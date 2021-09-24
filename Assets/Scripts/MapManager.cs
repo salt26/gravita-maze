@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class MapManager : MonoBehaviour
 
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
+
+    public Button gravityUpButton;
+    public Button gravityDownButton;
+    public Button gravityLeftButton;
+    public Button gravityRightButton;
 
     public GameObject ballPrefab;
     public GameObject ironPrefab;
@@ -382,6 +388,11 @@ public class MapManager : MonoBehaviour
         mainCamera.transform.position = new Vector3((sizeX + 1) / 2, (sizeY + 1) / 2, -10f);
         mainCamera.orthographicSize = Mathf.Max(sizeX, sizeY) / 2f + 1.5f;
 
+        gravityUpButton.interactable = true;
+        gravityDownButton.interactable = true;
+        gravityLeftButton.interactable = true;
+        gravityRightButton.interactable = true;
+
         IsReady = true;
         HasCleared = false;
         HasDied = false;
@@ -460,9 +471,54 @@ public class MapManager : MonoBehaviour
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
+        gravityUpButton.interactable = true;
+        gravityDownButton.interactable = true;
+        gravityLeftButton.interactable = true;
+        gravityRightButton.interactable = true;
+
         HasCleared = false;
         HasDied = false;
         IsReady = true;
+    }
+
+    public void ManipulateGravityUp()
+    {
+        if (!IsReady || HasCleared || HasDied) return;
+        gravityUpButton.interactable = false;
+        gravityDownButton.interactable = true;
+        gravityLeftButton.interactable = true;
+        gravityRightButton.interactable = true;
+        GameManager.mm.Gravity(GameManager.GravityDirection.Up, out _);
+    }
+
+    public void ManipulateGravityDown()
+    {
+        if (!IsReady || HasCleared || HasDied) return;
+        gravityUpButton.interactable = true;
+        gravityDownButton.interactable = false;
+        gravityLeftButton.interactable = true;
+        gravityRightButton.interactable = true;
+        GameManager.mm.Gravity(GameManager.GravityDirection.Down, out _);
+    }
+
+    public void ManipulateGravityLeft()
+    {
+        if (!IsReady || HasCleared || HasDied) return;
+        gravityUpButton.interactable = true;
+        gravityDownButton.interactable = true;
+        gravityLeftButton.interactable = false;
+        gravityRightButton.interactable = true;
+        GameManager.mm.Gravity(GameManager.GravityDirection.Left, out _);
+    }
+
+    public void ManipulateGravityRight()
+    {
+        if (!IsReady || HasCleared || HasDied) return;
+        gravityUpButton.interactable = true;
+        gravityDownButton.interactable = true;
+        gravityLeftButton.interactable = true;
+        gravityRightButton.interactable = false;
+        GameManager.mm.Gravity(GameManager.GravityDirection.Right, out _);
     }
 
     /// <summary>
