@@ -251,68 +251,71 @@ public class MapManager : MonoBehaviour
         fixedObjects = new List<FixedObject>();
         traces = new List<GameObject>();
 
-        foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
+        if (SceneManager.GetActiveScene().name == "Main")
         {
-            int x = (int)m.GetComponent<Transform>().localPosition.x;
-            int y = (int)m.GetComponent<Transform>().localPosition.y;
-
-            if (x < 1 || x > sizeX || y < 1 || y > sizeY)
+            foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
             {
-                Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
-                return;
-            }
-            if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
-            {
-                Debug.LogError("Map invalid: object overlapped at (" + x + ", " + y + ")");
-                return;
-            }
+                int x = (int)m.GetComponent<Transform>().localPosition.x;
+                int y = (int)m.GetComponent<Transform>().localPosition.y;
 
-            movables.Add(m);
-
-            if (m is Ball)
-            {
-                if (hasBall)
+                if (x < 1 || x > sizeX || y < 1 || y > sizeY)
                 {
-                    Debug.LogError("Map invalid: too many balls");
+                    Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                initialMovableCoord[x - 1, y - 1] = m;
-                hasBall = true;
-            }
-            else if (m is Iron)
-            {
-                initialMovableCoord[x - 1, y - 1] = m;
-            }
-        }
-        foreach (FixedObject f in movableAndFixedGameObjects.GetComponentsInChildren<FixedObject>())
-        {
-            int x = (int)f.GetComponent<Transform>().localPosition.x;
-            int y = (int)f.GetComponent<Transform>().localPosition.y;
+                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                {
+                    Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
+                    return;
+                }
 
-            if (x < 1 || x > sizeX || y < 1 || y > sizeY)
-            {
-                Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
-                return;
-            }
-            if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
-            {
-                Debug.LogError("Map invalid: object overlapped at (" + x + ", " + y + ")");
-                return;
-            }
+                movables.Add(m);
 
-            fixedObjects.Add(f);
+                if (m is Ball)
+                {
+                    if (hasBall)
+                    {
+                        Debug.LogError("Map invalid: too many balls");
+                        return;
+                    }
+                    initialMovableCoord[x - 1, y - 1] = m;
+                    hasBall = true;
+                }
+                else if (m is Iron)
+                {
+                    initialMovableCoord[x - 1, y - 1] = m;
+                }
+            }
+            foreach (FixedObject f in movableAndFixedGameObjects.GetComponentsInChildren<FixedObject>())
+            {
+                int x = (int)f.GetComponent<Transform>().localPosition.x;
+                int y = (int)f.GetComponent<Transform>().localPosition.y;
 
-            if (f.type == FixedObject.Type.Fire)
-            {
-                mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
-            }
-            else if (f.type == FixedObject.Type.QuitGame)
-            {
-                mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
-            }
-            else if (f.type == FixedObject.Type.MapEditor)
-            {
-                mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                if (x < 1 || x > sizeX || y < 1 || y > sizeY)
+                {
+                    Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
+                    return;
+                }
+                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                {
+                    Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
+                    return;
+                }
+
+                fixedObjects.Add(f);
+
+                if (f.type == FixedObject.Type.Fire)
+                {
+                    mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
+                }
+                else if (f.type == FixedObject.Type.QuitGame)
+                {
+                    mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
+                }
+                else if (f.type == FixedObject.Type.MapEditor)
+                {
+                    mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                }
             }
         }
 
@@ -325,7 +328,7 @@ public class MapManager : MonoBehaviour
             }
             if (initialMovableCoord[oi.x - 1, oi.y - 1] != null || mapCoord[oi.x - 1, oi.y - 1] >= 16)
             {
-                Debug.LogError("Map invalid: object overlapped at (" + oi.x + ", " + oi.y + ")");
+                Debug.LogError("Map invalid: objects overlapped at (" + oi.x + ", " + oi.y + ")");
                 return;
             }
 
@@ -399,7 +402,7 @@ public class MapManager : MonoBehaviour
         IsReady = true;
         HasCleared = false;
         HasDied = false;
-        PrintMapCoord();
+        //PrintMapCoord();
     }
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
@@ -645,6 +648,19 @@ public class MapManager : MonoBehaviour
                                     GameManager.gm.QuitGame();
                                     break;
                                 }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.MapEditor))
+                                {
+                                    flag = Flag.Escaped;
+                                    ballX = i + 1;
+                                    ballY = k + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.MapEditor();
+                                    break;
+                                }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[i, k] != null && mutableMovableCoord[i, k] is Ball)
                                 {
                                     flag = Flag.Squashed;
@@ -779,6 +795,19 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[i, j] = null;
                                     GameManager.gm.QuitGame();
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.MapEditor))
+                                {
+                                    flag = Flag.Escaped;
+                                    ballX = i + 1;
+                                    ballY = k + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.MapEditor();
                                     break;
                                 }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[i, k] != null && mutableMovableCoord[i, k] is Ball)
@@ -917,6 +946,19 @@ public class MapManager : MonoBehaviour
                                     GameManager.gm.QuitGame();
                                     break;
                                 }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.MapEditor))
+                                {
+                                    flag = Flag.Escaped;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.MapEditor();
+                                    break;
+                                }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[k, j] != null && mutableMovableCoord[k, j] is Ball)
                                 {
                                     flag = Flag.Squashed;
@@ -1051,6 +1093,19 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[i, j] = null;
                                     GameManager.gm.QuitGame();
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.MapEditor))
+                                {
+                                    flag = Flag.Escaped;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.MapEditor();
                                     break;
                                 }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[k, j] != null && mutableMovableCoord[k, j] is Ball)

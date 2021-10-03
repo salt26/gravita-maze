@@ -123,4 +123,9 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    public void MapEditor()
+    {
+        SceneManager.LoadScene("Editor");
+    }
 }
