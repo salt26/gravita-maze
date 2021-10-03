@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public class MapManager : MonoBehaviour
     public Button gravityDownButton;
     public Button gravityLeftButton;
     public Button gravityRightButton;
+    public RectTransform gravityBall;
 
     public GameObject ballPrefab;
     public GameObject ironPrefab;
@@ -79,13 +80,13 @@ public class MapManager : MonoBehaviour
         private set;
     } = false;
 
-    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution)
+    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "")
     {
         IsReady = false;
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨
         // 인자에서 ObjectInfo가 주어진 objects는 씬에 미리 배치된 오브젝트가 아니므로 여기에서 자동으로 생성됨
-        if (sizeX < 2 || sizeX > 8 || sizeY < 2 || sizeY > 8)
+        if (sizeX < 2 || sizeX > 10 || sizeY < 2 || sizeY > 10)
         {
             Debug.LogError("Map invalid: size");
             return;
@@ -93,6 +94,8 @@ public class MapManager : MonoBehaviour
 
         this.SizeX = sizeX;
         this.SizeY = sizeY;
+        ExitX = 0;
+        ExitY = 0;
         int [,] mapCoord = new int[sizeX, sizeY];
         initialMovableCoord = new Movable[sizeX, sizeY];
 
@@ -177,7 +180,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (!hasExit)
+        if (!hasExit && SceneManager.GetActiveScene().name != "Editor")
         {
             Debug.LogError("Map invalid: no exit");
             return;
@@ -366,15 +369,14 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (!hasBall)
+        if (!hasBall && SceneManager.GetActiveScene().name != "Editor")
         {
             Debug.LogError("Map invalid: no ball");
             return;
         }
 
         map = new Map(sizeX, sizeY, mapCoord, ExitX, ExitY);
-
-        if (!Simulate(map, initialMovableCoord, solution))
+        if (SceneManager.GetActiveScene().name != "Editor" && !Simulate(map, initialMovableCoord, solution))
         {
             Debug.LogError("Map invalid: impossible to clear");
             return;
@@ -385,9 +387,10 @@ public class MapManager : MonoBehaviour
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
-        mainCamera.transform.position = new Vector3((sizeX + 1) / 2, (sizeY + 1) / 2, -10f);
+        mainCamera.transform.position = new Vector3((sizeX + 1) / 2f, (sizeY + 1) / 2f, -10f);
         mainCamera.orthographicSize = Mathf.Max(sizeX, sizeY) / 2f + 1.5f;
 
+        gravityBall.anchoredPosition = new Vector3(0f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
@@ -471,6 +474,7 @@ public class MapManager : MonoBehaviour
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
+        gravityBall.anchoredPosition = new Vector3(0f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
@@ -484,6 +488,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityUp()
     {
         if (!IsReady || HasCleared || HasDied) return;
+        gravityBall.anchoredPosition = new Vector3(0f, 264f);
         gravityUpButton.interactable = false;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
@@ -494,6 +499,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityDown()
     {
         if (!IsReady || HasCleared || HasDied) return;
+        gravityBall.anchoredPosition = new Vector3(0f, -264f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = false;
         gravityLeftButton.interactable = true;
@@ -504,6 +510,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityLeft()
     {
         if (!IsReady || HasCleared || HasDied) return;
+        gravityBall.anchoredPosition = new Vector3(-264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = false;
@@ -514,6 +521,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityRight()
     {
         if (!IsReady || HasCleared || HasDied) return;
+        gravityBall.anchoredPosition = new Vector3(264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
@@ -622,6 +630,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.QuitGame))
+                                {
+                                    flag = Flag.Burned;
+                                    ballX = i + 1;
+                                    ballY = k + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.QuitGame();
                                     break;
                                 }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[i, k] != null && mutableMovableCoord[i, k] is Ball)
@@ -747,6 +768,19 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.QuitGame))
+                                {
+                                    flag = Flag.Burned;
+                                    ballX = i + 1;
+                                    ballY = k + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.QuitGame();
+                                    break;
+                                }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[i, k] != null && mutableMovableCoord[i, k] is Ball)
                                 {
                                     flag = Flag.Squashed;
@@ -870,6 +904,19 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.QuitGame))
+                                {
+                                    flag = Flag.Burned;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.QuitGame();
+                                    break;
+                                }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[k, j] != null && mutableMovableCoord[k, j] is Ball)
                                 {
                                     flag = Flag.Squashed;
@@ -991,6 +1038,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.QuitGame))
+                                {
+                                    flag = Flag.Burned;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    GameManager.gm.QuitGame();
                                     break;
                                 }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[k, j] != null && mutableMovableCoord[k, j] is Ball)
