@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     {
         if (gm != null)
         {
-            Destroy(gameObject);
+            Destroy(gm.gameObject);
         }
         gm = this;
         DontDestroyOnLoad(gameObject);
@@ -28,61 +28,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
-        if (SceneManager.GetActiveScene().name.Equals("Main"))
-        {
-            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
-            List<WallInfo> walls = new List<WallInfo>();
-
-            walls.Add(new WallInfo(WallInfo.Type.Vertical, 5, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
-            walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
-            walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 7, 4));
-
-            List<ObjectInfo> objects = new List<ObjectInfo>();
-
-            /*
-            objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, 1, 1));
-            objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, 5, 2));
-            objects.Add(new ObjectInfo(ObjectInfo.Type.MapEditor, 1, 5));
-            objects.Add(new ObjectInfo(ObjectInfo.Type.QuitGame, 1, 2));
-            */
-
-            mm.Initialize(7, 7, walls, objects, "d");
-        }
+        Initialize();
     }
 
     // Update is called once per frame
@@ -115,6 +61,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Initialize()
+    {
+        // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
+        if (SceneManager.GetActiveScene().name.Equals("Main"))
+        {
+            StartCoroutine(InitializeMain());
+        }
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -127,5 +82,69 @@ public class GameManager : MonoBehaviour
     public void MapEditor()
     {
         SceneManager.LoadScene("Editor");
+    }
+
+    public void ReturnToMain()
+    {
+        SceneManager.LoadScene("Main");
+    }
+
+    IEnumerator InitializeMain()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            yield return null;
+        }
+        List<WallInfo> walls = new List<WallInfo>();
+
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 5, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 7, 4));
+
+        List<ObjectInfo> objects = new List<ObjectInfo>();
+
+        /*
+        objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, 1, 1));
+        objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, 5, 2));
+        objects.Add(new ObjectInfo(ObjectInfo.Type.MapEditor, 1, 5));
+        objects.Add(new ObjectInfo(ObjectInfo.Type.QuitGame, 1, 2));
+        */
+
+        mm.Initialize(7, 7, walls, objects, "d");
     }
 }

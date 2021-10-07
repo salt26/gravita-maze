@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EditorManager : MonoBehaviour
 {
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Simulation }
 
     public Camera mainCamera;
     public Grid grid;
     public MapManager mm;
+    public List<Button> editorButtons;
 
     public EditMode editMode = EditMode.Wall;//EditMode.None;
 
@@ -27,7 +30,12 @@ public class EditorManager : MonoBehaviour
     void Start()
     {
         mm.Initialize(sizeX, sizeY, walls, objects);
-        editMode = EditMode.Wall;
+
+        foreach (Button b in editorButtons)
+        {
+            if (b != null) b.interactable = true;
+        }
+        editMode = EditMode.None;
     }
 
     // Update is called once per frame
@@ -615,5 +623,35 @@ public class EditorManager : MonoBehaviour
         mm.Initialize(sizeX, sizeY, walls, objects, "");
 
         return hasChanged;
+    }
+
+    public void EditModeChange(int buttonNum)
+    {
+        if (editMode == EditMode.Simulation) return;
+        foreach (Button b in editorButtons)
+        {
+            if (b != null) b.interactable = true;
+        }
+        editorButtons[buttonNum].interactable = false;
+        editMode = (EditMode)buttonNum;
+    }
+    public void EditReset()
+    {
+        // TODO: 경고 메시지 띄우기
+        foreach (Button b in editorButtons)
+        {
+            if (b != null) b.interactable = true;
+        }
+        editMode = EditMode.None;
+
+        walls = new List<WallInfo>();
+        objects = new List<ObjectInfo>();
+        mm.Initialize(sizeX, sizeY, walls, objects, "");
+    }
+
+    public void EditQuit()
+    {
+        // TODO: 경고 메시지 띄우기
+        GameManager.gm.ReturnToMain();
     }
 }
