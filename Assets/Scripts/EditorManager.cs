@@ -12,6 +12,9 @@ public class EditorManager : MonoBehaviour
     public Grid grid;
     public MapManager mm;
     public List<Button> editorButtons;
+    public Dropdown editorSizeXDropdown;
+    public Dropdown editorSizeYDropdown;
+    public InputField editorMapNameInput;
 
     public EditMode editMode = EditMode.Wall;//EditMode.None;
 
@@ -20,6 +23,7 @@ public class EditorManager : MonoBehaviour
     private List<WallInfo> walls = new List<WallInfo>();
     private List<ObjectInfo> objects = new List<ObjectInfo>();
     private string solution = "";
+    private string mapName = "";
 
     private int currentTouchX;
     private int currentTouchY;
@@ -635,6 +639,7 @@ public class EditorManager : MonoBehaviour
         editorButtons[buttonNum].interactable = false;
         editMode = (EditMode)buttonNum;
     }
+
     public void EditReset()
     {
         // TODO: 경고 메시지 띄우기
@@ -653,5 +658,49 @@ public class EditorManager : MonoBehaviour
     {
         // TODO: 경고 메시지 띄우기
         GameManager.gm.ReturnToMain();
+    }
+
+    public void EditSizeX()
+    {
+        int value = editorSizeXDropdown.value + 2;
+        if (value < 2 || value > 9) return;
+        int oldValue = sizeX;
+
+        sizeX = value;
+
+        if (oldValue > value)
+        {
+            walls.RemoveAll(w => w.x > value);
+            walls.RemoveAll(w => w.type == WallInfo.Type.Vertical && w.x == value);
+            objects.RemoveAll(o => o.x > value);
+        }
+        walls.RemoveAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
+
+        mm.Initialize(sizeX, sizeY, walls, objects, "");
+    }
+
+    public void EditSizeY()
+    {
+        int value = editorSizeYDropdown.value + 2;
+        if (value < 2 || value > 9) return;
+        int oldValue = sizeY;
+
+        sizeY = value;
+
+        if (oldValue > value)
+        {
+            walls.RemoveAll(w => w.y > value);
+            walls.RemoveAll(w => w.type == WallInfo.Type.Horizontal && w.y == value);
+            objects.RemoveAll(o => o.y > value);
+        }
+        walls.RemoveAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
+
+        mm.Initialize(sizeX, sizeY, walls, objects, "");
+    }
+
+    public void EditMapName()
+    {
+        mapName = editorMapNameInput.text;
+        Debug.Log("Map name changed: " + mapName);
     }
 }

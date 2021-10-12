@@ -11,6 +11,9 @@ public class MapManager : MonoBehaviour
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3 }
     public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64 }
 
+    public const int MAX_SIZE_X = 9;
+    public const int MAX_SIZE_Y = 9;
+
     [HideInInspector]
     public List<Movable> movables;
     [HideInInspector]
@@ -86,7 +89,7 @@ public class MapManager : MonoBehaviour
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨
         // 인자에서 ObjectInfo가 주어진 objects는 씬에 미리 배치된 오브젝트가 아니므로 여기에서 자동으로 생성됨
-        if (sizeX < 2 || sizeX > 10 || sizeY < 2 || sizeY > 10)
+        if (sizeX < 2 || sizeX > MAX_SIZE_X || sizeY < 2 || sizeY > MAX_SIZE_Y)
         {
             Debug.LogError("Map invalid: size");
             return;
@@ -98,6 +101,8 @@ public class MapManager : MonoBehaviour
         ExitY = 0;
         int [,] mapCoord = new int[sizeX, sizeY];
         initialMovableCoord = new Movable[sizeX, sizeY];
+
+        tilemap.ClearAllTiles();
 
         bool[,] horizontalWalls = new bool[sizeX, sizeY + 1];
         bool[,] verticalWalls = new bool[sizeX + 1, sizeY];
