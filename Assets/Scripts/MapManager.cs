@@ -11,6 +11,8 @@ public class MapManager : MonoBehaviour
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3 }
     public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64 }
 
+    public const int MIN_SIZE_X = 2;
+    public const int MIN_SIZE_Y = 2;
     public const int MAX_SIZE_X = 9;
     public const int MAX_SIZE_Y = 9;
 

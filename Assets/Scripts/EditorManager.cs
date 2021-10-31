@@ -18,8 +18,8 @@ public class EditorManager : MonoBehaviour
 
     public EditMode editMode = EditMode.Wall;//EditMode.None;
 
-    private int sizeX = 8;
-    private int sizeY = 8;
+    private int sizeX;
+    private int sizeY;
     private List<WallInfo> walls = new List<WallInfo>();
     private List<ObjectInfo> objects = new List<ObjectInfo>();
     private string solution = "";
@@ -33,6 +33,8 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sizeX = Mathf.Clamp(editorSizeXDropdown.value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
+        sizeY = Mathf.Clamp(editorSizeYDropdown.value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
         mm.Initialize(sizeX, sizeY, walls, objects);
 
         foreach (Button b in editorButtons)
@@ -662,8 +664,8 @@ public class EditorManager : MonoBehaviour
 
     public void EditSizeX()
     {
-        int value = editorSizeXDropdown.value + 2;
-        if (value < 2 || value > 9) return;
+        int value = editorSizeXDropdown.value + MapManager.MIN_SIZE_X;
+        if (value < MapManager.MIN_SIZE_X || value > MapManager.MAX_SIZE_X) return;
         int oldValue = sizeX;
 
         sizeX = value;
@@ -681,8 +683,8 @@ public class EditorManager : MonoBehaviour
 
     public void EditSizeY()
     {
-        int value = editorSizeYDropdown.value + 2;
-        if (value < 2 || value > 9) return;
+        int value = editorSizeYDropdown.value + MapManager.MIN_SIZE_Y;
+        if (value < MapManager.MIN_SIZE_Y || value > MapManager.MAX_SIZE_Y) return;
         int oldValue = sizeY;
 
         sizeY = value;
