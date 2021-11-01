@@ -12,6 +12,8 @@ public class EditorManager : MonoBehaviour
     public Grid grid;
     public MapManager mm;
     public List<Button> editorButtons;
+    public Button editorUndoButton;
+    public Button editorRedoButton;
     public Dropdown editorSizeXDropdown;
     public Dropdown editorSizeYDropdown;
     public InputField editorMapNameInput;
@@ -29,6 +31,9 @@ public class EditorManager : MonoBehaviour
     private int currentTouchY;
     private List<WallInfo> tempWalls;
     private List<ObjectInfo> tempObjects;
+
+    private List<EditActionInfo> undoStack = new List<EditActionInfo>();
+    private List<EditActionInfo> redoStack = new List<EditActionInfo>();
 
     // Start is called before the first frame update
     void Start()
@@ -167,6 +172,8 @@ public class EditorManager : MonoBehaviour
             }
         }
 #endif
+        editorUndoButton.interactable = undoStack.Count > 0;
+        editorRedoButton.interactable = redoStack.Count > 0;
     }
 
     bool TouchMap(float x, float y, EditMode editMode, List<WallInfo> walls, List<ObjectInfo> objects, int touchID, bool verbose = false)
@@ -195,6 +202,8 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                    redoStack.Clear();
                     walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                     hasChanged = true;
                 }
@@ -216,6 +225,8 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Add vertical wall at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                    redoStack.Clear();
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                     hasChanged = true;
                 }
@@ -242,12 +253,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -271,12 +287,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -300,12 +321,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -329,12 +355,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -358,12 +389,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -387,12 +423,17 @@ public class EditorManager : MonoBehaviour
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
-                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
+                        walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                        redoStack.Clear();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -420,6 +461,9 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove horizontal wall or exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) => 
+                        (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b), null));
+                    redoStack.Clear();
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -442,6 +486,9 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove vertical wall or exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) =>
+                        (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b), null));
+                    redoStack.Clear();
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -462,8 +509,10 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
 
-                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     if (verbose) Debug.Log("Remove vertical exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 else if (x >= sizeX + 0.5f)
@@ -483,8 +532,10 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
 
-                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     if (verbose) Debug.Log("Remove vertical exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 else if (y < 0.5f)
@@ -504,8 +555,10 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
 
-                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     if (verbose) Debug.Log("Remove horizontal exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 else // if (y >= sizeY + 0.5f)
@@ -525,8 +578,10 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
 
-                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     if (verbose) Debug.Log("Remove horizontal exit at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                    walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 break;
@@ -549,12 +604,16 @@ public class EditorManager : MonoBehaviour
 
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
-                    objects.Remove(objects.Find((i) => i.type == ObjectInfo.Type.Ball));
                     if (verbose) Debug.Log("Replace ball at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
+                    redoStack.Clear();
+                    objects.Remove(objects.Find((i) => i.type == ObjectInfo.Type.Ball));
                 }
                 else
                 {
                     if (verbose) Debug.Log("Add ball at (" + a + ", " + b + ")");
+                    undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
+                    redoStack.Clear();
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, a, b));
                 hasChanged = true;
@@ -576,8 +635,10 @@ public class EditorManager : MonoBehaviour
                     break;
                 }
 
-                objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 if (verbose) Debug.Log("Add iron at (" + a + ", " + b + ")");
+                undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Iron, a, b)));
+                redoStack.Clear();
+                objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 hasChanged = true;
                 break;
             #endregion
@@ -597,8 +658,10 @@ public class EditorManager : MonoBehaviour
                     break;
                 }
 
-                objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 if (verbose) Debug.Log("Add fire at (" + a + ", " + b + ")");
+                undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Fire, a, b)));
+                redoStack.Clear();
+                objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 hasChanged = true;
                 break;
                 #endregion
@@ -618,8 +681,10 @@ public class EditorManager : MonoBehaviour
                     break;
                 }
 
-                objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 if (verbose) Debug.Log("Remove object at (" + a + ", " + b + ")");
+                undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
+                redoStack.Clear();
+                objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
                 break;
                 #endregion
@@ -651,9 +716,14 @@ public class EditorManager : MonoBehaviour
         }
         editMode = EditMode.None;
 
+        List<WallInfo> oldWalls = walls;
+        List<ObjectInfo> oldObjects = objects;
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
         mm.Initialize(sizeX, sizeY, walls, objects, "");
+
+        undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
+        redoStack.Clear();
     }
 
     public void EditQuit()
@@ -662,47 +732,273 @@ public class EditorManager : MonoBehaviour
         GameManager.gm.ReturnToMain();
     }
 
-    public void EditSizeX()
+    private void EditSizeX(int newSizeX)
     {
+        if (newSizeX != 0)
+        {
+            editorSizeXDropdown.value = newSizeX - MapManager.MIN_SIZE_X;
+        }
+
         int value = editorSizeXDropdown.value + MapManager.MIN_SIZE_X;
         if (value < MapManager.MIN_SIZE_X || value > MapManager.MAX_SIZE_X) return;
         int oldValue = sizeX;
 
         sizeX = value;
 
+        List<WallInfo> removedWalls = new List<WallInfo>();
+        List<ObjectInfo> removedObjects = new List<ObjectInfo>();
+        List<WallInfo> tempWalls = null;
+        List<ObjectInfo> tempObjects = null;
+
         if (oldValue > value)
         {
+            tempWalls = walls.FindAll(w => w.x > value);
+            removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.x > value);
+
+            tempWalls = walls.FindAll(w => w.type == WallInfo.Type.Vertical && w.x == value);
+            removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.type == WallInfo.Type.Vertical && w.x == value);
+
+            tempObjects = objects.FindAll(o => o.x > value);
+            removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.x > value);
         }
+        tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
+        removedWalls.AddRange(tempWalls);
         walls.RemoveAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
+
+        if (newSizeX == 0)
+        {
+            undoStack.Add(new EditActionInfo(true, oldValue, value, removedWalls, removedObjects));
+            redoStack.Clear();
+        }
 
         mm.Initialize(sizeX, sizeY, walls, objects, "");
     }
 
-    public void EditSizeY()
+    public void EditSizeX()
     {
+        EditSizeX(0);
+    }
+
+    private void EditSizeY(int newSizeY)
+    {
+        if (newSizeY != 0)
+        {
+            editorSizeYDropdown.value = newSizeY - MapManager.MIN_SIZE_Y;
+        }
+
         int value = editorSizeYDropdown.value + MapManager.MIN_SIZE_Y;
         if (value < MapManager.MIN_SIZE_Y || value > MapManager.MAX_SIZE_Y) return;
         int oldValue = sizeY;
 
         sizeY = value;
 
+        List<WallInfo> removedWalls = new List<WallInfo>();
+        List<ObjectInfo> removedObjects = new List<ObjectInfo>();
+        List<WallInfo> tempWalls = null;
+        List<ObjectInfo> tempObjects = null;
+
         if (oldValue > value)
         {
+            tempWalls = walls.FindAll(w => w.y > value);
+            removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.y > value);
+
+            tempWalls = walls.FindAll(w => w.type == WallInfo.Type.Horizontal && w.y == value);
+            removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.type == WallInfo.Type.Horizontal && w.y == value);
+
+            tempObjects = objects.FindAll(o => o.y > value);
+            removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.y > value);
         }
+        tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
+        removedWalls.AddRange(tempWalls);
         walls.RemoveAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
+
+        if (newSizeY == 0)
+        {
+            undoStack.Add(new EditActionInfo(false, oldValue, value, removedWalls, removedObjects));
+            redoStack.Clear();
+        }
 
         mm.Initialize(sizeX, sizeY, walls, objects, "");
     }
 
-    public void EditMapName()
+    public void EditSizeY()
     {
+        EditSizeY(0);
+    }
+
+    private void EditMapName(string newName)
+    {
+        string oldMapName = mapName;
+        if (newName != null)
+        {
+            editorMapNameInput.text = newName;
+        }
         mapName = editorMapNameInput.text;
         Debug.Log("Map name changed: " + mapName);
+        if (newName == null)
+        {
+            undoStack.Add(new EditActionInfo(oldMapName, mapName));
+            redoStack.Clear();
+        }
+    }
+
+    public void EditMapName()
+    {
+        EditMapName(null);
+    }
+
+    public void EditUndo()
+    {
+        if (undoStack.Count == 0) return;   // TODO: 버튼 비활성화
+        EditActionInfo eai = undoStack[undoStack.Count - 1];
+
+        switch (eai.type)
+        {
+            case EditActionInfo.Type.MapName:
+                EditMapName(eai.oldName);
+                break;
+            case EditActionInfo.Type.Wall:
+                // TODO
+                break;
+            case EditActionInfo.Type.Object:
+                // TODO
+                break;
+            case EditActionInfo.Type.SizeX:
+                EditSizeX(eai.oldSize);
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+            case EditActionInfo.Type.SizeY:
+                EditSizeY(eai.oldSize);
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+            case EditActionInfo.Type.MassRemoval:
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+        }
+        undoStack.RemoveAt(undoStack.Count - 1);
+        redoStack.Add(eai);
+    }
+
+    public void EditRedo()
+    {
+        // TODO
+    }
+
+    private class EditActionInfo
+    {
+        public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval }
+
+        public Type type;
+
+        // MapName
+        public string oldName;
+        public string newName;
+
+        // SizeX, SizeY
+        public int oldSize;
+        public int newSize;
+
+        // Wall
+        public WallInfo oldWall;
+        public WallInfo newWall;
+
+        // Object
+        public ObjectInfo oldObject;
+        public ObjectInfo newObject;
+
+        // SizeX, SizeY, MassRemoval
+        public List<WallInfo> oldWalls;
+        public List<ObjectInfo> oldObjects;
+
+        /// <summary>
+        /// Type: MapName
+        /// </summary>
+        /// <param name="oldMapName">없으면 ""</param>
+        /// <param name="newMapName">없으면 ""</param>
+        public EditActionInfo(string oldMapName, string newMapName)
+        {
+            type = Type.MapName;
+            oldName = oldMapName;
+            newName = newMapName;
+        }
+
+        /// <summary>
+        /// Type: SizeX, SizeY
+        /// </summary>
+        /// <param name="isX">sizeX 변경 시 true, sizeY 변경 시 false</param>
+        /// <param name="oldSize"></param>
+        /// <param name="newSize"></param>
+        public EditActionInfo(bool isX, int oldSize, int newSize,
+            List<WallInfo> oldRemovedWalls = null, List <ObjectInfo> oldRemovedObjects = null)
+        {
+            if (isX)
+                type = Type.SizeX;
+            else
+                type = Type.SizeY;
+            this.oldSize = oldSize;
+            this.newSize = newSize;
+            if (oldRemovedWalls is null)
+                oldWalls = new List<WallInfo>();
+            else
+                oldWalls = oldRemovedWalls;
+            if (oldRemovedObjects is null)
+                oldObjects = new List<ObjectInfo>();
+            else
+                oldObjects = oldRemovedObjects;
+        }
+
+        /// <summary>
+        /// Type: Wall
+        /// </summary>
+        /// <param name="oldWallInfo">없으면 null</param>
+        /// <param name="newWallInfo">없으면 null</param>
+        public EditActionInfo(WallInfo oldWallInfo, WallInfo newWallInfo)
+        {
+            type = Type.Wall;
+            oldWall = oldWallInfo;
+            newWall = newWallInfo;
+        }
+
+        /// <summary>
+        /// Type: Object
+        /// </summary>
+        /// <param name="oldObjectInfo">없으면 null</param>
+        /// <param name="newObjectInfo">없으면 null</param>
+        public EditActionInfo(ObjectInfo oldObjectInfo, ObjectInfo newObjectInfo)
+        {
+            type = Type.Object;
+            oldObject = oldObjectInfo;
+            newObject = newObjectInfo;
+        }
+
+        /// <summary>
+        /// Type: MassRemoval (Reset, ...)
+        /// </summary>
+        /// <param name="oldRemovedWalls">없으면 null</param>
+        /// <param name="oldRemovedObjects">없으면 null</param>
+        public EditActionInfo(List<WallInfo> oldRemovedWalls, List<ObjectInfo> oldRemovedObjects)
+        {
+            type = Type.MassRemoval;
+            if (oldRemovedWalls is null)
+                oldWalls = new List<WallInfo>();
+            else
+                oldWalls = oldRemovedWalls;
+            if (oldRemovedObjects is null)
+                oldObjects = new List<ObjectInfo>();
+            else
+                oldObjects = oldRemovedObjects;
+        }
     }
 }
