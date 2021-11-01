@@ -18,7 +18,7 @@ public class EditorManager : MonoBehaviour
     public Dropdown editorSizeYDropdown;
     public InputField editorMapNameInput;
 
-    public EditMode editMode = EditMode.Wall;//EditMode.None;
+    public EditMode editMode = EditMode.None;
 
     private int sizeX;
     private int sizeY;
@@ -104,7 +104,7 @@ public class EditorManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, touch.fingerId, true);
+                    TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, touch.fingerId, true, true);
                 }
             }
         }
@@ -168,7 +168,7 @@ public class EditorManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, -1, true);
+                TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, -1, true, true);
             }
         }
 #endif
@@ -176,7 +176,8 @@ public class EditorManager : MonoBehaviour
         editorRedoButton.interactable = redoStack.Count > 0;
     }
 
-    bool TouchMap(float x, float y, EditMode editMode, List<WallInfo> walls, List<ObjectInfo> objects, int touchID, bool verbose = false)
+    bool TouchMap(float x, float y, EditMode editMode, List<WallInfo> walls, List<ObjectInfo> objects, int touchID,
+        bool commitAction = false, bool verbose = false)
     {
         bool hasChanged = false;
         int a, b;
@@ -202,8 +203,11 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
-                    redoStack.Clear();
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        redoStack.Clear();
+                    }
                     walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                     hasChanged = true;
                 }
@@ -225,8 +229,11 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Add vertical wall at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
-                    redoStack.Clear();
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        redoStack.Clear();
+                    }
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                     hasChanged = true;
                 }
@@ -254,16 +261,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -288,16 +301,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -322,16 +341,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -356,16 +381,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add vertical exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
                     hasChanged = true;
@@ -390,16 +421,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -424,16 +461,22 @@ public class EditorManager : MonoBehaviour
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
-                            new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
+                                new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
                     else
                     {
                         if (verbose) Debug.Log("Add horizontal exit at (" + a + ", " + b + ")");
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
-                        redoStack.Clear();
+                        if (commitAction)
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
+                            redoStack.Clear();
+                        }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
                     hasChanged = true;
@@ -461,9 +504,15 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove horizontal wall or exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) => 
-                        (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction &&
+                    //    !walls.Exists((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing horizontal wall or exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) =>
+                            (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -486,9 +535,15 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove vertical wall or exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) =>
-                        (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction &&
+                    //    !walls.Exists((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing vertical wall or exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) =>
+                            (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -510,8 +565,13 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove vertical exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction && !walls.Exists((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing vertical left exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -533,8 +593,13 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove vertical exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction && !walls.Exists((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing vertical right exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -556,8 +621,13 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove horizontal exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction && !walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing horizontal down exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -579,8 +649,13 @@ public class EditorManager : MonoBehaviour
                     }
 
                     if (verbose) Debug.Log("Remove horizontal exit at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
-                    redoStack.Clear();
+                    //if (commitAction && !walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b))
+                    //    Debug.LogError("Editor invalid: null in Removing horizontal up exit");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                    }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
                 }
@@ -605,15 +680,21 @@ public class EditorManager : MonoBehaviour
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
                     if (verbose) Debug.Log("Replace ball at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
-                    redoStack.Clear();
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
+                        redoStack.Clear();
+                    }
                     objects.Remove(objects.Find((i) => i.type == ObjectInfo.Type.Ball));
                 }
                 else
                 {
                     if (verbose) Debug.Log("Add ball at (" + a + ", " + b + ")");
-                    undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
-                    redoStack.Clear();
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
+                        redoStack.Clear();
+                    }
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, a, b));
                 hasChanged = true;
@@ -636,8 +717,11 @@ public class EditorManager : MonoBehaviour
                 }
 
                 if (verbose) Debug.Log("Add iron at (" + a + ", " + b + ")");
-                undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Iron, a, b)));
-                redoStack.Clear();
+                if (commitAction)
+                {
+                    undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Iron, a, b)));
+                    redoStack.Clear();
+                }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 hasChanged = true;
                 break;
@@ -659,8 +743,11 @@ public class EditorManager : MonoBehaviour
                 }
 
                 if (verbose) Debug.Log("Add fire at (" + a + ", " + b + ")");
-                undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Fire, a, b)));
-                redoStack.Clear();
+                if (commitAction)
+                {
+                    undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Fire, a, b)));
+                    redoStack.Clear();
+                }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 hasChanged = true;
                 break;
@@ -682,8 +769,13 @@ public class EditorManager : MonoBehaviour
                 }
 
                 if (verbose) Debug.Log("Remove object at (" + a + ", " + b + ")");
-                undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
-                redoStack.Clear();
+                //if (commitAction && !objects.Exists(i => i.x == a && i.y == b))
+                //    Debug.LogError("Editor invalid: null in Removing object");
+                if (commitAction)
+                {
+                    undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                }
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
                 break;
@@ -736,7 +828,7 @@ public class EditorManager : MonoBehaviour
     {
         if (newSizeX != 0)
         {
-            editorSizeXDropdown.value = newSizeX - MapManager.MIN_SIZE_X;
+            editorSizeXDropdown.SetValueWithoutNotify(newSizeX - MapManager.MIN_SIZE_X);
         }
 
         int value = editorSizeXDropdown.value + MapManager.MIN_SIZE_X;
@@ -786,7 +878,7 @@ public class EditorManager : MonoBehaviour
     {
         if (newSizeY != 0)
         {
-            editorSizeYDropdown.value = newSizeY - MapManager.MIN_SIZE_Y;
+            editorSizeYDropdown.SetValueWithoutNotify(newSizeY - MapManager.MIN_SIZE_Y);
         }
 
         int value = editorSizeYDropdown.value + MapManager.MIN_SIZE_Y;
@@ -841,11 +933,14 @@ public class EditorManager : MonoBehaviour
         }
         mapName = editorMapNameInput.text;
         Debug.Log("Map name changed: " + mapName);
+        /*
+        // Undoing or redoing map name change is disabled.
         if (newName == null)
         {
             undoStack.Add(new EditActionInfo(oldMapName, mapName));
             redoStack.Clear();
         }
+        */
     }
 
     public void EditMapName()
@@ -855,8 +950,10 @@ public class EditorManager : MonoBehaviour
 
     public void EditUndo()
     {
-        if (undoStack.Count == 0) return;   // TODO: 버튼 비활성화
+        if (undoStack.Count == 0) return;
         EditActionInfo eai = undoStack[undoStack.Count - 1];
+        const bool verbose = false;
+        string verboseMessage = "";
 
         switch (eai.type)
         {
@@ -864,10 +961,62 @@ public class EditorManager : MonoBehaviour
                 EditMapName(eai.oldName);
                 break;
             case EditActionInfo.Type.Wall:
-                // TODO
+                #region Undo Wall
+                if (eai.oldWall != null && !walls.Contains(eai.oldWall))
+                {
+                    walls.Add(eai.oldWall);
+                    if (verbose)
+                        verboseMessage += eai.oldWall.type.ToString() + " at (" + eai.oldWall.x + ", " + eai.oldWall.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    verboseMessage += " <- ";
+
+                if (eai.newWall != null && walls.Contains(eai.newWall))
+                {
+                    walls.Remove(eai.newWall);
+                    if (verbose)
+                        verboseMessage += eai.newWall.type.ToString() + " at (" + eai.newWall.x + ", " + eai.newWall.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    Debug.Log(verboseMessage);
+
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                #endregion
                 break;
             case EditActionInfo.Type.Object:
-                // TODO
+                #region Undo Object
+                if (eai.oldObject != null && !objects.Contains(eai.oldObject))
+                {
+                    objects.Add(eai.oldObject);
+                    if (verbose)
+                        verboseMessage += eai.oldObject.type.ToString() + " at (" + eai.oldObject.x + ", " + eai.oldObject.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    verboseMessage += " <- ";
+
+                if (eai.newObject != null && objects.Contains(eai.newObject))
+                {
+                    objects.Remove(eai.newObject);
+                    if (verbose)
+                        verboseMessage += eai.newObject.type.ToString() + " at (" + eai.newObject.x + ", " + eai.newObject.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    Debug.Log(verboseMessage);
+
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                #endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.oldSize);
@@ -893,7 +1042,93 @@ public class EditorManager : MonoBehaviour
 
     public void EditRedo()
     {
-        // TODO
+        if (redoStack.Count == 0) return;
+        EditActionInfo eai = redoStack[redoStack.Count - 1];
+        const bool verbose = false;
+        string verboseMessage = "";
+
+        switch (eai.type)
+        {
+            case EditActionInfo.Type.MapName:
+                EditMapName(eai.newName);
+                break;
+            case EditActionInfo.Type.Wall:
+                #region Redo Wall
+                if (eai.oldWall != null && walls.Contains(eai.oldWall))
+                {
+                    walls.Remove(eai.oldWall);
+                    if (verbose)
+                        verboseMessage += eai.oldWall.type.ToString() + " at (" + eai.oldWall.x + ", " + eai.oldWall.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    verboseMessage += " -> ";
+
+                if (eai.newWall != null && !walls.Contains(eai.newWall))
+                {
+                    walls.Add(eai.newWall);
+                    if (verbose)
+                        verboseMessage += eai.newWall.type.ToString() + " at (" + eai.newWall.x + ", " + eai.newWall.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    Debug.Log(verboseMessage);
+
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                #endregion
+                break;
+            case EditActionInfo.Type.Object:
+                #region Redo Object
+                if (eai.oldObject != null && objects.Contains(eai.oldObject))
+                {
+                    objects.Remove(eai.oldObject);
+                    if (verbose)
+                        verboseMessage += eai.oldObject.type.ToString() + " at (" + eai.oldObject.x + ", " + eai.oldObject.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    verboseMessage += " -> ";
+
+                if (eai.newObject != null && !objects.Contains(eai.newObject))
+                {
+                    objects.Add(eai.newObject);
+                    if (verbose)
+                        verboseMessage += eai.newObject.type.ToString() + " at (" + eai.newObject.x + ", " + eai.newObject.y + ")";
+                }
+                else if (verbose)
+                    verboseMessage += "null";
+
+                if (verbose)
+                    Debug.Log(verboseMessage);
+
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                #endregion
+                break;
+            case EditActionInfo.Type.SizeX:
+                EditSizeX(eai.newSize);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+            case EditActionInfo.Type.SizeY:
+                EditSizeY(eai.newSize);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+            case EditActionInfo.Type.MassRemoval:
+                // TODO
+                foreach (WallInfo wi in eai.oldWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.oldObjects)
+                    objects.Remove(oi);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+        }
+        redoStack.RemoveAt(redoStack.Count - 1);
+        undoStack.Add(eai);
     }
 
     private class EditActionInfo
