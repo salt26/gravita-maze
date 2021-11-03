@@ -6,18 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class EditorManager : MonoBehaviour
 {
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Simulation }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
+    public enum EditPhase { Initialize, Build, Save, Validate }
 
     public Camera mainCamera;
     public Grid grid;
     public MapManager mm;
-    public List<Button> editorButtons;
+    public List<Button> editorModeButtons;
+    public Button editorNewButton;
+    public Button editorResetButton;
     public Button editorUndoButton;
     public Button editorRedoButton;
-    public Dropdown editorSizeXDropdown;
-    public Dropdown editorSizeYDropdown;
-    public InputField editorMapNameInput;
+    public Button editorNextButton1;
+    public Button editorNextButton2;
+    public Button editorBackButton2;
+    public Button editorBackButton3;
+    public Button editorBackButton4;
+    public List<Dropdown> editorSizeXDropdowns;
+    public List<Dropdown> editorSizeYDropdowns;
+    public List<InputField> editorMapNameInputs;
+    public List<GameObject> editorPhases;
 
+    public EditPhase editPhase = EditPhase.Initialize;
     public EditMode editMode = EditMode.None;
 
     private int sizeX;
@@ -26,6 +36,7 @@ public class EditorManager : MonoBehaviour
     private List<ObjectInfo> objects = new List<ObjectInfo>();
     private string solution = "";
     private string mapName = "";
+    private bool hasCreated = false;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -38,142 +49,178 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sizeX = Mathf.Clamp(editorSizeXDropdown.value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
-        sizeY = Mathf.Clamp(editorSizeYDropdown.value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
-        mm.Initialize(sizeX, sizeY, walls, objects);
 
-        foreach (Button b in editorButtons)
+        sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
+        sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
+
+        //mm.Initialize(sizeX, sizeY, walls, objects);
+
+        foreach (Button b in editorModeButtons)
         {
             if (b != null) b.interactable = true;
         }
+        editorPhases[0].SetActive(true);
+        editorPhases[1].SetActive(false);
+        editorPhases[2].SetActive(false);
+        editorPhases[3].SetActive(false);
         editMode = EditMode.None;
+        editPhase = EditPhase.Initialize;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (editPhase == EditPhase.Build)
+        {
 #if (UNITY_ANDROID || UNITY_IOS || UNITY_WP8 || UNITY_WP8_1) && !UNITY_EDITOR
-        for (int i = 0; i < Input.touchCount; i++)
-        {
-            Touch touch = Input.GetTouch(i);
-
-            if (touch.phase == TouchPhase.Began)
+            for (int i = 0; i < Input.touchCount; i++)
             {
-                RaycastHit hit;
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                Touch touch = Input.GetTouch(i);
 
-                if (Physics.Raycast(ray, out hit))
+                if (touch.phase == TouchPhase.Began)
                 {
-                    tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                    tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
-                    if (editMode == EditMode.Exit)
+                    RaycastHit hit;
+                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                    if (Physics.Raycast(ray, out hit))
                     {
-                        if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                        tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
+                        tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                        if (editMode == EditMode.Exit)
                         {
-                            tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                            if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                            {
+                                tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                            }
                         }
+                        TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
                     }
-                    TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
                 }
-            }
 
-            if (touch.phase == TouchPhase.Moved)
-            {
-                RaycastHit hit;
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out hit))
+                if (touch.phase == TouchPhase.Moved)
                 {
-                    tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                    tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
-                    if (editMode == EditMode.Exit)
+                    RaycastHit hit;
+                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                    if (Physics.Raycast(ray, out hit))
                     {
-                        if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                        tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
+                        tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                        if (editMode == EditMode.Exit)
                         {
-                            tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                            if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                            {
+                                tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                            }
                         }
+                        TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
                     }
-                    TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
                 }
-            }
 
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-            {
-                RaycastHit hit;
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out hit))
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
-                    TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, touch.fingerId, true, true);
+                    RaycastHit hit;
+                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, touch.fingerId, true, true);
+                    }
                 }
             }
-        }
 #else
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetMouseButtonDown(0))
             {
-                tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
-                if (editMode == EditMode.Exit)
-                {
-                    if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
-                    {
-                        tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
-                    }
-                }
-                else if (editMode == EditMode.Ball)
-                {
-                    if (tempObjects.Exists((i) => i.type == ObjectInfo.Type.Ball))
-                    {
-                        tempObjects.Remove(tempObjects.Find((i) => i.type == ObjectInfo.Type.Ball));
-                    }
-                }
-                TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, -1);
-            }
-        }
-        if (Input.GetMouseButton(0))
-        {
-            RaycastHit hit;
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
-                if (editMode == EditMode.Exit)
+                if (Physics.Raycast(ray, out hit))
                 {
-                    if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                    tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
+                    tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                    if (editMode == EditMode.Exit)
                     {
-                        tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                        if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                        {
+                            tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                        }
                     }
-                }
-                else if (editMode == EditMode.Ball)
-                {
-                    if (tempObjects.Exists((i) => i.type == ObjectInfo.Type.Ball))
+                    else if (editMode == EditMode.Ball)
                     {
-                        tempObjects.Remove(tempObjects.Find((i) => i.type == ObjectInfo.Type.Ball));
+                        if (tempObjects.Exists((i) => i.type == ObjectInfo.Type.Ball))
+                        {
+                            tempObjects.Remove(tempObjects.Find((i) => i.type == ObjectInfo.Type.Ball));
+                        }
                     }
+                    TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, -1);
                 }
-                TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, -1);
             }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            RaycastHit hit;
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButton(0))
+            {
+                RaycastHit hit;
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, -1, true, true);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
+                    tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                    if (editMode == EditMode.Exit)
+                    {
+                        if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                        {
+                            tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                        }
+                    }
+                    else if (editMode == EditMode.Ball)
+                    {
+                        if (tempObjects.Exists((i) => i.type == ObjectInfo.Type.Ball))
+                        {
+                            tempObjects.Remove(tempObjects.Find((i) => i.type == ObjectInfo.Type.Ball));
+                        }
+                    }
+                    TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, -1);
+                }
             }
-        }
+            if (Input.GetMouseButtonUp(0))
+            {
+                RaycastHit hit;
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    TouchMap(hit.point.x, hit.point.y, editMode, walls, objects, -1, true, true);
+                }
+            }
 #endif
+        }
+
         editorUndoButton.interactable = undoStack.Count > 0;
         editorRedoButton.interactable = redoStack.Count > 0;
+
+        if (hasCreated && walls.Count == 0 && objects.Count == 0)
+        {
+            editorNewButton.interactable = false;
+            editorResetButton.interactable = false;
+        }
+        else if (hasCreated)
+        {
+            editorNewButton.interactable = true;
+            editorResetButton.interactable = true;
+        }
+        else
+        {
+            editorNewButton.interactable = true;
+        }
+
+        if (walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) &&
+            objects.Exists(e => e.type == ObjectInfo.Type.Ball))
+        {
+            editorNextButton2.interactable = true;
+        }
+        else
+        {
+            editorNextButton2.interactable = false;
+        }
     }
 
     bool TouchMap(float x, float y, EditMode editMode, List<WallInfo> walls, List<ObjectInfo> objects, int touchID,
@@ -790,19 +837,18 @@ public class EditorManager : MonoBehaviour
 
     public void EditModeChange(int buttonNum)
     {
-        if (editMode == EditMode.Simulation) return;
-        foreach (Button b in editorButtons)
+        foreach (Button b in editorModeButtons)
         {
             if (b != null) b.interactable = true;
         }
-        editorButtons[buttonNum].interactable = false;
+        editorModeButtons[buttonNum].interactable = false;
         editMode = (EditMode)buttonNum;
     }
 
     public void EditReset()
     {
         // TODO: 경고 메시지 띄우기
-        foreach (Button b in editorButtons)
+        foreach (Button b in editorModeButtons)
         {
             if (b != null) b.interactable = true;
         }
@@ -824,14 +870,21 @@ public class EditorManager : MonoBehaviour
         GameManager.gm.ReturnToMain();
     }
 
-    private void EditSizeX(int newSizeX)
+    private void EditSizeX(int newSizeX, Dropdown valueChangedDropdown = null)
     {
-        if (newSizeX != 0)
+        int value;
+        if (newSizeX != 0 || valueChangedDropdown == null)
         {
-            editorSizeXDropdown.SetValueWithoutNotify(newSizeX - MapManager.MIN_SIZE_X);
+            value = newSizeX;
+            foreach (Dropdown editorSizeXDropdown in editorSizeXDropdowns)
+                editorSizeXDropdown.SetValueWithoutNotify(value - MapManager.MIN_SIZE_X);
         }
-
-        int value = editorSizeXDropdown.value + MapManager.MIN_SIZE_X;
+        else
+        {
+            value = editorSizeXDropdowns.Find(e => e.Equals(valueChangedDropdown)).value + MapManager.MIN_SIZE_X;
+            foreach (Dropdown editorSizeXDropdown in editorSizeXDropdowns)
+                editorSizeXDropdown.SetValueWithoutNotify(value - MapManager.MIN_SIZE_X);
+        }
         if (value < MapManager.MIN_SIZE_X || value > MapManager.MAX_SIZE_X) return;
         int oldValue = sizeX;
 
@@ -869,19 +922,26 @@ public class EditorManager : MonoBehaviour
         mm.Initialize(sizeX, sizeY, walls, objects, "");
     }
 
-    public void EditSizeX()
+    public void EditSizeX(Dropdown caller)
     {
-        EditSizeX(0);
+        EditSizeX(0, caller);
     }
 
-    private void EditSizeY(int newSizeY)
+    private void EditSizeY(int newSizeY, Dropdown valueChangedDropdown = null)
     {
-        if (newSizeY != 0)
+        int value;
+        if (newSizeY != 0 || valueChangedDropdown == null)
         {
-            editorSizeYDropdown.SetValueWithoutNotify(newSizeY - MapManager.MIN_SIZE_Y);
+            value = newSizeY;
+            foreach (Dropdown editorSizeYDropdown in editorSizeYDropdowns)
+                editorSizeYDropdown.SetValueWithoutNotify(value - MapManager.MIN_SIZE_Y);
         }
-
-        int value = editorSizeYDropdown.value + MapManager.MIN_SIZE_Y;
+        else
+        {
+            value = editorSizeYDropdowns.Find(e => e.Equals(valueChangedDropdown)).value + MapManager.MIN_SIZE_Y;
+            foreach (Dropdown editorSizeYDropdown in editorSizeYDropdowns)
+                editorSizeYDropdown.SetValueWithoutNotify(value - MapManager.MIN_SIZE_Y);
+        }
         if (value < MapManager.MIN_SIZE_Y || value > MapManager.MAX_SIZE_Y) return;
         int oldValue = sizeY;
 
@@ -919,19 +979,26 @@ public class EditorManager : MonoBehaviour
         mm.Initialize(sizeX, sizeY, walls, objects, "");
     }
 
-    public void EditSizeY()
+    public void EditSizeY(Dropdown caller)
     {
-        EditSizeY(0);
+        EditSizeY(0, caller);
     }
 
-    private void EditMapName(string newName)
+    private void EditMapName(string newName, InputField valueChangedInputField = null)
     {
         string oldMapName = mapName;
-        if (newName != null)
+        if (newName != null || valueChangedInputField == null)
         {
-            editorMapNameInput.text = newName;
+            mapName = newName;
+            foreach (InputField editorMapNameInput in editorMapNameInputs)
+                editorMapNameInput.text = mapName;
         }
-        mapName = editorMapNameInput.text;
+        else
+        {
+            mapName = editorMapNameInputs.Find(e => e.Equals(valueChangedInputField)).text;
+            foreach (InputField editorMapNameInput in editorMapNameInputs)
+                editorMapNameInput.text = mapName;
+        }
         Debug.Log("Map name changed: " + mapName);
         /*
         // Undoing or redoing map name change is disabled.
@@ -943,11 +1010,90 @@ public class EditorManager : MonoBehaviour
         */
     }
 
-    public void EditMapName()
+    public void EditMapName(InputField caller)
     {
-        EditMapName(null);
+        EditMapName(null, caller);
     }
 
+    public void EditNew()
+    {
+        if (editPhase != EditPhase.Initialize) return;
+
+        // TODO 확인 메시지
+        hasCreated = true;
+        editorMapNameInputs[1].interactable = true;
+        editorSizeXDropdowns[1].interactable = true;
+        editorSizeYDropdowns[1].interactable = true;
+        editorNextButton1.interactable = true;
+        EditMapName("");
+        EditReset();
+    }
+
+    public void EditOpen()
+    {
+        // TODO
+    }
+
+    public void EditNext()
+    {
+        switch (editPhase)
+        {
+            case EditPhase.Initialize:
+                // TODO 전환 애니메이션
+                editorPhases[0].SetActive(false);
+                editorPhases[1].SetActive(true);
+                editPhase = EditPhase.Build;
+                break;
+            case EditPhase.Build:
+                editorPhases[1].SetActive(false);
+                editorPhases[2].SetActive(true);
+                editPhase = EditPhase.Save;
+                break;
+            case EditPhase.Save:
+                editorPhases[2].SetActive(false);
+                editorPhases[3].SetActive(true);
+                editPhase = EditPhase.Validate;
+                break;
+        }
+    }
+
+    public void EditBack()
+    {
+        switch (editPhase)
+        {
+            case EditPhase.Build:
+                editorPhases[1].SetActive(false);
+                editorPhases[0].SetActive(true);
+                editPhase = EditPhase.Initialize;
+                break;
+            case EditPhase.Save:
+                editorPhases[2].SetActive(false);
+                editorPhases[1].SetActive(true);
+                editPhase = EditPhase.Build;
+                break;
+            case EditPhase.Validate:
+                editorPhases[3].SetActive(false);
+                editorPhases[1].SetActive(true);
+                editPhase = EditPhase.Build;
+                solution = "";
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
+        }
+    }
+
+    public void EditValidationFinished()
+    {
+        // TODO
+        if (editPhase != EditPhase.Validate) return;
+
+        editorPhases[3].SetActive(false);
+        editorPhases[2].SetActive(true);
+        editPhase = EditPhase.Save;
+        //solution = "";
+        //mm.Initialize(sizeX, sizeY, walls, objects, solution);
+    }
+
+#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
     public void EditUndo()
     {
         if (undoStack.Count == 0) return;
@@ -1039,7 +1185,9 @@ public class EditorManager : MonoBehaviour
         undoStack.RemoveAt(undoStack.Count - 1);
         redoStack.Add(eai);
     }
+#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
+#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
     public void EditRedo()
     {
         if (redoStack.Count == 0) return;
@@ -1130,6 +1278,7 @@ public class EditorManager : MonoBehaviour
         redoStack.RemoveAt(redoStack.Count - 1);
         undoStack.Add(eai);
     }
+#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
     private class EditActionInfo
     {

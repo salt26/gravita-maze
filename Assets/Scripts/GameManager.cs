@@ -68,6 +68,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(InitializeMain());
         }
+        else if (SceneManager.GetActiveScene().name.Equals("Editor"))
+        {
+            StartCoroutine(InitializeEditor());
+        }
     }
 
     public void QuitGame()
@@ -81,12 +85,22 @@ public class GameManager : MonoBehaviour
 
     public void MapEditor()
     {
-        SceneManager.LoadScene("Editor");
+        StartCoroutine(SceneLoading("Editor"));
     }
 
     public void ReturnToMain()
     {
-        SceneManager.LoadScene("Main");
+        StartCoroutine(SceneLoading("Main"));
+    }
+
+    IEnumerator SceneLoading(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+        Initialize();
     }
 
     IEnumerator InitializeMain()
@@ -146,5 +160,14 @@ public class GameManager : MonoBehaviour
         */
 
         mm.Initialize(7, 7, walls, objects, "d");
+    }
+
+    IEnumerator InitializeEditor()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            yield return null;
+        }
     }
 }
