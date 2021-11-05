@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class EditorManager : MonoBehaviour
 {
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
-    public enum EditPhase { Initialize, Build, Save, Validate }
+    public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4 }
 
     public Camera mainCamera;
     public Grid grid;
@@ -19,9 +19,17 @@ public class EditorManager : MonoBehaviour
     public Button editorRedoButton;
     public Button editorNextButton1;
     public Button editorNextButton2;
+    public Button editorNextButton4;
     public Button editorBackButton2;
     public Button editorBackButton3;
     public Button editorBackButton4;
+    public Button editorBackHighlightedButton4;
+    public Button editorRetryButton;
+    public Button editorRetryHighlightedButton;
+    public Button editorMapTestRequiredButton;
+    public Button editorMapTestDoneButton;
+    public Button editorSaveButton;
+    public Button editorQuitButton3;
     public List<Dropdown> editorSizeXDropdowns;
     public List<Dropdown> editorSizeYDropdowns;
     public List<InputField> editorMapNameInputs;
@@ -37,6 +45,9 @@ public class EditorManager : MonoBehaviour
     private string solution = "";
     private string mapName = "";
     private bool hasCreated = false;
+    [SerializeField]
+    private bool dirtyBit = false;
+    private bool hasSavedOnce = false;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -53,18 +64,16 @@ public class EditorManager : MonoBehaviour
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
-        //mm.Initialize(sizeX, sizeY, walls, objects);
-
-        foreach (Button b in editorModeButtons)
-        {
-            if (b != null) b.interactable = true;
-        }
         editorPhases[0].SetActive(true);
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
         editorPhases[3].SetActive(false);
-        editMode = EditMode.None;
+        SetEditModeToNone();
         editPhase = EditPhase.Initialize;
+        hasCreated = false;
+        hasSavedOnce = false;
+        dirtyBit = false;
+        GameManager.gm.canPlay = false;
     }
 
     // Update is called once per frame
@@ -194,9 +203,7 @@ public class EditorManager : MonoBehaviour
 #endif
         }
 
-        editorUndoButton.interactable = undoStack.Count > 0;
-        editorRedoButton.interactable = redoStack.Count > 0;
-
+        // Phase 1 buttons
         if (hasCreated && walls.Count == 0 && objects.Count == 0)
         {
             editorNewButton.interactable = false;
@@ -212,6 +219,7 @@ public class EditorManager : MonoBehaviour
             editorNewButton.interactable = true;
         }
 
+        // Phase 2 buttons
         if (walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) &&
             objects.Exists(e => e.type == ObjectInfo.Type.Ball))
         {
@@ -221,11 +229,30 @@ public class EditorManager : MonoBehaviour
         {
             editorNextButton2.interactable = false;
         }
+
+        editorUndoButton.interactable = undoStack.Count > 0;
+        editorRedoButton.interactable = redoStack.Count > 0;
+
+        // Phase 3 buttons
+        editorSaveButton.interactable = solution != null && solution != "" && mapName != null && mapName != "" && dirtyBit;
+        editorQuitButton3.interactable = solution != null && solution != "" && hasSavedOnce;
+
+        if (solution != null && solution != "")
+        {
+            editorMapTestRequiredButton.gameObject.SetActive(false);
+            editorMapTestDoneButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            editorMapTestRequiredButton.gameObject.SetActive(true);
+            editorMapTestDoneButton.gameObject.SetActive(false);
+        }
     }
 
     bool TouchMap(float x, float y, EditMode editMode, List<WallInfo> walls, List<ObjectInfo> objects, int touchID,
         bool commitAction = false, bool verbose = false)
     {
+        if (touchID != 0 && touchID != -1) return false;
         bool hasChanged = false;
         int a, b;
         switch (editMode)
@@ -254,6 +281,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                     hasChanged = true;
@@ -280,6 +309,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                     hasChanged = true;
@@ -313,6 +344,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -323,6 +356,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -353,6 +388,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -363,6 +400,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -393,6 +432,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -403,6 +444,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -433,6 +476,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -443,6 +488,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitVertical, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -473,6 +520,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -483,6 +532,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -513,6 +564,8 @@ public class EditorManager : MonoBehaviour
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
                                 new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -523,6 +576,8 @@ public class EditorManager : MonoBehaviour
                         {
                             undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.ExitHorizontal, a, b)));
                             redoStack.Clear();
+                            solution = "";
+                            dirtyBit = true;
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -559,6 +614,8 @@ public class EditorManager : MonoBehaviour
                         undoStack.Add(new EditActionInfo(walls.Find((i) =>
                             (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b));
                     hasChanged = true;
@@ -590,6 +647,8 @@ public class EditorManager : MonoBehaviour
                         undoStack.Add(new EditActionInfo(walls.Find((i) =>
                             (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b));
                     hasChanged = true;
@@ -618,6 +677,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
@@ -646,6 +707,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
@@ -674,6 +737,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
@@ -702,6 +767,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b), null));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
@@ -731,6 +798,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                     objects.Remove(objects.Find((i) => i.type == ObjectInfo.Type.Ball));
                 }
@@ -741,6 +810,8 @@ public class EditorManager : MonoBehaviour
                     {
                         undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
                         redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
                     }
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, a, b));
@@ -768,6 +839,8 @@ public class EditorManager : MonoBehaviour
                 {
                     undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Iron, a, b)));
                     redoStack.Clear();
+                    solution = "";
+                    dirtyBit = true;
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 hasChanged = true;
@@ -794,6 +867,8 @@ public class EditorManager : MonoBehaviour
                 {
                     undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Fire, a, b)));
                     redoStack.Clear();
+                    solution = "";
+                    dirtyBit = true;
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 hasChanged = true;
@@ -822,6 +897,8 @@ public class EditorManager : MonoBehaviour
                 {
                     undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
                     redoStack.Clear();
+                    solution = "";
+                    dirtyBit = true;
                 }
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
@@ -848,11 +925,7 @@ public class EditorManager : MonoBehaviour
     public void EditReset()
     {
         // TODO: 경고 메시지 띄우기
-        foreach (Button b in editorModeButtons)
-        {
-            if (b != null) b.interactable = true;
-        }
-        editMode = EditMode.None;
+        SetEditModeToNone();
 
         List<WallInfo> oldWalls = walls;
         List<ObjectInfo> oldObjects = objects;
@@ -862,11 +935,17 @@ public class EditorManager : MonoBehaviour
 
         undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
         redoStack.Clear();
+        solution = "";
+        if (hasCreated)
+            dirtyBit = true;
     }
 
     public void EditQuit()
     {
-        // TODO: 경고 메시지 띄우기
+        if (dirtyBit)
+        {
+            // TODO: 경고 메시지 띄우기
+        }
         GameManager.gm.ReturnToMain();
     }
 
@@ -917,6 +996,8 @@ public class EditorManager : MonoBehaviour
         {
             undoStack.Add(new EditActionInfo(true, oldValue, value, removedWalls, removedObjects));
             redoStack.Clear();
+            solution = "";
+            dirtyBit = true;
         }
 
         mm.Initialize(sizeX, sizeY, walls, objects, "");
@@ -974,6 +1055,8 @@ public class EditorManager : MonoBehaviour
         {
             undoStack.Add(new EditActionInfo(false, oldValue, value, removedWalls, removedObjects));
             redoStack.Clear();
+            solution = "";
+            dirtyBit = true;
         }
 
         mm.Initialize(sizeX, sizeY, walls, objects, "");
@@ -999,7 +1082,7 @@ public class EditorManager : MonoBehaviour
             foreach (InputField editorMapNameInput in editorMapNameInputs)
                 editorMapNameInput.text = mapName;
         }
-        Debug.Log("Map name changed: " + mapName);
+
         /*
         // Undoing or redoing map name change is disabled.
         if (newName == null)
@@ -1008,6 +1091,12 @@ public class EditorManager : MonoBehaviour
             redoStack.Clear();
         }
         */
+
+        if (!oldMapName.Equals(mapName))
+        {
+            Debug.Log("Map name changed: " + mapName);
+            dirtyBit = true;
+        }
     }
 
     public void EditMapName(InputField caller)
@@ -1020,18 +1109,25 @@ public class EditorManager : MonoBehaviour
         if (editPhase != EditPhase.Initialize) return;
 
         // TODO 확인 메시지
-        hasCreated = true;
-        editorMapNameInputs[1].interactable = true;
-        editorSizeXDropdowns[1].interactable = true;
-        editorSizeYDropdowns[1].interactable = true;
+        editorMapNameInputs[0].interactable = true;
+        editorSizeXDropdowns[0].interactable = true;
+        editorSizeYDropdowns[0].interactable = true;
         editorNextButton1.interactable = true;
         EditMapName("");
         EditReset();
+        hasCreated = true;
     }
 
     public void EditOpen()
     {
         // TODO
+    }
+
+    public void EditSave()
+    {
+        // TODO
+        dirtyBit = false;
+        hasSavedOnce = true;
     }
 
     public void EditNext()
@@ -1042,17 +1138,33 @@ public class EditorManager : MonoBehaviour
                 // TODO 전환 애니메이션
                 editorPhases[0].SetActive(false);
                 editorPhases[1].SetActive(true);
+                SetEditModeToNone();
                 editPhase = EditPhase.Build;
+                GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Build:
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
+                GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Save:
                 editorPhases[2].SetActive(false);
                 editorPhases[3].SetActive(true);
-                editPhase = EditPhase.Validate;
+                editPhase = EditPhase.Test;
+                mm.afterGravity = EditorAfterGravity;
+                EditorAfterGravity(MapManager.Flag.Continued);
+                GameManager.gm.canPlay = true;
+                break;
+            case EditPhase.Test:
+                // Validation finished
+                editorPhases[3].SetActive(false);
+                editorPhases[2].SetActive(true);
+                editPhase = EditPhase.Save;
+                solution = mm.ActionHistory;
+                print(solution);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                GameManager.gm.canPlay = false;
                 break;
         }
     }
@@ -1065,32 +1177,62 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Save:
                 editorPhases[2].SetActive(false);
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
+                SetEditModeToNone();
+                GameManager.gm.canPlay = false;
                 break;
-            case EditPhase.Validate:
+            case EditPhase.Test:
                 editorPhases[3].SetActive(false);
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
-                solution = "";
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                SetEditModeToNone();
+                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                GameManager.gm.canPlay = false;
                 break;
         }
     }
 
-    public void EditValidationFinished()
+    public void EditorAfterGravity(MapManager.Flag flag)
     {
-        // TODO
-        if (editPhase != EditPhase.Validate) return;
+        switch (flag)
+        {
+            case MapManager.Flag.Continued:
+                editorBackHighlightedButton4.gameObject.SetActive(false);
+                editorBackButton4.gameObject.SetActive(true);
 
-        editorPhases[3].SetActive(false);
-        editorPhases[2].SetActive(true);
-        editPhase = EditPhase.Save;
-        //solution = "";
-        //mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                editorRetryHighlightedButton.gameObject.SetActive(false);
+                editorRetryButton.gameObject.SetActive(true);
+
+                editorNextButton4.interactable = false;
+                editorBackButton4.interactable = true;
+                break;
+            case MapManager.Flag.Escaped:
+                editorBackHighlightedButton4.gameObject.SetActive(false);
+                editorBackButton4.gameObject.SetActive(true);
+
+                editorRetryHighlightedButton.gameObject.SetActive(false);
+                editorRetryButton.gameObject.SetActive(true);
+
+                editorNextButton4.interactable = true;
+                editorBackButton4.interactable = false;
+                break;
+            case MapManager.Flag.Burned:
+            case MapManager.Flag.Squashed:
+                editorBackButton4.gameObject.SetActive(false);
+                editorBackHighlightedButton4.gameObject.SetActive(true);
+
+                editorRetryButton.gameObject.SetActive(false);
+                editorRetryHighlightedButton.gameObject.SetActive(true);
+
+                editorNextButton4.interactable = false;
+                editorBackHighlightedButton4.interactable = true;
+                break;
+        }
     }
 
 #pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
@@ -1184,6 +1326,8 @@ public class EditorManager : MonoBehaviour
         }
         undoStack.RemoveAt(undoStack.Count - 1);
         redoStack.Add(eai);
+        solution = "";
+        dirtyBit = true;
     }
 #pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
@@ -1277,8 +1421,20 @@ public class EditorManager : MonoBehaviour
         }
         redoStack.RemoveAt(redoStack.Count - 1);
         undoStack.Add(eai);
+        solution = "";
+        dirtyBit = true;
     }
 #pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
+
+
+    private void SetEditModeToNone()
+    {
+        foreach (Button b in editorModeButtons)
+        {
+            if (b != null) b.interactable = true;
+        }
+        editMode = EditMode.None;
+    }
 
     private class EditActionInfo
     {

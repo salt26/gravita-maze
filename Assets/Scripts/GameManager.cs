@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 
     public enum GravityDirection { Up, Down, Left, Right }
 
+    [HideInInspector]
+    public bool canPlay = true;
+
     private void Awake()
     {
         if (gm != null)
@@ -39,25 +42,28 @@ public class GameManager : MonoBehaviour
 
         //MapManager.Flag flag;
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        if (canPlay)
         {
-            mm.Gravity(GravityDirection.Down, out _);
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            mm.Gravity(GravityDirection.Up, out _);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            mm.Gravity(GravityDirection.Left, out _);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            mm.Gravity(GravityDirection.Right, out _);
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            mm.Restart();
+            if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
+            {
+                mm.ManipulateGravityDown();
+            }
+            else if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
+            {
+                mm.ManipulateGravityUp();
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
+            {
+                mm.ManipulateGravityLeft();
+            }
+            else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
+            {
+                mm.ManipulateGravityRight();
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                mm.Restart();
+            }
         }
     }
 
@@ -159,7 +165,10 @@ public class GameManager : MonoBehaviour
         objects.Add(new ObjectInfo(ObjectInfo.Type.QuitGame, 1, 2));
         */
 
+        mm.afterGravity = MainAfterGravity;
+
         mm.Initialize(7, 7, walls, objects, "d");
+        canPlay = true;
     }
 
     IEnumerator InitializeEditor()
@@ -168,6 +177,23 @@ public class GameManager : MonoBehaviour
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
             yield return null;
+        }
+        canPlay = false;
+    }
+
+    public void MainAfterGravity(MapManager.Flag flag)
+    {
+        switch (flag)
+        {
+            case MapManager.Flag.Escaped:
+                // TODO 게임 시작
+                break;
+            case MapManager.Flag.MapEditor:
+                MapEditor();
+                break;
+            case MapManager.Flag.QuitGame:
+                QuitGame();
+                break;
         }
     }
 }
