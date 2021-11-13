@@ -94,7 +94,7 @@ public class MapManager : MonoBehaviour
         private set;
     } = "";
 
-    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "")
+    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "", bool isValidation = false)
     {
         IsReady = false;
 
@@ -196,7 +196,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (!hasExit && SceneManager.GetActiveScene().name != "Editor")
+        if (!hasExit && (SceneManager.GetActiveScene().name != "Editor" || isValidation))
         {
             Debug.LogError("Map invalid: no exit");
             return;
@@ -388,14 +388,14 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (!hasBall && SceneManager.GetActiveScene().name != "Editor")
+        if (!hasBall && (SceneManager.GetActiveScene().name != "Editor" || isValidation))
         {
             Debug.LogError("Map invalid: no ball");
             return;
         }
 
         map = new Map(sizeX, sizeY, mapCoord, ExitX, ExitY);
-        if (SceneManager.GetActiveScene().name != "Editor" && !Simulate(map, initialMovableCoord, solution))
+        if ((SceneManager.GetActiveScene().name != "Editor" || isValidation) && !Simulate(map, initialMovableCoord, solution))
         {
             Debug.LogError("Map invalid: impossible to clear");
             return;

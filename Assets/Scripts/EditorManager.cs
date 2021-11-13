@@ -1,5 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -48,6 +52,7 @@ public class EditorManager : MonoBehaviour
     [SerializeField]
     private bool dirtyBit = false;
     private bool hasSavedOnce = false;
+    private bool isSaving = false;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -1121,13 +1126,117 @@ public class EditorManager : MonoBehaviour
     public void EditOpen()
     {
         // TODO
+        // ParseMapText(text) 사용하기
     }
 
     public void EditSave()
     {
-        // TODO
+        /*
+        Debug.Log("isSaving = " + isSaving.ToString() + ", solution = " + solution + ", mapName = " + mapName +
+            " dirtyBit = " + dirtyBit.ToString() + ", mm.IsReady = " + mm.IsReady.ToString());
+        */
+        if (solution == null || solution == "" || mapName == null || mapName == "" || !dirtyBit ||
+            mm == null || !mm.IsReady || editPhase != EditPhase.Save || isSaving) return;
+
+        isSaving = true;
+
+        if (!ValidateMapInGame())
+        {
+            Debug.LogError("Editor invalid: map validation failed");
+            isSaving = false;
+            return;
+        }
+
+        try
+        {
+            if (!Directory.Exists("Maps"))
+            {
+                Directory.CreateDirectory("Maps");
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("Editor invalid: exception while creating a directory");
+            isSaving = false;
+            throw;
+        }
+
+        try
+        {
+            if (File.Exists(@"Maps\" + mapName + ".txt"))
+            {
+                // TODO 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
+                Debug.LogWarning("Map \"" + mapName + "\" already exists. Do you want to overwrite it?");
+                isSaving = false; // 이것도 지우기
+                return; // return은 지우기
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("Editor invalid: exception while checking a file");
+            isSaving = false;
+            throw;
+        }
+
+        FileStream fs = new FileStream(@"Maps\" + mapName + ".txt", FileMode.Create);
+        StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+
+        try
+        {
+            sw.WriteLine(sizeX + " " + sizeY);
+            foreach (ObjectInfo o in objects)
+            {
+                switch (o.type)
+                {
+                    case ObjectInfo.Type.Ball:
+                        sw.WriteLine("@ " + o.x + " " + o.y);
+                        break;
+                    case ObjectInfo.Type.Iron:
+                        sw.WriteLine("# " + o.x + " " + o.y);
+                        break;
+                    case ObjectInfo.Type.Fire:
+                        sw.WriteLine("* " + o.x + " " + o.y);
+                        break;
+                }
+            }
+            foreach (WallInfo w in walls)
+            {
+                switch (w.type)
+                {
+                    case WallInfo.Type.Horizontal:
+                        sw.WriteLine("- " + w.x + " " + w.y);
+                        break;
+                    case WallInfo.Type.Vertical:
+                        sw.WriteLine("| " + w.x + " " + w.y);
+                        break;
+                    case WallInfo.Type.ExitHorizontal:
+                        sw.WriteLine("$ - " + w.x + " " + w.y);
+                        break;
+                    case WallInfo.Type.ExitVertical:
+                        sw.WriteLine("$ | " + w.x + " " + w.y);
+                        break;
+                }
+            }
+            sw.WriteLine(solution);
+        }
+        catch (Exception)
+        {
+            Debug.LogError("Editor invalid: exception while saving a map");
+            isSaving = false;
+            throw;
+        }
+        finally
+        {
+            sw.Close();
+            fs.Close();
+        }
+
+        // TODO 저장 성공 메시지
+        Debug.Log("Saved as " + mapName + "!");
+
         dirtyBit = false;
         hasSavedOnce = true;
+        isSaving = false;
     }
 
     public void EditNext()
@@ -1434,6 +1543,31 @@ public class EditorManager : MonoBehaviour
             if (b != null) b.interactable = true;
         }
         editMode = EditMode.None;
+    }
+
+    private bool ValidateMapInGame()
+    {
+        /*
+        if (sizeX < MapManager.MIN_SIZE_X || sizeX > MapManager.MAX_SIZE_X ||
+            sizeY < MapManager.MIN_SIZE_Y || sizeY > MapManager.MAX_SIZE_Y) return false;
+        if (objects.FindAll(e => e.type == ObjectInfo.Type.Ball).Count != 1) return false;
+        foreach (ObjectInfo o in objects)
+        {
+            if (o.x < 1 || o.x > sizeX || o.y < 1 || o.y > sizeY) return false;
+        }
+        */
+        mm.Initialize(sizeX, sizeY, walls, objects, solution, true);
+        return mm.IsReady;
+    }
+
+    private bool ParseMapText(string text)
+    {
+        // TODO
+        // 파일 유효성 검사는 파일 텍스트의 기호나 포맷만 본다.
+        // 숫자(좌표 등), 중복 좌표, Ball과 Exit의 유일성 등은 VailidationMapInGame()으로 확인하자.
+
+        // 근데 생각해 보면 유효성을 보기만 할 게 아니라 파싱까지 하면 되잖아?
+        return false;
     }
 
     private class EditActionInfo
