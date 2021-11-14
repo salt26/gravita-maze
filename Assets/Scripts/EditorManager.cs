@@ -74,6 +74,7 @@ public class EditorManager : MonoBehaviour
         editorPhases[2].SetActive(false);
         editorPhases[3].SetActive(false);
         SetEditModeToNone();
+        mm.Initialize();
         editPhase = EditPhase.Initialize;
         hasCreated = false;
         hasSavedOnce = false;
@@ -1125,8 +1126,190 @@ public class EditorManager : MonoBehaviour
 
     public void EditOpen()
     {
+        if (editPhase != EditPhase.Initialize) return;
+
         // TODO
-        // ParseMapText(text) 사용하기
+        // ditryBit == true이면 먼저 경고 메시지 띄우기
+        // UI 만들기
+        // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
+        bool b =  EditOpenFile("evsef");   // TODO 파일 이름 목록에서 고른 걸로 정하기
+        Debug.Log(b);
+    }
+
+    public bool EditOpenFile(string pathWithoutExtension)
+    {
+        try
+        {
+            if (!File.Exists(@"Maps\" + pathWithoutExtension + ".txt"))
+            {
+                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(pathWithoutExtension) + "\"");
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("File invalid: exception while checking a file");
+            throw;
+        }
+
+        int tempSizeX, tempSizeY;
+        List<ObjectInfo> tempObjects = new List<ObjectInfo>();
+        List<WallInfo> tempWalls = new List<WallInfo>();
+        string tempSolution = "";
+
+        FileStream fs = new FileStream(@"Maps\" + pathWithoutExtension + ".txt", FileMode.Open);
+        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+        #region parsing text file
+        try
+        {
+            // sizeX, sizeY
+            string line = sr.ReadLine();
+            string[] token = line.Split(' ');
+
+            if (token.Length != 2)
+            {
+                Debug.LogError("File invalid: map size (" + line + ")");
+                return false;
+            }
+
+            tempSizeX = int.Parse(token[0]);
+            tempSizeY = int.Parse(token[1]);
+
+            bool hasSolution = false;
+            string lines = sr.ReadToEnd();
+            foreach (string l in lines.Split('\n'))
+            {
+                token = l.Split(' ');
+                if (l == "" || token.Length == 0) continue;
+
+                switch (token[0])
+                {
+                    case "@":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: ball (" + l + ")");
+                            return false;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Ball, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "#":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: iron (" + l + ")");
+                            return false;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Iron, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "*":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: fire (" + l + ")");
+                            return false;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "$":
+                        if (token.Length != 4)
+                        {
+                            Debug.LogError("File invalid: exit (" + l + ")");
+                            return false;
+                        }
+
+                        if (token[1].Equals("-"))
+                        {
+                            tempWalls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, int.Parse(token[2]), int.Parse(token[3])));
+                        }
+                        else if (token[1].Equals("|"))
+                        {
+                            tempWalls.Add(new WallInfo(WallInfo.Type.ExitVertical, int.Parse(token[2]), int.Parse(token[3])));
+                        }
+                        else
+                        {
+                            Debug.LogError("File invalid: exit (" + l + ")");
+                            return false;
+                        }
+                        break;
+                    case "-":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: horizontal wall (" + l + ")");
+                            return false;
+                        }
+                        tempWalls.Add(new WallInfo(WallInfo.Type.Horizontal, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "|":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: vertical wall (" + l + ")");
+                            return false;
+                        }
+                        tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    default:
+                        if (token.Length != 1 ||
+                            !(token[0].StartsWith("w") || token[0].StartsWith("a") || token[0].StartsWith("s") || token[0].StartsWith("d")))
+                        {
+                            Debug.LogError("File invalid: unknown (" + l + ")");
+                            return false;
+                        }
+                        else if (hasSolution)
+                        {
+                            Debug.LogError("File invalid: solution already exists (" + l + ")");
+                            return false;
+                        }
+                        tempSolution = token[0];
+                        hasSolution = true;
+                        break;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("File invalid: exception while opening a map");
+            throw;
+        }
+        finally
+        {
+            sr.Close();
+            fs.Close();
+        }
+        #endregion
+
+        // Map validation
+        mm.Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, true);
+        if (!mm.IsReady)
+        {
+            Debug.LogError("File invalid: map validation failed");
+            if (hasCreated)
+                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+            else
+                mm.Initialize();
+            return false;
+        }
+
+        if (hasCreated)
+        {
+            undoStack.Add(new EditActionInfo(mapName, Path.GetFileNameWithoutExtension(pathWithoutExtension),
+                sizeX, sizeY, tempSizeX, tempSizeY, walls, objects, tempWalls, tempObjects));
+            redoStack.Clear();
+        }
+
+        EditSizeX(tempSizeX);
+        EditSizeY(tempSizeY);
+        EditMapName(Path.GetFileNameWithoutExtension(pathWithoutExtension));
+        objects = tempObjects;
+        walls = tempWalls;
+        solution = tempSolution;
+        mm.Initialize(sizeX, sizeY, walls, objects, solution);
+
+        editorMapNameInputs[0].interactable = false;
+        editorSizeXDropdowns[0].interactable = false;
+        editorSizeYDropdowns[0].interactable = false;
+        editorNextButton1.interactable = true;
+        hasCreated = true;
+
+        return true;
     }
 
     public void EditSave()
@@ -1142,7 +1325,7 @@ public class EditorManager : MonoBehaviour
 
         if (!ValidateMapInGame())
         {
-            Debug.LogError("Editor invalid: map validation failed");
+            Debug.LogError("File invalid: map validation failed");
             isSaving = false;
             return;
         }
@@ -1156,7 +1339,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.LogError("Editor invalid: exception while creating a directory");
+            Debug.LogError("File invalid: exception while creating a directory");
             isSaving = false;
             throw;
         }
@@ -1173,7 +1356,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.LogError("Editor invalid: exception while checking a file");
+            Debug.LogError("File invalid: exception while checking a file");
             isSaving = false;
             throw;
         }
@@ -1221,7 +1404,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.LogError("Editor invalid: exception while saving a map");
+            Debug.LogError("File invalid: exception while saving a map");
             isSaving = false;
             throw;
         }
@@ -1245,6 +1428,9 @@ public class EditorManager : MonoBehaviour
         {
             case EditPhase.Initialize:
                 // TODO 전환 애니메이션
+                editorMapNameInputs[0].interactable = true;
+                editorSizeXDropdowns[0].interactable = true;
+                editorSizeYDropdowns[0].interactable = true;
                 editorPhases[0].SetActive(false);
                 editorPhases[1].SetActive(true);
                 SetEditModeToNone();
@@ -1432,6 +1618,18 @@ public class EditorManager : MonoBehaviour
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "");
                 break;
+            case EditActionInfo.Type.MassChange:
+                EditMapName(eai.oldName);
+                EditSizeX(eai.oldSizeX);
+                EditSizeY(eai.oldSizeY);
+                foreach (WallInfo wi in eai.newWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.newObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
         }
         undoStack.RemoveAt(undoStack.Count - 1);
         redoStack.Add(eai);
@@ -1527,6 +1725,18 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 mm.Initialize(sizeX, sizeY, walls, objects, "");
                 break;
+            case EditActionInfo.Type.MassChange:
+                EditMapName(eai.newName);
+                EditSizeX(eai.newSizeX);
+                EditSizeY(eai.newSizeY);
+                foreach (WallInfo wi in eai.oldWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.oldObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.newWalls);
+                objects.AddRange(eai.newObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                break;
         }
         redoStack.RemoveAt(redoStack.Count - 1);
         undoStack.Add(eai);
@@ -1547,36 +1757,17 @@ public class EditorManager : MonoBehaviour
 
     private bool ValidateMapInGame()
     {
-        /*
-        if (sizeX < MapManager.MIN_SIZE_X || sizeX > MapManager.MAX_SIZE_X ||
-            sizeY < MapManager.MIN_SIZE_Y || sizeY > MapManager.MAX_SIZE_Y) return false;
-        if (objects.FindAll(e => e.type == ObjectInfo.Type.Ball).Count != 1) return false;
-        foreach (ObjectInfo o in objects)
-        {
-            if (o.x < 1 || o.x > sizeX || o.y < 1 || o.y > sizeY) return false;
-        }
-        */
         mm.Initialize(sizeX, sizeY, walls, objects, solution, true);
         return mm.IsReady;
     }
 
-    private bool ParseMapText(string text)
-    {
-        // TODO
-        // 파일 유효성 검사는 파일 텍스트의 기호나 포맷만 본다.
-        // 숫자(좌표 등), 중복 좌표, Ball과 Exit의 유일성 등은 VailidationMapInGame()으로 확인하자.
-
-        // 근데 생각해 보면 유효성을 보기만 할 게 아니라 파싱까지 하면 되잖아?
-        return false;
-    }
-
     private class EditActionInfo
     {
-        public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval }
+        public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval, MassChange }
 
         public Type type;
 
-        // MapName
+        // MapName, MassChange
         public string oldName;
         public string newName;
 
@@ -1592,9 +1783,17 @@ public class EditorManager : MonoBehaviour
         public ObjectInfo oldObject;
         public ObjectInfo newObject;
 
-        // SizeX, SizeY, MassRemoval
+        // SizeX, SizeY, MassRemoval, MassChange
         public List<WallInfo> oldWalls;
         public List<ObjectInfo> oldObjects;
+
+        // MassChange
+        public int oldSizeX;
+        public int oldSizeY;
+        public int newSizeX;
+        public int newSizeY;
+        public List<WallInfo> newWalls;
+        public List<ObjectInfo> newObjects;
 
         /// <summary>
         /// Type: MapName
@@ -1658,7 +1857,7 @@ public class EditorManager : MonoBehaviour
         }
 
         /// <summary>
-        /// Type: MassRemoval (Reset, ...)
+        /// Type: MassRemoval (Reset, New)
         /// </summary>
         /// <param name="oldRemovedWalls">없으면 null</param>
         /// <param name="oldRemovedObjects">없으면 null</param>
@@ -1673,6 +1872,35 @@ public class EditorManager : MonoBehaviour
                 oldObjects = new List<ObjectInfo>();
             else
                 oldObjects = oldRemovedObjects;
+        }
+
+        /// <summary>
+        /// Type: MassChange (Open)
+        /// </summary>
+        public EditActionInfo(string oldMapName, string newMapName,
+            int oldSizeX, int oldSizeY, int newSizeX, int newSizeY,
+            List<WallInfo> oldWalls, List<ObjectInfo> oldObjects,
+            List<WallInfo> newWalls, List<ObjectInfo> newObjects)
+        {
+            type = Type.MassChange;
+            oldName = oldMapName;
+            newName = newMapName;
+            this.oldSizeX = oldSizeX;
+            this.oldSizeY = oldSizeY;
+            this.newSizeX = newSizeX;
+            this.newSizeY = newSizeY;
+            this.oldWalls = new List<WallInfo>();
+            this.oldObjects = new List<ObjectInfo>();
+            this.newWalls = new List<WallInfo>();
+            this.newObjects = new List<ObjectInfo>();
+            if (!(oldWalls is null))
+                this.oldWalls.AddRange(oldWalls);       // Clone()
+            if (!(oldObjects is null))
+                this.oldObjects.AddRange(oldObjects);   // Clone()
+            if (!(newWalls is null))
+                this.newWalls.AddRange(newWalls);       // Clone()
+            if (!(newObjects is null))
+                this.newObjects.AddRange(newObjects);   // Clone()
         }
     }
 }

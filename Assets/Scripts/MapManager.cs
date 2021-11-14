@@ -94,6 +94,25 @@ public class MapManager : MonoBehaviour
         private set;
     } = "";
 
+    public void Initialize()
+    {
+        IsReady = false;
+
+        SizeX = 0;
+        SizeY = 0;
+        ExitX = 0;
+        ExitY = 0;
+        initialMovableCoord = null;
+        map = null;
+        movables = new List<Movable>();
+        fixedObjects = new List<FixedObject>();
+        traces = new List<GameObject>();
+        ActionHistory = "";
+        HasCleared = false;
+        HasDied = false;
+        tilemap.ClearAllTiles();
+    }
+
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "", bool isValidation = false)
     {
         IsReady = false;

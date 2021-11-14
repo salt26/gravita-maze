@@ -8440,6 +8440,7 @@ MonoBehaviour:
   - {fileID: 2022614170}
   editPhase: 0
   editMode: 0
+  dirtyBit: 0
 --- !u!4 &1073929002
 Transform:
   m_ObjectHideFlags: 0
@@ -14627,7 +14628,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1999761347}
   m_OnClick:
     m_PersistentCalls:
