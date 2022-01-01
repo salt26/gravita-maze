@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class EditorManager : MonoBehaviour
 {
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
-    public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4 }
+    public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4, Open = 5 }
 
     public Camera mainCamera;
     public Grid grid;
@@ -73,6 +73,7 @@ public class EditorManager : MonoBehaviour
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
         editorPhases[3].SetActive(false);
+        editorPhases[4].SetActive(false);
         SetEditModeToNone();
         mm.Initialize();
         editPhase = EditPhase.Initialize;
@@ -1124,7 +1125,7 @@ public class EditorManager : MonoBehaviour
         hasCreated = true;
     }
 
-    public void EditOpen()
+    public void EditOpenPhase()
     {
         if (editPhase != EditPhase.Initialize) return;
 
@@ -1132,7 +1133,16 @@ public class EditorManager : MonoBehaviour
         // ditryBit == true이면 먼저 경고 메시지 띄우기
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
-        bool b =  EditOpenFile("evsef");   // TODO 파일 이름 목록에서 고른 걸로 정하기
+
+        editorPhases[0].SetActive(false);
+        editorPhases[4].SetActive(true);
+        editPhase = EditPhase.Open;
+        GameManager.gm.canPlay = false;
+    }
+
+    public void EditOpenMap(string mapName = "evsef")
+    {
+        bool b = EditOpenFile(mapName);   // TODO 파일 이름 목록에서 고른 걸로 정하기
         Debug.Log(b);
     }
 
@@ -1307,6 +1317,11 @@ public class EditorManager : MonoBehaviour
         editorSizeXDropdowns[0].interactable = false;
         editorSizeYDropdowns[0].interactable = false;
         editorNextButton1.interactable = true;
+
+        editorPhases[4].SetActive(false);
+        editorPhases[0].SetActive(true);
+        editPhase = EditPhase.Initialize;
+
         hasCreated = true;
 
         return true;
@@ -1487,6 +1502,13 @@ public class EditorManager : MonoBehaviour
                 editPhase = EditPhase.Build;
                 SetEditModeToNone();
                 mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                GameManager.gm.canPlay = false;
+                break;
+            case EditPhase.Open:
+                editorPhases[4].SetActive(false);
+                editorPhases[0].SetActive(true);
+                editPhase = EditPhase.Initialize;
+                mm.Initialize();                    // TODO 상황에 따라 맵이 초기화되지 않게
                 GameManager.gm.canPlay = false;
                 break;
         }
