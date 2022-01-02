@@ -1136,6 +1136,7 @@ public class EditorManager : MonoBehaviour
 
         editorPhases[0].SetActive(false);
         editorPhases[4].SetActive(true);
+        mm.Initialize();
         editPhase = EditPhase.Open;
         GameManager.gm.canPlay = false;
     }
@@ -1508,7 +1509,14 @@ public class EditorManager : MonoBehaviour
                 editorPhases[4].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
-                mm.Initialize();                    // TODO 상황에 따라 맵이 초기화되지 않게
+                if (hasCreated)
+                {
+                    mm.Initialize(sizeX, sizeY, walls, objects, solution);      // TODO 상황에 따라 맵이 초기화되지 않게
+                }
+                else
+                {
+                    mm.Initialize();
+                }
                 GameManager.gm.canPlay = false;
                 break;
         }

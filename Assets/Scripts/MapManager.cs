@@ -108,6 +108,14 @@ public class MapManager : MonoBehaviour
         fixedObjects = new List<FixedObject>();
         traces = new List<GameObject>();
         ActionHistory = "";
+        foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
+        {
+            Destroy(m.gameObject);
+        }
+        foreach (FixedObject f in movableAndFixedGameObjects.GetComponentsInChildren<FixedObject>())
+        {
+            Destroy(f.gameObject);
+        }
         HasCleared = false;
         HasDied = false;
         tilemap.ClearAllTiles();
