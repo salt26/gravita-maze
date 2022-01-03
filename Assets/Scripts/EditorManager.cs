@@ -13,6 +13,8 @@ public class EditorManager : MonoBehaviour
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
     public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4, Open = 5 }
 
+    public const string MAP_ROOT_PATH = @"Maps\";
+
     public Camera mainCamera;
     public Grid grid;
     public MapManager mm;
@@ -34,9 +36,16 @@ public class EditorManager : MonoBehaviour
     public Button editorMapTestDoneButton;
     public Button editorSaveButton;
     public Button editorQuitButton3;
+    public Button editorCancelButton5;
+    public Button editorOpenButton5;
+    public Button editorOpenHighlightedButton5;
+    public Text editorOpenPathText;
     public List<Dropdown> editorSizeXDropdowns;
     public List<Dropdown> editorSizeYDropdowns;
     public List<InputField> editorMapNameInputs;
+    public GameObject openScrollItemPrefab;
+    public GameObject editorOpenScrollContent;
+    public Scrollbar editorOpenScrollbar;
     public List<GameObject> editorPhases;
 
     public EditPhase editPhase = EditPhase.Initialize;
@@ -53,6 +62,9 @@ public class EditorManager : MonoBehaviour
     private bool dirtyBit = false;
     private bool hasSavedOnce = false;
     private bool isSaving = false;
+    private OpenScrollItem selectedOpenScrollItem;
+    private string currentOpenPath = MAP_ROOT_PATH;
+    private float openItemSelectTime = 0f;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -1134,6 +1146,15 @@ public class EditorManager : MonoBehaviour
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
+
+        if (!Directory.Exists(MAP_ROOT_PATH))
+        {
+            Debug.LogError("File invalid: there is no directory \"" + MAP_ROOT_PATH + "\"");
+            return;
+        }
+
+        RenderOpenScrollView(MAP_ROOT_PATH);
+
         editorPhases[0].SetActive(false);
         editorPhases[4].SetActive(true);
         mm.Initialize();
@@ -1141,19 +1162,145 @@ public class EditorManager : MonoBehaviour
         GameManager.gm.canPlay = false;
     }
 
-    public void EditOpenMap(string mapName = "evsef")
+    private void RenderOpenScrollView(string openPath)
     {
-        bool b = EditOpenFile(mapName);   // TODO 파일 이름 목록에서 고른 걸로 정하기
-        Debug.Log(b);
+        ClearOpenScrollItems();
+
+        const float SCROLL_ITEM_HEIGHT = 84f;
+
+        string[] files = Directory.GetFiles(openPath, "*.txt");
+        string[] dirs = Directory.GetDirectories(openPath);
+        int index = 0;
+        int length = dirs.Length + files.Length;
+
+        if (!openPath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        {
+            length++;
+        }
+
+        currentOpenPath = openPath.TrimEnd('\\');
+        //Debug.Log(currentOpenPath);
+
+        string currentPath = currentOpenPath.Substring(currentOpenPath.LastIndexOf('\\') + 1);
+        if (currentOpenPath.Length <= 21)
+        {
+            editorOpenPathText.text = currentOpenPath.Replace('\\', '/');
+        }
+        else if (currentPath.Length <= 17)
+        {
+            string tempPath = currentOpenPath.Substring(currentOpenPath.Length - 17);
+            tempPath = tempPath.Substring(tempPath.IndexOf('\\') + 1);
+            editorOpenPathText.text = ".../" + tempPath.Replace('\\', '/');
+        }
+        else
+        {
+            editorOpenPathText.text = ".../" + currentPath.Remove(14) + "...";
+        }
+
+        editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta =
+            new Vector2(editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
+
+        if (!openPath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        {
+            GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+            g.GetComponent<OpenScrollItem>().Initialize(currentOpenPath.Remove(currentOpenPath.LastIndexOf('\\')), true, this, true);
+            index++;
+        }
+
+        foreach (string s in dirs)
+        {
+            GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+            g.GetComponent<OpenScrollItem>().Initialize(s, true, this, false);
+            index++;
+        }
+
+        foreach (string s in files)
+        {
+            GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+            g.GetComponent<OpenScrollItem>().Initialize(s, false, this);
+            index++;
+        }
+
+        editorOpenScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
     }
 
-    public bool EditOpenFile(string pathWithoutExtension)
+    public void EditOpenItemSelect(OpenScrollItem caller)
+    {
+        float selectTime = Time.time;
+        if (caller != null && caller.Equals(selectedOpenScrollItem) && 
+            openItemSelectTime > 0f && selectTime - openItemSelectTime < 0.5f)
+        {
+            // Double click
+            EditOpen();
+            return;
+        }
+        openItemSelectTime = selectTime;
+
+        foreach (OpenScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenScrollItem>())
+        {
+            i.isSelected = false;
+        }
+        caller.isSelected = true;
+        selectedOpenScrollItem = caller;
+
+        if (caller.isFolder)
+        {
+            editorOpenButton5.gameObject.SetActive(true);
+            editorOpenHighlightedButton5.gameObject.SetActive(false);
+            editorOpenButton5.interactable = true;
+            mm.Initialize();
+        }
+        else
+        {
+            bool b = EditOpenFile(selectedOpenScrollItem.path, true);
+            editorOpenHighlightedButton5.gameObject.SetActive(b);
+            editorOpenButton5.gameObject.SetActive(!b);
+            editorOpenButton5.interactable = b;
+            editorOpenHighlightedButton5.interactable = b;
+        }
+    }
+
+    public void EditOpen()
+    {
+        if (editPhase != EditPhase.Open || selectedOpenScrollItem is null) return;
+
+        if (selectedOpenScrollItem.isFolder)
+        {
+            RenderOpenScrollView(selectedOpenScrollItem.path);
+            mm.Initialize();
+        }
+        else
+        {
+            EditOpenFile(selectedOpenScrollItem.path, false);
+        }
+    }
+
+    public bool EditOpenFile(string path, bool isPreview)
     {
         try
         {
-            if (!File.Exists(@"Maps\" + pathWithoutExtension + ".txt"))
+            if (!File.Exists(path))
             {
-                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(pathWithoutExtension) + "\"");
+                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(path) + "\"");
+                return false;
+            }
+            else if (Path.GetExtension(path) != ".txt")
+            {
+                Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(path) + "\" is not a .txt file");
                 return false;
             }
         }
@@ -1168,7 +1315,7 @@ public class EditorManager : MonoBehaviour
         List<WallInfo> tempWalls = new List<WallInfo>();
         string tempSolution = "";
 
-        FileStream fs = new FileStream(@"Maps\" + pathWithoutExtension + ".txt", FileMode.Open);
+        FileStream fs = new FileStream(path, FileMode.Open);
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
         #region parsing text file
@@ -1275,10 +1422,15 @@ public class EditorManager : MonoBehaviour
                 }
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Debug.LogError("File invalid: exception while opening a map");
-            throw;
+            Debug.LogException(e);
+            if (hasCreated && !isPreview)
+                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+            else
+                mm.Initialize();
+            return false;
         }
         finally
         {
@@ -1292,40 +1444,49 @@ public class EditorManager : MonoBehaviour
         if (!mm.IsReady)
         {
             Debug.LogError("File invalid: map validation failed");
-            if (hasCreated)
+            if (hasCreated && !isPreview)
                 mm.Initialize(sizeX, sizeY, walls, objects, solution);
             else
                 mm.Initialize();
             return false;
         }
 
-        if (hasCreated)
+        if (isPreview)
         {
-            undoStack.Add(new EditActionInfo(mapName, Path.GetFileNameWithoutExtension(pathWithoutExtension),
-                sizeX, sizeY, tempSizeX, tempSizeY, walls, objects, tempWalls, tempObjects));
-            redoStack.Clear();
+            return true;
         }
+        else
+        { 
+            if (hasCreated)
+            {
+                undoStack.Add(new EditActionInfo(mapName, Path.GetFileNameWithoutExtension(path),
+                    sizeX, sizeY, tempSizeX, tempSizeY, walls, objects, tempWalls, tempObjects));
+                redoStack.Clear();
+            }
 
-        EditSizeX(tempSizeX);
-        EditSizeY(tempSizeY);
-        EditMapName(Path.GetFileNameWithoutExtension(pathWithoutExtension));
-        objects = tempObjects;
-        walls = tempWalls;
-        solution = tempSolution;
-        mm.Initialize(sizeX, sizeY, walls, objects, solution);
+            EditSizeX(tempSizeX);
+            EditSizeY(tempSizeY);
+            EditMapName(Path.GetFileNameWithoutExtension(path));
+            objects = tempObjects;
+            walls = tempWalls;
+            solution = tempSolution;
+            mm.Initialize(sizeX, sizeY, walls, objects, solution);
 
-        editorMapNameInputs[0].interactable = false;
-        editorSizeXDropdowns[0].interactable = false;
-        editorSizeYDropdowns[0].interactable = false;
-        editorNextButton1.interactable = true;
+            editorMapNameInputs[0].interactable = false;
+            editorSizeXDropdowns[0].interactable = false;
+            editorSizeYDropdowns[0].interactable = false;
+            editorNextButton1.interactable = true;
 
-        editorPhases[4].SetActive(false);
-        editorPhases[0].SetActive(true);
-        editPhase = EditPhase.Initialize;
+            editorPhases[4].SetActive(false);
+            editorPhases[0].SetActive(true);
+            editPhase = EditPhase.Initialize;
 
-        hasCreated = true;
+            ClearOpenScrollItems();
 
-        return true;
+            hasCreated = true;
+
+            return true;
+        }
     }
 
     public void EditSave()
@@ -1509,6 +1670,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[4].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                ClearOpenScrollItems();
                 if (hasCreated)
                 {
                     mm.Initialize(sizeX, sizeY, walls, objects, solution);      // TODO 상황에 따라 맵이 초기화되지 않게
@@ -1789,6 +1951,21 @@ public class EditorManager : MonoBehaviour
     {
         mm.Initialize(sizeX, sizeY, walls, objects, solution, true);
         return mm.IsReady;
+    }
+
+    private void ClearOpenScrollItems()
+    {
+        selectedOpenScrollItem = null;
+        foreach (OpenScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenScrollItem>())
+        {
+            Destroy(i.gameObject);
+        }
+
+        editorOpenButton5.gameObject.SetActive(true);
+        editorOpenHighlightedButton5.gameObject.SetActive(false);
+
+        editorOpenButton5.interactable = false;
+        editorOpenHighlightedButton5.interactable = false;
     }
 
     private class EditActionInfo

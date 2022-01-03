@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class OpenScrollItem : MonoBehaviour
 {
@@ -15,15 +16,29 @@ public class OpenScrollItem : MonoBehaviour
     public Sprite basicFolderIcon;
     public Sprite highlightedFolderIcon;
 
+    public EditorManager em;
+
     public bool isFolder = false;
+    public bool isUpOneLevel = false;
+    public string path = "";
     public string labelName = "";
 
     public bool isSelected = false;
 
-    public void Initialize(string name, bool isFolder)
+    public void Initialize(string path, bool isFolder, EditorManager em, bool isUpOneLevel = false)
     {
+        this.em = em;
         this.isFolder = isFolder;
-        labelName = name;
+        this.isUpOneLevel = isFolder & isUpOneLevel;
+        this.path = path;
+        if (isFolder)
+        {
+            labelName = path.Substring(path.LastIndexOf('\\') + 1);
+        }
+        else
+        {
+            labelName = Path.GetFileNameWithoutExtension(path);
+        }
         Update();
     }
 
@@ -31,10 +46,12 @@ public class OpenScrollItem : MonoBehaviour
     {
         if (isFolder)
         {
-            if (labelName.Length <= 22)
-                label.text = "[" + labelName + "]";
+            if (isUpOneLevel)
+                label.text = "[Up One Level]";
+            else if (labelName.Length <= 24)
+                label.text = labelName;
             else
-                label.text = "[" + labelName.Substring(0, 19) + "...]";
+                label.text = labelName.Substring(0, 21) + "...";
         }
         else
         {
@@ -68,5 +85,10 @@ public class OpenScrollItem : MonoBehaviour
             }
             label.color = highlightedColor;
         }
+    }
+
+    public void Select()
+    {
+        em.EditOpenItemSelect(this);
     }
 }
