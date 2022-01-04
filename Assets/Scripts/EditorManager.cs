@@ -14,6 +14,7 @@ public class EditorManager : MonoBehaviour
     public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4, Open = 5 }
 
     public const string MAP_ROOT_PATH = @"Maps\";
+    public const float DEFAULT_TIME_LIMIT = 10f;
 
     public Camera mainCamera;
     public Grid grid;
@@ -32,6 +33,8 @@ public class EditorManager : MonoBehaviour
     public Button editorBackHighlightedButton4;
     public Button editorRetryButton;
     public Button editorRetryHighlightedButton;
+    public Button editorRetryTimeButton;
+    public Button editorRetryTimeHighlightedButton;
     public Button editorMapTestRequiredButton;
     public Button editorMapTestDoneButton;
     public Button editorSaveButton;
@@ -57,6 +60,7 @@ public class EditorManager : MonoBehaviour
     private List<ObjectInfo> objects = new List<ObjectInfo>();
     private string solution = "";
     private string mapName = "";
+    private float timeLimit = DEFAULT_TIME_LIMIT;
     private bool hasCreated = false;
     [SerializeField]
     private bool dirtyBit = false;
@@ -1314,6 +1318,7 @@ public class EditorManager : MonoBehaviour
         List<ObjectInfo> tempObjects = new List<ObjectInfo>();
         List<WallInfo> tempWalls = new List<WallInfo>();
         string tempSolution = "";
+        float tempTimeLimit = DEFAULT_TIME_LIMIT;
 
         FileStream fs = new FileStream(path, FileMode.Open);
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
@@ -1404,6 +1409,14 @@ public class EditorManager : MonoBehaviour
                         }
                         tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
                         break;
+                    case "t":
+                        if (token.Length != 2)
+                        {
+                            Debug.LogError("File invalid: time limit (" + l + ")");
+                            return false;
+                        }
+                        tempTimeLimit = float.Parse(token[1]);
+                        break;
                     default:
                         if (token.Length != 1 ||
                             !(token[0].StartsWith("w") || token[0].StartsWith("a") || token[0].StartsWith("s") || token[0].StartsWith("d")))
@@ -1427,7 +1440,7 @@ public class EditorManager : MonoBehaviour
             Debug.LogError("File invalid: exception while opening a map");
             Debug.LogException(e);
             if (hasCreated && !isPreview)
-                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
             else
                 mm.Initialize();
             return false;
@@ -1440,12 +1453,12 @@ public class EditorManager : MonoBehaviour
         #endregion
 
         // Map validation
-        mm.Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, true);
+        mm.Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true);
         if (!mm.IsReady)
         {
             Debug.LogError("File invalid: map validation failed");
             if (hasCreated && !isPreview)
-                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
             else
                 mm.Initialize();
             return false;
@@ -1470,7 +1483,8 @@ public class EditorManager : MonoBehaviour
             objects = tempObjects;
             walls = tempWalls;
             solution = tempSolution;
-            mm.Initialize(sizeX, sizeY, walls, objects, solution);
+            timeLimit = Mathf.Max(3f, tempTimeLimit);
+            mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
 
             editorMapNameInputs[0].interactable = false;
             editorSizeXDropdowns[0].interactable = false;
@@ -1491,6 +1505,8 @@ public class EditorManager : MonoBehaviour
 
     public void EditSave()
     {
+        // TODO 루트 디렉토리가 아닌 경로에도 저장할 수 있도록 변경하기
+
         /*
         Debug.Log("isSaving = " + isSaving.ToString() + ", solution = " + solution + ", mapName = " + mapName +
             " dirtyBit = " + dirtyBit.ToString() + ", mm.IsReady = " + mm.IsReady.ToString());
@@ -1509,9 +1525,9 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (!Directory.Exists("Maps"))
+            if (!Directory.Exists(MAP_ROOT_PATH.TrimEnd('\\')))
             {
-                Directory.CreateDirectory("Maps");
+                Directory.CreateDirectory(MAP_ROOT_PATH.TrimEnd('\\'));
             }
         }
         catch (Exception)
@@ -1523,7 +1539,7 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (File.Exists(@"Maps\" + mapName + ".txt"))
+            if (File.Exists(MAP_ROOT_PATH + mapName + ".txt"))
             {
                 // TODO 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
                 Debug.LogWarning("Map \"" + mapName + "\" already exists. Do you want to overwrite it?");
@@ -1538,7 +1554,7 @@ public class EditorManager : MonoBehaviour
             throw;
         }
 
-        FileStream fs = new FileStream(@"Maps\" + mapName + ".txt", FileMode.Create);
+        FileStream fs = new FileStream(MAP_ROOT_PATH + mapName + ".txt", FileMode.Create);
         StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
 
         try
@@ -1577,6 +1593,7 @@ public class EditorManager : MonoBehaviour
                         break;
                 }
             }
+            sw.WriteLine("t " + timeLimit);
             sw.WriteLine(solution);
         }
         catch (Exception)
@@ -1624,8 +1641,10 @@ public class EditorManager : MonoBehaviour
                 editorPhases[2].SetActive(false);
                 editorPhases[3].SetActive(true);
                 editPhase = EditPhase.Test;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 mm.afterGravity = EditorAfterGravity;
                 EditorAfterGravity(MapManager.Flag.Continued);
+                mm.TimeActivate();
                 GameManager.gm.canPlay = true;
                 break;
             case EditPhase.Test:
@@ -1635,7 +1654,7 @@ public class EditorManager : MonoBehaviour
                 editPhase = EditPhase.Save;
                 solution = mm.ActionHistory;
                 print(solution);
-                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
         }
@@ -1660,10 +1679,9 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditPhase.Test:
                 editorPhases[3].SetActive(false);
-                editorPhases[1].SetActive(true);
-                editPhase = EditPhase.Build;
-                SetEditModeToNone();
-                mm.Initialize(sizeX, sizeY, walls, objects, solution);
+                editorPhases[2].SetActive(true);
+                editPhase = EditPhase.Save;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Open:
@@ -1673,7 +1691,7 @@ public class EditorManager : MonoBehaviour
                 ClearOpenScrollItems();
                 if (hasCreated)
                 {
-                    mm.Initialize(sizeX, sizeY, walls, objects, solution);      // TODO 상황에 따라 맵이 초기화되지 않게
+                    mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 }
                 else
                 {
@@ -1692,8 +1710,10 @@ public class EditorManager : MonoBehaviour
                 editorBackHighlightedButton4.gameObject.SetActive(false);
                 editorBackButton4.gameObject.SetActive(true);
 
-                editorRetryHighlightedButton.gameObject.SetActive(false);
                 editorRetryButton.gameObject.SetActive(true);
+                editorRetryHighlightedButton.gameObject.SetActive(false);
+                editorRetryTimeButton.gameObject.SetActive(false);
+                editorRetryTimeHighlightedButton.gameObject.SetActive(false);
 
                 editorNextButton4.interactable = false;
                 editorBackButton4.interactable = true;
@@ -1702,8 +1722,10 @@ public class EditorManager : MonoBehaviour
                 editorBackHighlightedButton4.gameObject.SetActive(false);
                 editorBackButton4.gameObject.SetActive(true);
 
+                editorRetryButton.gameObject.SetActive(false);
                 editorRetryHighlightedButton.gameObject.SetActive(false);
-                editorRetryButton.gameObject.SetActive(true);
+                editorRetryTimeButton.gameObject.SetActive(true);
+                editorRetryTimeHighlightedButton.gameObject.SetActive(false);
 
                 editorNextButton4.interactable = true;
                 editorBackButton4.interactable = false;
@@ -1715,6 +1737,20 @@ public class EditorManager : MonoBehaviour
 
                 editorRetryButton.gameObject.SetActive(false);
                 editorRetryHighlightedButton.gameObject.SetActive(true);
+                editorRetryTimeButton.gameObject.SetActive(false);
+                editorRetryTimeHighlightedButton.gameObject.SetActive(false);
+
+                editorNextButton4.interactable = false;
+                editorBackHighlightedButton4.interactable = true;
+                break;
+            case MapManager.Flag.TimeOver:
+                editorBackButton4.gameObject.SetActive(false);
+                editorBackHighlightedButton4.gameObject.SetActive(true);
+
+                editorRetryButton.gameObject.SetActive(false);
+                editorRetryHighlightedButton.gameObject.SetActive(false);
+                editorRetryTimeButton.gameObject.SetActive(false);
+                editorRetryTimeHighlightedButton.gameObject.SetActive(true);
 
                 editorNextButton4.interactable = false;
                 editorBackHighlightedButton4.interactable = true;
@@ -1761,7 +1797,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -1790,25 +1826,25 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.oldName);
@@ -1820,7 +1856,7 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
         }
         undoStack.RemoveAt(undoStack.Count - 1);
@@ -1869,7 +1905,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -1898,16 +1934,16 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 // TODO
@@ -1915,7 +1951,7 @@ public class EditorManager : MonoBehaviour
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.newName);
@@ -1927,7 +1963,7 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "");
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 break;
         }
         redoStack.RemoveAt(redoStack.Count - 1);
@@ -1949,7 +1985,7 @@ public class EditorManager : MonoBehaviour
 
     private bool ValidateMapInGame()
     {
-        mm.Initialize(sizeX, sizeY, walls, objects, solution, true);
+        mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, true);
         return mm.IsReady;
     }
 

@@ -167,7 +167,8 @@ public class GameManager : MonoBehaviour
 
         mm.afterGravity = MainAfterGravity;
 
-        mm.Initialize(7, 7, walls, objects, "d");
+        mm.Initialize(7, 7, walls, objects, "d", float.PositiveInfinity);
+        mm.TimeActivate();
         canPlay = true;
     }
 

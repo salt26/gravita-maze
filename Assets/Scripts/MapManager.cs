@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
-    public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, QuitGame = 4, MapEditor = 5 }
+    public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6 }
     public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64 }
 
     public const int MIN_SIZE_X = 2;
@@ -69,6 +69,21 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     }
+    public float TimeLimit
+    {
+        get;
+        private set;
+    }
+    public float RemainingTime
+    {
+        get;
+        private set;
+    } = 0f;
+    public bool IsTimePassing
+    {
+        get;
+        private set;
+    } = false;
 
     public bool IsReady
     {
@@ -94,6 +109,20 @@ public class MapManager : MonoBehaviour
         private set;
     } = "";
 
+    void Update()
+    {
+        if (IsReady && IsTimePassing && RemainingTime > 0f && !HasCleared)
+        {
+            RemainingTime -= Time.deltaTime;
+            if (RemainingTime <= 0f)
+            {
+                if (afterGravity.GetInvocationList().Length > 0)
+                    afterGravity(Flag.TimeOver);
+                Debug.LogWarning("Time over");
+            }
+        }
+    }
+
     public void Initialize()
     {
         IsReady = false;
@@ -102,6 +131,7 @@ public class MapManager : MonoBehaviour
         SizeY = 0;
         ExitX = 0;
         ExitY = 0;
+        TimeLimit = 0f;
         initialMovableCoord = null;
         map = null;
         movables = new List<Movable>();
@@ -118,10 +148,13 @@ public class MapManager : MonoBehaviour
         }
         HasCleared = false;
         HasDied = false;
+        IsTimePassing = false;
+        RemainingTime = 0f;
         tilemap.ClearAllTiles();
     }
 
-    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "", bool isValidation = false)
+    public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
+        float timeLimit = 0f, bool isValidation = false)
     {
         IsReady = false;
 
@@ -437,16 +470,32 @@ public class MapManager : MonoBehaviour
         mainCamera.orthographicSize = Mathf.Max(sizeX, sizeY) / 2f + 1.5f;
 
         gravityBall.anchoredPosition = new Vector3(0f, 0f);
+
+        TimeLimit = Mathf.Max(3f, timeLimit);
+        ActionHistory = "";
+        IsReady = true;
+        HasCleared = false;
+        HasDied = false;
+        IsTimePassing = false;
+        RemainingTime = 0f;
+        //PrintMapCoord();
+    }
+
+    /// <summary>
+    /// 시간 흐름(게임 플레이) 활성화 함수. 반드시 Initialize() 호출 직후에만 호출할 것.
+    /// </summary>
+    public void TimeActivate()
+    {
+        if (!IsReady) return;
+
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
 
-        ActionHistory = "";
-        IsReady = true;
-        HasCleared = false;
-        HasDied = false;
-        //PrintMapCoord();
+        RemainingTime = TimeLimit;
+        IsTimePassing = true;
+        Debug.Log("Remaining time: " + RemainingTime);
     }
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
@@ -489,14 +538,27 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 현재 맵을 초기 상태로 되돌리는 함수.
+    /// 현재 맵과 남은 시간을 초기 상태로 되돌리는 함수.
+    /// </summary>
+    public void RestartWithTime()
+    {
+        if (!IsReady || (RemainingTime > 0f && !HasCleared)) return;
+        TimeActivate();
+        RestartHelper();
+    }
+
+    /// <summary>
+    /// 현재 맵을 초기 상태로 되돌리는 함수. 남은 시간은 되돌리지 않습니다.
     /// </summary>
     public void Restart()
     {
-        if (!IsReady) return;
+        if (!IsReady || RemainingTime <= 0f || HasCleared) return;
+        RestartHelper();
+    }
 
+    private void RestartHelper()
+    {
         IsReady = false;
-        // TODO: 모든 movable들을 initialMovableCoord 참조하여 원래 위치로 돌려놓고 SetActive(true)해야 함
 
         for (int i = 0; i < SizeX; i++)
         {
@@ -537,7 +599,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityUp()
     {
-        if (!IsReady || HasCleared || HasDied) return;
+        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         gravityBall.anchoredPosition = new Vector3(0f, 264f);
         gravityUpButton.interactable = false;
         gravityDownButton.interactable = true;
@@ -550,7 +612,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityDown()
     {
-        if (!IsReady || HasCleared || HasDied) return;
+        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         gravityBall.anchoredPosition = new Vector3(0f, -264f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = false;
@@ -563,7 +625,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityLeft()
     {
-        if (!IsReady || HasCleared || HasDied) return;
+        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         gravityBall.anchoredPosition = new Vector3(-264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -576,7 +638,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityRight()
     {
-        if (!IsReady || HasCleared || HasDied) return;
+        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         gravityBall.anchoredPosition = new Vector3(264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -595,7 +657,7 @@ public class MapManager : MonoBehaviour
     public void Gravity(GameManager.GravityDirection gravityDirection, out Flag flag)
     {
         flag = Flag.Continued;
-        if (!IsReady || HasCleared || HasDied) return;
+        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
 
         currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _);
 
