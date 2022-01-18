@@ -49,6 +49,7 @@ public class EditorManager : MonoBehaviour
     public GameObject openScrollItemPrefab;
     public GameObject editorOpenScrollContent;
     public Scrollbar editorOpenScrollbar;
+    public GameObject timerUI;
     public List<GameObject> editorPhases;
 
     public EditPhase editPhase = EditPhase.Initialize;
@@ -85,6 +86,7 @@ public class EditorManager : MonoBehaviour
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
+        timerUI.SetActive(false);
         editorPhases[0].SetActive(true);
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
@@ -1640,6 +1642,7 @@ public class EditorManager : MonoBehaviour
             case EditPhase.Save:
                 editorPhases[2].SetActive(false);
                 editorPhases[3].SetActive(true);
+                timerUI.SetActive(true);
                 editPhase = EditPhase.Test;
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 mm.afterGravity = EditorAfterGravity;
@@ -1649,6 +1652,7 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditPhase.Test:
                 // Validation finished
+                timerUI.SetActive(false);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
@@ -1678,6 +1682,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Test:
+                timerUI.SetActive(false);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
