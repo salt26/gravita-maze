@@ -49,6 +49,8 @@ public class MapManager : MonoBehaviour
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
 
+    private float _timeLimit;
+
     public int SizeX
     {
         get;
@@ -71,8 +73,14 @@ public class MapManager : MonoBehaviour
     }
     public float TimeLimit
     {
-        get;
-        private set;
+        get
+        {
+            return _timeLimit;
+        }
+        set
+        {
+            _timeLimit = Mathf.Max(3f, value);
+        }
     }
     public float RemainingTime
     {
@@ -131,7 +139,7 @@ public class MapManager : MonoBehaviour
         SizeY = 0;
         ExitX = 0;
         ExitY = 0;
-        TimeLimit = 0f;
+        _timeLimit = 0f;
         initialMovableCoord = null;
         map = null;
         movables = new List<Movable>();

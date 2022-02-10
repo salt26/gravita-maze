@@ -50,6 +50,9 @@ public class EditorManager : MonoBehaviour
     public GameObject editorOpenScrollContent;
     public Scrollbar editorOpenScrollbar;
     public GameObject timerUI;
+    public Slider editorTimerSlider;
+    public Image editorTimerLabel10;
+    public Image editorTimerLabel1;
     public List<GameObject> editorPhases;
 
     public EditPhase editPhase = EditPhase.Initialize;
@@ -932,7 +935,7 @@ public class EditorManager : MonoBehaviour
         }
 
         // Map Rendering
-        mm.Initialize(sizeX, sizeY, walls, objects, "");
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
 
         return hasChanged;
     }
@@ -956,7 +959,7 @@ public class EditorManager : MonoBehaviour
         List<ObjectInfo> oldObjects = objects;
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
-        mm.Initialize(sizeX, sizeY, walls, objects, "");
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
 
         undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
         redoStack.Clear();
@@ -1025,7 +1028,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "");
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
     }
 
     public void EditSizeX(Dropdown caller)
@@ -1084,7 +1087,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "");
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
     }
 
     public void EditSizeY(Dropdown caller)
@@ -1138,6 +1141,7 @@ public class EditorManager : MonoBehaviour
         editorSizeXDropdowns[0].interactable = true;
         editorSizeYDropdowns[0].interactable = true;
         editorNextButton1.interactable = true;
+        timeLimit = DEFAULT_TIME_LIMIT;
         EditMapName("");
         EditReset();
         hasCreated = true;
@@ -1634,6 +1638,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Build:
+                SetEditTimerUI();
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
@@ -1653,6 +1658,7 @@ public class EditorManager : MonoBehaviour
             case EditPhase.Test:
                 // Validation finished
                 timerUI.SetActive(false);
+                SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
@@ -1683,6 +1689,7 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditPhase.Test:
                 timerUI.SetActive(false);
+                SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Save;
@@ -1978,6 +1985,40 @@ public class EditorManager : MonoBehaviour
     }
 #pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
+    public void EditTimer()
+    {
+        if (mm == null || !mm.IsReady || editPhase != EditPhase.Save) return;
+        timeLimit = Mathf.Max(3f, editorTimerSlider.value);
+        mm.TimeLimit = timeLimit;
+        solution = "";
+
+        SetEditTimerUI();
+    }
+
+    private void SetEditTimerUI()
+    {
+        Debug.Log("SetEditTimerUI");
+        if (!mm.IsReady)
+        {
+            editorTimerSlider.SetValueWithoutNotify(0f);
+            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[0];
+            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[0];
+            return;
+        }
+
+        if (mm.TimeLimit > 99f)
+        {
+            editorTimerSlider.SetValueWithoutNotify(editorTimerSlider.maxValue);
+            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[9];
+            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[9];
+        }
+        else
+        {
+            editorTimerSlider.SetValueWithoutNotify(mm.TimeLimit);
+            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[Mathf.CeilToInt(mm.TimeLimit) / 10];
+            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[Mathf.CeilToInt(mm.TimeLimit) % 10];
+        }
+    }
 
     private void SetEditModeToNone()
     {
