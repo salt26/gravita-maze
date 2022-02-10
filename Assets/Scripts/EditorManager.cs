@@ -49,10 +49,11 @@ public class EditorManager : MonoBehaviour
     public GameObject openScrollItemPrefab;
     public GameObject editorOpenScrollContent;
     public Scrollbar editorOpenScrollbar;
-    public GameObject timerUI;
+    public TimerUI timerUI;
     public Slider editorTimerSlider;
     public Image editorTimerLabel10;
     public Image editorTimerLabel1;
+    public StatusUI statusUI;
     public List<GameObject> editorPhases;
 
     public EditPhase editPhase = EditPhase.Initialize;
@@ -89,7 +90,8 @@ public class EditorManager : MonoBehaviour
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
-        timerUI.SetActive(false);
+        statusUI.gameObject.SetActive(true);
+        timerUI.gameObject.SetActive(false);
         editorPhases[0].SetActive(true);
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
@@ -296,11 +298,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || b < 1 || b > sizeY - 1)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal wall position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
 
@@ -324,11 +328,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX - 1 || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical wall position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
 
@@ -356,17 +362,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || !(b == 0 || b == sizeY))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -400,17 +409,20 @@ public class EditorManager : MonoBehaviour
                     if (!(a == 0 || a == sizeX) || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -444,17 +456,20 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -488,17 +503,20 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -532,17 +550,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -576,17 +597,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -624,12 +648,14 @@ public class EditorManager : MonoBehaviour
                     if (a < 0 || a > sizeX + 1 || b < 0 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal wall position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)) &&
                         !walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal wall or exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
                         break;
                     }
 
@@ -657,12 +683,14 @@ public class EditorManager : MonoBehaviour
                     if (a < 0 || a > sizeX || b < 0 || b > sizeY + 1)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical wall position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)) &&
                         !walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical wall or exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
                         break;
                     }
 
@@ -690,11 +718,13 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
 
@@ -720,11 +750,13 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: vertical exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
 
@@ -750,11 +782,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
 
@@ -780,11 +814,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor invalid: horizontal exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
 
@@ -811,17 +847,20 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: ball position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
                     break;
                 }
 
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
                     if (verbose) Debug.Log("Replace ball at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Only one ball can be placed.", 1f);
                     if (commitAction)
                     {
                         undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
@@ -854,11 +893,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: iron position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
                     break;
                 }
 
@@ -882,11 +923,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: fire position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
                     break;
                 }
 
@@ -910,11 +953,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: object position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
                     break;
                 }
                 if (!objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor invalid: object doesn't exists at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
                     break;
                 }
 
@@ -948,6 +993,32 @@ public class EditorManager : MonoBehaviour
         }
         editorModeButtons[buttonNum].interactable = false;
         editMode = (EditMode)buttonNum;
+        switch (editMode) {
+            case EditMode.None:
+                statusUI.SetStatusMessage("");
+                break;
+            case EditMode.Ball:
+                statusUI.SetStatusMessage("Touch map to add a ball.");
+                break;
+            case EditMode.Exit:
+                statusUI.SetStatusMessage("Touch map to add an exit.");
+                break;
+            case EditMode.Fire:
+                statusUI.SetStatusMessage("Touch map to add fires.");
+                break;
+            case EditMode.Iron:
+                statusUI.SetStatusMessage("Touch map to add irons");
+                break;
+            case EditMode.Wall:
+                statusUI.SetStatusMessage("Touch map to add walls");
+                break;
+            case EditMode.RemoveWall:
+                statusUI.SetStatusMessage("Touch map to remove walls or exits");
+                break;
+            case EditMode.RemoveObject:
+                statusUI.SetStatusMessage("Touch map to remove objects");
+                break;
+        }
     }
 
     public void EditReset()
@@ -1647,7 +1718,8 @@ public class EditorManager : MonoBehaviour
             case EditPhase.Save:
                 editorPhases[2].SetActive(false);
                 editorPhases[3].SetActive(true);
-                timerUI.SetActive(true);
+                statusUI.gameObject.SetActive(false);
+                timerUI.gameObject.SetActive(true);
                 editPhase = EditPhase.Test;
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 mm.afterGravity = EditorAfterGravity;
@@ -1657,7 +1729,8 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditPhase.Test:
                 // Validation finished
-                timerUI.SetActive(false);
+                timerUI.gameObject.SetActive(false);
+                statusUI.gameObject.SetActive(true);
                 SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
@@ -1688,7 +1761,8 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Test:
-                timerUI.SetActive(false);
+                timerUI.gameObject.SetActive(false);
+                statusUI.gameObject.SetActive(true);
                 SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
@@ -2001,22 +2075,22 @@ public class EditorManager : MonoBehaviour
         if (!mm.IsReady)
         {
             editorTimerSlider.SetValueWithoutNotify(0f);
-            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[0];
-            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[0];
+            editorTimerLabel10.sprite = timerUI.numberLabels[0];
+            editorTimerLabel1.sprite = timerUI.numberLabels[0];
             return;
         }
 
         if (mm.TimeLimit > 99f)
         {
             editorTimerSlider.SetValueWithoutNotify(editorTimerSlider.maxValue);
-            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[9];
-            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[9];
+            editorTimerLabel10.sprite = timerUI.numberLabels[9];
+            editorTimerLabel1.sprite = timerUI.numberLabels[9];
         }
         else
         {
             editorTimerSlider.SetValueWithoutNotify(mm.TimeLimit);
-            editorTimerLabel10.sprite = timerUI.GetComponent<TimerUI>().numberLabels[Mathf.CeilToInt(mm.TimeLimit) / 10];
-            editorTimerLabel1.sprite = timerUI.GetComponent<TimerUI>().numberLabels[Mathf.CeilToInt(mm.TimeLimit) % 10];
+            editorTimerLabel10.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) / 10];
+            editorTimerLabel1.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) % 10];
         }
     }
 
