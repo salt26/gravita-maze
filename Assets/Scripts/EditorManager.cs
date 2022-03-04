@@ -71,6 +71,7 @@ public class EditorManager : MonoBehaviour
     private bool dirtyBit = false;
     private bool hasSavedOnce = false;
     private bool isSaving = false;
+    private bool hasPassedInitPhaseOnce = false;
     private OpenScrollItem selectedOpenScrollItem;
     private string currentOpenPath = MAP_ROOT_PATH;
     private float openItemSelectTime = 0f;
@@ -100,9 +101,11 @@ public class EditorManager : MonoBehaviour
         SetEditModeToNone();
         mm.Initialize();
         editPhase = EditPhase.Initialize;
+        statusUI.SetStatusMessage("Welcome to the map editor!");
         hasCreated = false;
         hasSavedOnce = false;
         dirtyBit = false;
+        hasPassedInitPhaseOnce = false;
         GameManager.gm.canPlay = false;
     }
 
@@ -238,11 +241,19 @@ public class EditorManager : MonoBehaviour
         {
             editorNewButton.interactable = false;
             editorResetButton.interactable = false;
+            if (editPhase == EditPhase.Initialize && !hasPassedInitPhaseOnce)
+            {
+                statusUI.SetStatusMessage("All right!\nLet's move on to the next step.");
+            }
         }
         else if (hasCreated)
         {
             editorNewButton.interactable = true;
             editorResetButton.interactable = true;
+            if (editPhase == EditPhase.Initialize && !hasPassedInitPhaseOnce)
+            {
+                statusUI.SetStatusMessage("All right!\nLet's move on to the next step.");
+            }
         }
         else
         {
@@ -271,11 +282,28 @@ public class EditorManager : MonoBehaviour
         {
             editorMapTestRequiredButton.gameObject.SetActive(false);
             editorMapTestDoneButton.gameObject.SetActive(true);
+
+            if (editPhase == EditPhase.Save)
+            {
+                if (mapName == null || mapName == "")
+                {
+                    statusUI.SetStatusMessage("Set your map name.");
+                }
+                else if (dirtyBit)
+                {
+                    statusUI.SetStatusMessage("Now you can save your map.");
+                }
+            }
         }
         else
         {
             editorMapTestRequiredButton.gameObject.SetActive(true);
             editorMapTestDoneButton.gameObject.SetActive(false);
+
+            if (editPhase == EditPhase.Save)
+            {
+                statusUI.SetStatusMessage("Set the time limit and\nrun the map test.");
+            }
         }
     }
 
@@ -998,25 +1026,25 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessage("");
                 break;
             case EditMode.Ball:
-                statusUI.SetStatusMessage("Touch map to add a ball.");
+                statusUI.SetStatusMessage("Touch the map to add a ball.\nThere must be one ball.");
                 break;
             case EditMode.Exit:
-                statusUI.SetStatusMessage("Touch map to add an exit.");
+                statusUI.SetStatusMessage("Touch the map to add an exit.\nThere must be one exit.");
                 break;
             case EditMode.Fire:
-                statusUI.SetStatusMessage("Touch map to add fires.");
+                statusUI.SetStatusMessage("Touch the map to add fires.");
                 break;
             case EditMode.Iron:
-                statusUI.SetStatusMessage("Touch map to add irons");
+                statusUI.SetStatusMessage("Touch the map to add irons.");
                 break;
             case EditMode.Wall:
-                statusUI.SetStatusMessage("Touch map to add walls");
+                statusUI.SetStatusMessage("Touch the map to add walls.");
                 break;
             case EditMode.RemoveWall:
-                statusUI.SetStatusMessage("Touch map to remove walls or exits");
+                statusUI.SetStatusMessage("Touch the map to\nremove walls or exits.");
                 break;
             case EditMode.RemoveObject:
-                statusUI.SetStatusMessage("Touch map to remove objects");
+                statusUI.SetStatusMessage("Touch the map to remove objects.");
                 break;
         }
     }
@@ -1031,12 +1059,15 @@ public class EditorManager : MonoBehaviour
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
         mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-
-        undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
-        redoStack.Clear();
         solution = "";
+
         if (hasCreated)
+        {
+            undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
+            redoStack.Clear();
+            statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
             dirtyBit = true;
+        }
     }
 
     public void EditQuit()
@@ -1194,6 +1225,7 @@ public class EditorManager : MonoBehaviour
         if (!oldMapName.Equals(mapName))
         {
             Debug.Log("Map name changed: " + mapName);
+            //statusUI.SetStatusMessageWithFlashing("Map name changed.", 1.5f);
             dirtyBit = true;
         }
     }
@@ -1215,6 +1247,10 @@ public class EditorManager : MonoBehaviour
         timeLimit = DEFAULT_TIME_LIMIT;
         EditMapName("");
         EditReset();
+        if (hasPassedInitPhaseOnce)
+        {
+            statusUI.SetStatusMessage("The map has been reinitialized.\nYou can undo this action.");
+        }
         hasCreated = true;
     }
 
@@ -1222,15 +1258,14 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // TODO
-        // ditryBit == true이면 먼저 경고 메시지 띄우기
+        // ditryBit == true이면 먼저 경고 메시지 띄우기 -> 안 해도 될듯?
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
-
 
         if (!Directory.Exists(MAP_ROOT_PATH))
         {
             Debug.LogError("File invalid: there is no directory \"" + MAP_ROOT_PATH + "\"");
+            Directory.CreateDirectory(MAP_ROOT_PATH);
             return;
         }
 
@@ -1240,6 +1275,7 @@ public class EditorManager : MonoBehaviour
         editorPhases[4].SetActive(true);
         mm.Initialize();
         editPhase = EditPhase.Open;
+        statusUI.SetStatusMessage("Choose a map to open.");
         GameManager.gm.canPlay = false;
     }
 
@@ -1410,6 +1446,7 @@ public class EditorManager : MonoBehaviour
             if (token.Length != 2)
             {
                 Debug.LogError("File invalid: map size (" + line + ")");
+                statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nsize error", 1.5f);
                 return false;
             }
 
@@ -1429,6 +1466,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 3)
                         {
                             Debug.LogError("File invalid: ball (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nball error", 1.5f);
                             return false;
                         }
                         tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Ball, int.Parse(token[1]), int.Parse(token[2])));
@@ -1437,6 +1475,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 3)
                         {
                             Debug.LogError("File invalid: iron (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\niron error", 1.5f);
                             return false;
                         }
                         tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Iron, int.Parse(token[1]), int.Parse(token[2])));
@@ -1445,6 +1484,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 3)
                         {
                             Debug.LogError("File invalid: fire (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nfire error", 1.5f);
                             return false;
                         }
                         tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
@@ -1453,6 +1493,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 4)
                         {
                             Debug.LogError("File invalid: exit (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
                             return false;
                         }
 
@@ -1467,6 +1508,7 @@ public class EditorManager : MonoBehaviour
                         else
                         {
                             Debug.LogError("File invalid: exit (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
                             return false;
                         }
                         break;
@@ -1474,6 +1516,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 3)
                         {
                             Debug.LogError("File invalid: horizontal wall (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
                             return false;
                         }
                         tempWalls.Add(new WallInfo(WallInfo.Type.Horizontal, int.Parse(token[1]), int.Parse(token[2])));
@@ -1482,6 +1525,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 3)
                         {
                             Debug.LogError("File invalid: vertical wall (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
                             return false;
                         }
                         tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
@@ -1490,6 +1534,7 @@ public class EditorManager : MonoBehaviour
                         if (token.Length != 2)
                         {
                             Debug.LogError("File invalid: time limit (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\ntime limit error", 1.5f);
                             return false;
                         }
                         tempTimeLimit = float.Parse(token[1]);
@@ -1499,11 +1544,13 @@ public class EditorManager : MonoBehaviour
                             !(token[0].StartsWith("w") || token[0].StartsWith("a") || token[0].StartsWith("s") || token[0].StartsWith("d")))
                         {
                             Debug.LogError("File invalid: unknown (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nunknown symbols", 1.5f);
                             return false;
                         }
                         else if (hasSolution)
                         {
                             Debug.LogError("File invalid: solution already exists (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nmultiple solutions", 1.5f);
                             return false;
                         }
                         tempSolution = token[0];
@@ -1515,6 +1562,7 @@ public class EditorManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("File invalid: exception while opening a map");
+            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
             Debug.LogException(e);
             if (hasCreated && !isPreview)
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
@@ -1534,6 +1582,7 @@ public class EditorManager : MonoBehaviour
         if (!mm.IsReady)
         {
             Debug.LogError("File invalid: map validation failed");
+            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nimpossible to clear", 1.5f);
             if (hasCreated && !isPreview)
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
             else
@@ -1571,6 +1620,10 @@ public class EditorManager : MonoBehaviour
             editorPhases[4].SetActive(false);
             editorPhases[0].SetActive(true);
             editPhase = EditPhase.Initialize;
+            if (hasPassedInitPhaseOnce)
+            {
+                statusUI.SetStatusMessage("The map has been reinitialized.\nYou can undo this action.");
+            }
 
             ClearOpenScrollItems();
 
@@ -1582,7 +1635,7 @@ public class EditorManager : MonoBehaviour
 
     public void EditSave()
     {
-        // TODO 루트 디렉토리가 아닌 경로에도 저장할 수 있도록 변경하기
+        // 루트 디렉토리가 아닌 경로에도 저장할 수 있도록 변경하기 -> 루트 디렉토리에만 저장할 수 있도록 함
 
         /*
         Debug.Log("isSaving = " + isSaving.ToString() + ", solution = " + solution + ", mapName = " + mapName +
@@ -1596,6 +1649,7 @@ public class EditorManager : MonoBehaviour
         if (!ValidateMapInGame())
         {
             Debug.LogError("File invalid: map validation failed");
+            statusUI.SetStatusMessageWithFlashing("Cannot save your map:\nimpossible to clear", 1.5f);
             isSaving = false;
             return;
         }
@@ -1687,6 +1741,7 @@ public class EditorManager : MonoBehaviour
 
         // TODO 저장 성공 메시지
         Debug.Log("Saved as " + mapName + "!");
+        statusUI.SetStatusMessage("You're done!\nSaved as " + mapName + "!");
 
         dirtyBit = false;
         hasSavedOnce = true;
@@ -1706,6 +1761,8 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 SetEditModeToNone();
                 editPhase = EditPhase.Build;
+                hasPassedInitPhaseOnce = true;
+                statusUI.SetStatusMessage("Build your own map!");
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Build:
@@ -1751,12 +1808,14 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                statusUI.SetStatusMessage("You can reinitialize your map.");
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Save:
                 editorPhases[2].SetActive(false);
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
+                statusUI.SetStatusMessage("Build your own map!");
                 SetEditModeToNone();
                 GameManager.gm.canPlay = false;
                 break;
@@ -1774,6 +1833,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[4].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                statusUI.SetStatusMessage("");
                 ClearOpenScrollItems();
                 if (hasCreated)
                 {
@@ -1856,6 +1916,7 @@ public class EditorManager : MonoBehaviour
         {
             case EditActionInfo.Type.MapName:
                 EditMapName(eai.oldName);
+                statusUI.SetStatusMessageWithFlashing("Undo: the map name", 1f);
                 break;
             case EditActionInfo.Type.Wall:
                 #region Undo Wall
@@ -1884,6 +1945,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: a wall or an exit", 1f);
                 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -1913,6 +1975,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: an object", 1f);
                 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
@@ -1920,17 +1983,20 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: the map size", 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: the map size", 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: reset", 1f);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.oldName);
@@ -1943,6 +2009,7 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Undo: reinitialization", 1f);
                 break;
         }
         undoStack.RemoveAt(undoStack.Count - 1);
@@ -1964,6 +2031,7 @@ public class EditorManager : MonoBehaviour
         {
             case EditActionInfo.Type.MapName:
                 EditMapName(eai.newName);
+                statusUI.SetStatusMessageWithFlashing("Redo: the map name", 1f);
                 break;
             case EditActionInfo.Type.Wall:
                 #region Redo Wall
@@ -1992,6 +2060,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: a wall or an exit", 1f);
                 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2021,15 +2090,18 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: an object", 1f);
                 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: the map size", 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.newSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: the map size", 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 // TODO
@@ -2038,6 +2110,7 @@ public class EditorManager : MonoBehaviour
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: reset", 1f);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.newName);
@@ -2050,6 +2123,7 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing("Redo: reinitialization", 1f);
                 break;
         }
         redoStack.RemoveAt(redoStack.Count - 1);
@@ -2071,7 +2145,7 @@ public class EditorManager : MonoBehaviour
 
     private void SetEditTimerUI()
     {
-        Debug.Log("SetEditTimerUI");
+        //Debug.Log("SetEditTimerUI");
         if (!mm.IsReady)
         {
             editorTimerSlider.SetValueWithoutNotify(0f);

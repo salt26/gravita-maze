@@ -469,7 +469,6 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        // TODO: map에 따라 타일 생성, 맵 크기에 따라 카메라 조정
         // TODO: 좌표계 회전 및 상하 반전 적용
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
