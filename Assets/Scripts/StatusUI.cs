@@ -38,14 +38,28 @@ public class StatusUI : MonoBehaviour
 
     public void SetStatusMessage(string message)
     {
-        timer = 0f;
-        reservedText = "";
-        if (message is null)
+        if (timer <= 0f)
         {
-            statusText.text = "";
-            return;
+            timer = 0f;
+            reservedText = "";
+            if (message is null)
+            {
+                statusText.text = "";
+                return;
+            }
+            statusText.text = message;
         }
-        statusText.text = message;
+        else
+        {
+            if (message is null)
+            {
+                reservedText = "";
+            }
+            else
+            {
+                reservedText = message;
+            }
+        }
     }
 
     /// <summary>

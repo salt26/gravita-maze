@@ -1197,18 +1197,55 @@ public class EditorManager : MonoBehaviour
         EditSizeY(0, caller);
     }
 
-    private void EditMapName(string newName, InputField valueChangedInputField = null)
+    private bool isBadFileName(string newName)
     {
-        string oldMapName = mapName;
-        if (newName != null || valueChangedInputField == null)
+        if (newName is null)
         {
-            mapName = newName;
-            foreach (InputField editorMapNameInput in editorMapNameInputs)
-                editorMapNameInput.text = mapName;
+            return true;
+        }
+        else if (newName.Contains("/") || newName.Contains("\\") ||
+            newName.Contains(":") || newName.Contains("*") || newName.Contains("?") ||
+            newName.Contains("\"") || newName.Contains("<") || newName.Contains(">") ||
+            newName.Contains("|") || newName.Equals("con") || newName.Equals("aux") ||
+            newName.Equals("nul") || newName.Equals("prn"))
+        {
+            return true;
         }
         else
         {
-            mapName = editorMapNameInputs.Find(e => e.Equals(valueChangedInputField)).text;
+            for (int i = 0; i <= 9; i++)
+            {
+                if (newName.Equals("com" + i) || newName.Equals("lpt" + i))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void EditMapName(string newName, InputField valueChangedInputField = null)
+    {
+        string oldMapName = mapName;
+
+        if (newName is null && !(valueChangedInputField is null))
+        {
+            newName = editorMapNameInputs.Find(e => e.Equals(valueChangedInputField)).text;
+        }
+
+        if (isBadFileName(newName))
+        {
+            Debug.LogWarning("Editor invalid: illegal file name");
+            statusUI.SetStatusMessageWithFlashing("Illegal file name.", 1f);
+            mapName = oldMapName;
+            foreach (InputField editorMapNameInput in editorMapNameInputs)
+                editorMapNameInput.text = mapName;
+            return;
+        }
+
+        if (newName != null)
+        {
+            mapName = newName;
             foreach (InputField editorMapNameInput in editorMapNameInputs)
                 editorMapNameInput.text = mapName;
         }
