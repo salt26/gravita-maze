@@ -92,6 +92,11 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     } = false;
+    public bool IsTimeActivated
+    {
+        get;
+        private set;
+    } = false;
 
     public bool IsReady
     {
@@ -119,7 +124,7 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        if (IsReady && IsTimePassing && RemainingTime > 0f && !HasCleared)
+        if (IsReady && IsTimeActivated && IsTimePassing && RemainingTime > 0f && !HasCleared)
         {
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
@@ -156,6 +161,7 @@ public class MapManager : MonoBehaviour
         }
         HasCleared = false;
         HasDied = false;
+        IsTimeActivated = false;
         IsTimePassing = false;
         RemainingTime = 0f;
         tilemap.ClearAllTiles();
@@ -483,6 +489,7 @@ public class MapManager : MonoBehaviour
         IsReady = true;
         HasCleared = false;
         HasDied = false;
+        IsTimeActivated = false;
         IsTimePassing = false;
         RemainingTime = 0f;
         //PrintMapCoord();
@@ -501,7 +508,8 @@ public class MapManager : MonoBehaviour
         gravityRightButton.interactable = true;
 
         RemainingTime = TimeLimit;
-        IsTimePassing = true;
+        IsTimeActivated = true;
+        IsTimePassing = false;
         Debug.Log("Remaining time: " + RemainingTime);
     }
 
@@ -607,6 +615,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityUp()
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        IsTimePassing = true;
         gravityBall.anchoredPosition = new Vector3(0f, 264f);
         gravityUpButton.interactable = false;
         gravityDownButton.interactable = true;
@@ -620,6 +629,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityDown()
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        IsTimePassing = true;
         gravityBall.anchoredPosition = new Vector3(0f, -264f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = false;
@@ -633,6 +643,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityLeft()
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        IsTimePassing = true;
         gravityBall.anchoredPosition = new Vector3(-264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -646,6 +657,7 @@ public class MapManager : MonoBehaviour
     public void ManipulateGravityRight()
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        IsTimePassing = true;
         gravityBall.anchoredPosition = new Vector3(264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
