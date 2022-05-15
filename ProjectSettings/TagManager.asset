@@ -57,3 +57,6 @@ TagManager:
   - name: Iron
     uniqueID: 1165801003
     locked: 0
+  - name: Flags
+    uniqueID: 1498988141
+    locked: 0

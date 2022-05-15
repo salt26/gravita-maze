@@ -43,6 +43,9 @@ public class MapManager : MonoBehaviour
     public List<GameObject> ballTracePrefabs = new List<GameObject>();
     public List<GameObject> ironTracePrefabs = new List<GameObject>();
 
+    public GameObject flagBurnedPrefab;
+    public GameObject flagSquashedPrefab;
+
     public Tilemap tilemap;
     public List<Tile> tiles = new List<Tile>();
 
@@ -766,6 +769,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (i + 1, k + 1)에서 공이 불타는 애니메이션 재생
+                                        GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
+                                        if (traceCoord[i, k] != null)
+                                        {
+                                            traces.Remove(traceCoord[i, k]);
+                                            Destroy(traceCoord[i, k]);
+                                        }
+                                        traceCoord[i, k] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
@@ -806,6 +818,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (i + 1, k + 1)에 있던 공이 찌부러지는 애니메이션 재생
+                                        GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
+                                        if (traceCoord[i, k] != null)
+                                        {
+                                            traces.Remove(traceCoord[i, k]);
+                                            Destroy(traceCoord[i, k]);
+                                        }
+                                        traceCoord[i, k] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, k].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, k] = null;
@@ -847,7 +868,7 @@ public class MapManager : MonoBehaviour
                                     {
                                         GameObject g = Instantiate(ironTracePrefabs[0], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
-                                        if (traceCoord[i, k] != null)
+                                        if (traceCoord[i, k] != null && !traceCoord[i, k].CompareTag("Flag"))
                                         {
                                             traces.Remove(traceCoord[i, k]);
                                             Destroy(traceCoord[i, k]);
@@ -916,6 +937,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (i + 1, k + 1)에서 공이 불타는 애니메이션 재생
+                                        GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
+                                        if (traceCoord[i, k] != null)
+                                        {
+                                            traces.Remove(traceCoord[i, k]);
+                                            Destroy(traceCoord[i, k]);
+                                        }
+                                        traceCoord[i, k] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
@@ -956,6 +986,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (i + 1, k + 1)에 있던 공이 찌부러지는 애니메이션 재생
+                                        GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
+                                        if (traceCoord[i, k] != null)
+                                        {
+                                            traces.Remove(traceCoord[i, k]);
+                                            Destroy(traceCoord[i, k]);
+                                        }
+                                        traceCoord[i, k] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, k].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, k] = null;
@@ -997,7 +1036,7 @@ public class MapManager : MonoBehaviour
                                     {
                                         GameObject g = Instantiate(ironTracePrefabs[1], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
-                                        if (traceCoord[i, k] != null)
+                                        if (traceCoord[i, k] != null && !traceCoord[i, k].CompareTag("Flag"))
                                         {
                                             traces.Remove(traceCoord[i, k]);
                                             Destroy(traceCoord[i, k]);
@@ -1066,6 +1105,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (k + 1, j + 1)에서 공이 불타는 애니메이션 재생
+                                        GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
+                                        if (traceCoord[k, j] != null)
+                                        {
+                                            traces.Remove(traceCoord[k, j]);
+                                            Destroy(traceCoord[k, j]);
+                                        }
+                                        traceCoord[k, j] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
@@ -1106,6 +1154,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (k + 1, j + 1)에 있던 공이 찌부러지는 애니메이션 재생
+                                        GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
+                                        if (traceCoord[k, j] != null)
+                                        {
+                                            traces.Remove(traceCoord[k, j]);
+                                            Destroy(traceCoord[k, j]);
+                                        }
+                                        traceCoord[k, j] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[k, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[k, j] = null;
@@ -1147,7 +1204,7 @@ public class MapManager : MonoBehaviour
                                     {
                                         GameObject g = Instantiate(ironTracePrefabs[2], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
-                                        if (traceCoord[k, j] != null)
+                                        if (traceCoord[k, j] != null && !traceCoord[k, j].CompareTag("Flag"))
                                         {
                                             traces.Remove(traceCoord[k, j]);
                                             Destroy(traceCoord[k, j]);
@@ -1216,6 +1273,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (k + 1, j + 1)에서 공이 불타는 애니메이션 재생
+                                        GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
+                                        if (traceCoord[k, j] != null)
+                                        {
+                                            traces.Remove(traceCoord[k, j]);
+                                            Destroy(traceCoord[k, j]);
+                                        }
+                                        traceCoord[k, j] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[i, j] = null;
@@ -1256,6 +1322,15 @@ public class MapManager : MonoBehaviour
                                     if (!isSimulation)
                                     {
                                         // TODO: (k + 1, j + 1)에 있던 공이 찌부러지는 애니메이션 재생
+                                        GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
+                                        if (traceCoord[k, j] != null)
+                                        {
+                                            traces.Remove(traceCoord[k, j]);
+                                            Destroy(traceCoord[k, j]);
+                                        }
+                                        traceCoord[k, j] = g;
+                                        traces.Add(g);
                                         mutableMovableCoord[k, j].gameObject.SetActive(false);
                                     }
                                     mutableMovableCoord[k, j] = null;
@@ -1297,7 +1372,7 @@ public class MapManager : MonoBehaviour
                                     {
                                         GameObject g = Instantiate(ironTracePrefabs[3], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
-                                        if (traceCoord[k, j] != null)
+                                        if (traceCoord[k, j] != null && !traceCoord[k, j].CompareTag("Flag"))
                                         {
                                             traces.Remove(traceCoord[k, j]);
                                             Destroy(traceCoord[k, j]);

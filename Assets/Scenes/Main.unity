@@ -4881,6 +4881,12 @@ MonoBehaviour:
   - {fileID: 4370644689789817207, guid: 886a6e1e15d0c314d95993672b17bec5, type: 3}
   - {fileID: 416756368769208826, guid: 79661f9932437254ab1114ca2b9bc0f4, type: 3}
   - {fileID: 4517403120350036946, guid: e74e0129d3cdce94b877925a7f96f67f, type: 3}
+  flagBurnedPrefab: {fileID: 5284734312881419259, guid: 0e6029afc12483b4b88c5b22ccb1371a,
+    type: 3}
+  flagSquashedPrefab: {fileID: 2088692297327534820, guid: ef56c638cbd8b0f4e9a84edc720e688c,
+    type: 3}
+  flagTimeoutPrefab: {fileID: 6590084133705928340, guid: c3e6375a2898ffd4281dbcc69744273d,
+    type: 3}
   tilemap: {fileID: 1578408920}
   tiles:
   - {fileID: 11400000, guid: 5df065da5e7d6624991c46879b605732, type: 2}
