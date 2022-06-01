@@ -1301,9 +1301,8 @@ public class EditorManager : MonoBehaviour
 
         if (!Directory.Exists(MAP_ROOT_PATH))
         {
-            Debug.LogError("File invalid: there is no directory \"" + MAP_ROOT_PATH + "\"");
+            Debug.LogWarning("File invalid: there is no directory \"" + MAP_ROOT_PATH + "\"");
             Directory.CreateDirectory(MAP_ROOT_PATH);
-            return;
         }
 
         RenderOpenScrollView(MAP_ROOT_PATH);
