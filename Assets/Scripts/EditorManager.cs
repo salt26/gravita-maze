@@ -54,6 +54,8 @@ public class EditorManager : MonoBehaviour
     public Image editorTimerLabel10;
     public Image editorTimerLabel1;
     public StatusUI statusUI;
+    public MessageUI messageUI;
+    public GameObject editorTimeoutPanel;
     public List<GameObject> editorPhases;
 
     public EditPhase editPhase = EditPhase.Initialize;
@@ -93,6 +95,8 @@ public class EditorManager : MonoBehaviour
 
         statusUI.gameObject.SetActive(true);
         timerUI.gameObject.SetActive(false);
+        messageUI.gameObject.SetActive(false);
+        editorTimeoutPanel.SetActive(false);
         editorPhases[0].SetActive(true);
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
@@ -1858,6 +1862,7 @@ public class EditorManager : MonoBehaviour
             case EditPhase.Test:
                 timerUI.gameObject.SetActive(false);
                 statusUI.gameObject.SetActive(true);
+                editorTimeoutPanel.SetActive(false);
                 SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
@@ -1933,6 +1938,7 @@ public class EditorManager : MonoBehaviour
                 editorRetryHighlightedButton.gameObject.SetActive(false);
                 editorRetryTimeButton.gameObject.SetActive(false);
                 editorRetryTimeHighlightedButton.gameObject.SetActive(true);
+                editorTimeoutPanel.SetActive(true);
 
                 editorNextButton4.interactable = false;
                 editorBackHighlightedButton4.interactable = true;
