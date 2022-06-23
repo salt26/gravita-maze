@@ -1053,7 +1053,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-    public void EditReset()
+    public void EditReset(bool setStatusMessage = true)
     {
         // TODO: 경고 메시지 띄우기
         SetEditModeToNone();
@@ -1069,7 +1069,8 @@ public class EditorManager : MonoBehaviour
         {
             undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
             redoStack.Clear();
-            statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
+            if (setStatusMessage)
+                statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
             dirtyBit = true;
         }
     }
@@ -1287,10 +1288,10 @@ public class EditorManager : MonoBehaviour
         editorNextButton1.interactable = true;
         timeLimit = DEFAULT_TIME_LIMIT;
         EditMapName("");
-        EditReset();
+        EditReset(false);
         if (hasPassedInitPhaseOnce)
         {
-            statusUI.SetStatusMessage("The map has been reinitialized.\nYou can undo this action.");
+            statusUI.SetStatusMessage("The map has been reset.\nYou can undo this action.");
         }
         hasCreated = true;
     }
