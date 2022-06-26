@@ -4,13 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class OpenScrollItem : MonoBehaviour
+public class OpenSaveScrollItem : MonoBehaviour
 {
+    public enum Type { Open = 0, Save = 1 };
+    public Type type;
+
     public Image icon;
     public Text label;
 
-    public Color basicColor;
-    public Color highlightedColor;
+    public static Color basicColor = Color.black;
+    public static Color highlightedColor = new Color(191f / 255f, 0f, 165f / 255f);
     public Sprite basicFileIcon;
     public Sprite highlightedFileIcon;
     public Sprite basicFolderIcon;
@@ -25,8 +28,9 @@ public class OpenScrollItem : MonoBehaviour
 
     public bool isSelected = false;
 
-    public void Initialize(string path, bool isFolder, EditorManager em, bool isUpOneLevel = false)
+    public void Initialize(Type type, string path, bool isFolder, EditorManager em, bool isUpOneLevel = false)
     {
+        this.type = type;
         this.em = em;
         this.isFolder = isFolder;
         this.isUpOneLevel = isFolder & isUpOneLevel;
@@ -78,17 +82,25 @@ public class OpenScrollItem : MonoBehaviour
             if (isFolder)
             {
                 icon.sprite = highlightedFolderIcon;
+                label.color = highlightedColor;
             }
             else
             {
                 icon.sprite = highlightedFileIcon;
+                label.color = highlightedColor;
             }
-            label.color = highlightedColor;
         }
     }
 
     public void Select()
     {
-        em.EditOpenItemSelect(this);
+        switch (type) {
+            case Type.Open:
+                em.EditOpenItemSelect(this);
+                break;
+            case Type.Save:
+                em.EditSaveItemSelect(this);
+                break;
+        }
     }
 }

@@ -10,7 +10,6 @@ public class MessageUI : MonoBehaviour
 
     public void Initialize(string text, UnityAction onOKClick = null, UnityAction onXClick = null)
     {
-        Debug.Log(text);
         messageText.text = text;
         messageOKButton.onClick.RemoveAllListeners();
         messageXButton.onClick.RemoveAllListeners();

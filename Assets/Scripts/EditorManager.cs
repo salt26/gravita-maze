@@ -44,12 +44,21 @@ public class EditorManager : MonoBehaviour
     public Button editorOpenButton5;
     public Button editorOpenHighlightedButton5;
     public Text editorOpenPathText;
+    public Button editorCancelButton6;
+    public Button editorSaveButton6;
+    public Button editorOpenButton6;
+    public Button editorNewFolderButton6;
+    public Text editorSavePathText;
+    public ButtonWithText editorSavePathButton;
     public List<Dropdown> editorSizeXDropdowns;
     public List<Dropdown> editorSizeYDropdowns;
     public List<InputField> editorMapNameInputs;
     public GameObject openScrollItemPrefab;
     public GameObject editorOpenScrollContent;
     public Scrollbar editorOpenScrollbar;
+    public GameObject saveScrollItemPrefab;
+    public GameObject editorSaveScrollContent;
+    public Scrollbar editorSaveScrollbar;
     public TimerUI timerUI;
     public Slider editorTimerSlider;
     public Image editorTimerLabel10;
@@ -75,9 +84,12 @@ public class EditorManager : MonoBehaviour
     private bool hasSavedOnce = false;
     private bool isSaving = false;
     private bool hasPassedInitPhaseOnce = false;
-    private OpenScrollItem selectedOpenScrollItem;
+    private OpenSaveScrollItem selectedOpenScrollItem;
     private string currentOpenPath = MAP_ROOT_PATH;
     private float openItemSelectTime = 0f;
+    private OpenSaveScrollItem selectedSaveScrollItem;
+    private string currentSavePath = MAP_ROOT_PATH;
+    private float saveItemSelectTime = 0f;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -103,6 +115,7 @@ public class EditorManager : MonoBehaviour
         editorPhases[2].SetActive(false);
         editorPhases[3].SetActive(false);
         editorPhases[4].SetActive(false);
+        editorPhases[5].SetActive(false);
         SetEditModeToNone();
         mm.Initialize();
         editPhase = EditPhase.Initialize;
@@ -282,7 +295,7 @@ public class EditorManager : MonoBehaviour
 
         // Phase 3 buttons
         // TODO 툴팁
-        editorSaveButton.interactable = solution != null && solution != "" && mapName != null && mapName != "" && dirtyBit;
+        editorSaveButton.interactable = solution != null && solution != "" && dirtyBit;
         if (solution != null && solution != "" && hasSavedOnce)
         {
             editorQuitButton3.gameObject.SetActive(false);
@@ -301,11 +314,7 @@ public class EditorManager : MonoBehaviour
 
             if (editPhase == EditPhase.Request)
             {
-                if (mapName == null || mapName == "")
-                {
-                    statusUI.SetStatusMessage("Set your map name.");
-                }
-                else if (dirtyBit)
+                if (dirtyBit)
                 {
                     statusUI.SetStatusMessage("Now you can save your map.");
                 }
@@ -319,6 +328,21 @@ public class EditorManager : MonoBehaviour
             if (editPhase == EditPhase.Request)
             {
                 statusUI.SetStatusMessage("Set the time limit and\nrun the map test.");
+            }
+        }
+
+        // Phase 6 buttons
+        editorSaveButton6.interactable = (mapName != null && mapName != "");
+        editorSavePathButton.interactable = (selectedSaveScrollItem != null && selectedSaveScrollItem.isFolder);
+        if (editPhase == EditPhase.Save)
+        {
+            if (mapName == null || mapName == "")
+            {
+                statusUI.SetStatusMessage("Set your map name.");
+            }
+            else
+            {
+                statusUI.SetStatusMessage("Choose a path to save.");
             }
         }
     }
@@ -1395,7 +1419,7 @@ public class EditorManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenScrollItem>().Initialize(currentOpenPath.Remove(currentOpenPath.LastIndexOf('\\')), true, this, true);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('\\')), true, this, true);
             index++;
         }
 
@@ -1407,7 +1431,7 @@ public class EditorManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenScrollItem>().Initialize(s, true, this, false);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, true, this, false);
             index++;
         }
 
@@ -1418,14 +1442,14 @@ public class EditorManager : MonoBehaviour
             g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-            g.GetComponent<OpenScrollItem>().Initialize(s, false, this);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
             index++;
         }
 
         editorOpenScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
     }
 
-    public void EditOpenItemSelect(OpenScrollItem caller)
+    public void EditOpenItemSelect(OpenSaveScrollItem caller)
     {
         float selectTime = Time.time;
         if (caller != null && caller.Equals(selectedOpenScrollItem) && 
@@ -1437,7 +1461,7 @@ public class EditorManager : MonoBehaviour
         }
         openItemSelectTime = selectTime;
 
-        foreach (OpenScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenScrollItem>())
+        foreach (OpenSaveScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
         {
             i.isSelected = false;
         }
@@ -1703,16 +1727,192 @@ public class EditorManager : MonoBehaviour
         }
     }
 
+    public void EditSavePhase()
+    {
+        if (solution == null || solution == "" || !dirtyBit ||
+            mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
+
+        // UI 만들기
+        // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
+
+        if (!Directory.Exists(MAP_ROOT_PATH))
+        {
+            Debug.LogWarning("File warning: there is no directory \"" + MAP_ROOT_PATH + "\"");
+            Directory.CreateDirectory(MAP_ROOT_PATH);
+        }
+
+        RenderSaveScrollView(MAP_ROOT_PATH);
+
+        editorPhases[2].SetActive(false);
+        editorPhases[5].SetActive(true);
+        editPhase = EditPhase.Save;
+        GameManager.gm.canPlay = false;
+    }
+
+    private void RenderSaveScrollView(string savePath)
+    {
+        ClearSaveScrollItems();
+
+        const float SCROLL_ITEM_HEIGHT = 84f;
+
+        string[] files = Directory.GetFiles(savePath, "*.txt");
+        string[] dirs = Directory.GetDirectories(savePath);
+        int index = 0;
+        int length = dirs.Length + files.Length;
+
+        if (!savePath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        {
+            length++;
+        }
+
+        currentSavePath = savePath.TrimEnd('\\');
+        //Debug.Log(currentSavePath);
+
+        string currentPath = currentSavePath.Substring(currentSavePath.LastIndexOf('\\') + 1);
+        if (currentSavePath.Length <= 21)
+        {
+            editorSavePathText.text = currentSavePath.Replace('\\', '/');
+        }
+        else if (currentPath.Length <= 17)
+        {
+            string tempPath = currentSavePath.Substring(currentSavePath.Length - 17);
+            tempPath = tempPath.Substring(tempPath.IndexOf('\\') + 1);
+            editorSavePathText.text = ".../" + tempPath.Replace('\\', '/');
+        }
+        else
+        {
+            editorSavePathText.text = ".../" + currentPath.Remove(14) + "...";
+        }
+        editorSavePathButton.IsTextHighlighted = true;
+
+        editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta =
+            new Vector2(editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
+
+        if (!savePath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        {
+            GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, currentSavePath.Remove(currentSavePath.LastIndexOf('\\')), true, this, true);
+            index++;
+        }
+
+        foreach (string s in dirs)
+        {
+            GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, true, this, false);
+            index++;
+        }
+
+        foreach (string s in files)
+        {
+            GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, false, this);
+            index++;
+        }
+
+        editorSaveScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
+    }
+
+    public void EditSaveItemSelect(OpenSaveScrollItem caller)
+    {
+        float selectTime = Time.time;
+        if (caller != null && caller.Equals(selectedSaveScrollItem) &&
+            saveItemSelectTime > 0f && selectTime - saveItemSelectTime < 0.5f)
+        {
+            // Double click
+            EditSaveItemDoubleClick();
+            return;
+        }
+        else if (caller != null && caller.Equals(selectedSaveScrollItem) && caller.isFolder &&
+            saveItemSelectTime > 0f && selectTime - saveItemSelectTime >= 0.5f)
+        {
+            // Unselect the folder
+            saveItemSelectTime = selectTime;
+
+            foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+            {
+                i.isSelected = false;
+            }
+            selectedSaveScrollItem = null;
+
+            editorOpenButton6.gameObject.SetActive(false);
+            editorSaveButton6.gameObject.SetActive(true);
+            editorOpenButton6.interactable = false;
+            editorSavePathButton.IsTextHighlighted = true;
+        }
+        else
+        {
+            saveItemSelectTime = selectTime;
+
+            foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+            {
+                i.isSelected = false;
+            }
+            selectedSaveScrollItem = caller;
+
+            if (caller.isFolder)
+            {
+                caller.isSelected = true;
+                editorOpenButton6.gameObject.SetActive(true);
+                editorSaveButton6.gameObject.SetActive(false);
+                editorOpenButton6.interactable = true;
+                editorSavePathButton.IsTextHighlighted = false;
+            }
+            else
+            {
+                editorOpenButton6.gameObject.SetActive(false);
+                editorSaveButton6.gameObject.SetActive(true);
+                editorOpenButton6.interactable = false;
+                editorSavePathButton.IsTextHighlighted = true;
+            }
+        }
+    }
+
+    public void EditSaveItemDoubleClick()
+    {
+        if (editPhase != EditPhase.Save || selectedSaveScrollItem is null) return;
+
+        if (selectedSaveScrollItem.isFolder)
+        {
+            RenderSaveScrollView(selectedSaveScrollItem.path);
+        }
+        else
+        {
+            EditMapName(selectedSaveScrollItem.labelName);
+            selectedSaveScrollItem.isSelected = true;
+        }
+    }
+
+    public void EditSaveCurrentPathSelect()
+    {
+        foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        {
+            i.isSelected = false;
+        }
+        selectedSaveScrollItem = null;
+        editorOpenButton6.gameObject.SetActive(false);
+        editorSaveButton6.gameObject.SetActive(true);
+        editorOpenButton6.interactable = false;
+        editorSavePathButton.IsTextHighlighted = true;
+    }
+
     public void EditSave()
     {
-        // 루트 디렉토리가 아닌 경로에도 저장할 수 있도록 변경하기 -> 루트 디렉토리에만 저장할 수 있도록 함
-
-        /*
-        Debug.Log("isSaving = " + isSaving.ToString() + ", solution = " + solution + ", mapName = " + mapName +
-            " dirtyBit = " + dirtyBit.ToString() + ", mm.IsReady = " + mm.IsReady.ToString());
-        */
         if (solution == null || solution == "" || mapName == null || mapName == "" || !dirtyBit ||
-            mm == null || !mm.IsReady || editPhase != EditPhase.Request || isSaving) return;
+            mm == null || !mm.IsReady || editPhase != EditPhase.Save || isSaving) return;
 
         isSaving = true;
 
@@ -1726,9 +1926,9 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (!Directory.Exists(MAP_ROOT_PATH.TrimEnd('\\')))
+            if (!Directory.Exists(currentSavePath.TrimEnd('\\')))
             {
-                Directory.CreateDirectory(MAP_ROOT_PATH.TrimEnd('\\'));
+                Directory.CreateDirectory(currentSavePath.TrimEnd('\\'));
             }
         }
         catch (Exception)
@@ -1740,10 +1940,11 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (File.Exists(MAP_ROOT_PATH + mapName + ".txt"))
+            if (File.Exists(currentSavePath + "\\" + mapName + ".txt"))
             {
                 // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
                 messageUI.Initialize("Map \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
+                // TODO 메시지에서 버튼 입력 후에 반환하도록
             }
             else
             {
@@ -1760,7 +1961,7 @@ public class EditorManager : MonoBehaviour
 
     private void EditSaveHelper()
     {
-        FileStream fs = new FileStream(MAP_ROOT_PATH + mapName + ".txt", FileMode.Create);
+        FileStream fs = new FileStream(currentSavePath + "\\" + mapName + ".txt", FileMode.Create);
         StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
 
         try
@@ -1820,6 +2021,8 @@ public class EditorManager : MonoBehaviour
         dirtyBit = false;
         hasSavedOnce = true;
         isSaving = false;
+
+        EditNext();
     }
 
     public void EditNext()
@@ -1871,6 +2074,13 @@ public class EditorManager : MonoBehaviour
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
+            case EditPhase.Save:
+                SetEditTimerUI();
+                editorPhases[5].SetActive(false);
+                editorPhases[2].SetActive(true);
+                editPhase = EditPhase.Request;
+                GameManager.gm.canPlay = false;
+                break;
         }
     }
 
@@ -1918,6 +2128,18 @@ public class EditorManager : MonoBehaviour
                 {
                     mm.Initialize();
                 }
+                GameManager.gm.canPlay = false;
+                break;
+            case EditPhase.Save:
+                SetEditTimerUI();
+                editorPhases[5].SetActive(false);
+                editorPhases[2].SetActive(true);
+                editPhase = EditPhase.Request;
+                if (!hasSavedOnce)
+                {
+                    statusUI.SetStatusMessage("The map has not been saved yet.");
+                }
+                ClearSaveScrollItems();
                 GameManager.gm.canPlay = false;
                 break;
         }
@@ -2214,6 +2436,7 @@ public class EditorManager : MonoBehaviour
         timeLimit = Mathf.Max(3f, editorTimerSlider.value);
         mm.TimeLimit = timeLimit;
         solution = "";
+        dirtyBit = true;
 
         SetEditTimerUI();
     }
@@ -2261,7 +2484,7 @@ public class EditorManager : MonoBehaviour
     private void ClearOpenScrollItems()
     {
         selectedOpenScrollItem = null;
-        foreach (OpenScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenScrollItem>())
+        foreach (OpenSaveScrollItem i in editorOpenScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
         {
             Destroy(i.gameObject);
         }
@@ -2271,6 +2494,20 @@ public class EditorManager : MonoBehaviour
 
         editorOpenButton5.interactable = false;
         editorOpenHighlightedButton5.interactable = false;
+    }
+
+    private void ClearSaveScrollItems()
+    {
+        selectedSaveScrollItem = null;
+        foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        {
+            Destroy(i.gameObject);
+        }
+
+        editorSaveButton6.gameObject.SetActive(true);
+        editorOpenButton6.gameObject.SetActive(false);
+
+        editorOpenButton6.interactable = false;
     }
 
     private class EditActionInfo
