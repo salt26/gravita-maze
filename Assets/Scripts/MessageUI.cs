@@ -8,13 +8,9 @@ public class MessageUI : MonoBehaviour
     public Button messageOKButton;
     public Button messageXButton;
 
-    void Awake()
-    {
-        messageText.text = "";
-    }
-
     public void Initialize(string text, UnityAction onOKClick = null, UnityAction onXClick = null)
     {
+        Debug.Log(text);
         messageText.text = text;
         messageOKButton.onClick.RemoveAllListeners();
         messageXButton.onClick.RemoveAllListeners();

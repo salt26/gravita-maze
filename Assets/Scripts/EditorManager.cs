@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class EditorManager : MonoBehaviour
 {
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
-    public enum EditPhase { Initialize = 1, Build = 2, Save = 3, Test = 4, Open = 5 }
+    public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public const string MAP_ROOT_PATH = @"Maps\";
     public const float DEFAULT_TIME_LIMIT = 10f;
@@ -299,7 +299,7 @@ public class EditorManager : MonoBehaviour
             editorMapTestRequiredButton.gameObject.SetActive(false);
             editorMapTestDoneButton.gameObject.SetActive(true);
 
-            if (editPhase == EditPhase.Save)
+            if (editPhase == EditPhase.Request)
             {
                 if (mapName == null || mapName == "")
                 {
@@ -316,7 +316,7 @@ public class EditorManager : MonoBehaviour
             editorMapTestRequiredButton.gameObject.SetActive(true);
             editorMapTestDoneButton.gameObject.SetActive(false);
 
-            if (editPhase == EditPhase.Save)
+            if (editPhase == EditPhase.Request)
             {
                 statusUI.SetStatusMessage("Set the time limit and\nrun the map test.");
             }
@@ -1088,7 +1088,7 @@ public class EditorManager : MonoBehaviour
 
     public void EditQuit(int phase)
     {
-        if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Save) return;
+        if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Request) return;
         if (dirtyBit)
         {
             // 경고 메시지 띄우기
@@ -1712,7 +1712,7 @@ public class EditorManager : MonoBehaviour
             " dirtyBit = " + dirtyBit.ToString() + ", mm.IsReady = " + mm.IsReady.ToString());
         */
         if (solution == null || solution == "" || mapName == null || mapName == "" || !dirtyBit ||
-            mm == null || !mm.IsReady || editPhase != EditPhase.Save || isSaving) return;
+            mm == null || !mm.IsReady || editPhase != EditPhase.Request || isSaving) return;
 
         isSaving = true;
 
@@ -1843,10 +1843,10 @@ public class EditorManager : MonoBehaviour
                 SetEditTimerUI();
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
-                editPhase = EditPhase.Save;
+                editPhase = EditPhase.Request;
                 GameManager.gm.canPlay = false;
                 break;
-            case EditPhase.Save:
+            case EditPhase.Request:
                 editorPhases[2].SetActive(false);
                 editorPhases[3].SetActive(true);
                 statusUI.gameObject.SetActive(false);
@@ -1865,7 +1865,7 @@ public class EditorManager : MonoBehaviour
                 SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
-                editPhase = EditPhase.Save;
+                editPhase = EditPhase.Request;
                 solution = mm.ActionHistory;
                 print(solution);
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
@@ -1885,7 +1885,7 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessage("You can reinitialize your map.");
                 GameManager.gm.canPlay = false;
                 break;
-            case EditPhase.Save:
+            case EditPhase.Request:
                 editorPhases[2].SetActive(false);
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
@@ -1900,7 +1900,7 @@ public class EditorManager : MonoBehaviour
                 SetEditTimerUI();
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
-                editPhase = EditPhase.Save;
+                editPhase = EditPhase.Request;
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
@@ -2210,7 +2210,7 @@ public class EditorManager : MonoBehaviour
 
     public void EditTimer()
     {
-        if (mm == null || !mm.IsReady || editPhase != EditPhase.Save) return;
+        if (mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
         timeLimit = Mathf.Max(3f, editorTimerSlider.value);
         mm.TimeLimit = timeLimit;
         solution = "";
