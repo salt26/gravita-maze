@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // TODO: 입력 담당
+        // 입력 담당
         if (mm is null || !mm.IsReady) return;
 
         //MapManager.Flag flag;

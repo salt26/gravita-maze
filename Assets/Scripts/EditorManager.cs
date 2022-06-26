@@ -39,6 +39,7 @@ public class EditorManager : MonoBehaviour
     public Button editorMapTestDoneButton;
     public Button editorSaveButton;
     public Button editorQuitButton3;
+    public Button editorQuitHighlightedButton3;
     public Button editorCancelButton5;
     public Button editorOpenButton5;
     public Button editorOpenHighlightedButton5;
@@ -272,6 +273,7 @@ public class EditorManager : MonoBehaviour
         }
         else
         {
+            // TODO 툴팁
             editorNextButton2.interactable = false;
         }
 
@@ -279,8 +281,18 @@ public class EditorManager : MonoBehaviour
         editorRedoButton.interactable = redoStack.Count > 0;
 
         // Phase 3 buttons
+        // TODO 툴팁
         editorSaveButton.interactable = solution != null && solution != "" && mapName != null && mapName != "" && dirtyBit;
-        editorQuitButton3.interactable = solution != null && solution != "" && hasSavedOnce;
+        if (solution != null && solution != "" && hasSavedOnce)
+        {
+            editorQuitButton3.gameObject.SetActive(false);
+            editorQuitHighlightedButton3.gameObject.SetActive(true);
+        }
+        else
+        {
+            editorQuitButton3.gameObject.SetActive(true);
+            editorQuitHighlightedButton3.gameObject.SetActive(false);
+        }
 
         if (solution != null && solution != "")
         {
@@ -1055,7 +1067,6 @@ public class EditorManager : MonoBehaviour
 
     public void EditReset(bool setStatusMessage = true)
     {
-        // TODO: 경고 메시지 띄우기
         SetEditModeToNone();
 
         List<WallInfo> oldWalls = walls;
@@ -1075,13 +1086,32 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-    public void EditQuit()
+    public void EditQuit(int phase)
     {
+        if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Save) return;
         if (dirtyBit)
         {
-            // TODO: 경고 메시지 띄우기
+            // 경고 메시지 띄우기
+            if (phase == (int)EditPhase.Initialize)
+            {
+                // 맵 변경 후 1페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("The map has changed.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+            }
+            else if (solution != null && solution != "")
+            {
+                // 맵 변경 후 검증은 완료했지만 저장되지 않은 상태에서 3페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("The map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+            }
+            else
+            {
+                // 맵 변경 후 검증을 하지 않고 3페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("The map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+            }
         }
-        GameManager.gm.ReturnToMain();
+        else
+        {
+            GameManager.gm.ReturnToMain();
+        }
     }
 
     private void EditSizeX(int newSizeX, Dropdown valueChangedDropdown = null)
@@ -1281,7 +1311,6 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // TODO 확인 메시지
         editorMapNameInputs[0].interactable = true;
         editorSizeXDropdowns[0].interactable = true;
         editorSizeYDropdowns[0].interactable = true;
@@ -1713,10 +1742,12 @@ public class EditorManager : MonoBehaviour
         {
             if (File.Exists(MAP_ROOT_PATH + mapName + ".txt"))
             {
-                // TODO 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
-                Debug.LogWarning("Map \"" + mapName + "\" already exists. Do you want to overwrite it?");
-                isSaving = false; // 이것도 지우기
-                return; // return은 지우기
+                // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
+                messageUI.Initialize("Map \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
+            }
+            else
+            {
+                EditSaveHelper();
             }
         }
         catch (Exception)
@@ -1725,7 +1756,10 @@ public class EditorManager : MonoBehaviour
             isSaving = false;
             throw;
         }
+    }
 
+    private void EditSaveHelper()
+    {
         FileStream fs = new FileStream(MAP_ROOT_PATH + mapName + ".txt", FileMode.Create);
         StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
 
@@ -1780,8 +1814,7 @@ public class EditorManager : MonoBehaviour
             fs.Close();
         }
 
-        // TODO 저장 성공 메시지
-        Debug.Log("Saved as " + mapName + "!");
+        //Debug.Log("Saved as " + mapName + "!");
         statusUI.SetStatusMessage("You're done!\nSaved as " + mapName + "!");
 
         dirtyBit = false;
@@ -2147,7 +2180,6 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing("Redo: the map size", 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
-                // TODO
                 foreach (WallInfo wi in eai.oldWalls)
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)

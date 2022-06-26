@@ -13,7 +13,7 @@ public class MessageUI : MonoBehaviour
         messageText.text = "";
     }
 
-    public void Initialize(string text, UnityAction onOKClick, UnityAction onXClick)
+    public void Initialize(string text, UnityAction onOKClick = null, UnityAction onXClick = null)
     {
         messageText.text = text;
         messageOKButton.onClick.RemoveAllListeners();
@@ -28,6 +28,8 @@ public class MessageUI : MonoBehaviour
             messageXButton.onClick.AddListener(onXClick);
         }
         messageXButton.onClick.AddListener(() => gameObject.SetActive(false));
+
+        gameObject.SetActive(true);
     }
 
 }

@@ -768,7 +768,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (i + 1, k + 1)에서 공이 불타는 애니메이션 재생
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -817,7 +816,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (i + 1, k + 1)에 있던 공이 찌부러지는 애니메이션 재생
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -936,7 +934,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (i + 1, k + 1)에서 공이 불타는 애니메이션 재생
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -985,7 +982,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (i + 1, k + 1)에 있던 공이 찌부러지는 애니메이션 재생
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1104,7 +1100,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (k + 1, j + 1)에서 공이 불타는 애니메이션 재생
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1153,7 +1148,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (k + 1, j + 1)에 있던 공이 찌부러지는 애니메이션 재생
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1272,7 +1266,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (k + 1, j + 1)에서 공이 불타는 애니메이션 재생
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1321,7 +1314,6 @@ public class MapManager : MonoBehaviour
                                     Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
-                                        // TODO: (k + 1, j + 1)에 있던 공이 찌부러지는 애니메이션 재생
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
