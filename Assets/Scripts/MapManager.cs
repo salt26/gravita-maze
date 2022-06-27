@@ -134,7 +134,7 @@ public class MapManager : MonoBehaviour
             {
                 if (afterGravity.GetInvocationList().Length > 0)
                     afterGravity(Flag.TimeOver);
-                Debug.LogWarning("Time over");
+                Debug.LogWarning("Map warning: Time over");
             }
         }
     }

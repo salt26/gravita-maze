@@ -28,13 +28,6 @@ public class ButtonWithText : Button
         }
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        textComponent = GetComponentInChildren<Text>();
-        initialTextPos = new Vector3(60f, 6f);
-    }
-
     private void Update()
     {
         if (!isDisabledOrPressed &&
@@ -55,6 +48,12 @@ public class ButtonWithText : Button
 
     public void UpdateChildren()
     {
+        if (textComponent == null || initialTextPos == null)
+        {
+            textComponent = GetComponentInChildren<Text>();
+            initialTextPos = new Vector3(60f, 6f);
+        }
+
         if (isDisabledOrPressed)
         {
             textComponent.rectTransform.localPosition = initialTextPos - new Vector3(0f, 12f);

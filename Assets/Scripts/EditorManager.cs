@@ -65,6 +65,7 @@ public class EditorManager : MonoBehaviour
     public Image editorTimerLabel1;
     public StatusUI statusUI;
     public MessageUI messageUI;
+    public InputMessageUI inputMessageUI;
     public GameObject editorTimeoutPanel;
     public List<GameObject> editorPhases;
 
@@ -90,6 +91,7 @@ public class EditorManager : MonoBehaviour
     private OpenSaveScrollItem selectedSaveScrollItem;
     private string currentSavePath = MAP_ROOT_PATH;
     private float saveItemSelectTime = 0f;
+    private string folderName = "";
 
     private int currentTouchX;
     private int currentTouchY;
@@ -365,13 +367,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX || b < 1 || b > sizeY - 1)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal wall position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal wall overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
@@ -395,13 +397,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX - 1 || b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical wall position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical wall overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
@@ -429,13 +431,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX || !(b == 0 || b == sizeY))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -476,13 +478,13 @@ public class EditorManager : MonoBehaviour
 
                     if (!(a == 0 || a == sizeX) || b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -523,13 +525,13 @@ public class EditorManager : MonoBehaviour
 
                     if (b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -570,13 +572,13 @@ public class EditorManager : MonoBehaviour
 
                     if (b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -617,13 +619,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -664,13 +666,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit overlapped at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
                         break;
                     }
@@ -715,14 +717,14 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 0 || a > sizeX + 1 || b < 0 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal wall position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)) &&
                         !walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal wall or exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall or exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
                         break;
                     }
@@ -750,14 +752,14 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 0 || a > sizeX || b < 0 || b > sizeY + 1)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical wall position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)) &&
                         !walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical wall or exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall or exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
                         break;
                     }
@@ -785,13 +787,13 @@ public class EditorManager : MonoBehaviour
 
                     if (b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
@@ -817,13 +819,13 @@ public class EditorManager : MonoBehaviour
 
                     if (b < 1 || b > sizeY)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: vertical exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
@@ -849,13 +851,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
@@ -881,13 +883,13 @@ public class EditorManager : MonoBehaviour
 
                     if (a < 1 || a > sizeX)
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit position at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor invalid: horizontal exit doesn't exist at (" + a + ", " + b + ")");
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
                         break;
                     }
@@ -914,13 +916,13 @@ public class EditorManager : MonoBehaviour
 
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: ball position at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: ball position at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
                     break;
                 }
@@ -960,13 +962,13 @@ public class EditorManager : MonoBehaviour
 
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: iron position at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: iron position at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
                     break;
                 }
@@ -990,13 +992,13 @@ public class EditorManager : MonoBehaviour
 
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: fire position at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: fire position at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: objects overlapped at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
                     break;
                 }
@@ -1020,13 +1022,13 @@ public class EditorManager : MonoBehaviour
 
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: object position at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: object position at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
                     break;
                 }
                 if (!objects.Exists(i => i.x == a && i.y == b))
                 {
-                    if (verbose) Debug.LogWarning("Editor invalid: object doesn't exists at (" + a + ", " + b + ")");
+                    if (verbose) Debug.LogWarning("Editor warning: object doesn't exists at (" + a + ", " + b + ")");
                     statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
                     break;
                 }
@@ -1119,17 +1121,17 @@ public class EditorManager : MonoBehaviour
             if (phase == (int)EditPhase.Initialize)
             {
                 // 맵 변경 후 1페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("The map has changed.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
             }
             else if (solution != null && solution != "")
             {
                 // 맵 변경 후 검증은 완료했지만 저장되지 않은 상태에서 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("The map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
             }
             else
             {
                 // 맵 변경 후 검증을 하지 않고 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("The map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
             }
         }
         else
@@ -1256,7 +1258,7 @@ public class EditorManager : MonoBehaviour
         EditSizeY(0, caller);
     }
 
-    private bool isBadFileName(string newName)
+    private bool IsBadFileName(string newName)
     {
         if (newName is null)
         {
@@ -1292,9 +1294,9 @@ public class EditorManager : MonoBehaviour
             newName = editorMapNameInputs.Find(e => e.Equals(valueChangedInputField)).text;
         }
 
-        if (isBadFileName(newName))
+        if (IsBadFileName(newName))
         {
-            Debug.LogWarning("Editor invalid: illegal file name");
+            Debug.LogWarning("Editor warning: illegal file name");
             statusUI.SetStatusMessageWithFlashing("Illegal file name.", 1f);
             mapName = oldMapName;
             foreach (InputField editorMapNameInput in editorMapNameInputs)
@@ -1909,6 +1911,74 @@ public class EditorManager : MonoBehaviour
         editorSavePathButton.IsTextHighlighted = true;
     }
 
+    public void EditNewFolder()
+    {
+        folderName = "";
+        inputMessageUI.Initialize("<b>Create folder</b>\n\nEnter new\nfolder name.", () => CreateNewFolder(), null);
+    }
+
+    public void EditNewFolderName(InputField caller)
+    {
+        string oldFolderName = folderName;
+
+        string newName = caller.text;
+
+        if (IsBadFileName(newName))
+        {
+            Debug.LogWarning("Editor warning: illegal folder name");
+            statusUI.SetStatusMessageWithFlashing("Illegal folder name.", 1f);
+            folderName = oldFolderName;
+            caller.text = folderName;
+            return;
+        }
+
+        if (newName != null)
+        {
+            folderName = newName;
+            caller.text = folderName;
+        }
+    }
+
+    private void CreateNewFolder()
+    {
+        if (folderName == null || folderName == "")
+        {
+            Debug.LogWarning("Editor warning: illegal folder name");
+            statusUI.SetStatusMessageWithFlashing("Cannot create the folder:\nillegal folder name.", 2f);
+            return;
+        }
+
+        if (!Directory.Exists(currentSavePath.TrimEnd('\\') + "\\" + folderName))
+        {
+            Directory.CreateDirectory(currentSavePath.TrimEnd('\\') + "\\" + folderName);
+            statusUI.SetStatusMessageWithFlashing("New folder \"" + folderName + "\" has created!", 2f);
+            RenderSaveScrollView(currentSavePath);
+            foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+            {
+                if (i.isFolder && i.labelName != null && i.labelName.Equals(folderName))
+                {
+                    i.Select();
+                    break;
+                }
+            }
+            folderName = "";
+        }
+        else
+        {
+            Debug.LogWarning("Editor warning: folder name already exists");
+            statusUI.SetStatusMessageWithFlashing("Cannot create the folder: folder \"" + folderName + "\" already exists.", 2.5f);
+            foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+            {
+                if (i.isFolder && i.labelName != null && i.labelName.Equals(folderName))
+                {
+                    i.Select();
+                    break;
+                }
+            }
+            folderName = "";
+        }
+    }
+
     public void EditSave()
     {
         if (solution == null || solution == "" || mapName == null || mapName == "" || !dirtyBit ||
@@ -1943,8 +2013,7 @@ public class EditorManager : MonoBehaviour
             if (File.Exists(currentSavePath + "\\" + mapName + ".txt"))
             {
                 // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
-                messageUI.Initialize("Map \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
-                // TODO 메시지에서 버튼 입력 후에 반환하도록
+                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
             {
