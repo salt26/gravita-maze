@@ -78,6 +78,14 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(InitializeEditor());
         }
+        else if (SceneManager.GetActiveScene().name.Equals("Mode"))
+        {
+            StartCoroutine(InitializeMode());
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("AdventureLevel"))
+        {
+            StartCoroutine(InitializeAdventureLevel());
+        }
     }
 
     public void QuitGame()
@@ -89,14 +97,24 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    public void MapEditor()
+    public void LoadEditor()
     {
         StartCoroutine(SceneLoading("Editor"));
     }
 
-    public void ReturnToMain()
+    public void LoadMain()
     {
         StartCoroutine(SceneLoading("Main"));
+    }
+
+    public void LoadMode()
+    {
+        StartCoroutine(SceneLoading("Mode"));
+    }
+
+    public void LoadAdventureLevel()
+    {
+        StartCoroutine(SceneLoading("AdventureLevel"));
     }
 
     IEnumerator SceneLoading(string sceneName)
@@ -182,18 +200,221 @@ public class GameManager : MonoBehaviour
         canPlay = false;
     }
 
+    IEnumerator InitializeMode()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            yield return null;
+        }
+        List<WallInfo> walls = new List<WallInfo>();
+
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+
+        List<ObjectInfo> objects = new List<ObjectInfo>();
+
+        mm.afterGravity = ModeAfterGravity;
+
+        mm.Initialize(10, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.TimeActivate();
+        canPlay = true;
+    }
+
+    IEnumerator InitializeAdventureLevel()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            yield return null;
+        }
+        List<WallInfo> walls = new List<WallInfo>();
+
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 6));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+
+        List<ObjectInfo> objects = new List<ObjectInfo>();
+
+        mm.afterGravity = AdventureLevelAfterGravity;
+
+        mm.Initialize(8, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.TimeActivate();
+        canPlay = true;
+    }
+
     public void MainAfterGravity(MapManager.Flag flag)
     {
         switch (flag)
         {
             case MapManager.Flag.Escaped:
-                // TODO 게임 시작
+                LoadMode();
                 break;
             case MapManager.Flag.MapEditor:
-                MapEditor();
+                LoadEditor();
                 break;
             case MapManager.Flag.QuitGame:
                 QuitGame();
+                break;
+        }
+    }
+
+    public void ModeAfterGravity(MapManager.Flag flag)
+    {
+        switch (flag)
+        {
+            case MapManager.Flag.Escaped:
+                LoadMain();
+                break;
+            case MapManager.Flag.Adventure:
+                LoadAdventureLevel();
+                break;
+            case MapManager.Flag.Tutorial:
+                // TODO
+                break;
+            case MapManager.Flag.Custom:
+                // TODO
+                break;
+            case MapManager.Flag.Survival:
+                // TODO
+                break;
+        }
+    }
+
+    public void AdventureLevelAfterGravity(MapManager.Flag flag)
+    {
+        switch (flag)
+        {
+            case MapManager.Flag.Escaped:
+                LoadMode();
+                break;
+            case MapManager.Flag.AdvEasy:
+                // TODO
+                break;
+            case MapManager.Flag.AdvNormal:
+                // TODO
+                break;
+            case MapManager.Flag.AdvHard:
+                // TODO
+                break;
+            case MapManager.Flag.AdvInsane:
+                // TODO
                 break;
         }
     }

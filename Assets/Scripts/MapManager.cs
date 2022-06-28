@@ -8,8 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
-    public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6 }
-    public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64 }
+    public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
+        Adventure = 7, Tutorial = 8, Custom = 9, Survival = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
+    public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64, 
+        Adventure = 128, Tutorial = 256, Custom = 512, Survival = 1024, AdvEasy = 2048, AdvNormal = 4096, AdvHard = 8192, AdvInsane = 16384 }
 
     public const int MIN_SIZE_X = 2;
     public const int MIN_SIZE_Y = 2;
@@ -177,7 +179,8 @@ public class MapManager : MonoBehaviour
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨
         // 인자에서 ObjectInfo가 주어진 objects는 씬에 미리 배치된 오브젝트가 아니므로 여기에서 자동으로 생성됨
-        if (sizeX < 2 || sizeX > MAX_SIZE_X || sizeY < 2 || sizeY > MAX_SIZE_Y)
+        // "Mode" 씬에서는 특별히 10 이상의 sizeX를 허용
+        if (sizeX < 2 || (!SceneManager.GetActiveScene().name.Equals("Mode") && sizeX > MAX_SIZE_X) || sizeY < 2 || sizeY > MAX_SIZE_Y)
         {
             Debug.LogError("Map invalid: size");
             return;
@@ -344,7 +347,9 @@ public class MapManager : MonoBehaviour
         fixedObjects = new List<FixedObject>();
         traces = new List<GameObject>();
 
-        if (SceneManager.GetActiveScene().name == "Main")
+        if (SceneManager.GetActiveScene().name == "Main" || 
+            SceneManager.GetActiveScene().name == "Mode" || 
+            SceneManager.GetActiveScene().name == "AdventureLevel")
         {
             foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
             {
@@ -397,17 +402,41 @@ public class MapManager : MonoBehaviour
 
                 fixedObjects.Add(f);
 
-                if (f.type == FixedObject.Type.Fire)
+                switch (f.type)
                 {
-                    mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
-                }
-                else if (f.type == FixedObject.Type.QuitGame)
-                {
-                    mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
-                }
-                else if (f.type == FixedObject.Type.MapEditor)
-                {
-                    mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                    case FixedObject.Type.Fire:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
+                        break;
+                    case FixedObject.Type.QuitGame:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
+                        break;
+                    case FixedObject.Type.MapEditor:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                        break;
+                    case FixedObject.Type.Adventure:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 128
+                        break;
+                    case FixedObject.Type.Tutorial:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 256
+                        break;
+                    case FixedObject.Type.Custom:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 512
+                        break;
+                    case FixedObject.Type.Survival:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 1024
+                        break;
+                    case FixedObject.Type.AdvEasy:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 2048
+                        break;
+                    case FixedObject.Type.AdvNormal:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 4096
+                        break;
+                    case FixedObject.Type.AdvHard:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 8192
+                        break;
+                    case FixedObject.Type.AdvInsane:
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 16384
+                        break;
                 }
             }
         }
@@ -1304,6 +1333,102 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[i, j] = null;
                                     //GameManager.gm.MapEditor();
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Adventure))
+                                {
+                                    flag = Flag.Adventure;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Tutorial))
+                                {
+                                    flag = Flag.Tutorial;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Custom))
+                                {
+                                    flag = Flag.Custom;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Survival))
+                                {
+                                    flag = Flag.Survival;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvEasy))
+                                {
+                                    flag = Flag.AdvEasy;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvNormal))
+                                {
+                                    flag = Flag.AdvNormal;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvHard))
+                                {
+                                    flag = Flag.AdvHard;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
+                                    break;
+                                }
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvInsane))
+                                {
+                                    flag = Flag.AdvInsane;
+                                    ballX = k + 1;
+                                    ballY = j + 1;
+                                    if (!isSimulation)
+                                    {
+                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                    }
+                                    mutableMovableCoord[i, j] = null;
                                     break;
                                 }
                                 if (mutableMovableCoord[i, j] is Iron && mutableMovableCoord[k, j] != null && mutableMovableCoord[k, j] is Ball)

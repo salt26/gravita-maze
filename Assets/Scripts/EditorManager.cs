@@ -1121,22 +1121,22 @@ public class EditorManager : MonoBehaviour
             if (phase == (int)EditPhase.Initialize)
             {
                 // 맵 변경 후 1페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
                 // 맵 변경 후 검증은 완료했지만 저장되지 않은 상태에서 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else
             {
                 // 맵 변경 후 검증을 하지 않고 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.ReturnToMain(), null);
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
         }
         else
         {
-            GameManager.gm.ReturnToMain();
+            GameManager.gm.LoadMain();
         }
     }
 
