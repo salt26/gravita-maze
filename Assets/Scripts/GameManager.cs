@@ -213,6 +213,8 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 1));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 3));  // TODO 나중에 해금
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
@@ -300,6 +302,10 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // TODO 나중에 해금
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
