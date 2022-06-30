@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MapManager
   - Flag
+  - EditorManager
   layers:
   - Default
   - TransparentFX

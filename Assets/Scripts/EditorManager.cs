@@ -66,6 +66,7 @@ public class EditorManager : MonoBehaviour
     public StatusUI statusUI;
     public MessageUI messageUI;
     public InputMessageUI inputMessageUI;
+    public GameObject tooltipUI;
     public GameObject editorTimeoutPanel;
     public List<GameObject> editorPhases;
 
@@ -1107,7 +1108,10 @@ public class EditorManager : MonoBehaviour
             undoStack.Add(new EditActionInfo(oldWalls, oldObjects));
             redoStack.Clear();
             if (setStatusMessage)
+            {
+                statusUI.SetStatusMessage("Build your own map!");
                 statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
+            }
             dirtyBit = true;
         }
     }
