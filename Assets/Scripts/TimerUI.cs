@@ -14,7 +14,7 @@ public class TimerUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float pixels = (Screen.width - 240) / 12f;
+        float pixels = (1080 - 240) / 12f;
 
         if (!mm.IsReady)
         {
