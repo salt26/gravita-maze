@@ -38,5 +38,5 @@ sysinfo.txt
 
 # End of https://www.gitignore.io/api/unity
 
-Maps/*
+# Maps/*
 ignore/*
