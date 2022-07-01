@@ -294,7 +294,6 @@ public class EditorManager : MonoBehaviour
         }
         else
         {
-            // TODO 툴팁
             editorNextButton2.interactable = false;
         }
 
@@ -302,7 +301,6 @@ public class EditorManager : MonoBehaviour
         editorRedoButton.interactable = redoStack.Count > 0;
 
         // Phase 3 buttons
-        // TODO 툴팁
         editorSaveButton3.interactable = solution != null && solution != "" && dirtyBit;
         if (solution == null || solution == "")
         {
