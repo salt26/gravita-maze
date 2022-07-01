@@ -147,13 +147,13 @@ public class EditorManager : MonoBehaviour
 
                     if (Physics.Raycast(ray, out hit))
                     {
-                        tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                        tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                        tempWalls = walls.ConvertAll(j => new WallInfo(j.type, j.x, j.y));
+                        tempObjects = objects.ConvertAll(j => new ObjectInfo(j.type, j.x, j.y));
                         if (editMode == EditMode.Exit)
                         {
-                            if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                            if (tempWalls.Exists((j) => j.type == WallInfo.Type.ExitHorizontal || j.type == WallInfo.Type.ExitVertical))
                             {
-                                tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                                tempWalls.Remove(tempWalls.Find((j) => j.type == WallInfo.Type.ExitHorizontal || j.type == WallInfo.Type.ExitVertical));
                             }
                         }
                         TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
@@ -167,13 +167,13 @@ public class EditorManager : MonoBehaviour
 
                     if (Physics.Raycast(ray, out hit))
                     {
-                        tempWalls = walls.ConvertAll(i => new WallInfo(i.type, i.x, i.y));
-                        tempObjects = objects.ConvertAll(i => new ObjectInfo(i.type, i.x, i.y));
+                        tempWalls = walls.ConvertAll(j => new WallInfo(j.type, j.x, j.y));
+                        tempObjects = objects.ConvertAll(j => new ObjectInfo(j.type, j.x, j.y));
                         if (editMode == EditMode.Exit)
                         {
-                            if (tempWalls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
+                            if (tempWalls.Exists((j) => j.type == WallInfo.Type.ExitHorizontal || j.type == WallInfo.Type.ExitVertical))
                             {
-                                tempWalls.Remove(tempWalls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
+                                tempWalls.Remove(tempWalls.Find((j) => j.type == WallInfo.Type.ExitHorizontal || j.type == WallInfo.Type.ExitVertical));
                             }
                         }
                         TouchMap(hit.point.x, hit.point.y, editMode, tempWalls, tempObjects, touch.fingerId);
