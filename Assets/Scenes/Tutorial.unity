@@ -464,7 +464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343747308}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 4, z: 0}
+  m_LocalPosition: {x: 2, y: 2, z: 0}
   m_LocalScale: {x: 11.11111, y: 11.11111, z: 1}
   m_Children: []
   m_Father: {fileID: 713554044}
@@ -1862,7 +1862,7 @@ GameObject:
   - component: {fileID: 1314148895}
   - component: {fileID: 1314148896}
   m_Layer: 0
-  m_Name: RightArrow2
+  m_Name: LeftArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1876,7 +1876,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314148894}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 5, z: 0}
+  m_LocalPosition: {x: 2, y: 1, z: 0}
   m_LocalScale: {x: 11.11111, y: 11.11111, z: 1}
   m_Children: []
   m_Father: {fileID: 713554044}
@@ -1919,7 +1919,7 @@ SpriteRenderer:
   m_SortingLayerID: 1342279173
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c50fdbe5b5668b34da664ec4ad2650e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 269cdd9ca56394c409bf17f458e05067, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2674,7 +2674,7 @@ GameObject:
   - component: {fileID: 1828790662}
   - component: {fileID: 1828790663}
   m_Layer: 0
-  m_Name: DownArrow
+  m_Name: UpArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2688,7 +2688,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828790661}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 5, z: 0}
+  m_LocalPosition: {x: 1, y: 2, z: 0}
   m_LocalScale: {x: 11.11111, y: 11.11111, z: 1}
   m_Children: []
   m_Father: {fileID: 713554044}

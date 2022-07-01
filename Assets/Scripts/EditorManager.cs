@@ -13,9 +13,6 @@ public class EditorManager : MonoBehaviour
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
-    public const string MAP_ROOT_PATH = @"Maps\";
-    public const float DEFAULT_TIME_LIMIT = 10f;
-
     public Camera mainCamera;
     public Grid grid;
     public MapManager mm;
@@ -78,7 +75,7 @@ public class EditorManager : MonoBehaviour
     private List<ObjectInfo> objects = new List<ObjectInfo>();
     private string solution = "";
     private string mapName = "";
-    private float timeLimit = DEFAULT_TIME_LIMIT;
+    private float timeLimit = MapManager.DEFAULT_TIME_LIMIT;
     private bool hasCreated = false;
     [SerializeField]
     private bool dirtyBit = false;
@@ -86,10 +83,10 @@ public class EditorManager : MonoBehaviour
     private bool isSaving = false;
     private bool hasPassedInitPhaseOnce = false;
     private OpenSaveScrollItem selectedOpenScrollItem;
-    private string currentOpenPath = MAP_ROOT_PATH;
+    private string currentOpenPath = MapManager.MAP_ROOT_PATH;
     private float openItemSelectTime = 0f;
     private OpenSaveScrollItem selectedSaveScrollItem;
-    private string currentSavePath = MAP_ROOT_PATH;
+    private string currentSavePath = MapManager.MAP_ROOT_PATH;
     private float saveItemSelectTime = 0f;
     private string folderName = "";
     private TooltipHover editorSaveButton3Hover;
@@ -1357,7 +1354,7 @@ public class EditorManager : MonoBehaviour
         editorSizeXDropdowns[0].interactable = true;
         editorSizeYDropdowns[0].interactable = true;
         editorNextButton1.interactable = true;
-        timeLimit = DEFAULT_TIME_LIMIT;
+        timeLimit = MapManager.DEFAULT_TIME_LIMIT;
         EditMapName("");
         EditReset(false);
         if (hasPassedInitPhaseOnce)
@@ -1375,13 +1372,13 @@ public class EditorManager : MonoBehaviour
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
-        if (!Directory.Exists(MAP_ROOT_PATH))
+        if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
         {
-            Debug.LogWarning("File warning: there is no directory \"" + MAP_ROOT_PATH + "\"");
-            Directory.CreateDirectory(MAP_ROOT_PATH);
+            Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
+            Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
         }
 
-        RenderOpenScrollView(MAP_ROOT_PATH);
+        RenderOpenScrollView(MapManager.MAP_ROOT_PATH);
 
         editorPhases[0].SetActive(false);
         editorPhases[4].SetActive(true);
@@ -1406,7 +1403,7 @@ public class EditorManager : MonoBehaviour
         int index = 0;
         int length = dirs.Length + files.Length;
 
-        if (!openPath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!openPath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
         {
             length++;
         }
@@ -1433,7 +1430,7 @@ public class EditorManager : MonoBehaviour
         editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta =
             new Vector2(editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
 
-        if (!openPath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!openPath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
         {
             GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
             g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
@@ -1526,7 +1523,7 @@ public class EditorManager : MonoBehaviour
     {
         MapManager.OpenFileFlag openFileFlag = mm.InitializeFromFile(path, out int tempSizeX, out int tempSizeY, 
             out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls, 
-            out string tempSolution, out float tempTimeLimit, statusUI);
+            out string tempSolution, out float tempTimeLimit, null, statusUI);
 
         switch (openFileFlag)
         {
@@ -1598,13 +1595,13 @@ public class EditorManager : MonoBehaviour
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
-        if (!Directory.Exists(MAP_ROOT_PATH))
+        if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
         {
-            Debug.LogWarning("File warning: there is no directory \"" + MAP_ROOT_PATH + "\"");
-            Directory.CreateDirectory(MAP_ROOT_PATH);
+            Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
+            Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
         }
 
-        RenderSaveScrollView(MAP_ROOT_PATH);
+        RenderSaveScrollView(MapManager.MAP_ROOT_PATH);
 
         editorPhases[2].SetActive(false);
         editorPhases[5].SetActive(true);
@@ -1628,7 +1625,7 @@ public class EditorManager : MonoBehaviour
         int index = 0;
         int length = dirs.Length + files.Length;
 
-        if (!savePath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!savePath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
         {
             length++;
         }
@@ -1656,7 +1653,7 @@ public class EditorManager : MonoBehaviour
         editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta =
             new Vector2(editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
 
-        if (!savePath.TrimEnd('\\').Equals(MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!savePath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
         {
             GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
             g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);

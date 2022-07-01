@@ -21,6 +21,9 @@ public class MapManager : MonoBehaviour
     public const int MAX_SIZE_X = 9;
     public const int MAX_SIZE_Y = 9;
 
+    public const string MAP_ROOT_PATH = @"Maps\";
+    public const float DEFAULT_TIME_LIMIT = 10f;
+
     [HideInInspector]
     public List<Movable> movables;
     [HideInInspector]
@@ -139,9 +142,9 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
+                timeoutPanel.SetActive(true);
                 if (afterGravity.GetInvocationList().Length > 0)
                     afterGravity(Flag.TimeOver);
-                timeoutPanel?.SetActive(true);
                 Debug.LogWarning("Map warning: Time over");
             }
         }
@@ -176,7 +179,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         RemainingTime = 0f;
         tilemap.ClearAllTiles();
-        timeoutPanel?.SetActive(false);
+        timeoutPanel.SetActive(false);
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
@@ -201,7 +204,7 @@ public class MapManager : MonoBehaviour
         initialMovableCoord = new Movable[sizeX, sizeY];
 
         tilemap.ClearAllTiles();
-        timeoutPanel?.SetActive(false);
+        timeoutPanel.SetActive(false);
 
         bool[,] horizontalWalls = new bool[sizeX, sizeY + 1];
         bool[,] verticalWalls = new bool[sizeX + 1, sizeY];
@@ -537,14 +540,18 @@ public class MapManager : MonoBehaviour
 
     public OpenFileFlag InitializeFromFile(string path, out int tempSizeX, out int tempSizeY,
         out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls, 
-        out string tempSolution, out float tempTimeLimit, StatusUI statusUI = null)
+        out string tempSolution, out float tempTimeLimit, List<ObjectInfo> objects = null, StatusUI statusUI = null)
     {
         tempSizeX = 0;
         tempSizeY = 0;
-        tempObjects = new List<ObjectInfo>();
+        tempObjects = objects;
+        if (objects == null)
+        {
+            tempObjects = new List<ObjectInfo>();
+        }
         tempWalls = new List<WallInfo>();
         tempSolution = "";
-        tempTimeLimit = EditorManager.DEFAULT_TIME_LIMIT;
+        tempTimeLimit = DEFAULT_TIME_LIMIT;
 
         try
         {
@@ -751,7 +758,7 @@ public class MapManager : MonoBehaviour
         RemainingTime = TimeLimit;
         IsTimeActivated = true;
         IsTimePassing = false;
-        timeoutPanel?.SetActive(false);
+        timeoutPanel.SetActive(false);
         Debug.Log("Remaining time: " + RemainingTime);
     }
 

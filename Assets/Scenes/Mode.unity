@@ -5210,7 +5210,7 @@ GameObject:
   - component: {fileID: 1828790662}
   - component: {fileID: 1828790663}
   m_Layer: 0
-  m_Name: DownArrow
+  m_Name: UpArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
