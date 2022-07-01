@@ -4540,7 +4540,7 @@ GameObject:
   - component: {fileID: 368163575}
   - component: {fileID: 368163578}
   m_Layer: 5
-  m_Name: EditorButtonSave
+  m_Name: EditorButtonSave3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12142,7 +12142,7 @@ MonoBehaviour:
   editorRetryTimeHighlightedButton: {fileID: 52850594}
   editorMapTestRequiredButton: {fileID: 363312022}
   editorMapTestDoneButton: {fileID: 1751737175}
-  editorSaveButton: {fileID: 368163575}
+  editorSaveButton3: {fileID: 368163575}
   editorQuitButton3: {fileID: 1909207574}
   editorQuitHighlightedButton3: {fileID: 1986560874}
   editorCancelButton5: {fileID: 947212285}

@@ -37,7 +37,7 @@ public class EditorManager : MonoBehaviour
     public Button editorRetryTimeHighlightedButton;
     public Button editorMapTestRequiredButton;
     public Button editorMapTestDoneButton;
-    public Button editorSaveButton;
+    public Button editorSaveButton3;
     public Button editorQuitButton3;
     public Button editorQuitHighlightedButton3;
     public Button editorCancelButton5;
@@ -93,6 +93,7 @@ public class EditorManager : MonoBehaviour
     private string currentSavePath = MAP_ROOT_PATH;
     private float saveItemSelectTime = 0f;
     private string folderName = "";
+    private TooltipHover editorSaveButton3Hover;
 
     private int currentTouchX;
     private int currentTouchY;
@@ -105,7 +106,7 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        editorSaveButton3Hover = editorSaveButton3.GetComponent<TooltipHover>();
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
@@ -128,6 +129,10 @@ public class EditorManager : MonoBehaviour
         dirtyBit = false;
         hasPassedInitPhaseOnce = false;
         GameManager.gm.canPlay = false;
+        foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+        {
+            Destroy(t.gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -298,7 +303,18 @@ public class EditorManager : MonoBehaviour
 
         // Phase 3 buttons
         // TODO 툴팁
-        editorSaveButton.interactable = solution != null && solution != "" && dirtyBit;
+        editorSaveButton3.interactable = solution != null && solution != "" && dirtyBit;
+        if (solution == null || solution == "")
+        {
+            editorSaveButton3Hover.tooltipMessage = "Test the map\\first to see if\\you can escape.";
+            editorSaveButton3Hover.tooltipWidth = 660f;
+        }
+        else if (!dirtyBit)
+        {
+            editorSaveButton3.GetComponent<TooltipHover>().tooltipMessage = "No changes\\since the\\last save.";
+            editorSaveButton3Hover.tooltipWidth = 480f;
+        }
+
         if (solution != null && solution != "" && hasSavedOnce)
         {
             editorQuitButton3.gameObject.SetActive(false);
@@ -1377,6 +1393,10 @@ public class EditorManager : MonoBehaviour
         editPhase = EditPhase.Open;
         statusUI.SetStatusMessage("Choose a map to open.");
         GameManager.gm.canPlay = false;
+        foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+        {
+            Destroy(t.gameObject);
+        }
     }
 
     private void RenderOpenScrollView(string openPath)
@@ -1639,12 +1659,11 @@ public class EditorManager : MonoBehaviour
                         }
                         tempTimeLimit = float.Parse(token[1]);
                         break;
-                    default:
-                        if (token.Length != 1 ||
-                            !(token[0].StartsWith("w") || token[0].StartsWith("a") || token[0].StartsWith("s") || token[0].StartsWith("d")))
+                    case "s":
+                        if (token.Length != 2)
                         {
-                            Debug.LogError("File invalid: unknown (" + l + ")");
-                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nunknown symbols", 1.5f);
+                            Debug.LogError("File invalid: solution (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nsolution error", 1.5f);
                             return false;
                         }
                         else if (hasSolution)
@@ -1653,9 +1672,29 @@ public class EditorManager : MonoBehaviour
                             statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nmultiple solutions", 1.5f);
                             return false;
                         }
-                        tempSolution = token[0];
+                        // http://www.nowan.hu/main.aspx?content=9cff1555-26ca-4e6a-910b-6a73463e22b2
+                        try
+                        {
+                            byte[] tempByte = Convert.FromBase64String(token[1]);
+                            UTF8Encoding encoder = new UTF8Encoding();
+                            Decoder decoder = encoder.GetDecoder();
+                            int count = decoder.GetCharCount(tempByte, 0, tempByte.Length);
+                            char[] decodedChar = new char[count];
+                            decoder.GetChars(tempByte, 0, tempByte.Length, decodedChar, 0);
+                            tempSolution = new string(decodedChar);
+                        }
+                        catch (FormatException)
+                        {
+                            Debug.LogError("File invalid: wrong solution format (" + l + ")");
+                            statusUI.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid solution", 1.5f);
+                            return false;
+                        }
                         hasSolution = true;
                         break;
+                    default:
+                        Debug.LogError("File invalid: unknown (" + l + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot open the map:\nunknown symbols", 1.5f);
+                        return false;
                 }
             }
         }
@@ -1729,6 +1768,11 @@ public class EditorManager : MonoBehaviour
 
             hasCreated = true;
 
+            foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+            {
+                Destroy(t.gameObject);
+            }
+
             return true;
         }
     }
@@ -1753,6 +1797,11 @@ public class EditorManager : MonoBehaviour
         editorPhases[5].SetActive(true);
         editPhase = EditPhase.Save;
         GameManager.gm.canPlay = false;
+
+        foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+        {
+            Destroy(t.gameObject);
+        }
     }
 
     private void RenderSaveScrollView(string savePath)
@@ -2074,7 +2123,7 @@ public class EditorManager : MonoBehaviour
                 }
             }
             sw.WriteLine("t " + timeLimit);
-            sw.WriteLine(solution);
+            sw.WriteLine("s " + Convert.ToBase64String(Encoding.UTF8.GetBytes(solution)));
         }
         catch (Exception)
         {
@@ -2143,7 +2192,6 @@ public class EditorManager : MonoBehaviour
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
                 solution = mm.ActionHistory;
-                print(solution);
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
@@ -2154,6 +2202,10 @@ public class EditorManager : MonoBehaviour
                 editPhase = EditPhase.Request;
                 GameManager.gm.canPlay = false;
                 break;
+        }
+        foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+        {
+            Destroy(t.gameObject);
         }
     }
 
@@ -2215,6 +2267,10 @@ public class EditorManager : MonoBehaviour
                 ClearSaveScrollItems();
                 GameManager.gm.canPlay = false;
                 break;
+        }
+        foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+        {
+            Destroy(t.gameObject);
         }
     }
 
