@@ -405,11 +405,11 @@ public class GameManager : MonoBehaviour
         HasClearedAll = false;
         mm.afterGravity = pm.TutorialAfterGravity;
 
-        mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
+        //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
 
-        for (int i = 0; i < mapList.Count; i++)
+        for (int i = 0; i < pm.mapFiles.Count; i++)
         {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromFile(mapList[i], out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
@@ -486,22 +486,22 @@ public class GameManager : MonoBehaviour
 
     public void TutorialNext()
     {
-        if (mapList == null || mapList.Count == 0) return;
+        if (pm == null || pm.mapFiles == null || pm.mapFiles.Count == 0) return;
 
         foreach (Transform obj in GameObject.Find("Objects").GetComponentsInChildren<Transform>())
         {
             if (obj.gameObject.name.Equals("Objects")) continue;
             Destroy(obj.gameObject);
         }
-        for (int i = playingMapIndex + 1; i <= mapList.Count; i++)
+        for (int i = playingMapIndex + 1; i <= pm.mapFiles.Count; i++)
         {
-            if (i >= mapList.Count)
+            if (i >= pm.mapFiles.Count)
             {
                 // TODO Victory
                 HasClearedAll = true;
                 break;
             }
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromFile(mapList[i], out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
@@ -519,6 +519,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayNext()
     {
+        // TODO mapList? or pm.mapFiles?
         if (mapList == null || mapList.Count == 0) return;
 
         for (int i = playingMapIndex + 1; i <= mapList.Count; i++)

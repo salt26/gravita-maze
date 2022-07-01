@@ -13,6 +13,8 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
 
+    public List<TextAsset> mapFiles = new List<TextAsset>();
+
     public void Quit()
     {
         // TODO 시간 멈추고 맵 가리고 확인 메시지 띄우기

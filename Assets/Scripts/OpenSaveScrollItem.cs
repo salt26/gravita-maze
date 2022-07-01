@@ -34,14 +34,14 @@ public class OpenSaveScrollItem : MonoBehaviour
         this.em = em;
         this.isFolder = isFolder;
         this.isUpOneLevel = isFolder & isUpOneLevel;
-        this.path = path;
+        this.path = path.Replace('\\', '/');
         if (isFolder)
         {
-            labelName = path.Substring(path.LastIndexOf('\\') + 1);
+            labelName = this.path.Substring(this.path.LastIndexOf('/') + 1);
         }
         else
         {
-            labelName = Path.GetFileNameWithoutExtension(path);
+            labelName = Path.GetFileNameWithoutExtension(this.path);
         }
         Update();
     }

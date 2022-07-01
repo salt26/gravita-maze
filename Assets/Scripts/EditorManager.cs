@@ -1398,29 +1398,30 @@ public class EditorManager : MonoBehaviour
 
         const float SCROLL_ITEM_HEIGHT = 84f;
 
+        openPath = openPath.Replace('\\', '/');
         string[] files = Directory.GetFiles(openPath, "*.txt");
         string[] dirs = Directory.GetDirectories(openPath);
         int index = 0;
         int length = dirs.Length + files.Length;
 
-        if (!openPath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             length++;
         }
 
-        currentOpenPath = openPath.TrimEnd('\\');
+        currentOpenPath = openPath.TrimEnd('/');
         //Debug.Log(currentOpenPath);
 
-        string currentPath = currentOpenPath.Substring(currentOpenPath.LastIndexOf('\\') + 1);
+        string currentPath = currentOpenPath.Substring(currentOpenPath.LastIndexOf('/') + 1);
         if (currentOpenPath.Length <= 21)
         {
-            editorOpenPathText.text = currentOpenPath.Replace('\\', '/');
+            editorOpenPathText.text = currentOpenPath;
         }
         else if (currentPath.Length <= 17)
         {
             string tempPath = currentOpenPath.Substring(currentOpenPath.Length - 17);
-            tempPath = tempPath.Substring(tempPath.IndexOf('\\') + 1);
-            editorOpenPathText.text = ".../" + tempPath.Replace('\\', '/');
+            tempPath = tempPath.Substring(tempPath.IndexOf('/') + 1);
+            editorOpenPathText.text = ".../" + tempPath;
         }
         else
         {
@@ -1430,7 +1431,7 @@ public class EditorManager : MonoBehaviour
         editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta =
             new Vector2(editorOpenScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
 
-        if (!openPath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
             g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
@@ -1438,7 +1439,7 @@ public class EditorManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('\\')), true, this, true);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('/')), true, this, true);
             index++;
         }
 
@@ -1523,7 +1524,7 @@ public class EditorManager : MonoBehaviour
     {
         MapManager.OpenFileFlag openFileFlag = mm.InitializeFromFile(path, out int tempSizeX, out int tempSizeY, 
             out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls, 
-            out string tempSolution, out float tempTimeLimit, null, statusUI);
+            out string tempSolution, out float tempTimeLimit, statusUI);
 
         switch (openFileFlag)
         {
@@ -1620,29 +1621,30 @@ public class EditorManager : MonoBehaviour
 
         const float SCROLL_ITEM_HEIGHT = 84f;
 
+        savePath = savePath.Replace('\\', '/');
         string[] files = Directory.GetFiles(savePath, "*.txt");
         string[] dirs = Directory.GetDirectories(savePath);
         int index = 0;
         int length = dirs.Length + files.Length;
 
-        if (!savePath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             length++;
         }
 
-        currentSavePath = savePath.TrimEnd('\\');
+        currentSavePath = savePath.TrimEnd('/');
         //Debug.Log(currentSavePath);
 
-        string currentPath = currentSavePath.Substring(currentSavePath.LastIndexOf('\\') + 1);
+        string currentPath = currentSavePath.Substring(currentSavePath.LastIndexOf('/') + 1);
         if (currentSavePath.Length <= 21)
         {
-            editorSavePathText.text = currentSavePath.Replace('\\', '/');
+            editorSavePathText.text = currentSavePath;
         }
         else if (currentPath.Length <= 17)
         {
             string tempPath = currentSavePath.Substring(currentSavePath.Length - 17);
-            tempPath = tempPath.Substring(tempPath.IndexOf('\\') + 1);
-            editorSavePathText.text = ".../" + tempPath.Replace('\\', '/');
+            tempPath = tempPath.Substring(tempPath.IndexOf('/') + 1);
+            editorSavePathText.text = ".../" + tempPath;
         }
         else
         {
@@ -1653,7 +1655,7 @@ public class EditorManager : MonoBehaviour
         editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta =
             new Vector2(editorSaveScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
 
-        if (!savePath.TrimEnd('\\').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('\\')))
+        if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
             g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
@@ -1661,7 +1663,7 @@ public class EditorManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, currentSavePath.Remove(currentSavePath.LastIndexOf('\\')), true, this, true);
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, currentSavePath.Remove(currentSavePath.LastIndexOf('/')), true, this, true);
             index++;
         }
 
@@ -1811,9 +1813,9 @@ public class EditorManager : MonoBehaviour
             return;
         }
 
-        if (!Directory.Exists(currentSavePath.TrimEnd('\\') + "\\" + folderName))
+        if (!Directory.Exists(currentSavePath.TrimEnd('/') + "/" + folderName))
         {
-            Directory.CreateDirectory(currentSavePath.TrimEnd('\\') + "\\" + folderName);
+            Directory.CreateDirectory(currentSavePath.TrimEnd('/') + "/" + folderName);
             statusUI.SetStatusMessageWithFlashing("New folder \"" + folderName + "\" has created!", 2f);
             RenderSaveScrollView(currentSavePath);
             foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
@@ -1859,9 +1861,9 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (!Directory.Exists(currentSavePath.TrimEnd('\\')))
+            if (!Directory.Exists(currentSavePath.TrimEnd('/')))
             {
-                Directory.CreateDirectory(currentSavePath.TrimEnd('\\'));
+                Directory.CreateDirectory(currentSavePath.TrimEnd('/'));
             }
         }
         catch (Exception)
@@ -1873,7 +1875,7 @@ public class EditorManager : MonoBehaviour
 
         try
         {
-            if (File.Exists(currentSavePath + "\\" + mapName + ".txt"))
+            if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
                 // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
                 messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
@@ -1893,7 +1895,7 @@ public class EditorManager : MonoBehaviour
 
     private void EditSaveHelper()
     {
-        FileStream fs = new FileStream(currentSavePath + "\\" + mapName + ".txt", FileMode.Create);
+        FileStream fs = new FileStream(currentSavePath + "/" + mapName + ".txt", FileMode.Create);
         StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
 
         try
