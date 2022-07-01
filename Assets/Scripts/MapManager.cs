@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -12,6 +14,7 @@ public class MapManager : MonoBehaviour
         Adventure = 7, Tutorial = 8, Custom = 9, Survival = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
     public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64, 
         Adventure = 128, Tutorial = 256, Custom = 512, Survival = 1024, AdvEasy = 2048, AdvNormal = 4096, AdvHard = 8192, AdvInsane = 16384 }
+    public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
 
     public const int MIN_SIZE_X = 2;
     public const int MIN_SIZE_Y = 2;
@@ -50,6 +53,8 @@ public class MapManager : MonoBehaviour
 
     public Tilemap tilemap;
     public List<Tile> tiles = new List<Tile>();
+
+    public GameObject timeoutPanel;
 
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
@@ -136,6 +141,7 @@ public class MapManager : MonoBehaviour
             {
                 if (afterGravity.GetInvocationList().Length > 0)
                     afterGravity(Flag.TimeOver);
+                timeoutPanel?.SetActive(true);
                 Debug.LogWarning("Map warning: Time over");
             }
         }
@@ -170,6 +176,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         RemainingTime = 0f;
         tilemap.ClearAllTiles();
+        timeoutPanel?.SetActive(false);
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
@@ -194,6 +201,7 @@ public class MapManager : MonoBehaviour
         initialMovableCoord = new Movable[sizeX, sizeY];
 
         tilemap.ClearAllTiles();
+        timeoutPanel?.SetActive(false);
 
         bool[,] horizontalWalls = new bool[sizeX, sizeY + 1];
         bool[,] verticalWalls = new bool[sizeX + 1, sizeY];
@@ -527,6 +535,207 @@ public class MapManager : MonoBehaviour
         //PrintMapCoord();
     }
 
+    public OpenFileFlag InitializeFromFile(string path, out int tempSizeX, out int tempSizeY,
+        out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls, 
+        out string tempSolution, out float tempTimeLimit, StatusUI statusUI = null)
+    {
+        tempSizeX = 0;
+        tempSizeY = 0;
+        tempObjects = new List<ObjectInfo>();
+        tempWalls = new List<WallInfo>();
+        tempSolution = "";
+        tempTimeLimit = EditorManager.DEFAULT_TIME_LIMIT;
+
+        try
+        {
+            if (!File.Exists(path))
+            {
+                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(path) + "\"");
+                return OpenFileFlag.Failed;
+            }
+            else if (Path.GetExtension(path) != ".txt")
+            {
+                Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(path) + "\" is not a .txt file");
+                return OpenFileFlag.Failed;
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("File invalid: exception while checking a file");
+            throw;
+        }
+
+        FileStream fs = new FileStream(path, FileMode.Open);
+        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+        #region parsing text file
+        try
+        {
+            // sizeX, sizeY
+            string line = sr.ReadLine();
+            string[] token = line.Split(' ');
+
+            if (token.Length != 2)
+            {
+                Debug.LogError("File invalid: map size (" + line + ")");
+                statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nsize error", 1.5f);
+                return OpenFileFlag.Failed;
+            }
+
+            tempSizeX = int.Parse(token[0]);
+            tempSizeY = int.Parse(token[1]);
+
+            bool hasSolution = false;
+            string lines = sr.ReadToEnd();
+            foreach (string l in lines.Split('\n'))
+            {
+                token = l.Split(' ');
+                if (l == "" || token.Length == 0) continue;
+
+                switch (token[0])
+                {
+                    case "@":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: ball (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nball error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Ball, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "#":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: iron (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\niron error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Iron, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "*":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: fire (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nfire error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "$":
+                        if (token.Length != 4)
+                        {
+                            Debug.LogError("File invalid: exit (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+
+                        if (token[1].Equals("-"))
+                        {
+                            tempWalls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, int.Parse(token[2]), int.Parse(token[3])));
+                        }
+                        else if (token[1].Equals("|"))
+                        {
+                            tempWalls.Add(new WallInfo(WallInfo.Type.ExitVertical, int.Parse(token[2]), int.Parse(token[3])));
+                        }
+                        else
+                        {
+                            Debug.LogError("File invalid: exit (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        break;
+                    case "-":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: horizontal wall (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempWalls.Add(new WallInfo(WallInfo.Type.Horizontal, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "|":
+                        if (token.Length != 3)
+                        {
+                            Debug.LogError("File invalid: vertical wall (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
+                        break;
+                    case "t":
+                        if (token.Length != 2)
+                        {
+                            Debug.LogError("File invalid: time limit (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ntime limit error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        tempTimeLimit = float.Parse(token[1]);
+                        break;
+                    case "s":
+                        if (token.Length != 2)
+                        {
+                            Debug.LogError("File invalid: solution (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nsolution error", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        else if (hasSolution)
+                        {
+                            Debug.LogError("File invalid: solution already exists (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nmultiple solutions", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        // http://www.nowan.hu/main.aspx?content=9cff1555-26ca-4e6a-910b-6a73463e22b2
+                        try
+                        {
+                            byte[] tempByte = Convert.FromBase64String(token[1]);
+                            UTF8Encoding encoder = new UTF8Encoding();
+                            Decoder decoder = encoder.GetDecoder();
+                            int count = decoder.GetCharCount(tempByte, 0, tempByte.Length);
+                            char[] decodedChar = new char[count];
+                            decoder.GetChars(tempByte, 0, tempByte.Length, decodedChar, 0);
+                            tempSolution = new string(decodedChar);
+                        }
+                        catch (FormatException)
+                        {
+                            Debug.LogError("File invalid: wrong solution format (" + l + ")");
+                            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid solution", 1.5f);
+                            return OpenFileFlag.Failed;
+                        }
+                        hasSolution = true;
+                        break;
+                    default:
+                        Debug.LogError("File invalid: unknown (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nunknown symbols", 1.5f);
+                        return OpenFileFlag.Failed;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("File invalid: exception while opening a map");
+            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+            Debug.LogException(e);
+            return OpenFileFlag.Restore;
+        }
+        finally
+        {
+            sr.Close();
+            fs.Close();
+        }
+        #endregion
+
+        // Map validation
+        Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true);
+        if (!IsReady)
+        {
+            Debug.LogError("File invalid: map validation failed");
+            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map or impossible to clear", 3f);
+            return OpenFileFlag.Restore;
+        }
+
+        return OpenFileFlag.Success;
+    }
+
     /// <summary>
     /// 시간 흐름(게임 플레이) 활성화 함수. 반드시 Initialize() 호출 직후에만 호출할 것.
     /// </summary>
@@ -542,6 +751,7 @@ public class MapManager : MonoBehaviour
         RemainingTime = TimeLimit;
         IsTimeActivated = true;
         IsTimePassing = false;
+        timeoutPanel?.SetActive(false);
         Debug.Log("Remaining time: " + RemainingTime);
     }
 
