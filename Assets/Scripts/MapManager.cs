@@ -38,6 +38,7 @@ public class MapManager : MonoBehaviour
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
 
+    public Button gravityRetryButton;
     public Button gravityUpButton;
     public Button gravityDownButton;
     public Button gravityLeftButton;
@@ -57,12 +58,14 @@ public class MapManager : MonoBehaviour
     public Tilemap tilemap;
     public List<Tile> tiles = new List<Tile>();
 
+    public GameObject loadingPanel;
     public GameObject timeoutPanel;
 
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
 
     private float _timeLimit;
+    private bool _isReady = false;
 
     public int SizeX
     {
@@ -113,9 +116,16 @@ public class MapManager : MonoBehaviour
 
     public bool IsReady
     {
-        get;
-        private set;
-    } = false;
+        get
+        {
+            return _isReady;
+        }
+        private set
+        {
+            _isReady = value;
+            loadingPanel.SetActive(!value);
+        }
+    }
 
     public bool HasCleared
     {
@@ -137,6 +147,7 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
+        gravityRetryButton.interactable = IsReady && ActionHistory != "";
         if (IsReady && IsTimeActivated && IsTimePassing && RemainingTime > 0f && !HasCleared)
         {
             RemainingTime -= Time.deltaTime;
