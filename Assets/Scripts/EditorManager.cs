@@ -368,7 +368,7 @@ public class EditorManager : MonoBehaviour
         switch (editMode)
         {
             case EditMode.Wall:
-                #region Wall
+#region Wall
                 if ((Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) % 2 == 0)
                 {
                     // Horizontal wall
@@ -430,9 +430,9 @@ public class EditorManager : MonoBehaviour
                     hasChanged = true;
                 }
                 break;
-            #endregion
+#endregion
             case EditMode.Exit:
-                #region Exit
+#region Exit
                 if (x >= 0.5f && x < sizeX + 0.5f && y >= 0.5f && y < sizeY + 0.5f && (Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) % 2 == 0)
                 {
                     // Horizontal exit
@@ -716,9 +716,9 @@ public class EditorManager : MonoBehaviour
                     hasChanged = true;
                 }
                 break;
-            #endregion
+#endregion
             case EditMode.RemoveWall:
-                #region Remove wall
+#region Remove wall
                 if (x >= 0.5f && x < sizeX + 0.5f && y >= 0.5f && y < sizeY + 0.5f && (Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) % 2 == 0)
                 {
                     // Remove horizontal wall or exit
@@ -918,9 +918,9 @@ public class EditorManager : MonoBehaviour
                     hasChanged = true;
                 }
                 break;
-            #endregion
+#endregion
             case EditMode.Ball:
-                #region Ball
+#region Ball
                 a = Mathf.FloorToInt(x + 0.5f);
                 b = Mathf.FloorToInt(y + 0.5f);
 
@@ -964,9 +964,9 @@ public class EditorManager : MonoBehaviour
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, a, b));
                 hasChanged = true;
                 break;
-            #endregion
+#endregion
             case EditMode.Iron:
-                #region Iron
+#region Iron
                 a = Mathf.FloorToInt(x + 0.5f);
                 b = Mathf.FloorToInt(y + 0.5f);
 
@@ -994,9 +994,9 @@ public class EditorManager : MonoBehaviour
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 hasChanged = true;
                 break;
-            #endregion
+#endregion
             case EditMode.Fire:
-                #region Fire
+#region Fire
                 a = Mathf.FloorToInt(x + 0.5f);
                 b = Mathf.FloorToInt(y + 0.5f);
 
@@ -1024,9 +1024,9 @@ public class EditorManager : MonoBehaviour
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 hasChanged = true;
                 break;
-                #endregion
+#endregion
             case EditMode.RemoveObject:
-                #region Remove object
+#region Remove object
                 a = Mathf.FloorToInt(x + 0.5f);
                 b = Mathf.FloorToInt(y + 0.5f);
 
@@ -1056,7 +1056,7 @@ public class EditorManager : MonoBehaviour
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
                 break;
-                #endregion
+#endregion
         }
 
         // Map Rendering
@@ -1372,10 +1372,33 @@ public class EditorManager : MonoBehaviour
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
-        if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
         {
-            Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
-            Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+            if (!Directory.Exists(Path.GetDirectoryName(MapManager.ROOT_PATH)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(MapManager.ROOT_PATH));
+            }
+        }
+        catch (Exception e)
+        {
+            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            return;
+        }
+#endif
+
+        try
+        {
+            if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
+            {
+                Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
+                Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+            }
+        }
+        catch (Exception e)
+        {
+            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            return;
         }
 
         RenderOpenScrollView(MapManager.MAP_ROOT_PATH);
@@ -1385,6 +1408,9 @@ public class EditorManager : MonoBehaviour
         mm.Initialize();
         editPhase = EditPhase.Open;
         statusUI.SetStatusMessage("Choose a map to open.");
+#if UNITY_ANDROID && !UNITY_EDITOR
+        statusUI.SetStatusMessageWithFlashing(Application.persistentDataPath, 2f);
+#endif
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
         {
@@ -1595,6 +1621,21 @@ public class EditorManager : MonoBehaviour
 
         // UI 만들기
         // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
+        {
+            if (!Directory.Exists(MapManager.ROOT_PATH))
+            {
+                Directory.CreateDirectory(MapManager.ROOT_PATH);
+            }
+        }
+        catch (Exception e)
+        {
+            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            return;
+        }
+#endif
 
         if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
         {
@@ -2054,15 +2095,16 @@ public class EditorManager : MonoBehaviour
                 editorPhases[4].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
-                statusUI.SetStatusMessage("");
                 ClearOpenScrollItems();
                 if (hasCreated)
                 {
                     mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
+                    statusUI.SetStatusMessage("You can reinitialize your map.");
                 }
                 else
                 {
                     mm.Initialize();
+                    statusUI.SetStatusMessage("Welcome to the map editor!");
                 }
                 GameManager.gm.canPlay = false;
                 break;
@@ -2156,7 +2198,7 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing("Undo: the map name", 1f);
                 break;
             case EditActionInfo.Type.Wall:
-                #region Undo Wall
+#region Undo Wall
                 if (eai.oldWall != null && !walls.Contains(eai.oldWall))
                 {
                     walls.Add(eai.oldWall);
@@ -2183,10 +2225,10 @@ public class EditorManager : MonoBehaviour
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 statusUI.SetStatusMessageWithFlashing("Undo: a wall or an exit", 1f);
-                #endregion
+#endregion
                 break;
             case EditActionInfo.Type.Object:
-                #region Undo Object
+#region Undo Object
                 if (eai.oldObject != null && !objects.Contains(eai.oldObject))
                 {
                     objects.Add(eai.oldObject);
@@ -2213,7 +2255,7 @@ public class EditorManager : MonoBehaviour
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 statusUI.SetStatusMessageWithFlashing("Undo: an object", 1f);
-                #endregion
+#endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.oldSize);
@@ -2271,7 +2313,7 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing("Redo: the map name", 1f);
                 break;
             case EditActionInfo.Type.Wall:
-                #region Redo Wall
+#region Redo Wall
                 if (eai.oldWall != null && walls.Contains(eai.oldWall))
                 {
                     walls.Remove(eai.oldWall);
@@ -2298,10 +2340,10 @@ public class EditorManager : MonoBehaviour
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 statusUI.SetStatusMessageWithFlashing("Redo: a wall or an exit", 1f);
-                #endregion
+#endregion
                 break;
             case EditActionInfo.Type.Object:
-                #region Redo Object
+#region Redo Object
                 if (eai.oldObject != null && objects.Contains(eai.oldObject))
                 {
                     objects.Remove(eai.oldObject);
@@ -2328,7 +2370,7 @@ public class EditorManager : MonoBehaviour
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 statusUI.SetStatusMessageWithFlashing("Redo: an object", 1f);
-                #endregion
+#endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);

@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+#if UNITY_ANDROID
+using UnityEngine.Android;
+#endif
 
 public class GameManager : MonoBehaviour
 {
@@ -50,6 +53,17 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Initialize();
+
+#if UNITY_ANDROID
+        if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+        {
+            Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+        }
+        if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+        {
+            Permission.RequestUserPermission(Permission.ExternalStorageRead);
+        }
+#endif
     }
 
     // Update is called once per frame
@@ -147,6 +161,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SceneLoading(string sceneName)
     {
+        if (mm != null)
+        {
+            mm.loadingPanel.SetActive(true);
+        }
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while (!operation.isDone)
         {

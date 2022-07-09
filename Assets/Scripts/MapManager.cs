@@ -21,7 +21,13 @@ public class MapManager : MonoBehaviour
     public const int MAX_SIZE_X = 9;
     public const int MAX_SIZE_Y = 9;
 
+#if PLATFORM_ANDROID && !UNITY_EDITOR
+    //public static string MAP_ROOT_PATH = Application.persistentDataPath + "/Maps/";
+    public static string ROOT_PATH = Application.persistentDataPath + "/GravitaMaze/";
+    public static string MAP_ROOT_PATH = ROOT_PATH + "Maps/";
+#else
     public const string MAP_ROOT_PATH = "Maps/";
+#endif
     public const float DEFAULT_TIME_LIMIT = 10f;
 
     [HideInInspector]
@@ -582,7 +588,7 @@ public class MapManager : MonoBehaviour
         FileStream fs = new FileStream(path, FileMode.Open);
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
-        #region parsing text file
+#region parsing text file
         try
         {
             // sizeX, sizeY
@@ -601,7 +607,7 @@ public class MapManager : MonoBehaviour
             sr.Close();
             fs.Close();
         }
-        #endregion
+#endregion
     }
 
     public OpenFileFlag InitializeFromText(string text, out int tempSizeX, out int tempSizeY,
@@ -615,7 +621,7 @@ public class MapManager : MonoBehaviour
         tempSolution = "";
         tempTimeLimit = DEFAULT_TIME_LIMIT;
 
-        #region parsing text file
+#region parsing text file
         // sizeX, sizeY
         string line = text.Substring(0, text.IndexOf('\n'));
         string[] token = line.Split(' ');
@@ -754,7 +760,7 @@ public class MapManager : MonoBehaviour
                     return OpenFileFlag.Failed;
             }
         }
-        #endregion
+#endregion
 
         // Map validation
         Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true);
@@ -995,7 +1001,7 @@ public class MapManager : MonoBehaviour
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // j++
-                            #region Up
+#region Up
                             for (int k = j; k <= SizeY; k++)
                             {
                                 if (k == SizeY)
@@ -1147,7 +1153,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                     }
                 }
@@ -1161,7 +1167,7 @@ public class MapManager : MonoBehaviour
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // j--
-                            #region Down
+#region Down
                             for (int k = j; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -1313,7 +1319,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                     }
                 }
@@ -1327,7 +1333,7 @@ public class MapManager : MonoBehaviour
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // i--
-                            #region Left
+#region Left
                             for (int k = i; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -1479,7 +1485,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                     }
                 }
@@ -1493,7 +1499,7 @@ public class MapManager : MonoBehaviour
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // i++
-                            #region Right
+#region Right
                             for (int k = i; k <= SizeX; k++)
                             {
                                 if (k == SizeX)
@@ -1741,7 +1747,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                     }
                 }
