@@ -1409,7 +1409,7 @@ public class EditorManager : MonoBehaviour
         editPhase = EditPhase.Open;
         statusUI.SetStatusMessage("Choose a map to open.");
 #if UNITY_ANDROID && !UNITY_EDITOR
-        statusUI.SetStatusMessageWithFlashing(Application.persistentDataPath, 2f);
+        //statusUI.SetStatusMessageWithFlashing(Application.persistentDataPath, 2f);
 #endif
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
