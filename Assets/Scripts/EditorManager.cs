@@ -7,6 +7,9 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+#if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine.Android;
+#endif
 
 public class EditorManager : MonoBehaviour
 {
@@ -1375,6 +1378,10 @@ public class EditorManager : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
         {
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+            }
             if (!Directory.Exists(Path.GetDirectoryName(MapManager.ROOT_PATH)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(MapManager.ROOT_PATH));
@@ -1408,9 +1415,6 @@ public class EditorManager : MonoBehaviour
         mm.Initialize();
         editPhase = EditPhase.Open;
         statusUI.SetStatusMessage("Choose a map to open.");
-#if UNITY_ANDROID && !UNITY_EDITOR
-        //statusUI.SetStatusMessageWithFlashing(Application.persistentDataPath, 2f);
-#endif
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
         {
@@ -1625,6 +1629,10 @@ public class EditorManager : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
         {
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+            }
             if (!Directory.Exists(MapManager.ROOT_PATH))
             {
                 Directory.CreateDirectory(MapManager.ROOT_PATH);
