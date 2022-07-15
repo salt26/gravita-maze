@@ -15,6 +15,8 @@ public class MapManager : MonoBehaviour
     public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64, 
         Adventure = 128, Tutorial = 256, Custom = 512, Survival = 1024, AdvEasy = 2048, AdvNormal = 4096, AdvHard = 8192, AdvInsane = 16384 }
     public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
+    public enum RotationStatus { Original = 0, Clockwise90 = 1, Clockwise180 = 2, Clockwise270 = 3,
+        UpsideDown = 4, UpsideDown90 = 5, UpsideDown180 = 6, UpsideDown270 = 7 }
 
     public const int MIN_SIZE_X = 2;
     public const int MIN_SIZE_Y = 2;
@@ -29,6 +31,8 @@ public class MapManager : MonoBehaviour
     public const string MAP_ROOT_PATH = "Maps/";
 #endif
     public const float DEFAULT_TIME_LIMIT = 30f;
+    public const float MIN_TIME_LIMIT = 3f;
+    public const float MAX_TIME_LIMIT = 30f;
 
     [HideInInspector]
     public List<Movable> movables;
@@ -70,18 +74,32 @@ public class MapManager : MonoBehaviour
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
 
+    private int _originalSizeX = 0;
+    private int _originalSizeY = 0;
     private float _timeLimit;
     private bool _isReady = false;
 
     public int SizeX
     {
-        get;
-        private set;
+        get
+        {
+            return RotatedSizeX();
+        }
+        private set
+        {
+            _originalSizeX = value;
+        }
     }
     public int SizeY
     {
-        get;
-        private set;
+        get
+        {
+            return RotatedSizeY();
+        }
+        private set
+        {
+            _originalSizeY = value;
+        }
     }
     public int ExitX
     {
@@ -151,6 +169,12 @@ public class MapManager : MonoBehaviour
         private set;
     } = "";
 
+    public RotationStatus Rotation
+    {
+        get;
+        private set;
+    } = RotationStatus.Original;
+
     void Update()
     {
         gravityRetryButton.interactable = IsReady && ActionHistory != "";
@@ -182,6 +206,7 @@ public class MapManager : MonoBehaviour
         fixedObjects = new List<FixedObject>();
         traces = new List<GameObject>();
         ActionHistory = "";
+        Rotation = RotationStatus.Original;
         foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
         {
             Destroy(m.gameObject);
@@ -200,7 +225,7 @@ public class MapManager : MonoBehaviour
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
-        float timeLimit = 0f, bool isValidation = false)
+        float timeLimit = 0f, bool isValidation = false, bool canRotate = false)
     {
         IsReady = false;
 
@@ -213,35 +238,74 @@ public class MapManager : MonoBehaviour
             return;
         }
 
+        // Caution: _originalSizeX == sizeX != SizeX, _originalSizeY == sizeY != SizeY
         this.SizeX = sizeX;
         this.SizeY = sizeY;
         ExitX = 0;
         ExitY = 0;
-        int [,] mapCoord = new int[sizeX, sizeY];
-        initialMovableCoord = new Movable[sizeX, sizeY];
+
+        if (canRotate && !(SceneManager.GetActiveScene().name.Equals("Main") ||
+            SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Mode") ||
+            SceneManager.GetActiveScene().name.Equals("AdventureLevel") || SceneManager.GetActiveScene().name.Equals("Tutorial")))
+        {
+            int r = UnityEngine.Random.Range(0, 8);
+            Rotation = (RotationStatus)r;
+            Debug.Log(Rotation);
+        }
+        else
+        {
+            Rotation = RotationStatus.Original;
+        }
+
+        int [,] mapCoord = new int[SizeX, SizeY];
+        initialMovableCoord = new Movable[SizeX, SizeY];
 
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
 
-        bool[,] horizontalWalls = new bool[sizeX, sizeY + 1];
-        bool[,] verticalWalls = new bool[sizeX + 1, sizeY];
+        bool[,] horizontalWalls = new bool[SizeX, SizeY + 1];
+        bool[,] verticalWalls = new bool[SizeX + 1, SizeY];
 
         for (int i = 0; i < sizeX; i++)
         {
-            horizontalWalls[i, 0] = true;
-            horizontalWalls[i, sizeY] = true;
-            for (int j = 1; j < sizeY; j++)
+            if (!RotatedHasTransposed())
             {
-                horizontalWalls[i, j] = false;
+                horizontalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
+                horizontalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                for (int j = 1; j < sizeY; j++)
+                {
+                    horizontalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                }
+            }
+            else
+            {
+                verticalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
+                verticalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                for (int j = 1; j < sizeY; j++)
+                {
+                    verticalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                }
             }
         }
         for (int j = 0; j < sizeY; j++)
         {
-            verticalWalls[0, j] = true;
-            verticalWalls[sizeX, j] = true;
-            for (int i = 1; i < sizeX; i++)
+            if (!RotatedHasTransposed())
             {
-                verticalWalls[i, j] = false;
+                verticalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
+                verticalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                for (int i = 1; i < sizeX; i++)
+                {
+                    verticalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                }
+            }
+            else
+            {
+                horizontalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
+                horizontalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                for (int i = 1; i < sizeX; i++)
+                {
+                    horizontalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                }
             }
         }
 
@@ -262,10 +326,21 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: exit position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-                    horizontalWalls[wi.x - 1, wi.y] = false;
-                    ExitX = wi.x;
-                    if (wi.y == 0) ExitY = 0;
-                    else ExitY = sizeY + 1;
+
+                    if (!RotatedHasTransposed())
+                    {
+                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        ExitX = RotatedX(wi.x, wi.y, true, true, true);
+                        if (RotatedY(wi.x, wi.y, true, true, true) == 0) ExitY = 0;
+                        else ExitY = SizeY + 1;
+                    }
+                    else
+                    {
+                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        if (RotatedX(wi.x, wi.y, true, true, true) == 0) ExitX = 0;
+                        else ExitX = SizeX + 1;
+                        ExitY = RotatedY(wi.x, wi.y, true, true, true);
+                    }
                     hasExit = true;
                     break;
                 case WallInfo.Type.ExitVertical:
@@ -279,10 +354,21 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: exit position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-                    verticalWalls[wi.x, wi.y - 1] = false;
-                    if (wi.x == 0) ExitX = 0;
-                    else ExitX = sizeX + 1;
-                    ExitY = wi.y;
+
+                    if (!RotatedHasTransposed())
+                    {
+                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        if (RotatedX(wi.x, wi.y, true, false, true) == 0) ExitX = 0;
+                        else ExitX = SizeX + 1;
+                        ExitY = RotatedY(wi.x, wi.y, true, false, true);
+                    }
+                    else
+                    {
+                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        ExitX = RotatedX(wi.x, wi.y, true, false, true);
+                        if (RotatedY(wi.x, wi.y, true, false, true) == 0) ExitY = 0;
+                        else ExitY = SizeY + 1;
+                    }
                     hasExit = true;
                     break;
                 case WallInfo.Type.Horizontal:
@@ -291,7 +377,15 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-                    horizontalWalls[wi.x - 1, wi.y] = true;
+
+                    if (!RotatedHasTransposed())
+                    {
+                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                    }
+                    else
+                    {
+                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                    }
                     break;
                 case WallInfo.Type.Vertical:
                     if (wi.x < 1 || wi.x > sizeX - 1 || wi.y < 1 || wi.y > sizeY)
@@ -299,7 +393,15 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-                    verticalWalls[wi.x, wi.y - 1] = true;
+
+                    if (!RotatedHasTransposed())
+                    {
+                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                    }
+                    else
+                    {
+                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                    }
                     break;
             }
         }
@@ -310,44 +412,52 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i <= sizeX + 1; i++)
+        for (int i = 0; i <= SizeX + 1; i++)
         {
-            for (int j = 0; j <= sizeY + 1; j++)
+            for (int j = 0; j <= SizeY + 1; j++)
             {
                 if (i == 0)
                 {
-                    if (ExitX == i && ExitY == j) tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[24]);
+                    if (ExitX == i && ExitY == j)
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[24]);
                     else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[16]);
                 }
-                else if (i == sizeX + 1)
+                else if (i == SizeX + 1)
                 {
-                    if (ExitX == i && ExitY == j) tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[25]);
+                    if (ExitX == i && ExitY == j)
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[25]);
                     else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[17]);
                 }
-                else if (j == sizeY + 1)
+                else if (j == SizeY + 1)
                 {
-                    if (ExitX == i && ExitY == j) tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[26]);
+                    if (ExitX == i && ExitY == j)
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[26]);
                     else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[18]);
                 }
                 else if (j == 0)
                 {
-                    if (ExitX == i && ExitY == j) tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[27]);
+                    if (ExitX == i && ExitY == j)
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[27]);
                     else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[19]);
                 }
                 else
                 {
-                    if (horizontalWalls[i - 1, j - 1]) mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 8
-                    if (horizontalWalls[i - 1, j]) mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 4
-                    if (verticalWalls[i - 1, j - 1]) mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 2
-                    if (verticalWalls[i, j - 1]) mapCoord[i - 1, j - 1] += (int)TileFlag.RightWall;     // 1
+                    if (horizontalWalls[i - 1, j - 1])
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 8
+                    if (horizontalWalls[i - 1, j])
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 4
+                    if (verticalWalls[i - 1, j - 1])
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 2
+                    if (verticalWalls[i, j - 1])
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
                     tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[mapCoord[i - 1, j - 1] % 16]);
                 }
             }
         }
         tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[20]);
-        tilemap.SetTile(new Vector3Int(-1, sizeY, 0), tiles[21]);
-        tilemap.SetTile(new Vector3Int(sizeX, -1, 0), tiles[22]);
-        tilemap.SetTile(new Vector3Int(sizeX, sizeY, 0), tiles[23]);
+        tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[21]);
+        tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[22]);
+        tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[23]);
 
         bool hasBall = false;
         if (movables != null)
@@ -384,7 +494,7 @@ public class MapManager : MonoBehaviour
                 int x = (int)m.GetComponent<Transform>().localPosition.x;
                 int y = (int)m.GetComponent<Transform>().localPosition.y;
 
-                if (x < 1 || x > sizeX || y < 1 || y > sizeY)
+                if (x < 1 || x > SizeX || y < 1 || y > SizeY)
                 {
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
@@ -417,7 +527,7 @@ public class MapManager : MonoBehaviour
                 int x = (int)f.GetComponent<Transform>().localPosition.x;
                 int y = (int)f.GetComponent<Transform>().localPosition.y;
 
-                if (x < 1 || x > sizeX || y < 1 || y > sizeY)
+                if (x < 1 || x > SizeX || y < 1 || y > SizeY)
                 {
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
@@ -476,7 +586,8 @@ public class MapManager : MonoBehaviour
                 Debug.LogError("Map invalid: object position at (" + oi.x + ", " + oi.y + ")");
                 return;
             }
-            if (initialMovableCoord[oi.x - 1, oi.y - 1] != null || mapCoord[oi.x - 1, oi.y - 1] >= 16)
+            if (initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] != null ||
+                mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 16)
             {
                 Debug.LogError("Map invalid: objects overlapped at (" + oi.x + ", " + oi.y + ")");
                 return;
@@ -493,30 +604,30 @@ public class MapManager : MonoBehaviour
                         return;
                     }
                     g = Instantiate(ballPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
-                    g.transform.localPosition = new Vector3(oi.x, oi.y, 0f);
+                    g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     movables.Add(g.GetComponent<Movable>());
-                    initialMovableCoord[oi.x - 1, oi.y - 1] = g.GetComponent<Movable>();
+                    initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] = g.GetComponent<Movable>();
                     hasBall = true;
                     break;
                 case ObjectInfo.Type.Iron:
                     g = Instantiate(ironPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
-                    g.transform.localPosition = new Vector3(oi.x, oi.y, 0f);
+                    g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     movables.Add(g.GetComponent<Movable>());
-                    initialMovableCoord[oi.x - 1, oi.y - 1] = g.GetComponent<Movable>();
+                    initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] = g.GetComponent<Movable>();
                     break;
                 case ObjectInfo.Type.Fire:
                     g = Instantiate(firePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
-                    g.transform.localPosition = new Vector3(oi.x, oi.y, 0f);
+                    g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());
-                    mapCoord[oi.x - 1, oi.y - 1] += (int)TileFlag.Fire;         // 16
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 16
                     break;
                 /*
                 // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
                 case ObjectInfo.Type.QuitGame:
-                    mapCoord[oi.x - 1, oi.y - 1] += (int)TileFlag.QuitGame;     // 32
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 32
                     break;
                 case ObjectInfo.Type.MapEditor:
-                    mapCoord[oi.x - 1, oi.y - 1] += (int)TileFlag.MapEditor;    // 64
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 64
                     break;
                 */
             }
@@ -528,19 +639,17 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        map = new Map(sizeX, sizeY, mapCoord, ExitX, ExitY);
-        if ((SceneManager.GetActiveScene().name != "Editor" || isValidation) && !Simulate(map, initialMovableCoord, solution))
+        map = new Map(SizeX, SizeY, mapCoord, ExitX, ExitY);
+        if ((SceneManager.GetActiveScene().name != "Editor" || isValidation) && !Simulate(map, initialMovableCoord, RotatedSolution(solution)))
         {
             Debug.LogError("Map invalid: impossible to clear");
             return;
         }
 
-        // TODO: 좌표계 회전 및 상하 반전 적용
-
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
-        mainCamera.transform.position = new Vector3((sizeX + 1) / 2f, (sizeY + 1) / 2f, -10f);
-        mainCamera.orthographicSize = Mathf.Max(sizeX, sizeY) / 2f + 1.5f;
+        mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f, -10f);
+        mainCamera.orthographicSize = Mathf.Max(SizeX, SizeY) / 2f + 1.5f;
 
         gravityBall.anchoredPosition = new Vector3(0f, 0f);
 
@@ -720,7 +829,7 @@ public class MapManager : MonoBehaviour
                         statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ntime limit error", 1.5f);
                         return OpenFileFlag.Failed;
                     }
-                    tempTimeLimit = float.Parse(token[1]);
+                    tempTimeLimit = Mathf.Clamp(float.Parse(token[1]), MIN_TIME_LIMIT, MAX_TIME_LIMIT);
                     break;
                 case "s":
                     if (token.Length != 2)
@@ -763,7 +872,7 @@ public class MapManager : MonoBehaviour
 #endregion
 
         // Map validation
-        Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true);
+        Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true, true);
         if (!IsReady)
         {
             Debug.LogError("File invalid: map validation failed");
@@ -1779,6 +1888,328 @@ public class MapManager : MonoBehaviour
             s += "\n";
         }
         Debug.Log(s);
+    }
+
+    private Vector3Int RotatedVector3Int(Vector3Int originalVector, bool isWall = false, bool isOriginalHorizontal = false)
+    {
+        if (SizeX <= 0 || SizeY <= 0) return new Vector3Int(originalVector.x, originalVector.y, 0);
+
+        int offsetVertical = -1;
+        int offsetHorizontal = -1;
+        if (isWall)
+        {
+            if (isOriginalHorizontal)
+            {
+                offsetHorizontal = 0;
+                offsetVertical = -1;
+            }
+            else
+            {
+                offsetHorizontal = -1;
+                offsetVertical = 0;
+            }
+        }
+
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+                return new Vector3Int(originalVector.x, originalVector.y, 0);
+            case RotationStatus.Clockwise90:
+                return new Vector3Int(originalVector.y, _originalSizeX + offsetVertical - originalVector.x, 0);
+            case RotationStatus.Clockwise180:
+                return new Vector3Int(_originalSizeX + offsetVertical - originalVector.x, _originalSizeY + offsetHorizontal - originalVector.y, 0);
+            case RotationStatus.Clockwise270:
+                return new Vector3Int(_originalSizeY + offsetHorizontal - originalVector.y, originalVector.x, 0);
+            case RotationStatus.UpsideDown:
+                return new Vector3Int(originalVector.x, _originalSizeY + offsetHorizontal - originalVector.y, 0);
+            case RotationStatus.UpsideDown90:
+                return new Vector3Int(_originalSizeY + offsetHorizontal - originalVector.y, _originalSizeX + offsetVertical - originalVector.x, 0);
+            case RotationStatus.UpsideDown180:
+                return new Vector3Int(_originalSizeX + offsetVertical - originalVector.x, originalVector.y, 0);
+            case RotationStatus.UpsideDown270:
+                return new Vector3Int(originalVector.y, originalVector.x, 0);
+            default:    // Unused
+                return new Vector3Int(originalVector.x, originalVector.y, 0);
+        }
+    }
+
+    private Vector3 RotatedVector3(Vector3 originalVector, bool isWall = false, bool isOriginalHorizontal = false)
+    {
+        if (SizeX <= 0 || SizeY <= 0) return new Vector3(originalVector.x, originalVector.y, 0f);
+
+        int offsetVertical = 1;
+        int offsetHorizontal = 1;
+        if (isWall)
+        {
+            if (isOriginalHorizontal)
+            {
+                offsetHorizontal = 0;
+                offsetVertical = -1;
+            }
+            else
+            {
+                offsetHorizontal = -1;
+                offsetVertical = 0;
+            }
+        }
+
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+                return new Vector3(originalVector.x, originalVector.y, 0f);
+            case RotationStatus.Clockwise90:
+                return new Vector3(originalVector.y, _originalSizeX + offsetVertical - originalVector.x, 0f);
+            case RotationStatus.Clockwise180:
+                return new Vector3(_originalSizeX + offsetVertical - originalVector.x, _originalSizeY + offsetHorizontal - originalVector.y, 0f);
+            case RotationStatus.Clockwise270:
+                return new Vector3(_originalSizeY + offsetHorizontal - originalVector.y, originalVector.x, 0f);
+            case RotationStatus.UpsideDown:
+                return new Vector3(originalVector.x, _originalSizeY + offsetHorizontal - originalVector.y, 0f);
+            case RotationStatus.UpsideDown90:
+                return new Vector3(_originalSizeY + offsetHorizontal - originalVector.y, _originalSizeX + offsetVertical - originalVector.x, 0f);
+            case RotationStatus.UpsideDown180:
+                return new Vector3(_originalSizeX + offsetVertical - originalVector.x, originalVector.y, 0f);
+            case RotationStatus.UpsideDown270:
+                return new Vector3(originalVector.y, originalVector.x, 0f);
+            default:    // Unused
+                return new Vector3(originalVector.x, originalVector.y, 0f);
+        }
+    }
+
+    private int RotatedX(int originalX, int originalY, bool isWall = false, bool isOriginalHorizontal = false, bool isExit = false)
+    {
+        if (SizeX <= 0 || SizeY <= 0) return originalX;
+
+        int offsetVertical = -1;
+        int offsetHorizontal = -1;
+        if (isWall)
+        {
+            if (isOriginalHorizontal)
+            {
+                if (isExit)
+                {
+                    offsetHorizontal = 0;
+                    offsetVertical = 1;
+                }
+                else
+                {
+                    offsetHorizontal = 0;
+                    offsetVertical = -1;
+                }
+            }
+            else
+            {
+                if (isExit)
+                {
+                    offsetHorizontal = 1;
+                    offsetVertical = 0;
+                }
+                else
+                {
+                    offsetHorizontal = -1;
+                    offsetVertical = 0;
+                }
+            }
+        }
+
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+                return originalX;
+            case RotationStatus.Clockwise90:
+                return originalY;
+            case RotationStatus.Clockwise180:
+                return _originalSizeX + offsetVertical - originalX;
+            case RotationStatus.Clockwise270:
+                return _originalSizeY + offsetHorizontal - originalY;
+            case RotationStatus.UpsideDown:
+                return originalX;
+            case RotationStatus.UpsideDown90:
+                return _originalSizeY + offsetHorizontal - originalY;
+            case RotationStatus.UpsideDown180:
+                return _originalSizeX + offsetVertical - originalX;
+            case RotationStatus.UpsideDown270:
+                return originalY;
+            default:    // Unused
+                return originalX;
+        }
+    }
+
+    private int RotatedY(int originalX, int originalY, bool isWall = false, bool isOriginalHorizontal = false, bool isExit = false)
+    {
+        if (SizeX <= 0 || SizeY <= 0) return originalY;
+
+        int offsetVertical = -1;
+        int offsetHorizontal = -1;
+        if (isWall)
+        {
+            if (isOriginalHorizontal)
+            {
+                if (isExit)
+                {
+                    offsetHorizontal = 0;
+                    offsetVertical = 1;
+                }
+                else
+                {
+                    offsetHorizontal = 0;
+                    offsetVertical = -1;
+                }
+            }
+            else
+            {
+                if (isExit)
+                {
+                    offsetHorizontal = 1;
+                    offsetVertical = 0;
+                }
+                else
+                {
+                    offsetHorizontal = -1;
+                    offsetVertical = 0;
+                }
+            }
+        }
+
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+                return originalY;
+            case RotationStatus.Clockwise90:
+                return _originalSizeX + offsetVertical - originalX;
+            case RotationStatus.Clockwise180:
+                return _originalSizeY + offsetHorizontal - originalY;
+            case RotationStatus.Clockwise270:
+                return originalX;
+            case RotationStatus.UpsideDown:
+                return _originalSizeY + offsetHorizontal - originalY;
+            case RotationStatus.UpsideDown90:
+                return _originalSizeX + offsetVertical - originalX;
+            case RotationStatus.UpsideDown180:
+                return originalY;
+            case RotationStatus.UpsideDown270:
+                return originalX;
+            default:    // Unused
+                return originalY;
+        }
+    }
+
+    private bool RotatedHasTransposed()
+    {
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+            case RotationStatus.Clockwise180:
+            case RotationStatus.UpsideDown:
+            case RotationStatus.UpsideDown180:
+                return false;
+            case RotationStatus.Clockwise90:
+            case RotationStatus.Clockwise270:
+            case RotationStatus.UpsideDown90:
+            case RotationStatus.UpsideDown270:
+                return true;
+            default:    // Unused
+                return false;
+        }
+    }
+
+    private int RotatedSizeX()
+    {
+        if (_originalSizeX <= 0 || _originalSizeY <= 0) return 0;
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+            case RotationStatus.Clockwise180:
+            case RotationStatus.UpsideDown:
+            case RotationStatus.UpsideDown180:
+                return _originalSizeX;
+            case RotationStatus.Clockwise90:
+            case RotationStatus.Clockwise270:
+            case RotationStatus.UpsideDown90:
+            case RotationStatus.UpsideDown270:
+                return _originalSizeY;
+            default:    // Unused
+                return _originalSizeX;
+        }
+    }
+
+    private int RotatedSizeY()
+    {
+        if (_originalSizeX <= 0 || _originalSizeY <= 0) return 0;
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+            case RotationStatus.Clockwise180:
+            case RotationStatus.UpsideDown:
+            case RotationStatus.UpsideDown180:
+                return _originalSizeY;
+            case RotationStatus.Clockwise90:
+            case RotationStatus.Clockwise270:
+            case RotationStatus.UpsideDown90:
+            case RotationStatus.UpsideDown270:
+                return _originalSizeX;
+            default:    // Unused
+                return _originalSizeY;
+        }
+    }
+
+    private string RotatedSolution(string originalSolution)
+    {
+        if (originalSolution == null || originalSolution.Equals("")) return "";
+        string newSolution = originalSolution.ToUpperInvariant();
+        switch (Rotation)
+        {
+            case RotationStatus.Original:
+                newSolution = newSolution.Replace('W', 'w');
+                newSolution = newSolution.Replace('A', 'a');
+                newSolution = newSolution.Replace('S', 's');
+                newSolution = newSolution.Replace('D', 'd');
+                return newSolution;
+            case RotationStatus.Clockwise90:
+                newSolution = newSolution.Replace('W', 'd');
+                newSolution = newSolution.Replace('A', 'w');
+                newSolution = newSolution.Replace('S', 'a');
+                newSolution = newSolution.Replace('D', 's');
+                return newSolution;
+            case RotationStatus.Clockwise180:
+                newSolution = newSolution.Replace('W', 's');
+                newSolution = newSolution.Replace('A', 'd');
+                newSolution = newSolution.Replace('S', 'w');
+                newSolution = newSolution.Replace('D', 'a');
+                return newSolution;
+            case RotationStatus.Clockwise270:
+                newSolution = newSolution.Replace('W', 'a');
+                newSolution = newSolution.Replace('A', 's');
+                newSolution = newSolution.Replace('S', 'd');
+                newSolution = newSolution.Replace('D', 'w');
+                return newSolution;
+            case RotationStatus.UpsideDown:
+                newSolution = newSolution.Replace('W', 's');
+                newSolution = newSolution.Replace('A', 'a');
+                newSolution = newSolution.Replace('S', 'w');
+                newSolution = newSolution.Replace('D', 'd');
+                return newSolution;
+            case RotationStatus.UpsideDown90:
+                newSolution = newSolution.Replace('W', 'a');
+                newSolution = newSolution.Replace('A', 'w');
+                newSolution = newSolution.Replace('S', 'd');
+                newSolution = newSolution.Replace('D', 's');
+                return newSolution;
+            case RotationStatus.UpsideDown180:
+                newSolution = newSolution.Replace('W', 'w');
+                newSolution = newSolution.Replace('A', 'd');
+                newSolution = newSolution.Replace('S', 's');
+                newSolution = newSolution.Replace('D', 'a');
+                return newSolution;
+            case RotationStatus.UpsideDown270:
+                newSolution = newSolution.Replace('W', 'd');
+                newSolution = newSolution.Replace('A', 's');
+                newSolution = newSolution.Replace('S', 'a');
+                newSolution = newSolution.Replace('D', 'w');
+                return newSolution;
+            default:    // Unused
+                return originalSolution;
+        }
     }
 
     public class Map

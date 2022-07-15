@@ -119,6 +119,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(InitializeTutorial());
         }
+        else if (SceneManager.GetActiveScene().name.Equals("AdventureEasy"))
+        {
+            StartCoroutine(InitializeAdventureEasy());
+        }
     }
 
     public void QuitGame()
@@ -153,6 +157,11 @@ public class GameManager : MonoBehaviour
     public void LoadTutorial()
     {
         StartCoroutine(SceneLoading("Tutorial"));
+    }
+
+    public void LoadAdventureEasy()
+    {
+        StartCoroutine(SceneLoading("AdventureEasy"));
     }
 
     IEnumerator SceneLoading(string sceneName)
@@ -337,10 +346,10 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // TODO 나중에 해금 Insane
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // TODO 나중에 해금 Hard
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // TODO 나중에 해금 Normal
+        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // TODO 나중에 해금 Easy
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
@@ -437,6 +446,44 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    
+    IEnumerator InitializeAdventureEasy()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            yield return null;
+        }
+
+        while (pm == null)
+        {
+            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+            if (pm != null) break;
+            yield return null;
+        }
+
+        Life = 5;
+        HasClearedAll = false;
+        mm.afterGravity = pm.PlayAfterGravity;
+
+        //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
+
+        for (int i = 0; i < pm.mapFiles.Count; i++)
+        {
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
+            if (openFileFlag != MapManager.OpenFileFlag.Success)
+            {
+                continue;
+            }
+            else
+            {
+                playingMapIndex = i;
+                mm.TimeActivate();
+                canPlay = true;
+                yield break;
+            }
+        }
+    }
 
     public void MainAfterGravity(MapManager.Flag flag)
     {
@@ -484,7 +531,7 @@ public class GameManager : MonoBehaviour
                 LoadMode();
                 break;
             case MapManager.Flag.AdvEasy:
-                // TODO
+                LoadAdventureEasy();
                 break;
             case MapManager.Flag.AdvNormal:
                 // TODO
