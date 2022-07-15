@@ -2059,7 +2059,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1430318116}
-        m_MethodName: TutorialNext
+        m_MethodName: PlayNext
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2491,13 +2491,66 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 1404637733}
   retryTimeButton: {fileID: 1061809501}
   retryTimeHighlightedButton: {fileID: 1783891383}
-  mapFiles:
-  - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
-  - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
-  - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
-  - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
-  - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
+  tutorialMapFiles: []
+  adventureEasyMapFiles:
+  - {fileID: 4900000, guid: ceeb98c8fcd68ce4ab4d275b2baa49b7, type: 3}
+  - {fileID: 4900000, guid: 1afa02d0d53d34c40b61cb4a9e479f2b, type: 3}
+  - {fileID: 4900000, guid: 9b74ea2b8c5ad7048802e58515c9a159, type: 3}
+  - {fileID: 4900000, guid: 044b1520037e4e243b58ff6c8254d593, type: 3}
+  - {fileID: 4900000, guid: d5833746e74034946aecf40b4d91c9a6, type: 3}
+  - {fileID: 4900000, guid: 932946fdda614c7409231e01e3830f4b, type: 3}
+  - {fileID: 4900000, guid: a892b56a1a5438342a2b9025861b5bea, type: 3}
+  - {fileID: 4900000, guid: 20e6432b59bc2e740b144c068f173b60, type: 3}
+  - {fileID: 4900000, guid: b1d60bbfc0061fa40bc13b32ff913456, type: 3}
+  adventureEasyPlayLength: 5
+  adventureEasyLife: 5
+  adventureNormalMapFiles:
+  - {fileID: 4900000, guid: 2176635ecb0f89345ade495524d4a7e0, type: 3}
+  - {fileID: 4900000, guid: 74aad6098c41ec549840feb105c2437b, type: 3}
+  - {fileID: 4900000, guid: 626920c002cf9874bbd8d74f33863425, type: 3}
+  - {fileID: 4900000, guid: 0e37dbfda511edf45a694fc7dfd5c504, type: 3}
+  - {fileID: 4900000, guid: 6f363d87f3ed16c45b160b3b9530541a, type: 3}
+  - {fileID: 4900000, guid: cf0ce2c97c4cb85499ecab7a40db0ec9, type: 3}
+  - {fileID: 4900000, guid: ee4015b88d0fba742935d66455af0f20, type: 3}
+  - {fileID: 4900000, guid: 199b0f64e0d19184a8d705ffea2fd835, type: 3}
+  - {fileID: 4900000, guid: 99778d8268a297d44bc24e802fa002d4, type: 3}
+  - {fileID: 4900000, guid: 77efa5efaa67453468aa5190a35cd4d7, type: 3}
+  - {fileID: 4900000, guid: 55cc3b05dd8ea5c4999ce70df5f81d19, type: 3}
+  - {fileID: 4900000, guid: f6f604eb107be2c4888bd2308f8069b3, type: 3}
+  - {fileID: 4900000, guid: a99b78dac43b4ef44aa0afe9cf22de56, type: 3}
+  - {fileID: 4900000, guid: 8d2ba5bac9d8bc14db802183c0bbdd3f, type: 3}
+  - {fileID: 4900000, guid: 2a49e04c51da4634aa8a64739e8fe2d6, type: 3}
+  adventureNormalPlayLength: 7
+  adventureNormalLife: 5
+  adventureHardMapFiles:
+  - {fileID: 4900000, guid: ec57bf43042e65c4995676586e606df6, type: 3}
+  - {fileID: 4900000, guid: 8ff796a795d882a4198af3f50994410f, type: 3}
+  - {fileID: 4900000, guid: 32426f3345e848a4fab1d77bc7d6a232, type: 3}
+  - {fileID: 4900000, guid: 6e7a6e17abbcac74d9788aedffca918c, type: 3}
+  - {fileID: 4900000, guid: 5017afca8097e2b4db10bcd512a47c95, type: 3}
+  - {fileID: 4900000, guid: b793472859266114397b078f491c02c7, type: 3}
+  - {fileID: 4900000, guid: a04e22cab2124204a9aebafd4603070a, type: 3}
+  - {fileID: 4900000, guid: c6412153ad94bf24db50f9f993e6ec14, type: 3}
+  - {fileID: 4900000, guid: d325fca297a4d6a4c8fc14ebdbb174a6, type: 3}
+  - {fileID: 4900000, guid: 9b4d2496616ecd54c9356eca7a7d7ca7, type: 3}
+  - {fileID: 4900000, guid: bf919c42579498649b2e1c73e1478e24, type: 3}
+  - {fileID: 4900000, guid: a6808832bbcd87f49a6b93981c5d44db, type: 3}
+  adventureHardPlayLength: 9
+  adventureHardLife: 5
+  adventureInsaneMapFiles:
+  - {fileID: 4900000, guid: 74b3830de32cabc4ebe05ad8a54c3782, type: 3}
+  - {fileID: 4900000, guid: 2d1efbf0b4b84ae48998ffd5a0fc012a, type: 3}
+  - {fileID: 4900000, guid: 4484a4cf1759b3e45a8be022c198a1bf, type: 3}
+  - {fileID: 4900000, guid: d7c10ec214823054db4472d5a5035ea1, type: 3}
+  - {fileID: 4900000, guid: 4e9545888530f624c9bee6fa3d7b9f1a, type: 3}
+  - {fileID: 4900000, guid: dfe775f4021031f4c94253b2b865fe72, type: 3}
+  - {fileID: 4900000, guid: d9ae2a2482b16154dbea4703312e8c89, type: 3}
+  - {fileID: 4900000, guid: b8a2773da608a9c409ed16fb95411a53, type: 3}
+  - {fileID: 4900000, guid: f212fe43339a69b4fa6bde7f32106a04, type: 3}
+  - {fileID: 4900000, guid: 3d016b1bace9e82418fb0705ee569edd, type: 3}
+  - {fileID: 4900000, guid: 7c1993625daaa7748ae9ef3d1cb3818c, type: 3}
+  adventureInsanePlayLength: 11
+  adventureInsaneLife: 5
 --- !u!1 &1517296249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3034,6 +3087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canPlay: 1
+  adventureLevel: 0
 --- !u!4 &1682911775
 Transform:
   m_ObjectHideFlags: 0

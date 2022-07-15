@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayManager : MonoBehaviour
 {
+    public enum Mode { Tutorial = 0, Custom = 1, Survival = 2,
+        AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
+
     public Button quitButton;                   // quitHighlightedButton이 활성화될 때 비활성화
     public Button quitHighlightedButton;        // 모든 맵을 탈출하거나 라이프가 0이 되어 게임이 종료될 때 활성화
     public Button nextButton;                   // 탈출 또는 시간 초과 시 활성화 (튜토리얼에서는 탈출 시에만 활성화), quitHighlightedButton이 활성화될 때 비활성화
@@ -13,7 +17,134 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
 
-    public List<TextAsset> mapFiles = new List<TextAsset>();
+    private Mode playMode;
+
+    [Header("Tutorial")]
+    [SerializeField]
+    private List<TextAsset> tutorialMapFiles = new List<TextAsset>();
+
+    [Header("Easy")]
+    [SerializeField]
+    private List<TextAsset> adventureEasyMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private int adventureEasyPlayLength = int.MaxValue;
+    [SerializeField]
+    private int adventureEasyLife = 5;
+
+    [Header("Normal")]
+    [SerializeField]
+    private List<TextAsset> adventureNormalMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private int adventureNormalPlayLength = int.MaxValue;
+    [SerializeField]
+    private int adventureNormalLife = 5;
+
+    [Header("Hard")]
+    [SerializeField]
+    private List<TextAsset> adventureHardMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private int adventureHardPlayLength = int.MaxValue;
+    [SerializeField]
+    private int adventureHardLife = 5;
+
+    [Header("Insane")]
+    [SerializeField]
+    private List<TextAsset> adventureInsaneMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private int adventureInsanePlayLength = int.MaxValue;
+    [SerializeField]
+    private int adventureInsaneLife = 5;
+
+    private List<TextAsset> _mapFiles;
+
+    public List<TextAsset> MapFiles
+    {
+        get
+        {
+            if (!IsReady) return null;
+            return _mapFiles.ToList();
+        }
+    }
+
+    public int PlayLength
+    {
+        get;
+        private set;
+    } = int.MaxValue;
+
+    public bool IsRandomOrder
+    {
+        get;
+        private set;
+    } = false;
+
+    public int Life
+    {
+        get;
+        set;
+    } = 5;
+
+    public bool IsReady
+    {
+        get;
+        private set;
+    } = false;
+
+    public void Initialize(Mode mode, bool isRandomOrder = false, int maxPlayLength = int.MaxValue, int initialLife = 5)
+    {
+        IsReady = false;
+        playMode = mode;
+        switch (playMode)
+        {
+            case Mode.Tutorial:
+                _mapFiles = tutorialMapFiles;
+                IsRandomOrder = false;
+                PlayLength = _mapFiles.Count;
+                Life = int.MaxValue;
+                break;
+            case Mode.AdvEasy:
+                _mapFiles = adventureEasyMapFiles;
+                IsRandomOrder = isRandomOrder;
+                PlayLength = Mathf.Clamp(adventureEasyPlayLength, 1, _mapFiles.Count);
+                Life = adventureEasyLife;
+                break;
+            case Mode.AdvNormal:
+                _mapFiles = adventureNormalMapFiles;
+                IsRandomOrder = isRandomOrder;
+                PlayLength = Mathf.Clamp(adventureNormalPlayLength, 1, _mapFiles.Count);
+                Life = adventureNormalLife;
+                break;
+            case Mode.AdvHard:
+                _mapFiles = adventureHardMapFiles;
+                IsRandomOrder = isRandomOrder;
+                PlayLength = Mathf.Clamp(adventureHardPlayLength, 1, _mapFiles.Count);
+                Life = adventureHardLife;
+                break;
+            case Mode.AdvInsane:
+                _mapFiles = adventureInsaneMapFiles;
+                IsRandomOrder = isRandomOrder;
+                PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count);
+                Life = adventureInsaneLife;
+                break;
+            default:
+                IsRandomOrder = isRandomOrder;
+                PlayLength = Mathf.Clamp(maxPlayLength, 1, _mapFiles.Count);
+                Life = Mathf.Max(initialLife, 1);
+                // TODO
+                return;
+        }
+
+        if (_mapFiles == null || _mapFiles.Count < 1 || maxPlayLength < 1) return;
+
+        Debug.Log("Remaining life: " + Life);
+
+        if (IsRandomOrder)
+        {
+            List<TextAsset> tempList = _mapFiles.OrderBy(_ => Random.value).ToList();
+            _mapFiles = tempList;
+        }
+        IsReady = true;
+    }
 
     public void Quit()
     {
@@ -160,11 +291,12 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.TimeOver:
-                GameManager.gm.Life--;
+                Life--;
+                Debug.Log("Remaining life: " + Life);
                 retryButton.gameObject.SetActive(false);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
-                if (GameManager.gm.Life > 0)
+                if (Life > 0)
                 {
                     // 라이프가 남아있을 때
                     retryTimeButton.gameObject.SetActive(true);

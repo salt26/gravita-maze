@@ -24,14 +24,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool canPlay = true;
 
+    private enum AdventureLevel { NULL = 0, Easy = 1, Normal = 2, Hard = 3, Insane = 4 }
+
+    [SerializeField]
+    private AdventureLevel adventureLevel;
     private List<string> mapList;
     private int playingMapIndex = 0;
-
-    public int Life
-    {
-        get;
-        set;
-    } = 1;
 
     public bool HasClearedAll
     {
@@ -41,9 +39,10 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (gm != null)
+        if (gm != null && gm != this)
         {
-            Destroy(gm.gameObject);
+            Destroy(gameObject);
+            return;
         }
         gm = this;
         DontDestroyOnLoad(gameObject);
@@ -119,9 +118,9 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(InitializeTutorial());
         }
-        else if (SceneManager.GetActiveScene().name.Equals("AdventureEasy"))
+        else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
         {
-            StartCoroutine(InitializeAdventureEasy());
+            StartCoroutine(InitializeAdventure());
         }
     }
 
@@ -161,7 +160,26 @@ public class GameManager : MonoBehaviour
 
     public void LoadAdventureEasy()
     {
-        StartCoroutine(SceneLoading("AdventureEasy"));
+        adventureLevel = AdventureLevel.Easy;
+        StartCoroutine(SceneLoading("Adventure"));
+    }
+
+    public void LoadAdventureNormal()
+    {
+        adventureLevel = AdventureLevel.Normal;
+        StartCoroutine(SceneLoading("Adventure"));
+    }
+
+    public void LoadAdventureHard()
+    {
+        adventureLevel = AdventureLevel.Hard;
+        StartCoroutine(SceneLoading("Adventure"));
+    }
+
+    public void LoadAdventureInsane()
+    {
+        adventureLevel = AdventureLevel.Insane;
+        StartCoroutine(SceneLoading("Adventure"));
     }
 
     IEnumerator SceneLoading(string sceneName)
@@ -183,6 +201,10 @@ public class GameManager : MonoBehaviour
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
         List<WallInfo> walls = new List<WallInfo>();
@@ -239,6 +261,10 @@ public class GameManager : MonoBehaviour
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
         canPlay = false;
@@ -249,6 +275,10 @@ public class GameManager : MonoBehaviour
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
         List<WallInfo> walls = new List<WallInfo>();
@@ -337,6 +367,10 @@ public class GameManager : MonoBehaviour
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
         List<WallInfo> walls = new List<WallInfo>();
@@ -346,10 +380,10 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // TODO 나중에 해금 Insane
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // TODO 나중에 해금 Hard
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // TODO 나중에 해금 Normal
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // TODO 나중에 해금 Easy
+        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // Insane
+        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // Hard
+        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // Normal
+        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // Easy
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
@@ -414,6 +448,10 @@ public class GameManager : MonoBehaviour
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
 
@@ -421,18 +459,22 @@ public class GameManager : MonoBehaviour
         {
             pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
             if (pm != null) break;
+            else
+            {
+                pm = GameObject.Find("PlayManager").GetComponent<PlayManager>();
+            }
             yield return null;
         }
 
-        Life = int.MaxValue;
+        pm.Initialize(PlayManager.Mode.Tutorial);
         HasClearedAll = false;
         mm.afterGravity = pm.TutorialAfterGravity;
 
         //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
 
-        for (int i = 0; i < pm.mapFiles.Count; i++)
+        for (int i = 0; i < pm.MapFiles.Count; i++)
         {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
@@ -447,11 +489,15 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    IEnumerator InitializeAdventureEasy()
+    IEnumerator InitializeAdventure()
     {
         while (mm == null)
         {
             mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
             yield return null;
         }
 
@@ -459,18 +505,39 @@ public class GameManager : MonoBehaviour
         {
             pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
             if (pm != null) break;
+            else
+            {
+                pm = GameObject.Find("PlayManager").GetComponent<PlayManager>();
+            }
             yield return null;
         }
+        Debug.Log(adventureLevel);
 
-        Life = 5;
+        switch (adventureLevel)
+        {
+            case AdventureLevel.Easy:
+                pm.Initialize(PlayManager.Mode.AdvEasy, true);
+                break;
+            case AdventureLevel.Normal:
+                pm.Initialize(PlayManager.Mode.AdvNormal, true);
+                break;
+            case AdventureLevel.Hard:
+                pm.Initialize(PlayManager.Mode.AdvHard, true);
+                break;
+            case AdventureLevel.Insane:
+                pm.Initialize(PlayManager.Mode.AdvInsane, true);
+                break;
+            default:
+                Debug.LogError("Play invalid: unknown adventure level");
+                yield break;
+        }
+
         HasClearedAll = false;
         mm.afterGravity = pm.PlayAfterGravity;
 
-        //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
-
-        for (int i = 0; i < pm.mapFiles.Count; i++)
+        for (int i = 0; i < pm.MapFiles.Count; i++)
         {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
@@ -534,35 +601,35 @@ public class GameManager : MonoBehaviour
                 LoadAdventureEasy();
                 break;
             case MapManager.Flag.AdvNormal:
-                // TODO
+                LoadAdventureNormal();
                 break;
             case MapManager.Flag.AdvHard:
-                // TODO
+                LoadAdventureHard();
                 break;
             case MapManager.Flag.AdvInsane:
-                // TODO
+                LoadAdventureInsane();
                 break;
         }
     }
 
     public void TutorialNext()
     {
-        if (pm == null || pm.mapFiles == null || pm.mapFiles.Count == 0) return;
+        if (pm == null || pm.MapFiles == null || pm.MapFiles.Count == 0) return;
 
         foreach (Transform obj in GameObject.Find("Objects").GetComponentsInChildren<Transform>())
         {
             if (obj.gameObject.name.Equals("Objects")) continue;
             Destroy(obj.gameObject);
         }
-        for (int i = playingMapIndex + 1; i <= pm.mapFiles.Count; i++)
+        for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
         {
-            if (i >= pm.mapFiles.Count)
+            if (i >= pm.PlayLength)
             {
                 // TODO Victory
                 HasClearedAll = true;
                 break;
             }
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.mapFiles[i].text, out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
@@ -581,17 +648,17 @@ public class GameManager : MonoBehaviour
     public void PlayNext()
     {
         // TODO mapList? or pm.mapFiles?
-        if (mapList == null || mapList.Count == 0) return;
+        if (pm == null || pm.MapFiles == null || pm.MapFiles.Count == 0) return;
 
-        for (int i = playingMapIndex + 1; i <= mapList.Count; i++)
+        for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
         {
-            if (i >= mapList.Count)
+            if (i >= pm.PlayLength)
             {
                 // TODO Victory
                 HasClearedAll = true;
                 break;
             }
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromFile(mapList[i], out _, out _, out _, out _, out _, out _);
+            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
             if (openFileFlag != MapManager.OpenFileFlag.Success)
             {
                 continue;
