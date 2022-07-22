@@ -132,6 +132,11 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     } = false;
+    public bool HasTimePaused
+    {
+        get;
+        private set;
+    } = false;
     public bool IsTimeActivated
     {
         get;
@@ -178,7 +183,7 @@ public class MapManager : MonoBehaviour
     void Update()
     {
         gravityRetryButton.interactable = IsReady && ActionHistory != "";
-        if (IsReady && IsTimeActivated && IsTimePassing && RemainingTime > 0f && !HasCleared)
+        if (IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared)
         {
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
@@ -219,6 +224,7 @@ public class MapManager : MonoBehaviour
         HasDied = false;
         IsTimeActivated = false;
         IsTimePassing = false;
+        HasTimePaused = false;
         RemainingTime = 0f;
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
@@ -660,6 +666,7 @@ public class MapManager : MonoBehaviour
         HasDied = false;
         IsTimeActivated = false;
         IsTimePassing = false;
+        HasTimePaused = false;
         RemainingTime = 0f;
         //PrintMapCoord();
     }
@@ -898,8 +905,21 @@ public class MapManager : MonoBehaviour
         RemainingTime = TimeLimit;
         IsTimeActivated = true;
         IsTimePassing = false;
+        HasTimePaused = false;
         timeoutPanel.SetActive(false);
         //Debug.Log("Remaining time: " + RemainingTime);
+    }
+
+    public void TimePause()
+    {
+        if (!IsReady || !IsTimeActivated) return;
+        HasTimePaused = true;
+    }
+
+    public void TimeResume()
+    {
+        if (!IsReady || !IsTimeActivated) return;
+        HasTimePaused = false;
     }
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)

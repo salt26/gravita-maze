@@ -16,6 +16,8 @@ public class PlayManager : MonoBehaviour
     public Button retryHighlightedButton;       // Burned 또는 Squashed일 때 활성화
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
+    public MessageUI messageUI;
+    public GameObject messagePanel;
 
     private Mode playMode;
 
@@ -109,6 +111,8 @@ public class PlayManager : MonoBehaviour
         IsReady = false;
         EscapedCount = 0;
         playMode = mode;
+        messageUI.gameObject.SetActive(false);
+        messagePanel.SetActive(false);
         switch (playMode)
         {
             case Mode.Tutorial:
@@ -164,7 +168,14 @@ public class PlayManager : MonoBehaviour
     public void Quit()
     {
         // TODO 시간 멈추고 맵 가리고 확인 메시지 띄우기
-        GameManager.gm.LoadMain();
+        messagePanel.SetActive(true);
+        GameManager.mm.TimePause();
+        messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+            () => GameManager.gm.LoadMain(),
+            () => {
+                GameManager.mm.TimeResume();
+                messagePanel.SetActive(false);
+            });
     }
 
     public void Ending()
