@@ -899,7 +899,7 @@ public class MapManager : MonoBehaviour
         IsTimeActivated = true;
         IsTimePassing = false;
         timeoutPanel.SetActive(false);
-        Debug.Log("Remaining time: " + RemainingTime);
+        //Debug.Log("Remaining time: " + RemainingTime);
     }
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)

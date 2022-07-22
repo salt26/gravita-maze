@@ -20,5 +20,5 @@ $ - 3 0
 - 5 1
 | 2 3
 | 1 1
-t 30
-s c2FzZHdkd2FzZHNkc2Rhc2RzZHNhcw==
+t 15
+s c2FzZHN3ZHNkc2FzZHNhcw==

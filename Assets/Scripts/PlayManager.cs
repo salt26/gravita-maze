@@ -84,6 +84,20 @@ public class PlayManager : MonoBehaviour
         set;
     } = 5;
 
+    public int EscapedCount
+    {
+        get;
+        private set;
+    } = 0;
+
+    public bool HasClearedAll
+    {
+        get
+        {
+            return IsReady && Life > 0 && EscapedCount >= PlayLength;
+        }
+    }
+
     public bool IsReady
     {
         get;
@@ -93,43 +107,44 @@ public class PlayManager : MonoBehaviour
     public void Initialize(Mode mode, bool isRandomOrder = false, int maxPlayLength = int.MaxValue, int initialLife = 5)
     {
         IsReady = false;
+        EscapedCount = 0;
         playMode = mode;
         switch (playMode)
         {
             case Mode.Tutorial:
                 _mapFiles = tutorialMapFiles;
                 IsRandomOrder = false;
-                PlayLength = _mapFiles.Count;
                 Life = int.MaxValue;
+                PlayLength = _mapFiles.Count;
                 break;
             case Mode.AdvEasy:
                 _mapFiles = adventureEasyMapFiles;
                 IsRandomOrder = isRandomOrder;
-                PlayLength = Mathf.Clamp(adventureEasyPlayLength, 1, _mapFiles.Count);
                 Life = adventureEasyLife;
+                PlayLength = Mathf.Clamp(adventureEasyPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvNormal:
                 _mapFiles = adventureNormalMapFiles;
                 IsRandomOrder = isRandomOrder;
-                PlayLength = Mathf.Clamp(adventureNormalPlayLength, 1, _mapFiles.Count);
                 Life = adventureNormalLife;
+                PlayLength = Mathf.Clamp(adventureNormalPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvHard:
                 _mapFiles = adventureHardMapFiles;
                 IsRandomOrder = isRandomOrder;
-                PlayLength = Mathf.Clamp(adventureHardPlayLength, 1, _mapFiles.Count);
                 Life = adventureHardLife;
+                PlayLength = Mathf.Clamp(adventureHardPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvInsane:
                 _mapFiles = adventureInsaneMapFiles;
                 IsRandomOrder = isRandomOrder;
-                PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count);
                 Life = adventureInsaneLife;
+                PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             default:
                 IsRandomOrder = isRandomOrder;
-                PlayLength = Mathf.Clamp(maxPlayLength, 1, _mapFiles.Count);
                 Life = Mathf.Max(initialLife, 1);
+                PlayLength = Mathf.Clamp(maxPlayLength, 1, _mapFiles.Count - Life + 1);
                 // TODO
                 return;
         }
@@ -161,7 +176,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
-        if (GameManager.gm.HasClearedAll)
+        if (HasClearedAll)
         {
             Ending();
         }
@@ -170,7 +185,7 @@ public class PlayManager : MonoBehaviour
     public void PlayNext()
     {
         GameManager.gm.PlayNext();
-        if (GameManager.gm.HasClearedAll)
+        if (HasClearedAll)
         {
             Ending();
         }
@@ -196,7 +211,8 @@ public class PlayManager : MonoBehaviour
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(true);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
-                if (!GameManager.gm.HasClearedAll)
+                EscapedCount++;
+                if (!HasClearedAll)
                 {
                     // 다음 맵이 존재할 때
                     nextButton.gameObject.SetActive(true);
@@ -260,7 +276,8 @@ public class PlayManager : MonoBehaviour
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
-                if (!GameManager.gm.HasClearedAll)
+                EscapedCount++;
+                if (!HasClearedAll)
                 {
                     // 다음 맵이 존재할 때
                     nextButton.gameObject.SetActive(true);
@@ -295,11 +312,11 @@ public class PlayManager : MonoBehaviour
                 Debug.Log("Remaining life: " + Life);
                 retryButton.gameObject.SetActive(false);
                 retryHighlightedButton.gameObject.SetActive(false);
-                retryTimeHighlightedButton.gameObject.SetActive(false);
+                retryTimeButton.gameObject.SetActive(false);
                 if (Life > 0)
                 {
                     // 라이프가 남아있을 때
-                    retryTimeButton.gameObject.SetActive(true);
+                    retryTimeHighlightedButton.gameObject.SetActive(true);
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
@@ -309,7 +326,7 @@ public class PlayManager : MonoBehaviour
                 else
                 {
                     // 라이프가 0일 때
-                    retryTimeButton.gameObject.SetActive(false);
+                    retryTimeHighlightedButton.gameObject.SetActive(false);
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 

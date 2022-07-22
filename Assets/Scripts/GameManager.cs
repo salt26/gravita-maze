@@ -28,14 +28,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private AdventureLevel adventureLevel;
-    private List<string> mapList;
     private int playingMapIndex = 0;
-
-    public bool HasClearedAll
-    {
-        get;
-        private set;
-    } = false;
 
     private void Awake()
     {
@@ -94,7 +87,6 @@ public class GameManager : MonoBehaviour
 
     void Initialize()
     {
-        mapList = null;
         playingMapIndex = -1;
 
         // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
@@ -467,7 +459,6 @@ public class GameManager : MonoBehaviour
         }
 
         pm.Initialize(PlayManager.Mode.Tutorial);
-        HasClearedAll = false;
         mm.afterGravity = pm.TutorialAfterGravity;
 
         //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
@@ -529,10 +520,10 @@ public class GameManager : MonoBehaviour
                 break;
             default:
                 Debug.LogError("Play invalid: unknown adventure level");
+                LoadAdventureLevel();
                 yield break;
         }
 
-        HasClearedAll = false;
         mm.afterGravity = pm.PlayAfterGravity;
 
         for (int i = 0; i < pm.MapFiles.Count; i++)
@@ -623,10 +614,9 @@ public class GameManager : MonoBehaviour
         }
         for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
         {
-            if (i >= pm.PlayLength)
+            if (pm.HasClearedAll)
             {
                 // TODO Victory
-                HasClearedAll = true;
                 break;
             }
             MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
@@ -652,10 +642,9 @@ public class GameManager : MonoBehaviour
 
         for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
         {
-            if (i >= pm.PlayLength)
+            if (pm.HasClearedAll)
             {
                 // TODO Victory
-                HasClearedAll = true;
                 break;
             }
             MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
