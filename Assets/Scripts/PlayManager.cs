@@ -202,6 +202,11 @@ public class PlayManager : MonoBehaviour
         }
     }
 
+    public void TutorialRestartWithTime()
+    {
+        if (EscapedCount > 0) EscapedCount--;
+    }
+
     public void TutorialAfterGravity(MapManager.Flag flag)
     {
         switch (flag)
