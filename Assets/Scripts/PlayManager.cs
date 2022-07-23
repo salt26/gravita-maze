@@ -249,6 +249,11 @@ public class PlayManager : MonoBehaviour
             IsHurt = false;
         }
     }
+    
+    public void TutorialRestartWithTime()
+    {
+        if (EscapedCount > 0) EscapedCount--;
+    }
 
     public void TutorialAfterGravity(MapManager.Flag flag)
     {
