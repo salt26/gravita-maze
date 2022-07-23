@@ -62,23 +62,23 @@ public class GameManager : MonoBehaviour
 
         if (canPlay)
         {
-            if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
+            if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)) && mm.gravityDownButton.interactable)
             {
                 mm.ManipulateGravityDown();
             }
-            else if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
+            else if ((Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W)) && mm.gravityUpButton.interactable)
             {
                 mm.ManipulateGravityUp();
             }
-            else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
+            else if ((Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && mm.gravityLeftButton.interactable)
             {
                 mm.ManipulateGravityLeft();
             }
-            else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
+            else if ((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D)) && mm.gravityRightButton.interactable)
             {
                 mm.ManipulateGravityRight();
             }
-            else if (Input.GetKeyUp(KeyCode.Space))
+            else if (Input.GetKeyUp(KeyCode.Space) && mm.gravityRetryButton.interactable)
             {
                 mm.Restart();
             }
