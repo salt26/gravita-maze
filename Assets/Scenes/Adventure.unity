@@ -2615,16 +2615,13 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 0e37dbfda511edf45a694fc7dfd5c504, type: 3}
   - {fileID: 4900000, guid: b4ff577702e484c4e8ac1c28d3ba98f1, type: 3}
   - {fileID: 4900000, guid: 7003bdf68e5500d459f1f9ec9d0fb7c7, type: 3}
-  - {fileID: 4900000, guid: ee4015b88d0fba742935d66455af0f20, type: 3}
-  - {fileID: 4900000, guid: 199b0f64e0d19184a8d705ffea2fd835, type: 3}
-  - {fileID: 4900000, guid: 99778d8268a297d44bc24e802fa002d4, type: 3}
-  - {fileID: 4900000, guid: 55cc3b05dd8ea5c4999ce70df5f81d19, type: 3}
-  - {fileID: 4900000, guid: f6f604eb107be2c4888bd2308f8069b3, type: 3}
-  - {fileID: 4900000, guid: a99b78dac43b4ef44aa0afe9cf22de56, type: 3}
-  - {fileID: 4900000, guid: 8d2ba5bac9d8bc14db802183c0bbdd3f, type: 3}
-  - {fileID: 4900000, guid: dbf64d4fe8ac4314b8a4e346198d9205, type: 3}
-  - {fileID: 4900000, guid: 5231a35dde3f4ab4092a66dc9b31a49e, type: 3}
   - {fileID: 4900000, guid: 2a49e04c51da4634aa8a64739e8fe2d6, type: 3}
+  - {fileID: 4900000, guid: 5231a35dde3f4ab4092a66dc9b31a49e, type: 3}
+  - {fileID: 4900000, guid: 99778d8268a297d44bc24e802fa002d4, type: 3}
+  - {fileID: 4900000, guid: dbf64d4fe8ac4314b8a4e346198d9205, type: 3}
+  - {fileID: 4900000, guid: 8d2ba5bac9d8bc14db802183c0bbdd3f, type: 3}
+  - {fileID: 4900000, guid: a99b78dac43b4ef44aa0afe9cf22de56, type: 3}
+  - {fileID: 4900000, guid: 28be81769f0f3c44baa6f445d41fc3ac, type: 3}
   adventureNormalPlayLength: 10
   adventureNormalLife: 5
   adventureHardMapFiles:
@@ -2632,47 +2629,42 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 8ff796a795d882a4198af3f50994410f, type: 3}
   - {fileID: 4900000, guid: 32426f3345e848a4fab1d77bc7d6a232, type: 3}
   - {fileID: 4900000, guid: 19f5335da3c34e546abb554425f8feca, type: 3}
-  - {fileID: 4900000, guid: 6e7a6e17abbcac74d9788aedffca918c, type: 3}
+  - {fileID: 4900000, guid: 7ff4a934757231f44a46e134d31ed5e1, type: 3}
   - {fileID: 4900000, guid: df5d9270c0328ba4c98a057f7b9ff509, type: 3}
-  - {fileID: 4900000, guid: db6b9f49d7455284d9c9df4c2a6d279b, type: 3}
-  - {fileID: 4900000, guid: 5761b280f92de0844a1df9a4ec136f36, type: 3}
-  - {fileID: 4900000, guid: 2734929ee11d98a479eec8c59095dd38, type: 3}
+  - {fileID: 4900000, guid: a6808832bbcd87f49a6b93981c5d44db, type: 3}
+  - {fileID: 4900000, guid: bf919c42579498649b2e1c73e1478e24, type: 3}
+  - {fileID: 4900000, guid: f7021cb363cda0b4897abd69e8b05795, type: 3}
   - {fileID: 4900000, guid: a04e22cab2124204a9aebafd4603070a, type: 3}
   - {fileID: 4900000, guid: b55cc4ee49785c545967b2fcaded30c9, type: 3}
   - {fileID: 4900000, guid: 25ea3bda4baf821439998049e3cb2c96, type: 3}
-  - {fileID: 4900000, guid: ecc32200240af8347b6d697d2d80e7f2, type: 3}
-  - {fileID: 4900000, guid: d325fca297a4d6a4c8fc14ebdbb174a6, type: 3}
   - {fileID: 4900000, guid: 9b4d2496616ecd54c9356eca7a7d7ca7, type: 3}
-  - {fileID: 4900000, guid: bc0b5c7f1d97d7545ac1d24deaa6ab96, type: 3}
-  - {fileID: 4900000, guid: bf919c42579498649b2e1c73e1478e24, type: 3}
-  - {fileID: 4900000, guid: a6808832bbcd87f49a6b93981c5d44db, type: 3}
+  - {fileID: 4900000, guid: d325fca297a4d6a4c8fc14ebdbb174a6, type: 3}
+  - {fileID: 4900000, guid: 242db7b5497596343bb8e629c95ea7df, type: 3}
+  - {fileID: 4900000, guid: 55ca6ab41fa0c27409cf4d252ae05770, type: 3}
   adventureHardPlayLength: 10
-  adventureHardLife: 5
+  adventureHardLife: 7
   adventureInsaneMapFiles:
   - {fileID: 4900000, guid: 961baa2594a7c6848b5fc076787a47da, type: 3}
   - {fileID: 4900000, guid: 807ed45f08d5fec44880ac7ff701da51, type: 3}
-  - {fileID: 4900000, guid: 7a68ced3e34117545b1ba643a44a6b2e, type: 3}
-  - {fileID: 4900000, guid: ffeddf391a44e934697e6b3a72abb40c, type: 3}
+  - {fileID: 4900000, guid: bf411c465d6379f44a1b88a40649e7d3, type: 3}
+  - {fileID: 4900000, guid: e74d0a9c88992ad4cb1abaca28ba633e, type: 3}
   - {fileID: 4900000, guid: 0f75ebab2de2c454c9f44b8535873fdf, type: 3}
   - {fileID: 4900000, guid: 8c2eca6084e77304d8db5fe801c7babf, type: 3}
   - {fileID: 4900000, guid: 356e0438709a3a240be38f172432c206, type: 3}
   - {fileID: 4900000, guid: 2d1efbf0b4b84ae48998ffd5a0fc012a, type: 3}
   - {fileID: 4900000, guid: 4484a4cf1759b3e45a8be022c198a1bf, type: 3}
   - {fileID: 4900000, guid: 1e206f92c39fb5946b91d6f70e3d59f6, type: 3}
-  - {fileID: 4900000, guid: 616019df3c8900d40a6fc4ea9f4d6186, type: 3}
-  - {fileID: 4900000, guid: 4e9545888530f624c9bee6fa3d7b9f1a, type: 3}
-  - {fileID: 4900000, guid: 9a0ad06785ab2fc44b361812d2cf534e, type: 3}
+  - {fileID: 4900000, guid: aea9d16cf47cc9e4b9ab1c489c880ff5, type: 3}
+  - {fileID: 4900000, guid: 7c1993625daaa7748ae9ef3d1cb3818c, type: 3}
+  - {fileID: 4900000, guid: 19825b32ee59fe640b58675cc55bdd7b, type: 3}
   - {fileID: 4900000, guid: e2c5d1427beed4c45b0612cb81dc36a9, type: 3}
   - {fileID: 4900000, guid: dfe775f4021031f4c94253b2b865fe72, type: 3}
-  - {fileID: 4900000, guid: d9ae2a2482b16154dbea4703312e8c89, type: 3}
+  - {fileID: 4900000, guid: 3d016b1bace9e82418fb0705ee569edd, type: 3}
   - {fileID: 4900000, guid: 0ee6324cd797b0f4ead195d95c2508b1, type: 3}
   - {fileID: 4900000, guid: b8a2773da608a9c409ed16fb95411a53, type: 3}
   - {fileID: 4900000, guid: f212fe43339a69b4fa6bde7f32106a04, type: 3}
-  - {fileID: 4900000, guid: 19825b32ee59fe640b58675cc55bdd7b, type: 3}
-  - {fileID: 4900000, guid: 3d016b1bace9e82418fb0705ee569edd, type: 3}
-  - {fileID: 4900000, guid: 7c1993625daaa7748ae9ef3d1cb3818c, type: 3}
   adventureInsanePlayLength: 10
-  adventureInsaneLife: 5
+  adventureInsaneLife: 10
 --- !u!1001 &1484046093
 PrefabInstance:
   m_ObjectHideFlags: 0
