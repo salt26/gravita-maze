@@ -82,6 +82,25 @@ public class GameManager : MonoBehaviour
             {
                 mm.Restart();
             }
+            else if (Input.GetKeyUp(KeyCode.Return) && !(pm is null) && pm.IsReady)
+            {
+                if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
+                {
+                    if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+                        pm.TutorialNext();
+                    else
+                        pm.PlayNext();
+                }
+                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                {
+                    pm.Ending();
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Escape) && !(pm is null) && pm.IsReady &&
+                pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
+            {
+                pm.Pause();
+            }
         }
     }
 

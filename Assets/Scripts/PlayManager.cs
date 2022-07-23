@@ -10,7 +10,7 @@ public class PlayManager : MonoBehaviour
     public enum Mode { Tutorial = 0, Custom = 1, Survival = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
 
-    public Button quitButton;                   // quitHighlightedButton이 활성화될 때 비활성화
+    public Button pauseButton;                   // quitHighlightedButton이 활성화될 때 비활성화
     public Button quitHighlightedButton;        // 모든 맵을 탈출하거나 라이프가 0이 되어 게임이 종료될 때 활성화
     public Button nextButton;                   // 탈출 또는 시간 초과 시 활성화 (튜토리얼에서는 탈출 시에만 활성화), quitHighlightedButton이 활성화될 때 비활성화
     public Button retryButton;                  // Continued일 때 활성화, 사망 또는 탈출 또는 시간 초과 시 비활성화
@@ -183,7 +183,6 @@ public class PlayManager : MonoBehaviour
 
     public void Pause()
     {
-        // TODO 시간 멈추고 맵 가리고 확인 메시지 띄우기
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
@@ -197,8 +196,6 @@ public class PlayManager : MonoBehaviour
 
     public void Quit()
     {
-        Debug.Log(SceneManager.GetActiveScene().name);
-        Debug.Log(SceneManager.GetActiveScene().name.Equals("Tutorial"));
         if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
             GameManager.gm.LoadMode();
@@ -267,7 +264,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
@@ -282,7 +279,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -291,7 +288,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -303,7 +300,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.TimeOver:
@@ -314,7 +311,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
         }
@@ -332,7 +329,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
@@ -347,7 +344,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -356,7 +353,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -368,7 +365,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.TimeOver:
@@ -385,7 +382,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -395,7 +392,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
         }
