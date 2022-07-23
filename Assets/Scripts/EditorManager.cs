@@ -1429,10 +1429,21 @@ public class EditorManager : MonoBehaviour
         const float SCROLL_ITEM_HEIGHT = 84f;
 
         openPath = openPath.Replace('\\', '/');
-        string[] files = Directory.GetFiles(openPath, "*.txt");
-        string[] dirs = Directory.GetDirectories(openPath);
+        string[] files = null;
+        string[] dirs = null;
         int index = 0;
-        int length = dirs.Length + files.Length;
+        int length = 0;
+        try
+        {
+            files = Directory.GetFiles(openPath, "*.txt");
+            dirs = Directory.GetDirectories(openPath);
+            length = dirs.Length + files.Length;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("File invalid: cannot open the path \"" + openPath + "\"");
+            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+        }
 
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
@@ -1473,27 +1484,33 @@ public class EditorManager : MonoBehaviour
             index++;
         }
 
-        foreach (string s in dirs)
+        if (dirs != null)
         {
-            GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().anchoredPosition =
-                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+            foreach (string s in dirs)
+            {
+                GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, true, this, false);
-            index++;
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, true, this, false);
+                index++;
+            }
         }
 
-        foreach (string s in files)
+        if (files != null)
         {
-            GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().anchoredPosition =
-                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
-            index++;
+            foreach (string s in files)
+            {
+                GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
+                index++;
+            }
         }
 
         editorOpenScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
@@ -1614,6 +1631,7 @@ public class EditorManager : MonoBehaviour
                 }
             case MapManager.OpenFileFlag.Failed:
             default:
+                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
                 return false;
         }
     }
@@ -1671,10 +1689,21 @@ public class EditorManager : MonoBehaviour
         const float SCROLL_ITEM_HEIGHT = 84f;
 
         savePath = savePath.Replace('\\', '/');
-        string[] files = Directory.GetFiles(savePath, "*.txt");
-        string[] dirs = Directory.GetDirectories(savePath);
+        string[] files = null;
+        string[] dirs = null;
         int index = 0;
-        int length = dirs.Length + files.Length;
+        int length = 0;
+        try
+        {
+            files = Directory.GetFiles(savePath, "*.txt");
+            dirs = Directory.GetDirectories(savePath);
+            length = dirs.Length + files.Length;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("File invalid: cannot open the path \"" + savePath + "\"");
+            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+        }
 
         if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
@@ -1716,27 +1745,33 @@ public class EditorManager : MonoBehaviour
             index++;
         }
 
-        foreach (string s in dirs)
+        if (dirs != null)
         {
-            GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().anchoredPosition =
-                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+            foreach (string s in dirs)
+            {
+                GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, true, this, false);
-            index++;
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, true, this, false);
+                index++;
+            }
         }
 
-        foreach (string s in files)
+        if (files != null)
         {
-            GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().anchoredPosition =
-                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, false, this);
-            index++;
+            foreach (string s in files)
+            {
+                GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, false, this);
+                index++;
+            }
         }
 
         editorSaveScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
