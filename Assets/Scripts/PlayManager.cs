@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
     public MessageUI messageUI;
     public GameObject messagePanel;
+    public ResultUI resultUI;
 
     private Mode playMode;
 
@@ -74,6 +76,12 @@ public class PlayManager : MonoBehaviour
         private set;
     } = int.MaxValue;
 
+    public int SkippedCount
+    {
+        get;
+        private set;
+    } = 0;
+
     public bool IsRandomOrder
     {
         get;
@@ -106,13 +114,21 @@ public class PlayManager : MonoBehaviour
         private set;
     } = false;
 
+    public bool IsHurt
+    {
+        get;
+        private set;
+    } = false;
+
     public void Initialize(Mode mode, bool isRandomOrder = false, int maxPlayLength = int.MaxValue, int initialLife = 5)
     {
         IsReady = false;
         EscapedCount = 0;
+        SkippedCount = 0;
         playMode = mode;
         messageUI.gameObject.SetActive(false);
         messagePanel.SetActive(false);
+        resultUI.gameObject.SetActive(false);
         switch (playMode)
         {
             case Mode.Tutorial:
@@ -165,23 +181,42 @@ public class PlayManager : MonoBehaviour
         IsReady = true;
     }
 
-    public void Quit()
+    public void Pause()
     {
         // TODO 시간 멈추고 맵 가리고 확인 메시지 띄우기
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
-            () => GameManager.gm.LoadMain(),
-            () => {
+            () => resultUI.Initialize(playMode),
+            () =>
+            {
                 GameManager.mm.TimeResume();
                 messagePanel.SetActive(false);
-            });
+            }) ;
+    }
+
+    public void Quit()
+    {
+        Debug.Log(SceneManager.GetActiveScene().name);
+        Debug.Log(SceneManager.GetActiveScene().name.Equals("Tutorial"));
+        if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+        {
+            GameManager.gm.LoadMode();
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            GameManager.gm.LoadAdventureLevel();
+        }
+        else 
+        {
+            GameManager.gm.LoadMain();
+        }
     }
 
     public void Ending()
     {
-        // TODO 결과창 보여주고 확인 메시지 띄우기
-        GameManager.gm.LoadMain();
+
+        resultUI.Initialize(playMode);
     }
 
     public void TutorialNext()
@@ -195,10 +230,23 @@ public class PlayManager : MonoBehaviour
 
     public void PlayNext()
     {
+        if (IsHurt)
+        {
+            SkippedCount++;
+            IsHurt = false;
+        }
         GameManager.gm.PlayNext();
         if (HasClearedAll)
         {
             Ending();
+        }
+    }
+
+    public void PlayRestartWithTime()
+    {
+        if (IsHurt)
+        {
+            IsHurt = false;
         }
     }
 
@@ -320,6 +368,7 @@ public class PlayManager : MonoBehaviour
                 break;
             case MapManager.Flag.TimeOver:
                 Life--;
+                IsHurt = true;
                 Debug.Log("Remaining life: " + Life);
                 retryButton.gameObject.SetActive(false);
                 retryHighlightedButton.gameObject.SetActive(false);

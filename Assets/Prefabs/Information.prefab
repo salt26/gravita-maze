@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3445140183688518218}
   - component: {fileID: 4638210107548121918}
   m_Layer: 5
-  m_Name: MessageForYou
+  m_Name: LowerMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 4962725885557860307}
   - component: {fileID: 3825228073622206985}
   m_Layer: 5
-  m_Name: Title
+  m_Name: ModeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,7 +192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 720}
+  m_AnchoredPosition: {x: 0, y: 756}
   m_SizeDelta: {x: 600, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4962725885557860307
@@ -315,7 +315,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Maps passed:'
+  m_Text: 'Maps Passed:'
 --- !u!1 &4386372828478808047
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 9033355189843463180}
   - component: {fileID: 3956575814827311043}
   m_Layer: 5
-  m_Name: Congratulations
+  m_Name: UpperMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
