@@ -73,7 +73,7 @@
   * This is an old version.
 * Download `GravitaMaze.v.1.0.m.zip` and unzip it.
 * Execute `Gravita-Maze.app`.
-* You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of the `Gravita-Maze.app` to enjoy the custom maps.
+* You can download `GravitaMaze.zip` from [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1), unzip it, and move the `Maps` folder to the root directory of the `Gravita-Maze.app` to enjoy the custom maps.
   * These maps are playable in the editor, not in Adventure mode.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
