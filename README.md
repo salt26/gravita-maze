@@ -1,54 +1,80 @@
 # GravitaMaze (중력 미로)
-> Last version: v.1.1.0
+> Last version: v.1.2.1
 
 ## Introduction
 * Puzzle game
+  * Manipulate gravity to escape the ball!
 * English is fully available!
-* This version(v.1.1.0) is also a prototype.
+* This version(v.1.2.1) is also a prototype.
 
 ### Download
-#### [Android](https://github.com/salt26/gravita-maze/releases/tag/v.1.1.0)
+#### [Android](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)
 
-#### [Windows](https://github.com/salt26/gravita-maze/releases/tag/v.1.1.0)
+#### [Windows](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)
 
 #### [macOS (old version)](https://github.com/salt26/gravita-maze/releases/tag/v.1.0.m)
 
-### Updates (v.1.0.2 -> v.1.1.0)
+### Updates (v.1.1.0 -> v.1.2.1)
 #### Common
-* Adventure mode is now playable!
-  * There are Easy, Normal, Hard, and Insane levels.
-  * In adventure mode, the map is randomly rotated or flipped.
-  * There are five lives given, but they are not displayed in the UI yet.
-* Even if you modify the map file(`.txt`) directly to increase the time limit to more than 30 seconds, the maximum time limit is set to 30 seconds.
+* In Tutorial mode,
+  * The progress is displayed.
+  * You can pause and resume the game.
+  * When you leave or complete the game, the results window is displayed.
+* In Adventure mode,
+  * Huge scale of map balance patch is done.
+    * Easy: 5 lives, 10 maps to escape, more easier than before!
+    * Normal: 5 lives, 10 maps to escape, a little easier than before.
+    * Hard: 7 lives, 10 maps to escape
+    * Insane: 10 lives, 10 maps to escape, more harder than before!
+  * The remaining life and progress are displayed.
+  * You can pause and resume the game.
+  * When you leave or complete the game, the results window is displayed.
+* You can enjoy some maps in the editor that are not in adventure mode.
+  * If you are using Android, please download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app.
+* Many types of screen resolution are supported.
+  * 9:16, 9:18, 9:18.5, 9:19, 9:19.5, 9:20, 9:20.5, 9:21 are supported. (Portrait)
+  * 3:4 is not supported.
+
+#### Android
+* You can press the Back key to press the Pause button in Tutorial and Adventure mode.
+
+#### Windows
+* You can press the Enter key to press the Next button in Tutorial and Adventure mode.
+* You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
 
 ## How to Play
 #### Android
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.1.0)!
-* Download `GravitaMaze.v.1.1.0.a.apk` on your Android cell phone and install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)!
+* Download `GravitaMaze.v.1.2.1.a.apk` on your Android cell phone and install it.
   * You may need to allow "Install unknown apps" (in "Settings" - "Apps" - "..." - "Special access" - "Install unknown apps")
   * When you run the app for the first time, you need to allow permission to write to external/internal storage.
     * If you deny permission, the app will not be able to create or load maps.
     * If you checked the “Do not ask me again” option, you must go into the application permission settings and manually turn on the permission for `GravitaMaze`.
+* You can download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app to enjoy the custom maps.
+  * These maps are playable in the editor, not in Adventure mode.
 * The gravity can be manipulated by touching the four "arrow" buttons.
 * Whenever the ball dies, you can touch "retry" button to retry the map.
   * Time passes even if the ball is dead.
 * Escape the ball before the time limit is over.
+  * If you time out, you lose one life.
 
 #### Windows
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.1.0)!
-* Download `GravitaMaze.v.1.1.0.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)!
+* Download `GravitaMaze.v.1.2.1.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
   * Time passes even if the ball is dead.
 * Escape the ball before the time limit is over.
+  * If you time out, you lose one life.
 
 #### macOS
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.0.m)!
   * This is an old version.
 * Download `GravitaMaze.v.1.0.m.zip` and unzip it.
 * Execute `Gravita-Maze.app`.
-* Sample maps are included in `Maps.zip`.
+* You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of the `Gravita-Maze.app` to enjoy the custom maps.
+  * These maps are playable in the editor, not in Adventure mode.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
   * Time passes even if the ball is dead.
@@ -56,14 +82,7 @@
 
 ### Map Editor
 * You can use the map editor to make your own custom maps!
-  * Also you can test and play the map in the map editor.
-
-#### Windows
-* There are some predefined map files.
-
-#### Android
-* No predefined map files are provided by default, but you can play Adventure modes without download `Maps.zip` explicitly.
-  * After installing the app, you can download `Maps.zip`, unzip it, and put it in `GravitaMaze/Maps`.
+  * Also you can test and play the custom maps in the map editor.
 
 ### Play Modes
 * There are a Tutorial mode and four Adventure modes.
