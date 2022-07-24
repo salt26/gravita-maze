@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             {
                 mm.Restart();
             }
-            else if (Input.GetKeyUp(KeyCode.Return) && !(pm is null) && pm.IsReady)
+            else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
             {
                 if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
                 {
@@ -95,11 +95,25 @@ public class GameManager : MonoBehaviour
                 {
                     pm.Ending();
                 }
+                else if (pm.resultUI.gameObject.activeInHierarchy)
+                {
+                    pm.Quit();
+                }
+                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageOKButton.interactable)
+                {
+                    pm.messageUI.messageOKButton.onClick.Invoke();
+                }
             }
-            else if (Input.GetKeyUp(KeyCode.Escape) && !(pm is null) && pm.IsReady &&
-                pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
+            else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
             {
-                pm.Pause();
+                if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
+                {
+                    pm.Pause();
+                }
+                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageXButton.interactable)
+                {
+                    pm.messageUI.messageXButton.onClick.Invoke();
+                }
             }
         }
     }

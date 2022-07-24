@@ -16,8 +16,6 @@ public class ResultUI : MonoBehaviour
 
     public PlayManager pm;
 
-    
-
     public void Initialize(PlayManager.Mode mode)
     {
         if (mode == PlayManager.Mode.Tutorial)
@@ -32,12 +30,12 @@ public class ResultUI : MonoBehaviour
             else
             {
                 upperMessage.text = "Your Result";
-                lowerMessage.text = "Goodbye! See you next time!";
+                lowerMessage.text = "You can try again at any time.";
             }
             mapsPassedCount.text = pm.EscapedCount.ToString();
             //mapsSkippedCount.text = "";
             //livesLeftCount.text = "";
-            mapsPassedCount.color = new Color(0f,100 / 255f,0f);
+            mapsPassedCount.color = new Color(0f, 100 / 255f, 0f);
 
         }
 
@@ -49,7 +47,7 @@ public class ResultUI : MonoBehaviour
             if (pm.HasClearedAll)
             {
                 upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Your journey has started";
+                lowerMessage.text = "Nice! Your journey has started!";
             }
             else if (pm.Life == 0)
             {
@@ -59,7 +57,7 @@ public class ResultUI : MonoBehaviour
             else 
             {
                 upperMessage.text = "Your Result";
-                lowerMessage.text = "Goodbye! See you next time!";
+                lowerMessage.text = "You can try again at any time.";
             }
             mapsPassedCount.text = pm.EscapedCount.ToString();
             mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -77,7 +75,7 @@ public class ResultUI : MonoBehaviour
             if (pm.HasClearedAll)
             {
                 upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Your skills are improving";
+                lowerMessage.text = "Great! You have the potential of a master!";
             }
             else if (pm.Life == 0)
             {
@@ -87,7 +85,7 @@ public class ResultUI : MonoBehaviour
             else
             {
                 upperMessage.text = "Your Result";
-                lowerMessage.text = "Goodbye! See you next time!";
+                lowerMessage.text = "You can try again at any time.";
             }
             mapsPassedCount.text = pm.EscapedCount.ToString();
             mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -101,11 +99,11 @@ public class ResultUI : MonoBehaviour
         {
             modeText.text = "Adventure";
             difficultyText.text = "Hard";
-            difficultyText.color = new Color(1f,165/255f,0f);
+            difficultyText.color = new Color(1f, 165 / 255f, 0f);
             if (pm.HasClearedAll)
             {
                 upperMessage.text = "Congratulations!";
-                lowerMessage.text = "How did you do this?!";
+                lowerMessage.text = "Wow! How did you do this?!";
             }
             else if (pm.Life == 0)
             {
@@ -115,7 +113,7 @@ public class ResultUI : MonoBehaviour
             else
             {
                 upperMessage.text = "Your Result";
-                lowerMessage.text = "Goodbye! See you next time!";
+                lowerMessage.text = "You can try again at any time.";
             }
             mapsPassedCount.text = pm.EscapedCount.ToString();
             mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -133,7 +131,7 @@ public class ResultUI : MonoBehaviour
             if (pm.HasClearedAll)
             {
                 upperMessage.text = "Congratulations!";
-                lowerMessage.text = "You overwhelmed the creators..";
+                lowerMessage.text = "Unbelievable! You overwhelmed the map creators...";
             }
             else if (pm.Life == 0)
             {
@@ -143,7 +141,7 @@ public class ResultUI : MonoBehaviour
             else
             {
                 upperMessage.text = "Your Result";
-                lowerMessage.text = "Goodbye! See you next time!";
+                lowerMessage.text = "You can try again at any time.";
             }
             mapsPassedCount.text = pm.EscapedCount.ToString();
             mapsSkippedCount.text = pm.SkippedCount.ToString();

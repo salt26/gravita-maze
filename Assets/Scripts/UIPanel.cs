@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIPanel : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class UIPanel : MonoBehaviour
         else
         {
             GetComponent<Image>().sprite = panel1920x1080;
+        }
+
+        if (SceneManager.GetActiveScene().name.Equals("Editor"))
+        {
+            GameObject.Find("EditorManager").GetComponent<EditorManager>().statusUI.SetStatusMessage(Screen.width + " * " + Screen.height);
         }
     }
 }

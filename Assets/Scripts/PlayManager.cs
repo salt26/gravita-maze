@@ -183,6 +183,7 @@ public class PlayManager : MonoBehaviour
 
     public void Pause()
     {
+        pauseButton.interactable = false;
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
@@ -191,6 +192,7 @@ public class PlayManager : MonoBehaviour
             {
                 GameManager.mm.TimeResume();
                 messagePanel.SetActive(false);
+                pauseButton.interactable = true;
             }) ;
     }
 
