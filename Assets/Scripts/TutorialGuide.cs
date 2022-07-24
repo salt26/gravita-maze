@@ -26,23 +26,23 @@ public class TutorialGuide : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
         // myTooltipUI = Instantiate(tooltipPrefab, em.tooltipUI.transform).GetComponent<TooltipBox>();
         myTransform = GetComponent<RectTransform>();
-        tipDict.Add(new TutorialTuple(1,2,0), "You can manipulate the direction of gravity using the arrow buttons. Press the left arrow to make the ball roll to the left!");
-        tipDict.Add(new TutorialTuple(1,0,0), "Great job!	Now, let's press the up arrow to make the ball roll up");
-        tipDict.Add(new TutorialTuple(1,0,1), "");
-        tipDict.Add(new TutorialTuple(2,2,0), "");
-        tipDict.Add(new TutorialTuple(2,0,0), "");
-        tipDict.Add(new TutorialTuple(2,0,2), "");
-        tipDict.Add(new TutorialTuple(2,1,2), "");
-        tipDict.Add(new TutorialTuple(2,1,1), "");
-        tipDict.Add(new TutorialTuple(2,0,1), "");
-        tipDict.Add(new TutorialTuple(3,1,2), "");
-        tipDict.Add(new TutorialTuple(4,2,0), "");
-        tipDict.Add(new TutorialTuple(4,2,1), "");
-        tipDict.Add(new TutorialTuple(4,2,2), "");
-        tipDict.Add(new TutorialTuple(4,2,0), "");
-        tipDict.Add(new TutorialTuple(5,1,1), "");
-        tipDict.Add(new TutorialTuple(6,2,2), "");
-        tipDict.Add(new TutorialTuple(6,2,0), "");
+        tipDict.Add(new TutorialTuple(1, 2, 0), "You can manipulate the direction of gravity using the arrow buttons. Press the left arrow to make the ball roll to the left!");
+        tipDict.Add(new TutorialTuple(1, 0, 0), "Great job! Now, let's press the up arrow to make the ball roll up");
+        tipDict.Add(new TutorialTuple(1, 0, 1), "Okay! Then let's get the ball out!");
+        tipDict.Add(new TutorialTuple(2, 2, 0), "Next is a more complicated maze... Good luck!");
+        tipDict.Add(new TutorialTuple(2, 0, 0), "Oh, that's a good choice");
+        tipDict.Add(new TutorialTuple(2, 0, 2), "Oh, that's a good choice");
+        tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
+        tipDict.Add(new TutorialTuple(2, 1, 1), "Here's only one step left!");
+        tipDict.Add(new TutorialTuple(2, 0, 1), "Here's only one step left!");
+        tipDict.Add(new TutorialTuple(3, 1, 2), "Fire can burn your balls...");
+        tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy Iron can crush a ball...");
+        tipDict.Add(new TutorialTuple(4, 2, 1), "And also, the Iron can escape outside with the ball!");
+        tipDict.Add(new TutorialTuple(4, 2, 2), "And also, the Iron can escape outside with the ball!");
+        tipDict.Add(new TutorialTuple(4, 2, 0), "Now, you can just escape with Iron.");
+        tipDict.Add(new TutorialTuple(5, 1, 1), "Also, a heavy Iron can make it go out regardless of the ball!");
+        tipDict.Add(new TutorialTuple(6, 2, 2), "Finally, the Iron can cover the fire for a while!");
+        tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the Iron has blocked the fire, you can step on it!");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
