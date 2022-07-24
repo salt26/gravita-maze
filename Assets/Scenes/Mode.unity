@@ -190,7 +190,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 84baaebe9a07aef4f91d11d81ea49978, type: 3}
-  m_Type: 0
+  m_Type: 2
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.083333336
 --- !u!222 &24088659
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -219,9 +219,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7806154cdb8eb8f47917fb5d2dfcccb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel1920x1080: {fileID: 21300000, guid: 84baaebe9a07aef4f91d11d81ea49978, type: 3}
-  panel2160x1080: {fileID: 21300000, guid: 206bad32da9a7ee4d98b4e4e93aa200c, type: 3}
-  panel2960x1440: {fileID: 21300000, guid: 28dfcdd419f191f4295380761de52c46, type: 3}
+  panel1080x1920: {fileID: 21300000, guid: 84baaebe9a07aef4f91d11d81ea49978, type: 3}
+  panel1080x2160: {fileID: 21300000, guid: 206bad32da9a7ee4d98b4e4e93aa200c, type: 3}
+  panel1080x2220: {fileID: 21300000, guid: 28dfcdd419f191f4295380761de52c46, type: 3}
+  panel1080x2280: {fileID: 21300000, guid: 75479a37b6209e942b1f186c781e1c56, type: 3}
+  panel1080x2340: {fileID: 21300000, guid: 8ca2e752fd434164f9a0f8cbfd12f7bc, type: 3}
+  panel1080x2400: {fileID: 21300000, guid: 5d92658dbfda1fa4ea42f6d0b0074a1f, type: 3}
+  panel1080x2460: {fileID: 21300000, guid: 1e36ba59ea09cf24c82bbf350dbd7bc3, type: 3}
+  panel1080x2520: {fileID: 21300000, guid: 91785ee2e361c1c468410fa8f8943dd5, type: 3}
 --- !u!1 &134944291
 GameObject:
   m_ObjectHideFlags: 0
