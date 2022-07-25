@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TutorialGuideUI : MonoBehaviour
 {
     public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
+    public TutorialGuide tutorialGuide;
 
     RectTransform myTransform;
     Text text;
@@ -30,20 +31,6 @@ public class TutorialGuideUI : MonoBehaviour
         myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         text.text = message.Replace('\\', '\n');
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (true) // To do (TutorialGuide 에 만든 함수들 가져오기...)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-
-        }
     }
 
 }

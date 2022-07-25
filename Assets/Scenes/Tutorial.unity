@@ -3083,6 +3083,7 @@ MonoBehaviour:
   retryTimeHighlightedButton: {fileID: 1783891383}
   messageUI: {fileID: 857531046}
   messagePanel: {fileID: 4462461048705734384}
+  tutorialGuide: {fileID: 0}
   tutorialMapFiles:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
