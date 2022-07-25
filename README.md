@@ -8,11 +8,7 @@
 * This version(v.1.2.1) is also a prototype.
 
 ### Download
-#### [Android](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)
-
-#### [Windows](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)
-
-#### [macOS (old version)](https://github.com/salt26/gravita-maze/releases/tag/v.1.0.m)
+#### [v.1.2.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)
 
 ### Updates (v.1.1.0 -> v.1.2.1)
 #### Common
@@ -39,6 +35,10 @@
 * You can press the Back key to press the Pause button in Tutorial and Adventure mode.
 
 #### Windows
+* You can press the Enter key to press the Next button in Tutorial and Adventure mode.
+* You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
+
+#### macOS
 * You can press the Enter key to press the Next button in Tutorial and Adventure mode.
 * You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
 
@@ -69,16 +69,15 @@
   * If you time out, you lose one life.
 
 #### macOS
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.0.m)!
-  * This is an old version.
-* Download `GravitaMaze.v.1.0.m.zip` and unzip it.
-* Execute `Gravita-Maze.app`.
-* You can download `GravitaMaze.zip` from [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1), unzip it, and move the `Maps` folder to the root directory of the `Gravita-Maze.app` to enjoy the custom maps.
-  * These maps are playable in the editor, not in Adventure mode.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v.1.2.1)!
+* Download `GravitaMaze.v.1.2.1.m.zip` and unzip it.
+* Execute `gravita-maze.app`.
+* You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of `gravita-maze.app` to enjoy the custom maps.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
   * Time passes even if the ball is dead.
 * Escape the ball before the time limit is over.
+  * If you time out, you lose one life.
 
 ### Map Editor
 * You can use the map editor to make your own custom maps!
