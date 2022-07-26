@@ -22,7 +22,6 @@ public class TutorialGuide : MonoBehaviour
     PlayManager pm;
 
     public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
-    public int mapNum;
     public List<TutorialTuple> tipKeys;
 
     void Awake()
@@ -59,7 +58,6 @@ public class TutorialGuide : MonoBehaviour
     }
 
     void Start(){
-        mapNum = 1;
         // Dict의 각 원소에 t/f 값 줘서 튜토리얼 시작할 때마다 초기화 시키도록 하기 (한번 나온 거 안나오게 하는 기믹 초기화용)
     }
 
@@ -89,10 +87,6 @@ public class TutorialGuide : MonoBehaviour
     }
     
 
-    public void TutorialCount(){
-        mapNum++;
-    }
-
     public void showText(string text){
         CurrentTip = Instantiate(tooltipPrefab).GetComponent<TutorialGuideUI>(); //Vector3 값 어케 하지
         switch (pivot)
@@ -117,9 +111,7 @@ public class TutorialGuide : MonoBehaviour
         CurrentTip = null;
     }
 
-
-/*    void Update(){
-        MapManager.Flag flag = mm.flag;
+    public void SpecificCaseGuide(MapManager.Flag flag){
         switch(flag){
             case MapManager.Flag.Burned:
                 emergencyText = "Your ball burned down! Press the shiny return button at the bottom to try again.";
@@ -149,12 +141,17 @@ public class TutorialGuide : MonoBehaviour
                 break;
         
         }
+    }
+
+/*    void Update(){
+        MapManager.Flag flag = mm.flag;
+        
 
         // 죽으면 나오는 것들 출력하기 (3개)
         for(int i=0;i <= tipKeys.Count;i++){
             int mapNumber = tipKeys[i].tutorialNumber;
-            if(mapNum == mapNumber){
-                if(mapNum == 6){
+            if(pm.EscapedCount + 1 == mapNumber){
+                if(pm.EscapedCount+1 == 6){
 
                     if(isIronThere(tipKeys[i])){
 
