@@ -429,11 +429,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
     type: 3}
-  tutorialTip: {fileID: 224579975}
   tooltipMessage: 
+  emergencyText: 
   tooltipWidth: 0
   tooltipHeight: 0
   pivot: 0
+  mapNum: 0
+  tipKeys: []
 --- !u!1 &250178042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3088,8 +3090,8 @@ MonoBehaviour:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
   - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
+  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
   adventureEasyMapFiles: []
   adventureEasyPlayLength: 0

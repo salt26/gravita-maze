@@ -9,25 +9,26 @@ public class TutorialGuide : MonoBehaviour
     public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
 
     public GameObject tooltipPrefab;
-    public GameObject tutorialTip;
+    // public GameObject tutorialTip;
     public string tooltipMessage;
+    public string emergencyText;
     public float tooltipWidth;
     public float tooltipHeight;
     public Pivot pivot;
 
-    public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
-
     RectTransform myTransform;
-    TooltipBox CurrentTip;
+    TutorialGuideUI CurrentTip;
     MapManager mm;
     PlayManager pm;
+
+    public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
     public int mapNum;
     public List<TutorialTuple> tipKeys;
 
     void Awake()
     {
         
-        CurrentTip = null;
+        CurrentTip = null; // 가장 처음 나와애 할 것을 나오게 하는 방법 찾기
 
         pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
 
@@ -59,6 +60,7 @@ public class TutorialGuide : MonoBehaviour
 
     void Start(){
         mapNum = 1;
+        // Dict의 각 원소에 t/f 값 줘서 튜토리얼 시작할 때마다 초기화 시키도록 하기 (한번 나온 거 안나오게 하는 기믹 초기화용)
     }
 
 
@@ -71,13 +73,11 @@ public class TutorialGuide : MonoBehaviour
         }
         else{
             return false;
-        
         }
     }
 
     public bool isIronThere(TutorialTuple tutorialTuple)
     {
-        int mapNumber = tutorialTuple.tutorialNumber;
         int posX = tutorialTuple.xIndex;
         int posY = tutorialTuple.yIndex;
         if (mm.currentMovableCoord[posX, posY] is Iron){
@@ -94,11 +94,63 @@ public class TutorialGuide : MonoBehaviour
     }
 
     public void showText(string text){
+        CurrentTip = Instantiate(tooltipPrefab).GetComponent<TutorialGuideUI>(); //Vector3 값 어케 하지
+        switch (pivot)
+        {
+            case Pivot.TopRight:
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24), // 실제 적용시 위치 봐가며 수정
+                    tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
+                break;
+            case Pivot.BottomRight:
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12),
+                    tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
+                break;
+            case Pivot.TopLeft:
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
+                    tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
+                break;
+            }
+    }
 
+    public void hideText(){
+        Destroy(CurrentTip.gameObject);
+        CurrentTip = null;
     }
 
 
-    void Update(){
+/*    void Update(){
+        MapManager.Flag flag = mm.flag;
+        switch(flag){
+            case MapManager.Flag.Burned:
+                emergencyText = "Your ball burned down! Press the shiny return button at the bottom to try again.";
+                if(CurrentTip != null){
+                    hideText();
+                }
+                showText(emergencyText);
+                break;
+
+            case MapManager.Flag.Squashed:
+                emergencyText = "Your ball is crushed by the box! Press the shiny return button at the bottom to try again.";
+                if(CurrentTip != null){
+                    hideText();
+                }
+                showText(emergencyText);
+                break;
+
+            case MapManager.Flag.TimeOver:
+                emergencyText = "Unfortunately, all time have passed! Press the shiny return button at the bottom to try again.";
+                if(CurrentTip != null){
+                    hideText();
+                }
+                showText(emergencyText);
+                break;
+                
+            default:
+                break;
+        
+        }
+
+        // 죽으면 나오는 것들 출력하기 (3개)
         for(int i=0;i <= tipKeys.Count;i++){
             int mapNumber = tipKeys[i].tutorialNumber;
             if(mapNum == mapNumber){
@@ -107,24 +159,32 @@ public class TutorialGuide : MonoBehaviour
                     if(isIronThere(tipKeys[i])){
 
                         if(!tipKeys[i].isPassed){
-                            Destroy(CurrentTip.GameObject); // 수정 필요
+                            if(CurrentTip != null){
+                                hideText();
+                            }
                             showText(tipDict[tipKeys[i]]);
                         }
                     }
-                    // 이전의 것 다시 안 나오게 하기 + 다시 시작하면 다시 안나오는 것도 리셋하기
+                    // 이전의 것 다시 안 나오게 하기
                     // 이상한 길로 갔을 때 다른 말 나오개 하기
                 }
 
                 else{
 
                     if(isBallThere(tipKeys[i])){
+                        if(!tipKeys[i].isPassed){
+                            if(CurrentTip != null){
+                                hideText();
+                            }
+                            showText(tipDict[tipKeys[i]]);
+                        }
                         
                     }
                 }
             }
 
         }
-        // 죽으면 나오는 것들 출력하기 (3개)
     }
+    */
 }
 
