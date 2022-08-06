@@ -227,6 +227,7 @@ MonoBehaviour:
   panel1080x2400: {fileID: 21300000, guid: 5d92658dbfda1fa4ea42f6d0b0074a1f, type: 3}
   panel1080x2460: {fileID: 21300000, guid: 1e36ba59ea09cf24c82bbf350dbd7bc3, type: 3}
   panel1080x2520: {fileID: 21300000, guid: 91785ee2e361c1c468410fa8f8943dd5, type: 3}
+  panel1080x2640: {fileID: 21300000, guid: 44c250cbb4c5b554fbadc2798176ff40, type: 3}
 --- !u!1 &43384919
 GameObject:
   m_ObjectHideFlags: 0

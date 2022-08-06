@@ -14,6 +14,7 @@ public class UIPanel : MonoBehaviour
     public Sprite panel1080x2400; // 9:20
     public Sprite panel1080x2460; // 9:20.5
     public Sprite panel1080x2520; // 9:21
+    public Sprite panel1080x2640; // 9:22
 
     private Image image;
 
@@ -71,6 +72,12 @@ public class UIPanel : MonoBehaviour
         {
             // 1080x2520, 1440x3360
             image.sprite = panel1080x2520;
+            image.pixelsPerUnitMultiplier = 1 / 12f;
+        }
+        else if (Screen.width / 9 * 22 == Screen.height)
+        {
+            // 1080x2640, 1440x3520
+            image.sprite = panel1080x2640;
             image.pixelsPerUnitMultiplier = 1 / 12f;
         }
         else
