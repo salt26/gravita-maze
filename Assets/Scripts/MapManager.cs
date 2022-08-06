@@ -951,6 +951,29 @@ public class MapManager : MonoBehaviour
                     }
                     tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
                     break;
+                case ":":
+                    if (token.Length != 4)
+                    {
+                        Debug.LogError("File invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+
+                    if (token[1].Equals("-"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else if (token[1].Equals("|"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else
+                    {
+                        Debug.LogError("File invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    break;
                 case "t":
                     if (token.Length != 2)
                     {
@@ -2014,7 +2037,11 @@ public class MapManager : MonoBehaviour
 
     private bool CheckTileFlag(int tile, TileFlag flag)
     {
-        return tile % (2 * (int)flag) / (int)flag == 1;
+        if ((int)flag % 2 == 0)
+        { 
+            return tile % (3 * ((int)flag / 2)) / ((int)flag / 2) == 2;
+        } // Shutter
+        return tile % (3 * (int)flag) / (int)flag == 1;
     }
 
     private void PrintMapCoord()
