@@ -1,0 +1,74 @@
+name: Build project and create release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Build and create release
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64
+          - StandaloneOSX
+          - Android
+    steps:
+      - name: Get runner's uid and gid
+        id: runner-info
+        run: |
+          echo "::set-output name=uid::$(id -u)"
+          echo "::set-output name=gid::$(id -g)"
+      - name: Checkout ${{ github.ref }}
+        uses: actions/checkout@v3
+      - name: Setup cache
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: | 
+            Library-${{ matrix.targetPlatform }}
+            Library-
+      - name: Build for ${{ matrix.targetPlatform }}
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: GravitaMaze
+          versioning: Tag
+          chownFilesTo: ${{ steps.runner-info.outputs.uid }}:${{ steps.runner-info.outputs.gid }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 7
+      - name: Prepare a file to release
+        id: prepare-release
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: ./build
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          FILE_PREFIX: GravitaMaze
+        run: |
+          FILE_NAME="${FILE_PREFIX}.${GITHUB_REF#refs/tags/}"
+          case $TARGET_PLATFORM in
+            "StandaloneWindows64") FILE_NAME+=".w";;
+            "StandaloneOSX") FILE_NAME+=".m";;
+            "Android") FILE_NAME+=".a";;
+          esac
+          mv ${{ matrix.targetPlatform }} "${FILE_NAME}"
+          zip -r "${FILE_NAME}.zip" "${FILE_NAME}"
+          echo "::set-output name=filename::$FILE_NAME"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          files: build/${{ steps.prepare-release.outputs.filename }}.zip
