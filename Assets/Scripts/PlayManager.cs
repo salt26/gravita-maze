@@ -21,6 +21,8 @@ public class PlayManager : MonoBehaviour
     public GameObject messagePanel;
     public ResultUI resultUI;
 
+    public TutorialGuide tutorialGuide;//추가
+
     private Mode playMode;
 
     [Header("Tutorial")]
@@ -221,6 +223,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
+        tutorialGuide.TutorialCount();
         if (HasClearedAll)
         {
             Ending();
