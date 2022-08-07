@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayManager : MonoBehaviour
 {
     public enum Mode { Tutorial = 0, Custom = 1, Survival = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
 
-    public Button quitButton;                   // quitHighlightedButton이 활성화될 때 비활성화
+    public Button pauseButton;                   // quitHighlightedButton이 활성화될 때 비활성화
     public Button quitHighlightedButton;        // 모든 맵을 탈출하거나 라이프가 0이 되어 게임이 종료될 때 활성화
     public Button nextButton;                   // 탈출 또는 시간 초과 시 활성화 (튜토리얼에서는 탈출 시에만 활성화), quitHighlightedButton이 활성화될 때 비활성화
     public Button retryButton;                  // Continued일 때 활성화, 사망 또는 탈출 또는 시간 초과 시 비활성화
@@ -18,6 +19,7 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
     public MessageUI messageUI;
     public GameObject messagePanel;
+    public ResultUI resultUI;
 
     public TutorialGuide tutorialGuide;//추가
 
@@ -76,6 +78,12 @@ public class PlayManager : MonoBehaviour
         private set;
     } = int.MaxValue;
 
+    public int SkippedCount
+    {
+        get;
+        private set;
+    } = 0;
+
     public bool IsRandomOrder
     {
         get;
@@ -108,13 +116,21 @@ public class PlayManager : MonoBehaviour
         private set;
     } = false;
 
+    public bool IsHurt
+    {
+        get;
+        private set;
+    } = false;
+
     public void Initialize(Mode mode, bool isRandomOrder = false, int maxPlayLength = int.MaxValue, int initialLife = 5)
     {
         IsReady = false;
         EscapedCount = 0;
+        SkippedCount = 0;
         playMode = mode;
         messageUI.gameObject.SetActive(false);
         messagePanel.SetActive(false);
+        resultUI.gameObject.SetActive(false);
         switch (playMode)
         {
             case Mode.Tutorial:
@@ -167,23 +183,41 @@ public class PlayManager : MonoBehaviour
         IsReady = true;
     }
 
-    public void Quit()
+    public void Pause()
     {
-        // TODO 시간 멈추고 맵 가리고 확인 메시지 띄우기
+        pauseButton.interactable = false;
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
-            () => GameManager.gm.LoadMain(),
-            () => {
+            () => resultUI.Initialize(playMode),
+            () =>
+            {
                 GameManager.mm.TimeResume();
                 messagePanel.SetActive(false);
-            });
+                pauseButton.interactable = true;
+            }) ;
+    }
+
+    public void Quit()
+    {
+        if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+        {
+            GameManager.gm.LoadMode();
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            GameManager.gm.LoadAdventureLevel();
+        }
+        else 
+        {
+            GameManager.gm.LoadMain();
+        }
     }
 
     public void Ending()
     {
-        // TODO 결과창 보여주고 확인 메시지 띄우기
-        GameManager.gm.LoadMain();
+
+        resultUI.Initialize(playMode);
     }
 
     public void TutorialNext()
@@ -198,6 +232,11 @@ public class PlayManager : MonoBehaviour
 
     public void PlayNext()
     {
+        if (IsHurt)
+        {
+            SkippedCount++;
+            IsHurt = false;
+        }
         GameManager.gm.PlayNext();
         if (HasClearedAll)
         {
@@ -205,6 +244,14 @@ public class PlayManager : MonoBehaviour
         }
     }
 
+    public void PlayRestartWithTime()
+    {
+        if (IsHurt)
+        {
+            IsHurt = false;
+        }
+    }
+    
     public void TutorialRestartWithTime()
     {
         if (EscapedCount > 0) EscapedCount--;
@@ -222,7 +269,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
@@ -237,7 +284,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -246,7 +293,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -258,7 +305,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.TimeOver:
@@ -269,7 +316,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
         }
@@ -287,7 +334,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
@@ -302,7 +349,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -311,7 +358,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -323,11 +370,12 @@ public class PlayManager : MonoBehaviour
                 nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
-                quitButton.interactable = true;
+                pauseButton.interactable = true;
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.TimeOver:
                 Life--;
+                IsHurt = true;
                 Debug.Log("Remaining life: " + Life);
                 retryButton.gameObject.SetActive(false);
                 retryHighlightedButton.gameObject.SetActive(false);
@@ -339,7 +387,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(true);
                     quitHighlightedButton.gameObject.SetActive(false);
 
-                    quitButton.interactable = true;
+                    pauseButton.interactable = true;
                     nextButton.interactable = true;
                 }
                 else
@@ -349,7 +397,7 @@ public class PlayManager : MonoBehaviour
                     nextButton.gameObject.SetActive(false);
                     quitHighlightedButton.gameObject.SetActive(true);
 
-                    quitButton.interactable = false;
+                    pauseButton.interactable = false;
                 }
                 break;
         }

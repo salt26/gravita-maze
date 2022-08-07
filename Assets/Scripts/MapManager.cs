@@ -654,8 +654,19 @@ public class MapManager : MonoBehaviour
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
-        mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f, -10f);
-        mainCamera.orthographicSize = Mathf.Max(SizeX, SizeY) / 2f + 1.5f;
+        mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f - 0.25f, -10f);
+        if (Screen.height * 9f / Screen.width <= 18)
+        {
+            mainCamera.orthographicSize = Mathf.Max(SizeX, SizeY + 1) * 0.5f + 1f;
+        }
+        else if (Screen.height * 9f / Screen.width >= 21)
+        {
+            mainCamera.orthographicSize = Mathf.Max(SizeX + 1, SizeY) * 0.6f + 0.7f;
+        }
+        else
+        {
+            mainCamera.orthographicSize = Mathf.Max(SizeX, SizeY) * 0.55f + 1.3f;
+        }
 
         gravityBall.anchoredPosition = new Vector3(0f, 0f);
 

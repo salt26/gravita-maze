@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
 
+    private AudioSource audioSource;
+
+    public List<AudioClip> bgms;
+
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -44,6 +48,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         Initialize();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -82,6 +87,39 @@ public class GameManager : MonoBehaviour
             {
                 mm.Restart();
             }
+            else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
+            {
+                if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
+                {
+                    if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+                        pm.TutorialNext();
+                    else
+                        pm.PlayNext();
+                }
+                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                {
+                    pm.Ending();
+                }
+                else if (pm.resultUI.gameObject.activeInHierarchy)
+                {
+                    pm.Quit();
+                }
+                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageOKButton.interactable)
+                {
+                    pm.messageUI.messageOKButton.onClick.Invoke();
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
+            {
+                if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
+                {
+                    pm.Pause();
+                }
+                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageXButton.interactable)
+                {
+                    pm.messageUI.messageXButton.onClick.Invoke();
+                }
+            }
         }
     }
 
@@ -92,26 +130,62 @@ public class GameManager : MonoBehaviour
         // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
         if (SceneManager.GetActiveScene().name.Equals("Main"))
         {
+            if (audioSource.clip != bgms[0])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[0];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeMain());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Editor"))
         {
+            if (audioSource.clip != bgms[2])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[2];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeEditor());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Mode"))
         {
+            if (audioSource.clip != bgms[0])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[0];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeMode());
         }
         else if (SceneManager.GetActiveScene().name.Equals("AdventureLevel"))
         {
+            if (audioSource.clip != bgms[0])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[0];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeAdventureLevel());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
+            if (audioSource.clip != bgms[1])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[1];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeTutorial());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
         {
+            if (audioSource.clip != bgms[1])
+            {
+                audioSource.Stop();
+                audioSource.clip = bgms[1];
+                audioSource.Play();
+            }
             StartCoroutine(InitializeAdventure());
         }
     }
