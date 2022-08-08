@@ -2001,7 +2001,12 @@ public class EditorManager : MonoBehaviour
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
                 // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
-                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
+                string truncated = mapName;
+                if (truncated.Length > editorMapNameInputs[0].characterLimit)
+                {
+                    truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
+                }
+                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + truncated + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
             {
@@ -2072,8 +2077,13 @@ public class EditorManager : MonoBehaviour
             fs.Close();
         }
 
-        //Debug.Log("Saved as " + mapName + "!");
-        statusUI.SetStatusMessage("You're done!\nSaved as " + mapName + "!");
+        string truncated = mapName;
+        if (truncated.Length > editorMapNameInputs[0].characterLimit)
+        {
+            truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
+        }
+        //Debug.Log("Saved as " + truncated + "!");
+        statusUI.SetStatusMessage("You're done!\nSaved as " + truncated + "!");
 
         dirtyBit = false;
         hasSavedOnce = true;
