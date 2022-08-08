@@ -1516,7 +1516,7 @@ public class EditorManager : MonoBehaviour
             }
         }
 
-        editorOpenScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
+        editorOpenScrollbar.numberOfSteps = Mathf.Max(1, length - 4);
     }
 
     public void EditOpenItemSelect(OpenSaveScrollItem caller)
@@ -1777,7 +1777,7 @@ public class EditorManager : MonoBehaviour
             }
         }
 
-        editorSaveScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
+        editorSaveScrollbar.numberOfSteps = Mathf.Max(1, length - 2);
     }
 
     public void EditSaveItemSelect(OpenSaveScrollItem caller)
