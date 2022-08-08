@@ -56,9 +56,11 @@ public class EditorManager : MonoBehaviour
     public GameObject openScrollItemPrefab;
     public GameObject editorOpenScrollContent;
     public Scrollbar editorOpenScrollbar;
+    public GameObject editorOpenScrollEmptyText;
     public GameObject saveScrollItemPrefab;
     public GameObject editorSaveScrollContent;
     public Scrollbar editorSaveScrollbar;
+    public GameObject editorSaveScrollEmptyText;
     public TimerUI timerUI;
     public Slider editorTimerSlider;
     public Image editorTimerLabel10;
@@ -1526,6 +1528,7 @@ public class EditorManager : MonoBehaviour
         string[] dirs = null;
         int index = 0;
         int length = 0;
+        bool isRoot = true;
         try
         {
             files = Directory.GetFiles(openPath, "*.txt");
@@ -1540,6 +1543,7 @@ public class EditorManager : MonoBehaviour
 
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
+            isRoot = false;
             length++;
         }
 
@@ -1606,7 +1610,22 @@ public class EditorManager : MonoBehaviour
             }
         }
 
-        editorOpenScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
+        editorOpenScrollbar.numberOfSteps = Mathf.Max(1, length - 4);
+
+        if (length == 0)
+        {
+            editorOpenScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, 0f, 0f);
+            editorOpenScrollEmptyText.SetActive(true);
+        }
+        else if (!isRoot && length == 1)
+        {
+            editorOpenScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, -42f, 0f);
+            editorOpenScrollEmptyText.SetActive(true);
+        }
+        else
+        {
+            editorOpenScrollEmptyText.SetActive(false);
+        }
     }
 
     public void EditOpenItemSelect(OpenSaveScrollItem caller)
@@ -1786,6 +1805,7 @@ public class EditorManager : MonoBehaviour
         string[] dirs = null;
         int index = 0;
         int length = 0;
+        bool isRoot = true;
         try
         {
             files = Directory.GetFiles(savePath, "*.txt");
@@ -1800,6 +1820,7 @@ public class EditorManager : MonoBehaviour
 
         if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
+            isRoot = false;
             length++;
         }
 
@@ -1867,7 +1888,22 @@ public class EditorManager : MonoBehaviour
             }
         }
 
-        editorSaveScrollbar.numberOfSteps = Mathf.Max(0, length - 5);
+        editorSaveScrollbar.numberOfSteps = Mathf.Max(1, length - 2);
+
+        if (length == 0)
+        {
+            editorSaveScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, 0f, 0f);
+            editorSaveScrollEmptyText.SetActive(true);
+        }
+        else if (!isRoot && length == 1)
+        {
+            editorSaveScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, -42f, 0f);
+            editorSaveScrollEmptyText.SetActive(true);
+        }
+        else
+        {
+            editorSaveScrollEmptyText.SetActive(false);
+        }
     }
 
     public void EditSaveItemSelect(OpenSaveScrollItem caller)
@@ -2055,7 +2091,12 @@ public class EditorManager : MonoBehaviour
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
                 // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
-                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
+                string truncated = mapName;
+                if (truncated.Length > editorMapNameInputs[0].characterLimit)
+                {
+                    truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
+                }
+                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + truncated + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
             {
@@ -2126,8 +2167,13 @@ public class EditorManager : MonoBehaviour
             fs.Close();
         }
 
-        //Debug.Log("Saved as " + mapName + "!");
-        statusUI.SetStatusMessage("You're done!\nSaved as " + mapName + "!");
+        string truncated = mapName;
+        if (truncated.Length > editorMapNameInputs[0].characterLimit)
+        {
+            truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
+        }
+        //Debug.Log("Saved as " + truncated + "!");
+        statusUI.SetStatusMessage("You're done!\nSaved as " + truncated + "!");
 
         dirtyBit = false;
         hasSavedOnce = true;
