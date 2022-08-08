@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -13,7 +13,7 @@ using UnityEngine.Android;
 
 public class EditorManager : MonoBehaviour
 {
-    public enum EditMode { None = 0, Wall = 1, Exit = 2, RemoveWall = 3, Ball = 4, Iron = 5, Fire = 6, RemoveObject = 7, Shutter = 8 }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public Camera mainCamera;
@@ -390,6 +390,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -420,6 +426,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add vertical wall at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -430,6 +442,82 @@ public class EditorManager : MonoBehaviour
                         dirtyBit = true;
                     }
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                    hasChanged = true;
+                }
+                break;
+#endregion
+            case EditMode.Shutter:
+#region Shutter
+                if ((Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) % 2 == 0)
+                {
+                    // Horizontal shutter
+                    a = (Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) / 2;
+                    b = (Mathf.FloorToInt(x + y) + Mathf.FloorToInt(y - x)) / 2;
+
+                    if (a < 1 || a > sizeX || b < 1 || b > sizeY - 1)
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+
+                    if (verbose) Debug.Log("Add horizontal shutter at (" + a + ", " + b + ")");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                    }
+                    walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                    hasChanged = true;
+                }
+                else
+                {
+                    // Vertical shutter
+                    a = (Mathf.FloorToInt(x + y) - Mathf.CeilToInt(y - x)) / 2;
+                    b = (Mathf.FloorToInt(x + y) + Mathf.CeilToInt(y - x)) / 2;
+
+                    if (a < 1 || a > sizeX - 1 || b < 1 || b > sizeY)
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter position at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+                    if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        break;
+                    }
+
+                    if (verbose) Debug.Log("Add vertical shutter at (" + a + ", " + b + ")");
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                    }
+                    walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
                     hasChanged = true;
                 }
                 break;
@@ -724,7 +812,7 @@ public class EditorManager : MonoBehaviour
 #region Remove wall
                 if (x >= 0.5f && x < sizeX + 0.5f && y >= 0.5f && y < sizeY + 0.5f && (Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) % 2 == 0)
                 {
-                    // Remove horizontal wall or exit
+                    // Remove horizontal wall or exit or shutter
                     a = (Mathf.FloorToInt(x + y) - Mathf.FloorToInt(y - x)) / 2;
                     b = (Mathf.FloorToInt(x + y) + Mathf.FloorToInt(y - x)) / 2;
 
@@ -735,26 +823,27 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)) &&
-                        !walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
+                        !walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)) &&
+                        !walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or shutters or exits there.", 1f);
                         break;
                     }
 
-                    if (verbose) Debug.Log("Remove horizontal wall or exit at (" + a + ", " + b + ")");
+                    if (verbose) Debug.Log("Remove horizontal wall or shutter or exit at (" + a + ", " + b + ")");
                     //if (commitAction &&
                     //    !walls.Exists((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b))
                     //    Debug.LogError("Editor invalid: null in Removing horizontal wall or exit");
                     if (commitAction)
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) =>
-                            (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b), null));
+                            (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b), null));
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                     }
-                    walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal) && i.x == a && i.y == b));
+                    walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 else if (x >= 0.5f && x < sizeX + 0.5f && y >= 0.5f && y < sizeY + 0.5f)
@@ -770,26 +859,27 @@ public class EditorManager : MonoBehaviour
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)) &&
-                        !walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
+                        !walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)) &&
+                        !walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
-                        if (verbose) Debug.LogWarning("Editor warning: vertical wall or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or exits there.", 1f);
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or shutters or exits there.", 1f);
                         break;
                     }
 
-                    if (verbose) Debug.Log("Remove vertical wall or exit at (" + a + ", " + b + ")");
+                    if (verbose) Debug.Log("Remove vertical wall or shutter or exit at (" + a + ", " + b + ")");
                     //if (commitAction &&
                     //    !walls.Exists((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b))
                     //    Debug.LogError("Editor invalid: null in Removing vertical wall or exit");
                     if (commitAction)
                     {
                         undoStack.Add(new EditActionInfo(walls.Find((i) =>
-                            (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b), null));
+                            (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical || i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b), null));
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                     }
-                    walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical) && i.x == a && i.y == b));
+                    walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical || i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
                     hasChanged = true;
                 }
                 else if (x < 0.5f)
@@ -1095,14 +1185,14 @@ public class EditorManager : MonoBehaviour
             case EditMode.Wall:
                 statusUI.SetStatusMessage("Touch the map to add walls.");
                 break;
+            case EditMode.Shutter:
+                statusUI.SetStatusMessage("Touch the map to add shutters.");
+                break;
             case EditMode.RemoveWall:
-                statusUI.SetStatusMessage("Touch the map to\nremove walls or exits.");
+                statusUI.SetStatusMessage("Touch the map to remove\nwalls or shutters or exits.");
                 break;
             case EditMode.RemoveObject:
                 statusUI.SetStatusMessage("Touch the map to remove objects.");
-                break;
-            case EditMode.Shutter:
-                statusUI.SetStatusMessage("Touch the map to add shutters.");
                 break;
         }
     }
@@ -1136,20 +1226,20 @@ public class EditorManager : MonoBehaviour
         if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Request) return;
         if (dirtyBit)
         {
-            // ê²½ê³  ë©”ì‹œì§€ ë„ìš°ê¸°
+            // °æ°í ¸Ş½ÃÁö ¶ç¿ì±â
             if (phase == (int)EditPhase.Initialize)
             {
-                // ë§µ ë³€ê²½ í›„ 1í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
+                // ¸Ê º¯°æ ÈÄ 1ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
-                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì€ ì™„ë£Œí–ˆì§€ë§Œ ì €ì¥ë˜ì§€ ì•Šì€ ìƒíƒœì—ì„œ 3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
+                // ¸Ê º¯°æ ÈÄ °ËÁõÀº ¿Ï·áÇßÁö¸¸ ÀúÀåµÇÁö ¾ÊÀº »óÅÂ¿¡¼­ 3ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else
             {
-                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì„ í•˜ì§€ ì•Šê³  3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
+                // ¸Ê º¯°æ ÈÄ °ËÁõÀ» ÇÏÁö ¾Ê°í 3ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
         }
@@ -1374,9 +1464,9 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // ditryBit == trueì´ë©´ ë¨¼ì € ê²½ê³  ë©”ì‹œì§€ ë„ìš°ê¸° -> ì•ˆ í•´ë„ ë ë“¯?
-        // UI ë§Œë“¤ê¸°
-        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
+        // ditryBit == trueÀÌ¸é ¸ÕÀú °æ°í ¸Ş½ÃÁö ¶ç¿ì±â -> ¾È ÇØµµ µÉµí?
+        // UI ¸¸µé±â
+        // Maps Æú´õÀÇ ¸ğµç ¸ÊÀ» ºÒ·¯¿Í¼­ ¸ñ·Ï¿¡ ¶ç¿öÁÖ±â
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -1644,8 +1734,8 @@ public class EditorManager : MonoBehaviour
         if (solution == null || solution == "" || !dirtyBit ||
             mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
 
-        // UI ë§Œë“¤ê¸°
-        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
+        // UI ¸¸µé±â
+        // Maps Æú´õÀÇ ¸ğµç ¸ÊÀ» ºÒ·¯¿Í¼­ ¸ñ·Ï¿¡ ¶ç¿öÁÖ±â
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -1964,7 +2054,7 @@ public class EditorManager : MonoBehaviour
         {
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
-                // ê°™ì€ ì´ë¦„ì˜ íŒŒì¼ì´ ìˆëŠ”ë° ê·¸ë˜ë„ ì €ì¥í•  ê²ƒì¸ì§€ ë©”ì‹œì§€ë¡œ ë¬¼ì–´ë³´ê¸°
+                // °°Àº ÀÌ¸§ÀÇ ÆÄÀÏÀÌ ÀÖ´Âµ¥ ±×·¡µµ ÀúÀåÇÒ °ÍÀÎÁö ¸Ş½ÃÁö·Î ¹°¾îº¸±â
                 messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + mapName + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
@@ -2051,7 +2141,7 @@ public class EditorManager : MonoBehaviour
         switch (editPhase)
         {
             case EditPhase.Initialize:
-                // TODO ì „í™˜ ì• ë‹ˆë©”ì´ì…˜
+                // TODO ÀüÈ¯ ¾Ö´Ï¸ŞÀÌ¼Ç
                 editorMapNameInputs[0].interactable = true;
                 editorSizeXDropdowns[0].interactable = true;
                 editorSizeYDropdowns[0].interactable = true;
@@ -2229,7 +2319,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
+#pragma warning disable CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
     public void EditUndo()
     {
         if (undoStack.Count == 0) return;
@@ -2270,7 +2360,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: a wall or an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing("Undo: a wall or a shutter or an exit", 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2342,9 +2432,9 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
+#pragma warning restore CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
 
-#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
+#pragma warning disable CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
     public void EditRedo()
     {
         if (redoStack.Count == 0) return;
@@ -2385,7 +2475,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: a wall or an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing("Redo: a wall or a shutter or an exit", 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2455,7 +2545,7 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
+#pragma warning restore CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
 
     public void EditTimer()
     {
@@ -2574,8 +2664,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MapName
         /// </summary>
-        /// <param name="oldMapName">ì—†ìœ¼ë©´ ""</param>
-        /// <param name="newMapName">ì—†ìœ¼ë©´ ""</param>
+        /// <param name="oldMapName">¾øÀ¸¸é ""</param>
+        /// <param name="newMapName">¾øÀ¸¸é ""</param>
         public EditActionInfo(string oldMapName, string newMapName)
         {
             type = Type.MapName;
@@ -2586,7 +2676,7 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: SizeX, SizeY
         /// </summary>
-        /// <param name="isX">sizeX ë³€ê²½ ì‹œ true, sizeY ë³€ê²½ ì‹œ false</param>
+        /// <param name="isX">sizeX º¯°æ ½Ã true, sizeY º¯°æ ½Ã false</param>
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
@@ -2611,8 +2701,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Wall
         /// </summary>
-        /// <param name="oldWallInfo">ì—†ìœ¼ë©´ null</param>
-        /// <param name="newWallInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="oldWallInfo">¾øÀ¸¸é null</param>
+        /// <param name="newWallInfo">¾øÀ¸¸é null</param>
         public EditActionInfo(WallInfo oldWallInfo, WallInfo newWallInfo)
         {
             type = Type.Wall;
@@ -2623,8 +2713,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Object
         /// </summary>
-        /// <param name="oldObjectInfo">ì—†ìœ¼ë©´ null</param>
-        /// <param name="newObjectInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="oldObjectInfo">¾øÀ¸¸é null</param>
+        /// <param name="newObjectInfo">¾øÀ¸¸é null</param>
         public EditActionInfo(ObjectInfo oldObjectInfo, ObjectInfo newObjectInfo)
         {
             type = Type.Object;
@@ -2635,8 +2725,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MassRemoval (Reset, New)
         /// </summary>
-        /// <param name="oldRemovedWalls">ì—†ìœ¼ë©´ null</param>
-        /// <param name="oldRemovedObjects">ì—†ìœ¼ë©´ null</param>
+        /// <param name="oldRemovedWalls">¾øÀ¸¸é null</param>
+        /// <param name="oldRemovedObjects">¾øÀ¸¸é null</param>
         public EditActionInfo(List<WallInfo> oldRemovedWalls, List<ObjectInfo> oldRemovedObjects)
         {
             type = Type.MassRemoval;
