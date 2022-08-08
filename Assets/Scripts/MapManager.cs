@@ -320,7 +320,7 @@ public class MapManager : MonoBehaviour
         } // 여기까지는 외벽을 일반 벽으로, 안쪽에 있는 벽은 일단 없도록 하는 코드임.
 
         bool hasExit = false;
-
+    
         foreach (WallInfo wi in walls)
         {
             switch (wi.type)
