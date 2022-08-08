@@ -809,17 +809,20 @@ public class MapManager : MonoBehaviour
             if (!File.Exists(path))
             {
                 Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(path) + "\"");
+                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
                 return OpenFileFlag.Failed;
             }
             else if (Path.GetExtension(path) != ".txt")
             {
                 Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(path) + "\" is not a .txt file");
+                statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
                 return OpenFileFlag.Failed;
             }
         }
         catch (Exception)
         {
             Debug.LogError("File invalid: exception while checking a file");
+            statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
             throw;
         }
 

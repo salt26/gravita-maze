@@ -23300,6 +23300,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MessageUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1167235146622771691, guid: d1ad3c89387d28e488ea573cdf2b5245,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1ad3c89387d28e488ea573cdf2b5245, type: 3}
 --- !u!1001 &7497914684433071669

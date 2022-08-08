@@ -829,7 +829,7 @@ public class EditorManager : MonoBehaviour
                         !walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or shutters or exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or\nshutters or exits there.", 1f);
                         break;
                     }
 
@@ -865,7 +865,7 @@ public class EditorManager : MonoBehaviour
                         !walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or shutters or exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or\nshutters or exits there.", 1f);
                         break;
                     }
 
@@ -1743,7 +1743,6 @@ public class EditorManager : MonoBehaviour
                 }
             case MapManager.OpenFileFlag.Failed:
             default:
-                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
                 return false;
         }
     }
@@ -2144,6 +2143,12 @@ public class EditorManager : MonoBehaviour
                     case WallInfo.Type.Vertical:
                         sw.WriteLine("| " + w.x + " " + w.y);
                         break;
+                    case WallInfo.Type.HorizontalShutter:
+                        sw.WriteLine(": - " + w.x + " " + w.y);
+                        break;
+                    case WallInfo.Type.VerticalShutter:
+                        sw.WriteLine(": | " + w.x + " " + w.y);
+                        break;
                     case WallInfo.Type.ExitHorizontal:
                         sw.WriteLine("$ - " + w.x + " " + w.y);
                         break;
@@ -2406,7 +2411,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: a wall or a shutter or an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing("Undo: a wall or a shutter\nor an exit", 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2521,7 +2526,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: a wall or a shutter or an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing("Redo: a wall or a shutter\nor an exit", 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
