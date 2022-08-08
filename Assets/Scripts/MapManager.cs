@@ -12,8 +12,11 @@ public class MapManager : MonoBehaviour
 {
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
         Adventure = 7, Tutorial = 8, Custom = 9, Survival = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
-    public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64, 
-        Adventure = 128, Tutorial = 256, Custom = 512, Survival = 1024, AdvEasy = 2048, AdvNormal = 4096, AdvHard = 8192, AdvInsane = 16384 }
+    public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
+        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Survival = 59049, AdvEasy = 177147, 
+        AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969 }
+    // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
+    // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
     public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
     public enum RotationStatus { Original = 0, Clockwise90 = 1, Clockwise180 = 2, Clockwise270 = 3,
         UpsideDown = 4, UpsideDown90 = 5, UpsideDown180 = 6, UpsideDown270 = 7 }
@@ -190,7 +193,7 @@ public class MapManager : MonoBehaviour
             {
                 timeoutPanel.SetActive(true);
                 if (afterGravity.GetInvocationList().Length > 0)
-                    afterGravity(Flag.TimeOver);
+                    afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
                 Debug.LogWarning("Map warning: Time over");
             }
         }
@@ -263,33 +266,34 @@ public class MapManager : MonoBehaviour
             Rotation = RotationStatus.Original;
         }
 
-        int [,] mapCoord = new int[SizeX, SizeY];
-        initialMovableCoord = new Movable[SizeX, SizeY];
+        int [,] mapCoord = new int[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
+        initialMovableCoord = new Movable[SizeX, SizeY]; // Movable의 좌표가 될 예정. 2차원 배열의 측정 위치에다가 Movable의 오브젝트를 넣는 다는 소리인가?
 
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
 
-        bool[,] horizontalWalls = new bool[SizeX, SizeY + 1];
-        bool[,] verticalWalls = new bool[SizeX + 1, SizeY];
+        int[,] horizontalWalls = new int[SizeX, SizeY + 1];
+        int[,] verticalWalls = new int[SizeX + 1, SizeY];
+        // 벽이 없는 경우: 0, 평범한 벽이 있는 경우: 1, Shutter가 있는 경우: 2
 
         for (int i = 0; i < sizeX; i++)
         {
-            if (!RotatedHasTransposed())
+            if (!RotatedHasTransposed()) // original, 즉 가로 세로 길이는 유지된 상태.
             {
-                horizontalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
-                horizontalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                horizontalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = 1; // 맨 위, 맨 아래 외벽은 일반 벽으로.
+                horizontalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = 1;
                 for (int j = 1; j < sizeY; j++)
                 {
-                    horizontalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                    horizontalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = 0; // 맨 위, 맨 아래가 아닌 곳은 일단 벽이 없음.
                 }
             }
             else
             {
-                verticalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
-                verticalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                verticalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = 1; // 가로세로가 바뀌는 회전이 있을 때: 맨 왼쪽, 맨 오른쪽 외벽은 일반 벽
+                verticalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = 1;
                 for (int j = 1; j < sizeY; j++)
                 {
-                    verticalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                    verticalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = 0; // 맨 왼쪽, 맨 오른쪽이 아닌 곳은 일단 벽이 없음.
                 }
             }
         }
@@ -297,23 +301,23 @@ public class MapManager : MonoBehaviour
         {
             if (!RotatedHasTransposed())
             {
-                verticalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
-                verticalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                verticalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = 1;
+                verticalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = 1;
                 for (int i = 1; i < sizeX; i++)
                 {
-                    verticalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                    verticalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = 0;
                 }
             }
             else
             {
-                horizontalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
-                horizontalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                horizontalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = 1;
+                horizontalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = 1;
                 for (int i = 1; i < sizeX; i++)
                 {
-                    horizontalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                    horizontalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = 0;
                 }
             }
-        }
+        } // 여기까지는 외벽을 일반 벽으로, 안쪽에 있는 벽은 일단 없도록 하는 코드임.
 
         bool hasExit = false;
 
@@ -335,14 +339,14 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 0;
                         ExitX = RotatedX(wi.x, wi.y, true, true, true);
                         if (RotatedY(wi.x, wi.y, true, true, true) == 0) ExitY = 0;
                         else ExitY = SizeY + 1;
                     }
                     else
                     {
-                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 0;
                         if (RotatedX(wi.x, wi.y, true, true, true) == 0) ExitX = 0;
                         else ExitX = SizeX + 1;
                         ExitY = RotatedY(wi.x, wi.y, true, true, true);
@@ -363,34 +367,52 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
                         if (RotatedX(wi.x, wi.y, true, false, true) == 0) ExitX = 0;
                         else ExitX = SizeX + 1;
                         ExitY = RotatedY(wi.x, wi.y, true, false, true);
                     }
                     else
                     {
-                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
                         ExitX = RotatedX(wi.x, wi.y, true, false, true);
                         if (RotatedY(wi.x, wi.y, true, false, true) == 0) ExitY = 0;
                         else ExitY = SizeY + 1;
                     }
                     hasExit = true;
                     break;
-                case WallInfo.Type.Horizontal:
+                    // 여기 위까지는 Exit을 다룰 때 벽을 어떻게 할 지에 관한 코드니까 Shutter와는 관계 없는 듯.
+                    /* 여기부터는 평범한 벽. 여기에는 Shutter가 들어갈 수 있다.
+                     */
+                case WallInfo.Type.Horizontal: 
                     if (wi.x < 1 || wi.x > sizeX || wi.y < 1 || wi.y > sizeY - 1)
                     {
                         Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-
                     if (!RotatedHasTransposed())
                     {
-                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                        if (horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            return;
+                        }
+                        else
+                        { 
+                            horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 1; 
+                        }
                     }
                     else
                     {
-                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                        if (verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            return;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 1;
+                        }
                     }
                     break;
                 case WallInfo.Type.Vertical:
@@ -402,11 +424,84 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                        if (verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else 
+                        {
+                            verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 1;
+                        }
                     }
                     else
                     {
-                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                        if (horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 1;
+                        }
+                    }
+                    break;
+                case WallInfo.Type.HorizontalShutter:
+                    if (wi.x < 1 || wi.x > sizeX || wi.y < 1 || wi.y > sizeY - 1)
+                    {
+                        Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
+                        return;
+                    }
+                    if (!RotatedHasTransposed())
+                    {
+                        if (horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        { 
+                            horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 2; 
+                        }
+                    }
+                    else
+                    {
+                        if (verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 2;
+                        }
+                    }
+                    break;
+                case WallInfo.Type.VerticalShutter:
+                    if (wi.x < 1 || wi.x > sizeX - 1 || wi.y < 1 || wi.y > sizeY)
+                    {
+                        Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
+                        return;
+                    }
+
+                    if (!RotatedHasTransposed())
+                    {
+                        if (verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 2;
+                        }
+                    }
+                    else
+                    {
+                        if (horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 2;
+                        }
                     }
                     break;
             }
@@ -425,46 +520,62 @@ public class MapManager : MonoBehaviour
                 if (i == 0)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[24]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[16]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[89]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[81]);
                 }
                 else if (i == SizeX + 1)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[25]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[17]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[90]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[82]);
                 }
                 else if (j == SizeY + 1)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[26]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[18]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[91]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[83]);
                 }
                 else if (j == 0)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[27]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[19]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[92]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[84]);
                 }
+                // 여기 위에 있는 if문은 겉테두리 벽을 두르는 부분. 여기에는 Shutter가 존재하지 않는다.
+                // 여기 아래부터는 평범한 벽을 두르는 부분. 상황에 따라 Shutter가 존재할 수 있다.
                 else
                 {
-                    if (horizontalWalls[i - 1, j - 1])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 8
-                    if (horizontalWalls[i - 1, j])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 4
-                    if (verticalWalls[i - 1, j - 1])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 2
-                    if (verticalWalls[i, j - 1])
+                    if (horizontalWalls[i - 1, j] == 1)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
+                    else if (horizontalWalls[i - 1, j] == 2)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
+                    if (horizontalWalls[i - 1, j - 1] == 1)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
+                    else if (horizontalWalls[i - 1, j - 1] == 2)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
+                    if (verticalWalls[i - 1, j - 1] == 1)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
+                    else if (verticalWalls[i - 1, j - 1] == 2)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
+                    if (verticalWalls[i, j - 1] == 1)
                         mapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
-                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[mapCoord[i - 1, j - 1] % 16]);
+                    else if (verticalWalls[i, j - 1] == 2)
+                        mapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
+                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[mapCoord[i - 1, j - 1] % 81]);
                 }
             }
         }
-        tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[20]);
-        tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[21]);
-        tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[22]);
-        tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[23]);
+        tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[85]);
+        tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[86]);
+        tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[87]);
+        tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[88]);
 
+        /* MapManager의 인스펙터에 있는 Tiles의 인덱스 번호를 바꿈. 벽과 Shutter 오브젝트를 0~80에 배치하고, 꼭짓점, Exit, 외벽 오브젝트 등등도
+        인덱스를 바꿔 줘야 한다.,(81 이상 숫자로)
+        일단 기존의 16, 17, 18, 19 (순서대로 오른쪽, 왼쪽, 아래, 위 방향 외벽) 은 81, 82, 83, 84로
+             기존의 20, 21, 22, 23 (순서대로 1시, 5시, 11시, 7시 방향 꼭짓점) 은 85, 86, 87, 88로 
+             기존의 24, 25, 26, 27 (순서대로 왼쪽, 오른쪽, 위, 아래 방향 화살표) 은 89, 90, 91, 92로
+        여기 코드에서는 고쳤으나 MapManager의 인스펙터에서도 제 위치로 Tile들을 옮겨야 함. */
         bool hasBall = false;
         if (movables != null)
         {
@@ -505,7 +616,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -538,7 +649,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -549,37 +660,37 @@ public class MapManager : MonoBehaviour
                 switch (f.type)
                 {
                     case FixedObject.Type.Fire:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
                         break;
                     case FixedObject.Type.QuitGame:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
                         break;
                     case FixedObject.Type.MapEditor:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 729
                         break;
                     case FixedObject.Type.Adventure:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 128
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 2187
                         break;
                     case FixedObject.Type.Tutorial:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 256
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 6561
                         break;
                     case FixedObject.Type.Custom:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 512
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 19683
                         break;
                     case FixedObject.Type.Survival:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 1024
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 59049
                         break;
                     case FixedObject.Type.AdvEasy:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 2048
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 177147
                         break;
                     case FixedObject.Type.AdvNormal:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 4096
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 531441
                         break;
                     case FixedObject.Type.AdvHard:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 8192
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 1594323
                         break;
                     case FixedObject.Type.AdvInsane:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 16384
+                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 4782969
                         break;
                 }
             }
@@ -593,7 +704,7 @@ public class MapManager : MonoBehaviour
                 return;
             }
             if (initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] != null ||
-                mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 16)
+                mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 81)
             {
                 Debug.LogError("Map invalid: objects overlapped at (" + oi.x + ", " + oi.y + ")");
                 return;
@@ -625,15 +736,15 @@ public class MapManager : MonoBehaviour
                     g = Instantiate(firePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                     g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 16
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
                     break;
                 /*
                 // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
                 case ObjectInfo.Type.QuitGame:
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 32
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
                     break;
                 case ObjectInfo.Type.MapEditor:
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 64
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
                     break;
                 */
             }
@@ -1903,7 +2014,11 @@ public class MapManager : MonoBehaviour
 
     private bool CheckTileFlag(int tile, TileFlag flag)
     {
-        return tile % (2 * (int)flag) / (int)flag == 1;
+        if ((int)flag % 2 == 0)
+        {
+            return tile % ((3 / 2) * (int)flag) / (int)flag == 1;
+        }
+        return tile % (3  * (int)flag) / (int)flag == 1;
     }
 
     private void PrintMapCoord()
@@ -2009,6 +2124,8 @@ public class MapManager : MonoBehaviour
 
     private int RotatedX(int originalX, int originalY, bool isWall = false, bool isOriginalHorizontal = false, bool isExit = false)
     {
+        
+
         if (SizeX <= 0 || SizeY <= 0) return originalX;
 
         int offsetVertical = -1;
