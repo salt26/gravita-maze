@@ -13,7 +13,7 @@ using UnityEngine.Android;
 
 public class EditorManager : MonoBehaviour
 {
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject }
+    public enum EditMode { None = 0, Wall = 1, Exit = 2, RemoveWall = 3, Ball = 4, Iron = 5, Fire = 6, RemoveObject = 7, Shutter = 8 }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public Camera mainCamera;
@@ -1100,6 +1100,9 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditMode.RemoveObject:
                 statusUI.SetStatusMessage("Touch the map to remove objects.");
+                break;
+            case EditMode.Shutter:
+                statusUI.SetStatusMessage("Touch the map to add shutters.");
                 break;
         }
     }
