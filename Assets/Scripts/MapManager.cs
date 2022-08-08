@@ -448,14 +448,14 @@ public class MapManager : MonoBehaviour
                 case WallInfo.Type.HorizontalShutter:
                     if (wi.x < 1 || wi.x > sizeX || wi.y < 1 || wi.y > sizeY - 1)
                     {
-                        Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
+                        Debug.LogError("Map invalid: shutter position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
                     if (!RotatedHasTransposed())
                     {
                         if (horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
                         {
-                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
                         }
                         else
                         { 
@@ -466,7 +466,7 @@ public class MapManager : MonoBehaviour
                     {
                         if (verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
                         {
-                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
                         }
                         else
                         {
@@ -477,7 +477,7 @@ public class MapManager : MonoBehaviour
                 case WallInfo.Type.VerticalShutter:
                     if (wi.x < 1 || wi.x > sizeX - 1 || wi.y < 1 || wi.y > sizeY)
                     {
-                        Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
+                        Debug.LogError("Map invalid: shutter position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
 
@@ -485,7 +485,7 @@ public class MapManager : MonoBehaviour
                     {
                         if (verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
                         {
-                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
                         }
                         else
                         {
@@ -496,7 +496,7 @@ public class MapManager : MonoBehaviour
                     {
                         if (horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
                         {
-                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
                         }
                         else
                         {
