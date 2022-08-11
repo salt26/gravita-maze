@@ -47,6 +47,8 @@ public class MapManager : MonoBehaviour
     public Map map;
     public Movable[,] initialMovableCoord;
     public Movable[,] currentMovableCoord;
+    public int[,] initialMapCoord;
+    public int[,] currentMapCoord;
 
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
@@ -266,7 +268,7 @@ public class MapManager : MonoBehaviour
             Rotation = RotationStatus.Original;
         }
 
-        int [,] mapCoord = new int[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
+        initialMapCoord = new int[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
         initialMovableCoord = new Movable[SizeX, SizeY]; // Movable의 좌표가 될 예정. 2차원 배열의 측정 위치에다가 Movable의 오브젝트를 넣는 다는 소리인가?
 
         tilemap.ClearAllTiles();
@@ -546,22 +548,22 @@ public class MapManager : MonoBehaviour
                 else
                 {
                     if (horizontalWalls[i - 1, j] == 1)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
                     else if (horizontalWalls[i - 1, j] == 2)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
                     if (horizontalWalls[i - 1, j - 1] == 1)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
                     else if (horizontalWalls[i - 1, j - 1] == 2)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
                     if (verticalWalls[i - 1, j - 1] == 1)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
                     else if (verticalWalls[i - 1, j - 1] == 2)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
                     if (verticalWalls[i, j - 1] == 1)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
                     else if (verticalWalls[i, j - 1] == 2)
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
-                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[mapCoord[i - 1, j - 1] % 81]);
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
+                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[initialMapCoord[i - 1, j - 1] % 81]);
                 }
             }
         }
@@ -616,7 +618,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 81)
+                if (initialMovableCoord[x - 1, y - 1] != null || initialMapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -649,7 +651,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 81)
+                if (initialMovableCoord[x - 1, y - 1] != null || initialMapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -660,37 +662,37 @@ public class MapManager : MonoBehaviour
                 switch (f.type)
                 {
                     case FixedObject.Type.Fire:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
                         break;
                     case FixedObject.Type.QuitGame:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
                         break;
                     case FixedObject.Type.MapEditor:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 729
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 729
                         break;
                     case FixedObject.Type.Adventure:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 2187
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 2187
                         break;
                     case FixedObject.Type.Tutorial:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 6561
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 6561
                         break;
                     case FixedObject.Type.Custom:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 19683
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 19683
                         break;
                     case FixedObject.Type.Survival:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 59049
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 59049
                         break;
                     case FixedObject.Type.AdvEasy:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 177147
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 177147
                         break;
                     case FixedObject.Type.AdvNormal:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 531441
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 531441
                         break;
                     case FixedObject.Type.AdvHard:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 1594323
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 1594323
                         break;
                     case FixedObject.Type.AdvInsane:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 4782969
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 4782969
                         break;
                 }
             }
@@ -704,7 +706,7 @@ public class MapManager : MonoBehaviour
                 return;
             }
             if (initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] != null ||
-                mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 81)
+                initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 81)
             {
                 Debug.LogError("Map invalid: objects overlapped at (" + oi.x + ", " + oi.y + ")");
                 return;
@@ -736,7 +738,7 @@ public class MapManager : MonoBehaviour
                     g = Instantiate(firePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                     g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
+                    initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
                     break;
                 /*
                 // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
@@ -756,14 +758,16 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        map = new Map(SizeX, SizeY, mapCoord, ExitX, ExitY);
+
+        currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
         if ((SceneManager.GetActiveScene().name != "Editor" || isValidation) && !Simulate(map, initialMovableCoord, RotatedSolution(solution)))
         {
             Debug.LogError("Map invalid: impossible to clear");
             return;
         }
-
-        currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
         mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f - 0.25f, -10f);
         if (Screen.height * 9f / Screen.width <= 18)
@@ -954,6 +958,28 @@ public class MapManager : MonoBehaviour
                     }
                     tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
                     break;
+                case ":":
+                    if (token.Length != 4)
+                    {
+                        Debug.LogError("File Invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    if (token[1].Equals("-"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else if (token[1].Equals("|"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else
+                    {
+                        Debug.LogError("File invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    break;
                 case "t":
                     if (token.Length != 2)
                     {
@@ -1121,6 +1147,14 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < SizeX; i++)
+        {
+            for (int j = 0; j < SizeY; j++)
+            {
+                tilemap.SetTile(new Vector3Int(i, j, 0), tiles[initialMapCoord[i, j] % 81]);
+            }
+        }
+
         if (traces != null)
         {
             foreach (GameObject g in traces)
@@ -1131,6 +1165,9 @@ public class MapManager : MonoBehaviour
         traces = new List<GameObject>();
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
 
         gravityBall.anchoredPosition = new Vector3(0f, 0f);
         gravityUpButton.interactable = true;
@@ -1255,7 +1292,7 @@ public class MapManager : MonoBehaviour
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // j++
-#region Up
+                            #region Up
                             for (int k = j; k <= SizeY; k++)
                             {
                                 if (k == SizeY)
@@ -1377,7 +1414,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(map.mapCoord[i, k], TileFlag.UpShutter) && mutableMovableCoord[i, k + 1] == null && k <= SizeY - 2)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        map.mapCoord[i, k] -= (int)TileFlag.UpShutter / 2;
+                                        map.mapCoord[i, k + 1] -= (int)TileFlag.DownShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(i, k, 0), tiles[map.mapCoord[i, k] % 81]);
+                                            tilemap.SetTile(new Vector3Int(i, k + 1, 0), tiles[map.mapCoord[i, k + 1] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1543,7 +1592,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(map.mapCoord[i, k], TileFlag.DownShutter) && mutableMovableCoord[i, k - 1] == null && k >= 1)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        map.mapCoord[i, k] -= (int)TileFlag.DownShutter / 2;
+                                        map.mapCoord[i, k - 1] -= (int)TileFlag.UpShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(i, k, 0), tiles[map.mapCoord[i, k] % 81]);
+                                            tilemap.SetTile(new Vector3Int(i, k - 1, 0), tiles[map.mapCoord[i, k - 1] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1709,7 +1770,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(map.mapCoord[k, j], TileFlag.LeftShutter) && mutableMovableCoord[k - 1, j] == null && k >= 1)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        map.mapCoord[k, j] -= (int)TileFlag.LeftShutter / 2;
+                                        map.mapCoord[k - 1, j] -= (int)TileFlag.RightShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(k, j, 0), tiles[map.mapCoord[k, j] % 81]);
+                                            tilemap.SetTile(new Vector3Int(k - 1, j, 0), tiles[map.mapCoord[k - 1, j] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1971,7 +2044,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(map.mapCoord[k, j], TileFlag.RightShutter) && mutableMovableCoord[k + 1, j] == null && k <= SizeX - 2)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        map.mapCoord[k, j] -= (int)TileFlag.RightShutter / 2;
+                                        map.mapCoord[k + 1, j] -= (int)TileFlag.LeftShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(k, j, 0), tiles[map.mapCoord[k, j] % 81]);
+                                            tilemap.SetTile(new Vector3Int(k + 1, j, 0), tiles[map.mapCoord[k + 1, j] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -2019,7 +2104,8 @@ public class MapManager : MonoBehaviour
     {
         if ((int)flag % 2 == 0)
         {
-            return tile % ((3 / 2) * (int)flag) / (int)flag == 1;
+            int div = (int)flag / 2;
+            return tile % (3 * div) / div == 2;
         }
         return tile % (3  * (int)flag) / (int)flag == 1;
     }
