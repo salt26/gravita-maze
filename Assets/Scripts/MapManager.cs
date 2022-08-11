@@ -973,6 +973,12 @@ public class MapManager : MonoBehaviour
                     {
                         tempWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, int.Parse(token[2]), int.Parse(token[3])));
                     }
+                    else
+                    {
+                        Debug.LogError("File invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
                     break;
                 case "t":
                     if (token.Length != 2)
