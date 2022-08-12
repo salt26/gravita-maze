@@ -44,6 +44,11 @@ jobs:
           buildName: GravitaMaze
           versioning: Tag
           chownFilesTo: ${{ steps.runner-info.outputs.uid }}:${{ steps.runner-info.outputs.gid }}
+        run:
+          case ${{ matrix.targetPlatform }} in
+            "StandaloneOSX")
+              chmod 0775 build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS/GravitaMaze;;
+          esac
       - uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
@@ -60,9 +65,7 @@ jobs:
           FILE_NAME="${FILE_PREFIX}.${GITHUB_REF#refs/tags/}"
           case $TARGET_PLATFORM in
             "StandaloneWindows64") FILE_NAME+=".w";;
-            "StandaloneOSX")
-              FILE_NAME+=".m"
-              chmod 0775 ${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS/GravitaMaze;;
+            "StandaloneOSX") FILE_NAME+=".m";;
             "Android") FILE_NAME+=".a";;
           esac
           mv ${{ matrix.targetPlatform }} "${FILE_NAME}"
