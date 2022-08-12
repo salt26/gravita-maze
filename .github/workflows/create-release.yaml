@@ -60,7 +60,9 @@ jobs:
           FILE_NAME="${FILE_PREFIX}.${GITHUB_REF#refs/tags/}"
           case $TARGET_PLATFORM in
             "StandaloneWindows64") FILE_NAME+=".w";;
-            "StandaloneOSX") FILE_NAME+=".m";;
+            "StandaloneOSX")
+              FILE_NAME+=".m"
+              chmod 0775 ${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS/GravitaMaze;;
             "Android") FILE_NAME+=".a";;
           esac
           mv ${{ matrix.targetPlatform }} "${FILE_NAME}"
