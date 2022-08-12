@@ -49,9 +49,9 @@ jobs:
           case ${{ matrix.targetPlatform }} in
             "StandaloneOSX")
               echo "StandaloneOSX";
-              ls --al build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS;
+              ls -al build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS;
               chmod 0775 build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS/GravitaMaze;
-              ls --al build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS;;
+              ls -al build/${{ matrix.targetPlatform }}/GravitaMaze.app/Contents/MacOS;;
           esac
       - uses: actions/upload-artifact@v3
         with:
