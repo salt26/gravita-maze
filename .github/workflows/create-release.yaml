@@ -44,6 +44,7 @@ jobs:
           buildName: GravitaMaze
           versioning: Tag
           chownFilesTo: ${{ steps.runner-info.outputs.uid }}:${{ steps.runner-info.outputs.gid }}
+      - name: Set permission for a macOS build artifact
         run:
           case ${{ matrix.targetPlatform }} in
             "StandaloneOSX")
