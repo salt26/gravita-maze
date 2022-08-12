@@ -1473,9 +1473,9 @@ public class EditorManager : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
         {
-            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
             {
-                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
             }
             if (!Directory.Exists(Path.GetDirectoryName(MapManager.ROOT_PATH)))
             {
@@ -1761,6 +1761,10 @@ public class EditorManager : MonoBehaviour
             if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
             {
                 Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+            }
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
             }
             if (!Directory.Exists(MapManager.ROOT_PATH))
             {
@@ -2078,9 +2082,10 @@ public class EditorManager : MonoBehaviour
                 Directory.CreateDirectory(currentSavePath.TrimEnd('/'));
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Debug.LogError("File invalid: exception while creating a directory");
+            statusUI.SetStatusMessageWithFlashing("Cannot save your map: " + e.Message, 3f);
             isSaving = false;
             throw;
         }
@@ -2102,9 +2107,10 @@ public class EditorManager : MonoBehaviour
                 EditSaveHelper();
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Debug.LogError("File invalid: exception while checking a file");
+            statusUI.SetStatusMessageWithFlashing("Cannot save your map: " + e.Message, 3f);
             isSaving = false;
             throw;
         }
