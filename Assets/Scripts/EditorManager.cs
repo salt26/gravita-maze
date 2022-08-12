@@ -1282,9 +1282,9 @@ public class EditorManager : MonoBehaviour
             removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.x > value);
 
-            tempWalls = walls.FindAll(w => w.type == WallInfo.Type.Vertical && w.x == value);
+            tempWalls = walls.FindAll(w => (w.type == WallInfo.Type.Vertical || w.type == WallInfo.Type.VerticalShutter) && w.x == value);
             removedWalls.AddRange(tempWalls);
-            walls.RemoveAll(w => w.type == WallInfo.Type.Vertical && w.x == value);
+            walls.RemoveAll(w => (w.type == WallInfo.Type.Vertical || w.type == WallInfo.Type.VerticalShutter) && w.x == value);
 
             tempObjects = objects.FindAll(o => o.x > value);
             removedObjects.AddRange(tempObjects);
@@ -1341,9 +1341,9 @@ public class EditorManager : MonoBehaviour
             removedWalls.AddRange(tempWalls);
             walls.RemoveAll(w => w.y > value);
 
-            tempWalls = walls.FindAll(w => w.type == WallInfo.Type.Horizontal && w.y == value);
+            tempWalls = walls.FindAll(w => (w.type == WallInfo.Type.Horizontal || w.type == WallInfo.Type.HorizontalShutter) && w.y == value);
             removedWalls.AddRange(tempWalls);
-            walls.RemoveAll(w => w.type == WallInfo.Type.Horizontal && w.y == value);
+            walls.RemoveAll(w => (w.type == WallInfo.Type.Horizontal || w.type == WallInfo.Type.HorizontalShutter) && w.y == value);
 
             tempObjects = objects.FindAll(o => o.y > value);
             removedObjects.AddRange(tempObjects);
