@@ -27,8 +27,8 @@ public class MapManager : MonoBehaviour
     public const int MAX_SIZE_Y = 9;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-    public const string ROOT_PATH = "/storage/emulated/0/GravitaMaze/";
-    // public static string ROOT_PATH = Application.persistentDataPath.Substring(0, Application.persistentDataPath.IndexOf("Android", StringComparison.Ordinal)) + "/GravitaMaze/";
+    //public const string ROOT_PATH = "/storage/emulated/0/GravitaMaze/";
+    public static string ROOT_PATH = Application.persistentDataPath.Substring(0, Application.persistentDataPath.IndexOf("Android", StringComparison.Ordinal)) + "/GravitaMaze/";
     public static string MAP_ROOT_PATH = ROOT_PATH + "Maps/";
 #else
     public const string MAP_ROOT_PATH = "Maps/";

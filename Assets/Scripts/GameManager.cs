@@ -56,6 +56,10 @@ public class GameManager : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.ExternalStorageWrite);
         }
+        if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+        {
+            Permission.RequestUserPermission(Permission.ExternalStorageRead);
+        }
 #endif
     }
 
