@@ -258,8 +258,9 @@ public class PlayManager : MonoBehaviour
 
     public void TutorialAfterGravity(MapManager.Flag flag)
     {
-        tutorialGuide.SpecificCaseGuide(flag);
-
+        if(tutorialGuide != null){
+            tutorialGuide.SpecificCaseGuide(flag);
+        }
         switch (flag)
         {
             case MapManager.Flag.Continued:

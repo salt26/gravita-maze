@@ -7,10 +7,7 @@ using UnityEngine.EventSystems;
 public class TutorialGuide : MonoBehaviour
 {
     public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
-
-    public GameObject tooltipPrefab;
-    // public GameObject tutorialTip;
-    public string tooltipMessage;
+    public GameObject tutorialTip;
     public string emergencyText;
     public float tooltipWidth;
     public float tooltipHeight;
@@ -23,6 +20,8 @@ public class TutorialGuide : MonoBehaviour
 
     public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
     public List<TutorialTuple> tipKeys;
+
+    public GameObject[] tips;
 
     void Awake()
     {
@@ -66,7 +65,7 @@ public class TutorialGuide : MonoBehaviour
     {
         int posX = tutorialTuple.xIndex;
         int posY = tutorialTuple.yIndex;
-        if (mm.currentMovableCoord[posX, posY] is Ball){
+        if (mm != null || mm.currentMovableCoord[posX, posY] is Ball){
             return true;
         }
         else{
@@ -78,7 +77,7 @@ public class TutorialGuide : MonoBehaviour
     {
         int posX = tutorialTuple.xIndex;
         int posY = tutorialTuple.yIndex;
-        if (mm.currentMovableCoord[posX, posY] is Iron){
+        if (mm != null||mm.currentMovableCoord[posX, posY] is Iron){
             return true;
         }
         else{
@@ -88,26 +87,27 @@ public class TutorialGuide : MonoBehaviour
     
 
     public void showText(string text){
-        CurrentTip = Instantiate(tooltipPrefab).GetComponent<TutorialGuideUI>(); //Vector3 값 어케 하지
+        Debug.Log("Create Tip");
+        CurrentTip = Instantiate(tutorialTip).GetComponent<TutorialGuideUI>(); //Vector3 값 어케 하지
         switch (pivot)
         {
             case Pivot.TopRight:
-                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24), // 실제 적용시 위치 봐가며 수정
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24, 0), // 실제 적용시 위치 봐가며 수정
                     tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
                 break;
             case Pivot.BottomRight:
-                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12),
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12, 0),
                     tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
                 break;
             case Pivot.TopLeft:
-                CurrentTip.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
+                CurrentTip.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24, 0),
                     tooltipWidth, tooltipHeight, (TutorialGuideUI.Pivot)pivot, text);
                 break;
             }
     }
 
-    public void hideText(){
-        Destroy(CurrentTip.gameObject);
+    public void hideText(TutorialGuideUI currentTip){
+        Destroy(currentTip.gameObject);
         CurrentTip = null;
     }
 
@@ -116,7 +116,7 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.Burned:
                 emergencyText = "Your ball burned down! Press the shiny return button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText();
+                    hideText(CurrentTip);
                 }
                 showText(emergencyText);
                 break;
@@ -124,7 +124,7 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.Squashed:
                 emergencyText = "Your ball is crushed by the box! Press the shiny return button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText();
+                    hideText(CurrentTip);
                 }
                 showText(emergencyText);
                 break;
@@ -132,7 +132,7 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.TimeOver:
                 emergencyText = "Unfortunately, all time have passed! Press the shiny return button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText();
+                    hideText(CurrentTip);
                 }
                 showText(emergencyText);
                 break;
@@ -143,12 +143,8 @@ public class TutorialGuide : MonoBehaviour
         }
     }
 
-/*    void Update(){
-        MapManager.Flag flag = mm.flag;
-        
-
-        // 죽으면 나오는 것들 출력하기 (3개)
-        for(int i=0;i <= tipKeys.Count;i++){
+    void Update(){
+        for(int i=0;i < tipKeys.Count;i++){
             int mapNumber = tipKeys[i].tutorialNumber;
             if(pm.EscapedCount + 1 == mapNumber){
                 if(pm.EscapedCount+1 == 6){
@@ -156,10 +152,13 @@ public class TutorialGuide : MonoBehaviour
                     if(isIronThere(tipKeys[i])){
 
                         if(!tipKeys[i].isPassed){
-                            if(CurrentTip != null){
-                                hideText();
+                            tips = GameObject.FindGameObjectsWithTag("Tip");
+                            if(tips.Length > 3){
+                                // Destroy(tips[1]);
                             }
-                            showText(tipDict[tipKeys[i]]);
+                            else if(tips.Length == 0){
+                                showText(tipDict[tipKeys[i]]);
+                            }
                         }
                     }
                     // 이전의 것 다시 안 나오게 하기
@@ -170,18 +169,21 @@ public class TutorialGuide : MonoBehaviour
 
                     if(isBallThere(tipKeys[i])){
                         if(!tipKeys[i].isPassed){
-                            if(CurrentTip != null){
-                                hideText();
+                            tips = GameObject.FindGameObjectsWithTag("Tip");
+                            if(tips.Length > 3){
+                                // Destroy(tips[1]); // 이게 문제....
                             }
-                            showText(tipDict[tipKeys[i]]);
+                            else if(tips.Length == 0){
+                                showText(tipDict[tipKeys[i]]);
+                            }
+
                         }
-                        
                     }
                 }
             }
 
         }
     }
-    */
+    
 }
 

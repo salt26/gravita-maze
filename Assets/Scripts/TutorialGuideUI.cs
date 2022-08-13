@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class TutorialGuideUI : MonoBehaviour
 {
     public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
-    public TutorialGuide tutorialGuide;
 
     RectTransform myTransform;
     Text text;

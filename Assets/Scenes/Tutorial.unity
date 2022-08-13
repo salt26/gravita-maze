@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -234,7 +234,7 @@ MonoBehaviour:
   panel1080x2400: {fileID: 21300000, guid: 5d92658dbfda1fa4ea42f6d0b0074a1f, type: 3}
   panel1080x2460: {fileID: 21300000, guid: 1e36ba59ea09cf24c82bbf350dbd7bc3, type: 3}
   panel1080x2520: {fileID: 21300000, guid: 91785ee2e361c1c468410fa8f8943dd5, type: 3}
-  panel1080x2640: {fileID: 21300000, guid: 44c250cbb4c5b554fbadc2798176ff40, type: 3}
+  panel1080x2640: {fileID: 0}
 --- !u!1 &100451631
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +414,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1851242258}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 1}
@@ -433,15 +433,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5575850a4fc35e7408ca67f8d1526d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+  tutorialTip: {fileID: 6307982104829601480, guid: 06e67a9f842de2d4ba44ce4b9b430493,
     type: 3}
-  tooltipMessage: 
   emergencyText: 
-  tooltipWidth: 0
-  tooltipHeight: 0
+  tooltipWidth: 5
+  tooltipHeight: 5
   pivot: 0
-  mapNum: 0
   tipKeys: []
+  tips: []
 --- !u!1 &250178042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3902,8 +3901,7 @@ MonoBehaviour:
   adventureLevel: 0
   bgms:
   - {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
 --- !u!4 &1682911775
 Transform:
   m_ObjectHideFlags: 0
@@ -3928,7 +3926,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
   m_Pitch: 1
@@ -4675,8 +4673,8 @@ RectTransform:
   - {fileID: 4462461048705734385}
   - {fileID: 1304023982}
   - {fileID: 857531045}
-  - {fileID: 224579976}
   - {fileID: 1121709906}
+  - {fileID: 224579976}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
