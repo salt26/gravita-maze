@@ -1,6 +1,6 @@
 # GravitaMaze (중력 미로)
-[![Version badge](https://img.shields.io/badge/version-1.3.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.3.0)  
-[![Licence](https://img.shields.io/github/license/salt26/gravita-maze?style=for-the-badge)](./LICENSE)  
+[![Version badge](https://img.shields.io/badge/Version-1.3.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.3.0)  
+[![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
@@ -38,7 +38,7 @@
   * This is because there are issues related to storage read/write permission when the target API level is 29 or higher.
 
 <details>
-<summary>Click here to expand or collapse the old update log!</summary>
+<summary>Click here to expand or collapse the old update logs!</summary>
 
 ### Updates (v.1.1.0 -> v.1.2.1)
 #### Common
@@ -71,6 +71,24 @@
 #### macOS
 * You can press the Enter key to press the Next button in Tutorial and Adventure mode.
 * You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
+
+### Updates (v.1.0.2 -> v.1.1.0)
+#### Common
+* Adventure mode is now playable!
+  * There are Easy, Normal, Hard, and Insane levels.
+  * In adventure mode, the map is randomly rotated or flipped.
+  * There are five lives given, but they are not displayed in the UI yet.
+* Even if you modify the map file(`.txt`) directly to increase the time limit to more than 30 seconds, the maximum time limit is set to 30 seconds.
+
+### Updates (v.1.0.1 -> v.1.0.2)
+#### Common
+* The default value for the time limit has increased from 10 seconds to 30 seconds.
+* Several maps have been added.
+
+#### Android
+* Maps can now be saved on internal storage rather than on the app's internal data.
+  * You can share your own map or download other's map!
+  * The map files are saved in `GravitaMaze/Maps`.
 </details>
 
 ---
