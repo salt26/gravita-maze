@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -414,7 +414,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1851242258}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 1}
@@ -3336,7 +3336,7 @@ MonoBehaviour:
   messageUI: {fileID: 857531046}
   messagePanel: {fileID: 4462461048705734384}
   resultUI: {fileID: 1121709908}
-  tutorialGuide: {fileID: 0}
+  tutorialGuide: {fileID: 224579977}
   tutorialMapFiles:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
@@ -3344,6 +3344,8 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
+  - {fileID: 4900000, guid: e4f1f5c37c6506a4d8a58b4da10726e0, type: 3}
+  - {fileID: 4900000, guid: 469a9b2b0a7443d4bb4cde5557f19510, type: 3}
   adventureEasyMapFiles: []
   adventureEasyPlayLength: 0
   adventureEasyLife: 0
@@ -4738,8 +4740,8 @@ RectTransform:
   - {fileID: 4462461048705734385}
   - {fileID: 1304023982}
   - {fileID: 857531045}
-  - {fileID: 224579976}
   - {fileID: 1121709906}
+  - {fileID: 224579976}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

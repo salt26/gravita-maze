@@ -768,6 +768,8 @@ public class MapManager : MonoBehaviour
             Debug.LogError("Map invalid: impossible to clear");
             return;
         }
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
 
         mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f - 0.25f, -10f);
         if (Screen.height * 9f / Screen.width <= 18)
