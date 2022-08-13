@@ -1,5 +1,6 @@
 # GravitaMaze (중력 미로)
-![Version badge](https://img.shields.io/badge/version-1.3.0-green.svg)  
+![Version badge](https://img.shields.io/badge/version-1.3.0-purple.svg)  
+[![Licence](https://img.shields.io/github/license/salt26/gravita-maze?style=for-the-badge)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
