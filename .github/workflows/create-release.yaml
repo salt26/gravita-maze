@@ -43,6 +43,7 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: GravitaMaze
           versioning: Tag
+          androidTargetSdkVersion: AndroidApiLevel28
           chownFilesTo: ${{ steps.runner-info.outputs.uid }}:${{ steps.runner-info.outputs.gid }}
       - uses: actions/upload-artifact@v3
         with:

@@ -16,14 +16,14 @@ public class TutorialTuple
         this.tutorialNumber = tutorialNumber;
         this.xIndex = xIndex;
         this.yIndex = yIndex;
-        this.isPassed = isPassed;
+        this.isPassed = false;
     }
 
     public override bool Equals(object obj)
     {
-        if (obj is TutorialTuple)
+        if (obj is TutorialTuple tuple)
         {
-            if (((TutorialTuple)obj).tutorialNumber == tutorialNumber && ((TutorialTuple)obj).xIndex == xIndex && ((TutorialTuple)obj).yIndex == yIndex)
+            if (tuple.tutorialNumber == tutorialNumber && tuple.xIndex == xIndex && tuple.yIndex == yIndex)
             {
                 return true;
             }
@@ -38,4 +38,8 @@ public class TutorialTuple
         }
     }
 
+    public override int GetHashCode()
+    {
+        return tutorialNumber * 10000 + xIndex * 100 + yIndex;
+    }
 }
