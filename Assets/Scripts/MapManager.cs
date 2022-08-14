@@ -186,10 +186,18 @@ public class MapManager : MonoBehaviour
         private set;
     } = RotationStatus.Original;
 
+    public bool DoesTimeGoBy
+    {
+        get
+        {
+            return IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
+        }
+    }
+
     void Update()
     {
         gravityRetryButton.interactable = IsReady && ActionHistory != "";
-        if (IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared)
+        if (DoesTimeGoBy)
         {
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
@@ -1183,6 +1191,7 @@ public class MapManager : MonoBehaviour
         ActionHistory = "";
         HasCleared = false;
         HasDied = false;
+        IsTimePassing = false;
         IsReady = true;
     }
 
@@ -1196,6 +1205,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Up, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1210,6 +1223,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Down, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1224,6 +1241,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = false;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Left, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1238,6 +1259,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = false;
         GameManager.mm.Gravity(GameManager.GravityDirection.Right, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }

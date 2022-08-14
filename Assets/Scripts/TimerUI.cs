@@ -11,6 +11,9 @@ public class TimerUI : MonoBehaviour
     public Image timerLabel1;
     public List<Sprite> numberLabels = new List<Sprite>();
 
+    private Color stoppedColor = new Color(1f, 0f, 0.8627452f);
+    private Color flowingColor = new Color(0.6980392f, 0f, 1f);
+
     // Update is called once per frame
     void Update()
     {
@@ -23,6 +26,10 @@ public class TimerUI : MonoBehaviour
             timerBar.GetComponent<RectTransform>().offsetMax = new Vector2(
                 -168 - pixels * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
+
+            timerLabel10.color = stoppedColor;
+            timerLabel1.color = stoppedColor;
+            timerBar.color = stoppedColor;
             return;
         }
 
@@ -42,6 +49,10 @@ public class TimerUI : MonoBehaviour
             timerBar.GetComponent<RectTransform>().offsetMax = new Vector2(
                 -168 - pixels * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
+
+            timerLabel10.color = stoppedColor;
+            timerLabel1.color = stoppedColor;
+            timerBar.color = stoppedColor;
         }
         else
         {
@@ -50,6 +61,19 @@ public class TimerUI : MonoBehaviour
             timerBar.GetComponent<RectTransform>().offsetMax = new Vector2(
                 -168 - (pixels - t) * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
+
+            if (mm.DoesTimeGoBy)
+            {
+                timerLabel10.color = flowingColor;
+                timerLabel1.color = flowingColor;
+                timerBar.color = flowingColor;
+            }
+            else
+            {
+                timerLabel10.color = stoppedColor;
+                timerLabel1.color = stoppedColor;
+                timerBar.color = stoppedColor;
+            }
         }
     }
 }
