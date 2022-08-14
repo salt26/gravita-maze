@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4043,7 +4043,7 @@ MonoBehaviour:
   adventureLevel: 0
   bgms:
   - {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 4f86b9e3f190f414587a9847632d689f, type: 3}
   - {fileID: 0}
 --- !u!4 &1682911775
 Transform:
@@ -4071,7 +4071,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4187,6 +4187,11 @@ MonoBehaviour:
   movables: []
   fixedObjects: []
   traces: []
+  map:
+    sizeX: 0
+    sizeY: 0
+    exitX: 0
+    exitY: 0
   movableAndFixedGameObjects: {fileID: 713554043}
   mainCamera: {fileID: 659557095}
   gravityRetryButton: {fileID: 1202573080}
