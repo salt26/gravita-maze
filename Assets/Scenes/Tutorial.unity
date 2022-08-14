@@ -436,8 +436,8 @@ MonoBehaviour:
   tutorialTip: {fileID: 6307982104829601480, guid: 06e67a9f842de2d4ba44ce4b9b430493,
     type: 3}
   emergencyText: 
-  tooltipWidth: 5
-  tooltipHeight: 5
+  tooltipWidth: 500
+  tooltipHeight: 500
   pivot: 0
   tipKeys: []
   tips: []
@@ -3335,14 +3335,16 @@ MonoBehaviour:
   messageUI: {fileID: 857531046}
   messagePanel: {fileID: 4462461048705734384}
   resultUI: {fileID: 1121709908}
-  tutorialGuide: {fileID: 0}
+  tutorialGuide: {fileID: 224579977}
   tutorialMapFiles:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
   - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
+  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
+  - {fileID: 4900000, guid: 100058feb6e540a4f953103aa3457977, type: 3}
+  - {fileID: 4900000, guid: d9eaede1a62b98540ace8ee2579a0d54, type: 3}
   adventureEasyMapFiles: []
   adventureEasyPlayLength: 0
   adventureEasyLife: 0
@@ -4692,13 +4694,53 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1755156424}
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 224579977}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: retryButtonDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TutorialGuide, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154924, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}

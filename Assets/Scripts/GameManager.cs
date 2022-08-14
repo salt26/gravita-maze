@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
 
+    public int PlayingMapIndex{
+        get{return playingMapIndex;}
+    }
+
     private AudioSource audioSource;
 
     public List<AudioClip> bgms;
