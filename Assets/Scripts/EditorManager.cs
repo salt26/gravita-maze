@@ -2228,6 +2228,7 @@ public class EditorManager : MonoBehaviour
                 EditorAfterGravity(MapManager.Flag.Continued);
                 mm.TimeActivate();
                 GameManager.gm.canPlay = true;
+                GameManager.gm.EditorChangeBGM(editPhase);
                 break;
             case EditPhase.Test:
                 // Validation finished
@@ -2240,6 +2241,7 @@ public class EditorManager : MonoBehaviour
                 solution = mm.ActionHistory;
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
+                GameManager.gm.EditorChangeBGM(editPhase);
                 break;
             case EditPhase.Save:
                 SetEditTimerUI();
@@ -2283,6 +2285,7 @@ public class EditorManager : MonoBehaviour
                 editPhase = EditPhase.Request;
                 mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
+                GameManager.gm.EditorChangeBGM(editPhase);
                 break;
             case EditPhase.Open:
                 editorPhases[4].SetActive(false);

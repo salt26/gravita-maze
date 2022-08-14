@@ -26,5 +26,5 @@
 - 4 1
 - 5 1
 $ | 6 1
-t 15
+t 12
 s ZHNhc2RzYXNk

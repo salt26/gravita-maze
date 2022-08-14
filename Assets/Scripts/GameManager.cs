@@ -194,6 +194,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EditorChangeBGM(EditorManager.EditPhase editPhase)
+    {
+        if (editPhase != EditorManager.EditPhase.Test && audioSource.clip != bgms[2])
+        {
+            audioSource.Stop();
+            audioSource.clip = bgms[2];
+            audioSource.Play();
+        }
+        if (editPhase == EditorManager.EditPhase.Test && audioSource.clip != bgms[1])
+        {
+            audioSource.Stop();
+            audioSource.clip = bgms[1];
+            audioSource.Play();
+        }
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR

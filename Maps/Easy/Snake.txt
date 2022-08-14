@@ -26,5 +26,5 @@
 | 5 4
 | 5 5
 $ | 0 1
-t 20
+t 15
 s ZHNhc2R3ZHNhc2R3ZHNh

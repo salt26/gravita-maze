@@ -49,7 +49,7 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy Iron can crush a ball...");
         tipDict.Add(new TutorialTuple(4, 2, 1), "And also, the Iron can escape outside with the ball!");
         tipDict.Add(new TutorialTuple(4, 2, 2), "And also, the Iron can escape outside with the ball!");
-        tipDict.Add(new TutorialTuple(4, 2, 0), "Now, you can just escape with Iron.");
+        //tipDict.Add(new TutorialTuple(4, 2, 0), "Now, you can just escape with Iron.");
         tipDict.Add(new TutorialTuple(5, 1, 1), "Also, a heavy Iron can make it go out regardless of the ball!");
         tipDict.Add(new TutorialTuple(6, 2, 2), "Finally, the Iron can cover the fire for a while!");
         tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the Iron has blocked the fire, you can step on it!");
