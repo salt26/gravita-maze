@@ -117,26 +117,26 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.Burned:
                 emergencyText = "Your ball burned down! Press the shiny retry button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText(CurrentTip);
+                    HideText(CurrentTip);
                 }
-                showText(emergencyText);
+                ShowText(emergencyText);
 
                 break;
 
             case MapManager.Flag.Squashed:
                 emergencyText = "Your ball is crushed by the box! Press the shiny retry button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText(CurrentTip);
+                    HideText(CurrentTip);
                 }
-                showText(emergencyText);
+                ShowText(emergencyText);
                 break;
 
             case MapManager.Flag.TimeOver:
                 emergencyText = "Unfortunately, all time have passed! Press the shiny retry button at the bottom to try again.";
                 if(CurrentTip != null){
-                    hideText(CurrentTip);
+                    HideText(CurrentTip);
                 }
-                showText(emergencyText);
+                ShowText(emergencyText);
                 
                 CurrentTip.changeColor();
                 break;
@@ -144,9 +144,9 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.Escaped:
                 emergencyText = "Your ball escaped! Congratulation!";
                 if(CurrentTip != null){
-                    hideText(CurrentTip);
+                    HideText(CurrentTip);
                 }
-                showText(emergencyText);
+                ShowText(emergencyText);
                 break;
                 
             default:
@@ -170,7 +170,7 @@ public class TutorialGuide : MonoBehaviour
             if(GameManager.gm.PlayingMapIndex+1 == mapNumber){
                 if(GameManager.gm.PlayingMapIndex+1 == 6){
 
-                    if(isIronThere(tipKeys[i])){
+                    if(IsIronThere(tipKeys[i])){
                         
                         storedI = i;
                         if(!tipKeys[i].isPassed){
@@ -182,7 +182,7 @@ public class TutorialGuide : MonoBehaviour
                             }
 
                             if(tips.Length == 0){
-                                showText(tipDict[tipKeys[i]]);
+                                ShowText(tipDict[tipKeys[i]]);
                                 tipKeys[i].isPassed = true;
                             }
                             
@@ -200,7 +200,7 @@ public class TutorialGuide : MonoBehaviour
 
                 else{
 
-                    if(isBallThere(tipKeys[i])){
+                    if(IsBallThere(tipKeys[i])){
                         
                         storedI = i;
                         if(!tipKeys[i].isPassed){
@@ -212,7 +212,7 @@ public class TutorialGuide : MonoBehaviour
                             }
 
                             if(tips.Length == 0){
-                                showText(tipDict[tipKeys[i]]);
+                                ShowText(tipDict[tipKeys[i]]);
                                 tipKeys[i].isPassed = true;
                             }
 
