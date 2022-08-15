@@ -223,7 +223,6 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
-        tutorialGuide.TutorialCount();
         if (HasClearedAll)
         {
             Ending();
@@ -285,6 +284,9 @@ public class PlayManager : MonoBehaviour
 
     public void TutorialAfterGravity(MapManager.Flag flag)
     {
+        if(tutorialGuide != null){
+            tutorialGuide.SpecificCaseGuide(flag);
+        }
         switch (flag)
         {
             case MapManager.Flag.Continued:
