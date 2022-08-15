@@ -51,7 +51,7 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
         tipDict.Add(new TutorialTuple(2, 1, 1), "Here's only one step left!");
         tipDict.Add(new TutorialTuple(2, 0, 1), "Here's only one step left!");
-        tipDict.Add(new TutorialTuple(3, 1, 2), "Fire can burn your ball...");
+        tipDict.Add(new TutorialTuple(3, 1, 0), "Fire can burn your ball...");
         tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy iron can crush a ball...");
         tipDict.Add(new TutorialTuple(4, 1, 0), "Also, a heavy iron can make it go out!");
         tipDict.Add(new TutorialTuple(4, 2, 2), "Also, a heavy iron can make it go out!");

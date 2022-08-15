@@ -433,15 +433,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5575850a4fc35e7408ca67f8d1526d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+  tutorialTip: {fileID: 6307982104829601480, guid: 06e67a9f842de2d4ba44ce4b9b430493,
     type: 3}
-  tooltipMessage: 
   emergencyText: 
   tooltipWidth: 0
   tooltipHeight: 0
   pivot: 0
-  mapNum: 0
   tipKeys: []
+  tips: []
 --- !u!1 &250178042
 GameObject:
   m_ObjectHideFlags: 0
