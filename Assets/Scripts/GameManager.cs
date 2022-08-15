@@ -60,6 +60,10 @@ public class GameManager : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.ExternalStorageWrite);
         }
+        if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+        {
+            Permission.RequestUserPermission(Permission.ExternalStorageRead);
+        }
 #endif
     }
 
@@ -191,6 +195,22 @@ public class GameManager : MonoBehaviour
                 audioSource.Play();
             }
             StartCoroutine(InitializeAdventure());
+        }
+    }
+
+    public void EditorChangeBGM(EditorManager.EditPhase editPhase)
+    {
+        if (editPhase != EditorManager.EditPhase.Test && audioSource.clip != bgms[2])
+        {
+            audioSource.Stop();
+            audioSource.clip = bgms[2];
+            audioSource.Play();
+        }
+        if (editPhase == EditorManager.EditPhase.Test && audioSource.clip != bgms[1])
+        {
+            audioSource.Stop();
+            audioSource.clip = bgms[1];
+            audioSource.Play();
         }
     }
 

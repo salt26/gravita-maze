@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WallInfo : IEquatable<WallInfo>
 {
-    public enum Type { Horizontal = 1, Vertical = 2, ExitHorizontal = 3, ExitVertical = 4 }
+    public enum Type { Horizontal = 1, Vertical = 2, ExitHorizontal = 3, ExitVertical = 4, HorizontalShutter = 5, VerticalShutter = 6 }
 
     public Type type;
     public int x;

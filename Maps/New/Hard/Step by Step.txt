@@ -1,0 +1,16 @@
+﻿9 9
+@ 1 1
+: - 7 3
+: - 4 6
+: | 6 6
+: | 1 5
+: - 2 8
+: - 5 1
+: | 7 1
+| 3 3
+- 6 4
+| 5 8
+: | 2 2
+$ - 3 9
+t 30
+s ZGF3YXNkd3NhZGFzZHdhc2R3YXdzZHNhd2FzZHdhd2RzYXdhc2R3YXdkc2FzZHdhd2RzYXdhc2R3YXdkc2F3ZHN3YXdzZHdhd2RzYXdkc2FzZHdhd2RzYXdkc2F3

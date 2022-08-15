@@ -1,0 +1,21 @@
+﻿8 8
+@ 3 1
+$ - 7 8
+- 3 4
+: | 4 4
+: | 7 4
+: - 6 3
+: - 6 7
+: | 6 6
+: | 2 6
+: - 4 6
+: - 4 1
+: - 1 5
+: | 3 8
+| 1 4
+: - 2 2
+| 5 3
+: | 2 1
+: - 8 4
+t 20
+s d2RzYXdkc2F3ZHdzZHNhc2R3c2RzYXdkd2RzYXNkd2RzYXdkc2F3ZHdkc2F3ZHN3ZHNkdw==

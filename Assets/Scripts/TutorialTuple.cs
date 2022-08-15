@@ -38,4 +38,8 @@ public class TutorialTuple
         }
     }
 
+    public override int GetHashCode()
+    {
+        return tutorialNumber * 10000 + xIndex * 100 + yIndex;
+    }
 }

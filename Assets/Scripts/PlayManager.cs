@@ -227,6 +227,32 @@ public class PlayManager : MonoBehaviour
         {
             Ending();
         }
+        /*
+        Debug.Log("initialMapCoord");
+        for (int i = 0; i < GameManager.mm.SizeX; i++)
+        {
+            for (int j = 0; j < GameManager.mm.SizeY; j++)
+            {
+                Debug.Log("(" + i + ", " + j + "): " + GameManager.mm.initialMapCoord[i, j]);
+            }
+        }
+        Debug.Log("currentMapCoord");
+        for (int i = 0; i < GameManager.mm.SizeX; i++)
+        {
+            for (int j = 0; j < GameManager.mm.SizeY; j++)
+            {
+                Debug.Log("(" + i + ", " + j + "): " + GameManager.mm.currentMapCoord[i, j]);
+            }
+        }
+        Debug.Log("map.mapCoord");
+        for (int i = 0; i < GameManager.mm.SizeX; i++)
+        {
+            for (int j = 0; j < GameManager.mm.SizeY; j++)
+            {
+                Debug.Log("(" + i + ", " + j + "): " + GameManager.mm.map.mapCoord[i, j]);
+            }
+        }
+        */
     }
 
     public void PlayNext()

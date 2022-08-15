@@ -12,8 +12,11 @@ public class MapManager : MonoBehaviour
 {
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
         Adventure = 7, Tutorial = 8, Custom = 9, Survival = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
-    public enum TileFlag { RightWall = 1, LeftWall = 2, DownWall = 4, UpWall = 8, Fire = 16, QuitGame = 32, MapEditor = 64, 
-        Adventure = 128, Tutorial = 256, Custom = 512, Survival = 1024, AdvEasy = 2048, AdvNormal = 4096, AdvHard = 8192, AdvInsane = 16384 }
+    public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
+        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Survival = 59049, AdvEasy = 177147,
+        AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969 }
+    // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
+    // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
     public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
     public enum RotationStatus { Original = 0, Clockwise90 = 1, Clockwise180 = 2, Clockwise270 = 3,
         UpsideDown = 4, UpsideDown90 = 5, UpsideDown180 = 6, UpsideDown270 = 7 }
@@ -24,8 +27,8 @@ public class MapManager : MonoBehaviour
     public const int MAX_SIZE_Y = 9;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-    public const string ROOT_PATH = "/storage/emulated/0/GravitaMaze/";
-    // public static string ROOT_PATH = Application.persistentDataPath.Substring(0, Application.persistentDataPath.IndexOf("Android", StringComparison.Ordinal)) + "/GravitaMaze/";
+    //public const string ROOT_PATH = "/storage/emulated/0/GravitaMaze/";
+    public static string ROOT_PATH = Application.persistentDataPath.Substring(0, Application.persistentDataPath.IndexOf("Android", StringComparison.Ordinal)) + "/GravitaMaze/";
     public static string MAP_ROOT_PATH = ROOT_PATH + "Maps/";
 #else
     public const string MAP_ROOT_PATH = "Maps/";
@@ -33,6 +36,7 @@ public class MapManager : MonoBehaviour
     public const float DEFAULT_TIME_LIMIT = 30f;
     public const float MIN_TIME_LIMIT = 3f;
     public const float MAX_TIME_LIMIT = 30f;
+    public const int MAX_ENOUGH_DISTANCE = 100;
 
     [HideInInspector]
     public List<Movable> movables;
@@ -44,6 +48,8 @@ public class MapManager : MonoBehaviour
     public Map map;
     public Movable[,] initialMovableCoord;
     public Movable[,] currentMovableCoord;
+    public int[,] initialMapCoord;
+    public int[,] currentMapCoord;
 
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
@@ -180,17 +186,25 @@ public class MapManager : MonoBehaviour
         private set;
     } = RotationStatus.Original;
 
+    public bool DoesTimeGoBy
+    {
+        get
+        {
+            return IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
+        }
+    }
+
     void Update()
     {
         gravityRetryButton.interactable = IsReady && ActionHistory != "";
-        if (IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared)
+        if (DoesTimeGoBy)
         {
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
                 timeoutPanel.SetActive(true);
                 if (afterGravity.GetInvocationList().Length > 0)
-                    afterGravity(Flag.TimeOver);
+                    afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
                 Debug.LogWarning("Map warning: Time over");
             }
         }
@@ -263,33 +277,34 @@ public class MapManager : MonoBehaviour
             Rotation = RotationStatus.Original;
         }
 
-        int [,] mapCoord = new int[SizeX, SizeY];
-        initialMovableCoord = new Movable[SizeX, SizeY];
+        initialMapCoord = new int[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
+        initialMovableCoord = new Movable[SizeX, SizeY]; // Movable의 좌표가 될 예정. 2차원 배열의 측정 위치에다가 Movable의 오브젝트를 넣는 다는 소리인가?
 
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
 
-        bool[,] horizontalWalls = new bool[SizeX, SizeY + 1];
-        bool[,] verticalWalls = new bool[SizeX + 1, SizeY];
+        int[,] horizontalWalls = new int[SizeX, SizeY + 1];
+        int[,] verticalWalls = new int[SizeX + 1, SizeY];
+        // 벽이 없는 경우: 0, 평범한 벽이 있는 경우: 1, Shutter가 있는 경우: 2
 
         for (int i = 0; i < sizeX; i++)
         {
-            if (!RotatedHasTransposed())
+            if (!RotatedHasTransposed()) // original, 즉 가로 세로 길이는 유지된 상태.
             {
-                horizontalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
-                horizontalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                horizontalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = 1; // 맨 위, 맨 아래 외벽은 일반 벽으로.
+                horizontalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = 1;
                 for (int j = 1; j < sizeY; j++)
                 {
-                    horizontalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                    horizontalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = 0; // 맨 위, 맨 아래가 아닌 곳은 일단 벽이 없음.
                 }
             }
             else
             {
-                verticalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = true;
-                verticalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = true;
+                verticalWalls[RotatedX(i, 0, true, true), RotatedY(i, 0, true, true)] = 1; // 가로세로가 바뀌는 회전이 있을 때: 맨 왼쪽, 맨 오른쪽 외벽은 일반 벽
+                verticalWalls[RotatedX(i, sizeY, true, true), RotatedY(i, sizeY, true, true)] = 1;
                 for (int j = 1; j < sizeY; j++)
                 {
-                    verticalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = false;
+                    verticalWalls[RotatedX(i, j, true, true), RotatedY(i, j, true, true)] = 0; // 맨 왼쪽, 맨 오른쪽이 아닌 곳은 일단 벽이 없음.
                 }
             }
         }
@@ -297,23 +312,23 @@ public class MapManager : MonoBehaviour
         {
             if (!RotatedHasTransposed())
             {
-                verticalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
-                verticalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                verticalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = 1;
+                verticalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = 1;
                 for (int i = 1; i < sizeX; i++)
                 {
-                    verticalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                    verticalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = 0;
                 }
             }
             else
             {
-                horizontalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = true;
-                horizontalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = true;
+                horizontalWalls[RotatedX(0, j, true, false), RotatedY(0, j, true, false)] = 1;
+                horizontalWalls[RotatedX(sizeX, j, true, false), RotatedY(sizeX, j, true, false)] = 1;
                 for (int i = 1; i < sizeX; i++)
                 {
-                    horizontalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = false;
+                    horizontalWalls[RotatedX(i, j, true, false), RotatedY(i, j, true, false)] = 0;
                 }
             }
-        }
+        } // 여기까지는 외벽을 일반 벽으로, 안쪽에 있는 벽은 일단 없도록 하는 코드임.
 
         bool hasExit = false;
 
@@ -335,14 +350,14 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 0;
                         ExitX = RotatedX(wi.x, wi.y, true, true, true);
                         if (RotatedY(wi.x, wi.y, true, true, true) == 0) ExitY = 0;
                         else ExitY = SizeY + 1;
                     }
                     else
                     {
-                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = false;
+                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 0;
                         if (RotatedX(wi.x, wi.y, true, true, true) == 0) ExitX = 0;
                         else ExitX = SizeX + 1;
                         ExitY = RotatedY(wi.x, wi.y, true, true, true);
@@ -363,34 +378,52 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
                         if (RotatedX(wi.x, wi.y, true, false, true) == 0) ExitX = 0;
                         else ExitX = SizeX + 1;
                         ExitY = RotatedY(wi.x, wi.y, true, false, true);
                     }
                     else
                     {
-                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = false;
+                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
                         ExitX = RotatedX(wi.x, wi.y, true, false, true);
                         if (RotatedY(wi.x, wi.y, true, false, true) == 0) ExitY = 0;
                         else ExitY = SizeY + 1;
                     }
                     hasExit = true;
                     break;
+                // 여기 위까지는 Exit을 다룰 때 벽을 어떻게 할 지에 관한 코드니까 Shutter와는 관계 없는 듯.
+                /* 여기부터는 평범한 벽. 여기에는 Shutter가 들어갈 수 있다.
+                 */
                 case WallInfo.Type.Horizontal:
                     if (wi.x < 1 || wi.x > sizeX || wi.y < 1 || wi.y > sizeY - 1)
                     {
                         Debug.LogError("Map invalid: wall position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-
                     if (!RotatedHasTransposed())
                     {
-                        horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                        if (horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            return;
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 1;
+                        }
                     }
                     else
                     {
-                        verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = true;
+                        if (verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                            return;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 1;
+                        }
                     }
                     break;
                 case WallInfo.Type.Vertical:
@@ -402,11 +435,84 @@ public class MapManager : MonoBehaviour
 
                     if (!RotatedHasTransposed())
                     {
-                        verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                        if (verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 1;
+                        }
                     }
                     else
                     {
-                        horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = true;
+                        if (horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: wall overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 1;
+                        }
+                    }
+                    break;
+                case WallInfo.Type.HorizontalShutter:
+                    if (wi.x < 1 || wi.x > sizeX || wi.y < 1 || wi.y > sizeY - 1)
+                    {
+                        Debug.LogError("Map invalid: shutter position at (" + wi.x + ", " + wi.y + ")");
+                        return;
+                    }
+                    if (!RotatedHasTransposed())
+                    {
+                        if (horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 2;
+                        }
+                    }
+                    else
+                    {
+                        if (verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] != 0)
+                        {
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x - 1, wi.y, true, true), RotatedY(wi.x - 1, wi.y, true, true)] = 2;
+                        }
+                    }
+                    break;
+                case WallInfo.Type.VerticalShutter:
+                    if (wi.x < 1 || wi.x > sizeX - 1 || wi.y < 1 || wi.y > sizeY)
+                    {
+                        Debug.LogError("Map invalid: shutter position at (" + wi.x + ", " + wi.y + ")");
+                        return;
+                    }
+
+                    if (!RotatedHasTransposed())
+                    {
+                        if (verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 2;
+                        }
+                    }
+                    else
+                    {
+                        if (horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] != 0)
+                        {
+                            Debug.LogError("Map invalid: shutter overlapped at the same position (" + wi.x + ", " + wi.y + ")");
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 2;
+                        }
                     }
                     break;
             }
@@ -425,46 +531,62 @@ public class MapManager : MonoBehaviour
                 if (i == 0)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[24]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[16]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[89]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[81]);
                 }
                 else if (i == SizeX + 1)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[25]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[17]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[90]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[82]);
                 }
                 else if (j == SizeY + 1)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[26]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[18]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[91]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[83]);
                 }
                 else if (j == 0)
                 {
                     if (ExitX == i && ExitY == j)
-                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[27]);
-                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[19]);
+                        tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[92]);
+                    else tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[84]);
                 }
+                // 여기 위에 있는 if문은 겉테두리 벽을 두르는 부분. 여기에는 Shutter가 존재하지 않는다.
+                // 여기 아래부터는 평범한 벽을 두르는 부분. 상황에 따라 Shutter가 존재할 수 있다.
                 else
                 {
-                    if (horizontalWalls[i - 1, j - 1])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 8
-                    if (horizontalWalls[i - 1, j])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 4
-                    if (verticalWalls[i - 1, j - 1])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 2
-                    if (verticalWalls[i, j - 1])
-                        mapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
-                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[mapCoord[i - 1, j - 1] % 16]);
+                    if (horizontalWalls[i - 1, j] == 1)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
+                    else if (horizontalWalls[i - 1, j] == 2)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
+                    if (horizontalWalls[i - 1, j - 1] == 1)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
+                    else if (horizontalWalls[i - 1, j - 1] == 2)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
+                    if (verticalWalls[i - 1, j - 1] == 1)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
+                    else if (verticalWalls[i - 1, j - 1] == 2)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
+                    if (verticalWalls[i, j - 1] == 1)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
+                    else if (verticalWalls[i, j - 1] == 2)
+                        initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
+                    tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[initialMapCoord[i - 1, j - 1] % 81]);
                 }
             }
         }
-        tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[20]);
-        tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[21]);
-        tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[22]);
-        tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[23]);
+        tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[85]);
+        tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[86]);
+        tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[87]);
+        tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[88]);
 
+        /* MapManager의 인스펙터에 있는 Tiles의 인덱스 번호를 바꿈. 벽과 Shutter 오브젝트를 0~80에 배치하고, 꼭짓점, Exit, 외벽 오브젝트 등등도
+        인덱스를 바꿔 줘야 한다.,(81 이상 숫자로)
+        일단 기존의 16, 17, 18, 19 (순서대로 오른쪽, 왼쪽, 아래, 위 방향 외벽) 은 81, 82, 83, 84로
+             기존의 20, 21, 22, 23 (순서대로 1시, 5시, 11시, 7시 방향 꼭짓점) 은 85, 86, 87, 88로 
+             기존의 24, 25, 26, 27 (순서대로 왼쪽, 오른쪽, 위, 아래 방향 화살표) 은 89, 90, 91, 92로
+        여기 코드에서는 고쳤으나 MapManager의 인스펙터에서도 제 위치로 Tile들을 옮겨야 함. */
         bool hasBall = false;
         if (movables != null)
         {
@@ -491,8 +613,8 @@ public class MapManager : MonoBehaviour
         fixedObjects = new List<FixedObject>();
         traces = new List<GameObject>();
 
-        if (SceneManager.GetActiveScene().name == "Main" || 
-            SceneManager.GetActiveScene().name == "Mode" || 
+        if (SceneManager.GetActiveScene().name == "Main" ||
+            SceneManager.GetActiveScene().name == "Mode" ||
             SceneManager.GetActiveScene().name == "AdventureLevel")
         {
             foreach (Movable m in movableAndFixedGameObjects.GetComponentsInChildren<Movable>())
@@ -505,7 +627,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                if (initialMovableCoord[x - 1, y - 1] != null || initialMapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -538,7 +660,7 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: object position at (" + x + ", " + y + ")");
                     return;
                 }
-                if (initialMovableCoord[x - 1, y - 1] != null || mapCoord[x - 1, y - 1] >= 16)
+                if (initialMovableCoord[x - 1, y - 1] != null || initialMapCoord[x - 1, y - 1] >= 81)
                 {
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
@@ -549,37 +671,37 @@ public class MapManager : MonoBehaviour
                 switch (f.type)
                 {
                     case FixedObject.Type.Fire:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 16
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
                         break;
                     case FixedObject.Type.QuitGame:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 32
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
                         break;
                     case FixedObject.Type.MapEditor:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 64
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.MapEditor;  // 729
                         break;
                     case FixedObject.Type.Adventure:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 128
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Adventure;  // 2187
                         break;
                     case FixedObject.Type.Tutorial:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 256
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Tutorial;   // 6561
                         break;
                     case FixedObject.Type.Custom:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 512
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 19683
                         break;
                     case FixedObject.Type.Survival:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 1024
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 59049
                         break;
                     case FixedObject.Type.AdvEasy:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 2048
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 177147
                         break;
                     case FixedObject.Type.AdvNormal:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 4096
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvNormal;  // 531441
                         break;
                     case FixedObject.Type.AdvHard:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 8192
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvHard;    // 1594323
                         break;
                     case FixedObject.Type.AdvInsane:
-                        mapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 16384
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 4782969
                         break;
                 }
             }
@@ -593,7 +715,7 @@ public class MapManager : MonoBehaviour
                 return;
             }
             if (initialMovableCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] != null ||
-                mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 16)
+                initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] >= 81)
             {
                 Debug.LogError("Map invalid: objects overlapped at (" + oi.x + ", " + oi.y + ")");
                 return;
@@ -625,17 +747,17 @@ public class MapManager : MonoBehaviour
                     g = Instantiate(firePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                     g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 16
+                    initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
                     break;
-                /*
-                // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
-                case ObjectInfo.Type.QuitGame:
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 32
-                    break;
-                case ObjectInfo.Type.MapEditor:
-                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 64
-                    break;
-                */
+                    /*
+                    // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
+                    case ObjectInfo.Type.QuitGame:
+                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
+                        break;
+                    case ObjectInfo.Type.MapEditor:
+                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
+                        break;
+                    */
             }
         }
 
@@ -645,14 +767,18 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        map = new Map(SizeX, SizeY, mapCoord, ExitX, ExitY);
+
+        currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
         if ((SceneManager.GetActiveScene().name != "Editor" || isValidation) && !Simulate(map, initialMovableCoord, RotatedSolution(solution)))
         {
             Debug.LogError("Map invalid: impossible to clear");
             return;
         }
-
-        currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
 
         mainCamera.transform.position = new Vector3((SizeX + 1) / 2f, (SizeY + 1) / 2f - 0.25f, -10f);
         if (Screen.height * 9f / Screen.width <= 18)
@@ -683,7 +809,7 @@ public class MapManager : MonoBehaviour
     }
 
     public OpenFileFlag InitializeFromFile(string path, out int tempSizeX, out int tempSizeY,
-        out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls, 
+        out List<ObjectInfo> tempObjects, out List<WallInfo> tempWalls,
         out string tempSolution, out float tempTimeLimit, StatusUI statusUI = null)
     {
         tempSizeX = 0;
@@ -698,24 +824,27 @@ public class MapManager : MonoBehaviour
             if (!File.Exists(path))
             {
                 Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(path) + "\"");
+                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
                 return OpenFileFlag.Failed;
             }
             else if (Path.GetExtension(path) != ".txt")
             {
                 Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(path) + "\" is not a .txt file");
+                statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
                 return OpenFileFlag.Failed;
             }
         }
         catch (Exception)
         {
             Debug.LogError("File invalid: exception while checking a file");
+            statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
             throw;
         }
 
         FileStream fs = new FileStream(path, FileMode.Open);
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
-#region parsing text file
+        #region parsing text file
         try
         {
             // sizeX, sizeY
@@ -734,7 +863,7 @@ public class MapManager : MonoBehaviour
             sr.Close();
             fs.Close();
         }
-#endregion
+        #endregion
     }
 
     public OpenFileFlag InitializeFromText(string text, out int tempSizeX, out int tempSizeY,
@@ -748,7 +877,7 @@ public class MapManager : MonoBehaviour
         tempSolution = "";
         tempTimeLimit = DEFAULT_TIME_LIMIT;
 
-#region parsing text file
+        #region parsing text file
         // sizeX, sizeY
         string line = text.Substring(0, text.IndexOf('\n'));
         string[] token = line.Split(' ');
@@ -840,6 +969,28 @@ public class MapManager : MonoBehaviour
                     }
                     tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
                     break;
+                case ":":
+                    if (token.Length != 4)
+                    {
+                        Debug.LogError("File Invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    if (token[1].Equals("-"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else if (token[1].Equals("|"))
+                    {
+                        tempWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, int.Parse(token[2]), int.Parse(token[3])));
+                    }
+                    else
+                    {
+                        Debug.LogError("File invalid: shutter (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    break;
                 case "t":
                     if (token.Length != 2)
                     {
@@ -887,7 +1038,7 @@ public class MapManager : MonoBehaviour
                     return OpenFileFlag.Failed;
             }
         }
-#endregion
+        #endregion
 
         // Map validation
         Initialize(tempSizeX, tempSizeY, tempWalls, tempObjects, tempSolution, tempTimeLimit, true, true);
@@ -944,16 +1095,16 @@ public class MapManager : MonoBehaviour
             switch (direction)
             {
                 case 'a':
-                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Left, true, out flag, out ballX, out ballY);
+                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Left, true, out flag, out ballX, out ballY, out _);
                     break;
                 case 's':
-                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Down, true, out flag, out ballX, out ballY);
+                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Down, true, out flag, out ballX, out ballY, out _);
                     break;
                 case 'd':
-                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Right, true, out flag, out ballX, out ballY);
+                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Right, true, out flag, out ballX, out ballY, out _);
                     break;
                 case 'w':
-                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Up, true, out flag, out ballX, out ballY);
+                    mutableMovableCoord = Gravity(map, mutableMovableCoord, GameManager.GravityDirection.Up, true, out flag, out ballX, out ballY, out _);
                     break;
                 default:
                     Debug.LogError("Map invalid: wrong solution format");
@@ -1007,6 +1158,14 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < SizeX; i++)
+        {
+            for (int j = 0; j < SizeY; j++)
+            {
+                tilemap.SetTile(new Vector3Int(i, j, 0), tiles[initialMapCoord[i, j] % 81]);
+            }
+        }
+
         if (traces != null)
         {
             foreach (GameObject g in traces)
@@ -1017,6 +1176,9 @@ public class MapManager : MonoBehaviour
         traces = new List<GameObject>();
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
+        currentMapCoord = (int[,])initialMapCoord.Clone();
+
+        map = new Map(SizeX, SizeY, currentMapCoord, ExitX, ExitY);
 
         gravityBall.anchoredPosition = new Vector3(0f, 0f);
         gravityUpButton.interactable = true;
@@ -1029,6 +1191,7 @@ public class MapManager : MonoBehaviour
         ActionHistory = "";
         HasCleared = false;
         HasDied = false;
+        IsTimePassing = false;
         IsReady = true;
     }
 
@@ -1042,6 +1205,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Up, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1056,6 +1223,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Down, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1070,6 +1241,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = false;
         gravityRightButton.interactable = true;
         GameManager.mm.Gravity(GameManager.GravityDirection.Left, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1084,6 +1259,10 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = false;
         GameManager.mm.Gravity(GameManager.GravityDirection.Right, out Flag flag);
+        if (flag == Flag.Burned || flag == Flag.Squashed)
+        {
+            IsTimePassing = false;
+        }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
     }
@@ -1098,24 +1277,33 @@ public class MapManager : MonoBehaviour
         flag = Flag.Continued;
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
 
-        currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _);
+        // First, simulate to check if the ball can escape.
+        Gravity(map.Clone(), (Movable[,])currentMovableCoord.Clone(), gravityDirection, true, out flag, out _, out _, out List<Move> moves);
 
         if (flag == Flag.Escaped)
         {
             HasCleared = true;
+            StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves));
         }
-        else if (flag == Flag.Burned || flag == Flag.Squashed)
+        else
         {
-            HasDied = true;
+            ActionHistory.Substring(0, ActionHistory.Length - 1);
+            currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
+
+            if (flag == Flag.Burned || flag == Flag.Squashed)
+            {
+                HasDied = true;
+            }
         }
     }
 
-    private Movable[,] Gravity(Map map, Movable[,] mutableMovableCoord,
-        GameManager.GravityDirection gravityDirection, bool isSimulation, out Flag flag, out int ballX, out int ballY)
+    private Movable[,] Gravity(Map mutableMap, Movable[,] mutableMovableCoord,
+        GameManager.GravityDirection gravityDirection, bool isSimulation, out Flag flag, out int ballX, out int ballY, out List<Move> moves)
     {
         flag = Flag.Continued;
         ballX = -1;
         ballY = -1;
+        moves = new List<Move>();
 
         if (!isSimulation)
         {
@@ -1129,7 +1317,7 @@ public class MapManager : MonoBehaviour
             traces = new List<GameObject>();
         }
 
-        GameObject[,] traceCoord = new GameObject[map.sizeX, map.sizeY];
+        GameObject[,] traceCoord = new GameObject[mutableMap.sizeX, mutableMap.sizeY];
 
         switch (gravityDirection)
         {
@@ -1138,10 +1326,12 @@ public class MapManager : MonoBehaviour
                 {
                     for (int j = SizeY - 1; j >= 0; j--)
                     {
+                        Move move = null;
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // j++
-#region Up
+                            move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
+                            #region Up
                             for (int k = j; k <= SizeY; k++)
                             {
                                 if (k == SizeY)
@@ -1156,6 +1346,9 @@ public class MapManager : MonoBehaviour
                                         flag = Flag.Escaped;
                                         ballX = ExitX;
                                         ballY = ExitY;
+                                        move.newX = i + 1;
+                                        move.newY += MAX_ENOUGH_DISTANCE;
+;
                                         if (!isSimulation)
                                         {
                                             Debug.Log("Stage clear!");
@@ -1168,6 +1361,8 @@ public class MapManager : MonoBehaviour
                                     }
                                     else if (mutableMovableCoord[i, j] is Iron)
                                     {
+                                        move.newX = i + 1;
+                                        move.newY += MAX_ENOUGH_DISTANCE;
                                         if (!isSimulation)
                                         {
                                             // TODO: (i + 1, k + 1)를 쇠가 지나 탈출하는 애니메이션 재생
@@ -1177,11 +1372,13 @@ public class MapManager : MonoBehaviour
                                         break;
                                     }
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.Fire))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.Fire))
                                 {
                                     flag = Flag.Burned;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1199,11 +1396,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.QuitGame))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.QuitGame))
                                 {
                                     flag = Flag.QuitGame;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1212,11 +1411,13 @@ public class MapManager : MonoBehaviour
                                     //GameManager.gm.QuitGame();
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.MapEditor))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.MapEditor))
                                 {
                                     flag = Flag.MapEditor;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1230,6 +1431,8 @@ public class MapManager : MonoBehaviour
                                     flag = Flag.Squashed;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1246,7 +1449,7 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[i, k] = null;
                                 }
-                                if (CheckTileFlag(map.mapCoord[i, k], TileFlag.UpWall) ||
+                                if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.UpWall) ||
                                     (k <= SizeY - 2 && mutableMovableCoord[i, k + 1] != null && mutableMovableCoord[i, k + 1] is Iron))
                                 {
                                     if (mutableMovableCoord[i, j] is Ball)
@@ -1254,6 +1457,8 @@ public class MapManager : MonoBehaviour
                                         ballX = i + 1;
                                         ballY = k + 1;
                                     }
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].transform.localPosition = new Vector3(i + 1, k + 1, 0f);
@@ -1263,7 +1468,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.UpShutter) && k <= SizeY - 2 && mutableMovableCoord[i, k + 1] == null)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        mutableMap.mapCoord[i, k] -= (int)TileFlag.UpShutter / 2;
+                                        mutableMap.mapCoord[i, k + 1] -= (int)TileFlag.DownShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
+                                            tilemap.SetTile(new Vector3Int(i, k + 1, 0), tiles[mutableMap.mapCoord[i, k + 1] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1293,8 +1510,9 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-#endregion
+                            #endregion
                         }
+                        if (move != null) moves.Add(move);
                     }
                 }
                 ActionHistory += "w";
@@ -1304,10 +1522,12 @@ public class MapManager : MonoBehaviour
                 {
                     for (int j = 0; j < SizeY; j++)
                     {
+                        Move move = null;
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // j--
-#region Down
+                            move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
+                            #region Down
                             for (int k = j; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -1322,6 +1542,8 @@ public class MapManager : MonoBehaviour
                                         flag = Flag.Escaped;
                                         ballX = ExitX;
                                         ballY = ExitY;
+                                        move.newX = i + 1;
+                                        move.newY -= MAX_ENOUGH_DISTANCE;
                                         if (!isSimulation)
                                         {
                                             Debug.Log("Stage clear!");
@@ -1334,6 +1556,8 @@ public class MapManager : MonoBehaviour
                                     }
                                     else if (mutableMovableCoord[i, j] is Iron)
                                     {
+                                        move.newX = i + 1;
+                                        move.newY -= MAX_ENOUGH_DISTANCE;
                                         if (!isSimulation)
                                         {
                                             // TODO: (i + 1, k + 1)를 쇠가 지나 탈출하는 애니메이션 재생
@@ -1343,11 +1567,13 @@ public class MapManager : MonoBehaviour
                                         break;
                                     }
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.Fire))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.Fire))
                                 {
                                     flag = Flag.Burned;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1365,11 +1591,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.QuitGame))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.QuitGame))
                                 {
                                     flag = Flag.QuitGame;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1378,11 +1606,13 @@ public class MapManager : MonoBehaviour
                                     //GameManager.gm.QuitGame();
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[i, k], TileFlag.MapEditor))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.MapEditor))
                                 {
                                     flag = Flag.MapEditor;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1396,6 +1626,8 @@ public class MapManager : MonoBehaviour
                                     flag = Flag.Squashed;
                                     ballX = i + 1;
                                     ballY = k + 1;
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1412,7 +1644,7 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[i, k] = null;
                                 }
-                                if (CheckTileFlag(map.mapCoord[i, k], TileFlag.DownWall) ||
+                                if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.DownWall) ||
                                     (k >= 1 && mutableMovableCoord[i, k - 1] != null && mutableMovableCoord[i, k - 1] is Iron))
                                 {
                                     if (mutableMovableCoord[i, j] is Ball)
@@ -1420,6 +1652,8 @@ public class MapManager : MonoBehaviour
                                         ballX = i + 1;
                                         ballY = k + 1;
                                     }
+                                    move.newX = i + 1;
+                                    move.newY = k + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].transform.localPosition = new Vector3(i + 1, k + 1, 0f);
@@ -1429,7 +1663,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.DownShutter) && k >= 1 && mutableMovableCoord[i, k - 1] == null)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        mutableMap.mapCoord[i, k] -= (int)TileFlag.DownShutter / 2;
+                                        mutableMap.mapCoord[i, k - 1] -= (int)TileFlag.UpShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
+                                            tilemap.SetTile(new Vector3Int(i, k - 1, 0), tiles[mutableMap.mapCoord[i, k - 1] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1459,8 +1705,9 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-#endregion
+                            #endregion
                         }
+                        if (move != null) moves.Add(move);
                     }
                 }
                 ActionHistory += "s";
@@ -1470,10 +1717,12 @@ public class MapManager : MonoBehaviour
                 {
                     for (int j = 0; j < SizeY; j++)
                     {
+                        Move move = null;
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // i--
-#region Left
+                            move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
+                            #region Left
                             for (int k = i; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -1488,6 +1737,8 @@ public class MapManager : MonoBehaviour
                                         flag = Flag.Escaped;
                                         ballX = ExitX;
                                         ballY = ExitY;
+                                        move.newX -= MAX_ENOUGH_DISTANCE;
+                                        move.newY = j + 1;
                                         if (!isSimulation)
                                         {
                                             Debug.Log("Stage clear!");
@@ -1500,6 +1751,8 @@ public class MapManager : MonoBehaviour
                                     }
                                     else if (mutableMovableCoord[i, j] is Iron)
                                     {
+                                        move.newX -= MAX_ENOUGH_DISTANCE;
+                                        move.newY = j + 1;
                                         if (!isSimulation)
                                         {
                                             // TODO: (k + 1, j + 1)를 쇠가 지나 탈출하는 애니메이션 재생
@@ -1509,11 +1762,13 @@ public class MapManager : MonoBehaviour
                                         break;
                                     }
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Fire))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Fire))
                                 {
                                     flag = Flag.Burned;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1531,11 +1786,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.QuitGame))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.QuitGame))
                                 {
                                     flag = Flag.QuitGame;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1544,11 +1801,13 @@ public class MapManager : MonoBehaviour
                                     //GameManager.gm.QuitGame();
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.MapEditor))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.MapEditor))
                                 {
                                     flag = Flag.MapEditor;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1562,6 +1821,8 @@ public class MapManager : MonoBehaviour
                                     flag = Flag.Squashed;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1578,7 +1839,7 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[k, j] = null;
                                 }
-                                if (CheckTileFlag(map.mapCoord[k, j], TileFlag.LeftWall) ||
+                                if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.LeftWall) ||
                                     (k >= 1 && mutableMovableCoord[k - 1, j] != null && mutableMovableCoord[k - 1, j] is Iron))
                                 {
                                     if (mutableMovableCoord[i, j] is Ball)
@@ -1586,6 +1847,8 @@ public class MapManager : MonoBehaviour
                                         ballX = k + 1;
                                         ballY = j + 1;
                                     }
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].transform.localPosition = new Vector3(k + 1, j + 1, 0f);
@@ -1595,7 +1858,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.LeftShutter) && k >= 1 && mutableMovableCoord[k - 1, j] == null)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        mutableMap.mapCoord[k, j] -= (int)TileFlag.LeftShutter / 2;
+                                        mutableMap.mapCoord[k - 1, j] -= (int)TileFlag.RightShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
+                                            tilemap.SetTile(new Vector3Int(k - 1, j, 0), tiles[mutableMap.mapCoord[k - 1, j] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1625,8 +1900,9 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-#endregion
+                            #endregion
                         }
+                        if (move != null) moves.Add(move);
                     }
                 }
                 ActionHistory += "a";
@@ -1636,10 +1912,12 @@ public class MapManager : MonoBehaviour
                 {
                     for (int j = SizeY - 1; j >= 0; j--)
                     {
+                        Move move = null;
                         if (mutableMovableCoord[i, j] != null)
                         {
                             // i++
-#region Right
+                            move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
+                            #region Right
                             for (int k = i; k <= SizeX; k++)
                             {
                                 if (k == SizeX)
@@ -1654,6 +1932,8 @@ public class MapManager : MonoBehaviour
                                         flag = Flag.Escaped;
                                         ballX = ExitX;
                                         ballY = ExitY;
+                                        move.newX += MAX_ENOUGH_DISTANCE;
+                                        move.newY = j + 1;
                                         if (!isSimulation)
                                         {
                                             Debug.Log("Stage clear!");
@@ -1666,6 +1946,8 @@ public class MapManager : MonoBehaviour
                                     }
                                     else if (mutableMovableCoord[i, j] is Iron)
                                     {
+                                        move.newX += MAX_ENOUGH_DISTANCE;
+                                        move.newY = j + 1;
                                         if (!isSimulation)
                                         {
                                             // TODO: (k + 1, j + 1)를 쇠가 지나 탈출하는 애니메이션 재생
@@ -1675,11 +1957,13 @@ public class MapManager : MonoBehaviour
                                         break;
                                     }
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Fire))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Fire))
                                 {
                                     flag = Flag.Burned;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1697,11 +1981,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.QuitGame))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.QuitGame))
                                 {
                                     flag = Flag.QuitGame;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1710,11 +1996,13 @@ public class MapManager : MonoBehaviour
                                     //GameManager.gm.QuitGame();
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.MapEditor))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.MapEditor))
                                 {
                                     flag = Flag.MapEditor;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1723,11 +2011,13 @@ public class MapManager : MonoBehaviour
                                     //GameManager.gm.MapEditor();
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Adventure))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Adventure))
                                 {
                                     flag = Flag.Adventure;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1735,11 +2025,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Tutorial))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Tutorial))
                                 {
                                     flag = Flag.Tutorial;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1747,11 +2039,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Custom))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Custom))
                                 {
                                     flag = Flag.Custom;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1759,11 +2053,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.Survival))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Survival))
                                 {
                                     flag = Flag.Survival;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1771,11 +2067,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvEasy))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.AdvEasy))
                                 {
                                     flag = Flag.AdvEasy;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1783,11 +2081,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvNormal))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.AdvNormal))
                                 {
                                     flag = Flag.AdvNormal;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1795,11 +2095,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvHard))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.AdvHard))
                                 {
                                     flag = Flag.AdvHard;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1807,11 +2109,13 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(map.mapCoord[k, j], TileFlag.AdvInsane))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.AdvInsane))
                                 {
                                     flag = Flag.AdvInsane;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].gameObject.SetActive(false);
@@ -1824,6 +2128,8 @@ public class MapManager : MonoBehaviour
                                     flag = Flag.Squashed;
                                     ballX = k + 1;
                                     ballY = j + 1;
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
@@ -1840,7 +2146,7 @@ public class MapManager : MonoBehaviour
                                     }
                                     mutableMovableCoord[k, j] = null;
                                 }
-                                if (CheckTileFlag(map.mapCoord[k, j], TileFlag.RightWall) ||
+                                if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.RightWall) ||
                                     (k <= SizeX - 2 && mutableMovableCoord[k + 1, j] != null && mutableMovableCoord[k + 1, j] is Iron))
                                 {
                                     if (mutableMovableCoord[i, j] is Ball)
@@ -1848,6 +2154,8 @@ public class MapManager : MonoBehaviour
                                         ballX = k + 1;
                                         ballY = j + 1;
                                     }
+                                    move.newX = k + 1;
+                                    move.newY = j + 1;
                                     if (!isSimulation)
                                     {
                                         mutableMovableCoord[i, j].transform.localPosition = new Vector3(k + 1, j + 1, 0f);
@@ -1857,7 +2165,19 @@ public class MapManager : MonoBehaviour
                                         mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-
+                                if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.RightShutter) && k <= SizeX - 2 && mutableMovableCoord[k + 1, j] == null)
+                                {
+                                    if (mutableMovableCoord[i, j] is Ball)
+                                    {
+                                        mutableMap.mapCoord[k, j] -= (int)TileFlag.RightShutter / 2;
+                                        mutableMap.mapCoord[k + 1, j] -= (int)TileFlag.LeftShutter / 2;
+                                        if (!isSimulation)
+                                        {
+                                            tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
+                                            tilemap.SetTile(new Vector3Int(k + 1, j, 0), tiles[mutableMap.mapCoord[k + 1, j] % 81]);
+                                        }
+                                    }
+                                }
                                 // 현재 k에서 멈추지 않는 경우 잔상 생성
                                 if (!isSimulation)
                                 {
@@ -1887,8 +2207,9 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-#endregion
+                            #endregion
                         }
+                        if (move != null) moves.Add(move);
                     }
                 }
                 ActionHistory += "d";
@@ -1901,9 +2222,202 @@ public class MapManager : MonoBehaviour
         return mutableMovableCoord;
     }
 
+    IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves)
+    {
+        float time = Time.time;
+        if (traces != null)
+        {
+            foreach (GameObject g in traces)
+            {
+                Destroy(g);
+            }
+        }
+        traces = new List<GameObject>();
+
+        GameObject[,] traceCoord = new GameObject[mutableMap.sizeX, mutableMap.sizeY];
+
+        while (Time.time <= time + 1.5f && IsReady && HasCleared)
+        {
+            foreach (Move m in moves)
+            {
+                bool hasPrevChanged = m.MoveAlongDirection(gravityDirection, Time.time - time, mutableMap);
+                if (hasPrevChanged)
+                {
+                    int x, y;
+                    switch (gravityDirection)
+                    {
+                        case GameManager.GravityDirection.Up:
+                            x = m.prevX;
+                            y = m.prevY - 1;
+                            if (m.movable is Ball)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ballTracePrefabs[0], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+
+                                // Activate a shutter
+                                if (m.prevY - 1 < mutableMap.sizeY && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
+                                {
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.DownShutter / 2;
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
+                                }
+                            }
+                            else if (m.movable is Iron)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ironTracePrefabs[0], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+                            }
+                            break;
+                        case GameManager.GravityDirection.Down:
+                            x = m.prevX;
+                            y = m.prevY + 1;
+                            if (m.movable is Ball)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ballTracePrefabs[1], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+
+                                // Activate a shutter
+                                if (m.prevY - 1 >= 0 && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.UpShutter))
+                                {
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.UpShutter / 2;
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY] -= (int)TileFlag.DownShutter / 2;
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
+                                }
+                            }
+                            else if (m.movable is Iron)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ironTracePrefabs[1], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+                            }
+                            break;
+                        case GameManager.GravityDirection.Left:
+                            x = m.prevX + 1;
+                            y = m.prevY;
+                            if (m.movable is Ball)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ballTracePrefabs[2], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+
+                                // Activate a shutter
+                                if (m.prevX - 1 >= 0 && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.RightShutter))
+                                {
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
+                                    mutableMap.mapCoord[m.prevX, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                    tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
+                                }
+                            }
+                            else if (m.movable is Iron)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ironTracePrefabs[2], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+                            }
+                            break;
+                        case GameManager.GravityDirection.Right:
+                            x = m.prevX - 1;
+                            y = m.prevY;
+                            if (m.movable is Ball)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ballTracePrefabs[3], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+
+                                // Activate a shutter
+                                if (m.prevX - 1 < mutableMap.sizeX && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.LeftShutter))
+                                {
+                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
+                                    mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                    tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
+                                }
+                            }
+                            else if (m.movable is Iron)
+                            {
+                                // Create a trace
+                                GameObject g = Instantiate(ironTracePrefabs[3], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(x, y, 0f);
+                                if (traceCoord[x - 1, y - 1] != null)
+                                {
+                                    traces.Remove(traceCoord[x - 1, y - 1]);
+                                    Destroy(traceCoord[x - 1, y - 1]);
+                                }
+                                traceCoord[x - 1, y - 1] = g;
+                                traces.Add(g);
+                            }
+                            break;
+                    }
+                }
+            }
+            yield return null;
+        }
+        // Animation can be skipped by press "Next" button.
+    }
+
     private bool CheckTileFlag(int tile, TileFlag flag)
     {
-        return tile % (2 * (int)flag) / (int)flag == 1;
+        if ((int)flag % 2 == 0)
+        {
+            int div = (int)flag / 2;
+            return tile % (3 * div) / div == 2;
+        }
+        return tile % (3 * (int)flag) / (int)flag == 1;
     }
 
     private void PrintMapCoord()
@@ -2243,6 +2757,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    [Serializable]
     public class Map
     {
         public int sizeX;
@@ -2259,5 +2774,88 @@ public class MapManager : MonoBehaviour
             this.exitX = exitX;
             this.exitY = exitY;
         }
+
+        public Map Clone()
+        {
+            return new Map(sizeX, sizeY, (int[,])mapCoord.Clone(), exitX, exitY);
+        }
     }
+
+    public class Move
+    {
+        public Movable movable;
+        public int oldX;
+        public int oldY;
+        public int newX;
+        public int newY;
+        public int prevX;
+        public int prevY;
+
+        public Move(Movable movable, int oldX, int oldY)
+        {
+            this.movable = movable;
+            this.oldX = oldX;
+            this.oldY = oldY;
+            this.newX = oldX;
+            this.newY = oldY;
+            this.prevX = oldX;
+            this.prevY = oldY;
+        }
+
+        public Move(Movable movable, int oldX, int oldY, int newX, int newY)
+        {
+            this.movable = movable;
+            this.oldX = oldX;
+            this.oldY = oldY;
+            this.newX = newX;
+            this.newY = newY;
+            this.prevX = oldX;
+            this.prevY = oldY;
+        }
+
+        public bool MoveAlongDirection(GameManager.GravityDirection gravityDirection, float t, Map map)
+        {
+            bool hasPrevChanged = false;
+            if (movable == null) return false;
+            Transform transform = movable.GetComponent<Transform>();
+            t = Mathf.Clamp(t, 0f, 1.5f);
+            switch (gravityDirection)
+            {
+                case GameManager.GravityDirection.Up:
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY + 16 * t * t / 3) * 9) / 9f, oldY, newY), 0f);
+                    if (transform.localPosition.y >= prevY + 1 && prevY <= map.sizeY)
+                    {
+                        prevY += 1;
+                        hasPrevChanged = true;
+                    }
+                    break;
+                case GameManager.GravityDirection.Down:
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY - 16 * t * t / 3) * 9) / 9f, newY, oldY), 0f);
+                    if (transform.localPosition.y <= prevY - 1 && prevY >= 1)
+                    {
+                        prevY -= 1;
+                        hasPrevChanged = true;
+                    }
+                    break;
+                case GameManager.GravityDirection.Left:
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX - 16 * t * t / 3) * 9) / 9f, newX, oldX), transform.localPosition.y, 0f);
+                    if (transform.localPosition.x <= prevX - 1 && prevX >= 1)
+                    {
+                        prevX -= 1;
+                        hasPrevChanged = true;
+                    }
+                    break;
+                case GameManager.GravityDirection.Right:
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX + 16 * t * t / 3) * 9) / 9f, oldX, newX), transform.localPosition.y, 0f);
+                    if (transform.localPosition.x >= prevX + 1 && prevX <= map.sizeX)
+                    {
+                        prevX += 1;
+                        hasPrevChanged = true;
+                    }
+                    break;
+            }
+            return hasPrevChanged;
+        }
+    }
+
 }
