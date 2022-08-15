@@ -43,9 +43,9 @@ public class TutorialGuide : MonoBehaviour
         //You can manipulate the direction of gravity using the arrow buttons.
 
         tipDict.Add(new TutorialTuple(1, 2, 0), "Press the left arrow to make the ball roll to the left!");
-        tipDict.Add(new TutorialTuple(1, 0, 0), "Great job! Now, let's press the up arrow to make the ball roll up");
+        tipDict.Add(new TutorialTuple(1, 0, 0), "Great job!\nNow, let's press the up arrow to make the ball roll up");
         tipDict.Add(new TutorialTuple(1, 0, 1), "Okay! Then let's get the ball out!");
-        tipDict.Add(new TutorialTuple(2, 2, 0), "Next is a more complicated maze... Good luck!");
+        tipDict.Add(new TutorialTuple(2, 2, 0), "Next is a more complicated maze...\nGood luck!");
         tipDict.Add(new TutorialTuple(2, 0, 0), "Oh, that's a good choice");
         tipDict.Add(new TutorialTuple(2, 0, 2), "Oh, that's a good choice");
         tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
@@ -59,10 +59,14 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(5, 2, 1), "And also, iron can escape outside!");
         tipDict.Add(new TutorialTuple(5, 2, 2), "And also, iron can escape outside!");
         tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with iron.");
-        tipDict.Add(new TutorialTuple(6, 2, 2), "Finally, the iron can cover the fire for a while!");
+        tipDict.Add(new TutorialTuple(6, 2, 2), "The iron can cover the fire for a while!");
         tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can step on it!");
-        tipDict.Add(new TutorialTuple(7, 0, 2), "Shutter can.");
-        tipDict.Add(new TutorialTuple(8, 1, 1), "Shutter also can.");
+        tipDict.Add(new TutorialTuple(7, 0, 2), "Press the right arrow to close the shutter if the green wall exists.");
+        tipDict.Add(new TutorialTuple(7, 1, 2), "If your ball passes through the green shutter, it will become a wall.");
+        tipDict.Add(new TutorialTuple(7, 1, 0), "After the shutter becomes a wall, it continues to exist as a wall.");
+        
+        tipDict.Add(new TutorialTuple(8, 1, 1), "A walled shutter can also block iron. Don't let iron crush the ball!");
+        tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
         
 
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
@@ -115,7 +119,7 @@ public class TutorialGuide : MonoBehaviour
     public void SpecificCaseGuide(MapManager.Flag flag){
         switch(flag){
             case MapManager.Flag.Burned:
-                emergencyText = "Your ball burned down! Press the shiny retry button at the bottom to try again.";
+                emergencyText = "Your ball burned down!\nPress the shiny retry button to try again.";
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -124,7 +128,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Squashed:
-                emergencyText = "Your ball is crushed by the box! Press the shiny retry button at the bottom to try again.";
+                emergencyText = "Your ball is crushed by the box!\nPress the shiny retry button to try again.";
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -132,7 +136,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.TimeOver:
-                emergencyText = "Unfortunately, all time have passed! Press the shiny retry button at the bottom to try again.";
+                emergencyText = "Unfortunately, all time have passed!\nPress the shiny retry button to try again.";
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -143,6 +147,9 @@ public class TutorialGuide : MonoBehaviour
 
             case MapManager.Flag.Escaped:
                 emergencyText = "Your ball escaped! Congratulation!";
+                if(GameManager.gm.PlayingMapIndex+1 == 8){
+                    emergencyText = "Congratulations!\nYou passed all tutorials!";
+                }
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -157,6 +164,9 @@ public class TutorialGuide : MonoBehaviour
     public void retryButtonDown(){
         Debug.Log("BP");
         Destroy(CurrentTip);
+        for(int j=0;j<tipKeys.Count;j++){
+            tipKeys[j].isPassed = false;
+        }
     }
 
 
