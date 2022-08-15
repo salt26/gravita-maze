@@ -51,16 +51,16 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
         tipDict.Add(new TutorialTuple(2, 1, 1), "Here's only one step left!");
         tipDict.Add(new TutorialTuple(2, 0, 1), "Here's only one step left!");
-        tipDict.Add(new TutorialTuple(3, 1, 2), "Fire can burn your balls...");
-        tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy Iron can crush a ball...");
-        tipDict.Add(new TutorialTuple(4, 1, 0), "Also, a heavy Iron can make it go out!");
-        tipDict.Add(new TutorialTuple(4, 2, 2), "Also, a heavy Iron can make it go out!");
-        tipDict.Add(new TutorialTuple(5, 1, 1), "A heavy Iron can crush a ball.");
-        tipDict.Add(new TutorialTuple(5, 2, 1), "And also, the Iron can escape outside!");
-        tipDict.Add(new TutorialTuple(5, 2, 2), "And also, the Iron can escape outside!");
-        tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with Iron.");
-        tipDict.Add(new TutorialTuple(6, 2, 2), "Finally, the Iron can cover the fire for a while!");
-        tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the Iron has blocked the fire, you can step on it!");
+        tipDict.Add(new TutorialTuple(3, 1, 2), "Fire can burn your ball...");
+        tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy iron can crush a ball...");
+        tipDict.Add(new TutorialTuple(4, 1, 0), "Also, a heavy iron can make it go out!");
+        tipDict.Add(new TutorialTuple(4, 2, 2), "Also, a heavy iron can make it go out!");
+        tipDict.Add(new TutorialTuple(5, 1, 1), "A heavy iron can crush a ball.");
+        tipDict.Add(new TutorialTuple(5, 2, 1), "And also, iron can escape outside!");
+        tipDict.Add(new TutorialTuple(5, 2, 2), "And also, iron can escape outside!");
+        tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with iron.");
+        tipDict.Add(new TutorialTuple(6, 2, 2), "Finally, the iron can cover the fire for a while!");
+        tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can step on it!");
         tipDict.Add(new TutorialTuple(7, 0, 2), "Shutter can.");
         tipDict.Add(new TutorialTuple(8, 1, 1), "Shutter also can.");
         
@@ -74,12 +74,12 @@ public class TutorialGuide : MonoBehaviour
     }
 
 
-    public bool isBallThere(TutorialTuple tutorialTuple)
+    public bool IsBallThere(TutorialTuple tutorialTuple)
     {
         int posX = tutorialTuple.xIndex;
         int posY = tutorialTuple.yIndex;
 
-        if (mm == null || mm.currentMovableCoord[posX, posY] is Ball){
+        if (mm != null && mm.currentMovableCoord[posX, posY] is Ball){
             return true;
         }
         else{
@@ -87,11 +87,11 @@ public class TutorialGuide : MonoBehaviour
         }
     }
 
-    public bool isIronThere(TutorialTuple tutorialTuple)
+    public bool IsIronThere(TutorialTuple tutorialTuple)
     {
         int posX = tutorialTuple.xIndex;
         int posY = tutorialTuple.yIndex;
-        if (mm == null||mm.currentMovableCoord[posX, posY] is Iron){
+        if (mm != null && mm.currentMovableCoord[posX, posY] is Iron){
             return true;
         }
         else{
@@ -100,14 +100,14 @@ public class TutorialGuide : MonoBehaviour
     }
     
 
-    public void showText(string text){
+    public void ShowText(string text){
         CurrentTip = Instantiate(tutorialTip, myTransform).GetComponent<TutorialGuideUI>();
 
         CurrentTip.Initialize(new Vector2(0f,0f), 1080, 400, text);
 
     }
 
-    public void hideText(TutorialGuideUI currentTip){
+    public void HideText(TutorialGuideUI currentTip){
         Destroy(currentTip.gameObject);
         CurrentTip = null;
     }
@@ -142,7 +142,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Escaped:
-                emergencyText = "Your Ball Escape! Congratulation!";
+                emergencyText = "Your ball escaped! Congratulation!";
                 if(CurrentTip != null){
                     hideText(CurrentTip);
                 }
