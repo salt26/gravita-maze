@@ -91,18 +91,28 @@ public class GameManager : MonoBehaviour
             {
                 mm.ManipulateGravityRight();
             }
-            else if (Input.GetKeyUp(KeyCode.Space) && mm.gravityRetryButton.interactable)
+            else if (Input.GetKeyUp(KeyCode.Space) && ((mm.gravityRetryButton.gameObject.activeInHierarchy
+                && mm.gravityRetryButton.interactable) || (mm.gravityRetryHighlightedButton != null &&
+                mm.gravityRetryHighlightedButton.gameObject.activeInHierarchy && mm.gravityRetryHighlightedButton.interactable)))
             {
-                mm.Restart();
+                mm.Retry();
+                if (SceneManager.GetActiveScene().name.Equals("Tutorial") && pm != null && pm.tutorialGuide != null)
+                {
+                    pm.tutorialGuide.RetryButtonDown();
+                }
             }
             else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
             {
                 if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
                 {
                     if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+                    {
                         pm.TutorialNext();
+                    }
                     else
+                    {
                         pm.PlayNext();
+                    }
                 }
                 else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
                 {

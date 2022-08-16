@@ -5044,6 +5044,9 @@ MonoBehaviour:
   movableAndFixedGameObjects: {fileID: 713554043}
   mainCamera: {fileID: 659557095}
   gravityRetryButton: {fileID: 1877085893}
+  gravityRetryHighlightedButton: {fileID: 0}
+  gravityRetryTimeButton: {fileID: 0}
+  gravityRetryTimeHighlightedButton: {fileID: 0}
   gravityUpButton: {fileID: 2068695179}
   gravityDownButton: {fileID: 1287567347}
   gravityLeftButton: {fileID: 1209234942}
@@ -6029,7 +6032,12 @@ PrefabInstance:
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Restart
+      value: Retry
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MapManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154924, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}

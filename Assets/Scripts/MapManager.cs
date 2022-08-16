@@ -55,6 +55,9 @@ public class MapManager : MonoBehaviour
     public Camera mainCamera;
 
     public Button gravityRetryButton;
+    public Button gravityRetryHighlightedButton;
+    public Button gravityRetryTimeButton;
+    public Button gravityRetryTimeHighlightedButton;
     public Button gravityUpButton;
     public Button gravityDownButton;
     public Button gravityLeftButton;
@@ -1126,23 +1129,23 @@ public class MapManager : MonoBehaviour
     /// <summary>
     /// 현재 맵과 남은 시간을 초기 상태로 되돌리는 함수.
     /// </summary>
-    public void RestartWithTime()
+    public void RetryWithTime()
     {
         if (!IsReady || (RemainingTime > 0f && !HasCleared)) return;
         TimeActivate();
-        RestartHelper();
+        RetryHelper();
     }
 
     /// <summary>
     /// 현재 맵을 초기 상태로 되돌리는 함수. 남은 시간은 되돌리지 않습니다.
     /// </summary>
-    public void Restart()
+    public void Retry()
     {
         if (!IsReady || RemainingTime <= 0f || HasCleared) return;
-        RestartHelper();
+        RetryHelper();
     }
 
-    private void RestartHelper()
+    private void RetryHelper()
     {
         IsReady = false;
 

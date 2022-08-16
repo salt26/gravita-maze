@@ -1034,8 +1034,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 387881936}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: RestartWithTime
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: RetryWithTime
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3175,8 +3175,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 387881936}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: RestartWithTime
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: RetryWithTime
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4894,6 +4894,9 @@ MonoBehaviour:
   movableAndFixedGameObjects: {fileID: 1804313141}
   mainCamera: {fileID: 1333333513}
   gravityRetryButton: {fileID: 1267238292}
+  gravityRetryHighlightedButton: {fileID: 1678934687}
+  gravityRetryTimeButton: {fileID: 275147236}
+  gravityRetryTimeHighlightedButton: {fileID: 52850594}
   gravityUpButton: {fileID: 1261721478}
   gravityDownButton: {fileID: 1541170116}
   gravityLeftButton: {fileID: 1129996991}
@@ -14207,8 +14210,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 387881936}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Restart
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19010,8 +19013,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 387881936}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Restart
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -438,7 +438,6 @@ MonoBehaviour:
   emergencyText: 
   tooltipWidth: 1080
   tooltipHeight: 400
-  pivot: 0
   tipKeys: []
   tips: []
 --- !u!1 &250178042
@@ -2027,8 +2026,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1755156424}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: RestartWithTime
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: RetryWithTime
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2052,7 +2051,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1430318116}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
-        m_MethodName: TutorialRestartWithTime
+        m_MethodName: TutorialRetryWithTime
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3226,8 +3225,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1755156424}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Restart
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3364,8 +3363,8 @@ MonoBehaviour:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
   - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
   - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
+  - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
   - {fileID: 4900000, guid: e4f1f5c37c6506a4d8a58b4da10726e0, type: 3}
   - {fileID: 4900000, guid: 469a9b2b0a7443d4bb4cde5557f19510, type: 3}
@@ -4079,6 +4078,9 @@ MonoBehaviour:
   movableAndFixedGameObjects: {fileID: 713554043}
   mainCamera: {fileID: 659557095}
   gravityRetryButton: {fileID: 1877085893}
+  gravityRetryHighlightedButton: {fileID: 1404637733}
+  gravityRetryTimeButton: {fileID: 1061809501}
+  gravityRetryTimeHighlightedButton: {fileID: 1783891383}
   gravityUpButton: {fileID: 2068695179}
   gravityDownButton: {fileID: 1287567347}
   gravityLeftButton: {fileID: 1209234942}
@@ -4301,8 +4303,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1755156424}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: RestartWithTime
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
+        m_MethodName: RetryWithTime
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4825,12 +4827,17 @@ PrefabInstance:
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Restart
+      value: Retry
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: RetryButtonDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MapManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}

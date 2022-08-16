@@ -269,7 +269,7 @@ public class PlayManager : MonoBehaviour
         }
     }
 
-    public void PlayRestartWithTime()
+    public void PlayRetryWithTime()
     {
         if (IsHurt)
         {
@@ -277,7 +277,7 @@ public class PlayManager : MonoBehaviour
         }
     }
     
-    public void TutorialRestartWithTime()
+    public void TutorialRetryWithTime()
     {
         if (EscapedCount > 0) EscapedCount--;
     }
