@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -414,7 +414,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1851242258}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 1}
@@ -436,8 +436,8 @@ MonoBehaviour:
   tutorialTip: {fileID: 6307982104829601480, guid: 06e67a9f842de2d4ba44ce4b9b430493,
     type: 3}
   emergencyText: 
-  tooltipWidth: 0
-  tooltipHeight: 0
+  tooltipWidth: 1080
+  tooltipHeight: 400
   pivot: 0
   tipKeys: []
   tips: []
@@ -2062,6 +2062,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 224579977}
+        m_TargetAssemblyTypeName: TutorialGuide, Assembly-CSharp
+        m_MethodName: RetryButtonDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1061809502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2235,7 +2247,7 @@ PrefabInstance:
     - target: {fileID: 6823232688551012769, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6823232688551012769, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
@@ -3225,6 +3237,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 224579977}
+        m_TargetAssemblyTypeName: TutorialGuide, Assembly-CSharp
+        m_MethodName: RetryButtonDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1404637734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3340,8 +3364,8 @@ MonoBehaviour:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
   - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
+  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
   - {fileID: 4900000, guid: e4f1f5c37c6506a4d8a58b4da10726e0, type: 3}
   - {fileID: 4900000, guid: 469a9b2b0a7443d4bb4cde5557f19510, type: 3}
@@ -4300,6 +4324,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 224579977}
+        m_TargetAssemblyTypeName: TutorialGuide, Assembly-CSharp
+        m_MethodName: RetryButtonDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1783891384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4744,8 +4780,8 @@ RectTransform:
   - {fileID: 4462461048705734385}
   - {fileID: 1304023982}
   - {fileID: 857531045}
-  - {fileID: 1121709906}
   - {fileID: 224579976}
+  - {fileID: 1121709906}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4763,13 +4799,53 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1755156424}
     - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 224579977}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: RetryButtonDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TutorialGuide, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 772091377553154923, guid: 572232613a4c4f2419c8447db52259db,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154924, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}

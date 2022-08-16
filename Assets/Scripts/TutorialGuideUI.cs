@@ -12,12 +12,12 @@ public class TutorialGuideUI : MonoBehaviour
     public void Initialize(Vector2 position, float width, float height, string message)
     {
         text = GetComponentInChildren<Text>();
-        myTransform = GetComponent<RectTransform>();
+        //myTransform = GetComponent<RectTransform>();
 
-        myTransform.localPosition = new Vector2(position.x, position.y - 530);
+        // myTransform.localPosition = new Vector2(position.x, position.y);
 
-        myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-        myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+        //myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        //myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         text.text = message.Replace('\\', '\n');
     }
 
