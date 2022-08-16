@@ -51,22 +51,23 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
         tipDict.Add(new TutorialTuple(2, 1, 1), "Here's only one step left!");
         tipDict.Add(new TutorialTuple(2, 0, 1), "Here's only one step left!");
-        tipDict.Add(new TutorialTuple(3, 1, 0), "Fire can burn your ball...");
+        tipDict.Add(new TutorialTuple(3, 1, 0), "Fire can burn the ball...");
         tipDict.Add(new TutorialTuple(4, 2, 0), "A heavy iron can crush a ball...");
-        tipDict.Add(new TutorialTuple(4, 1, 0), "Also, a heavy iron can make it go out!");
-        tipDict.Add(new TutorialTuple(4, 2, 2), "Also, a heavy iron can make it go out!");
+        tipDict.Add(new TutorialTuple(4, 1, 0), "The iron can be removed by escaping outside!");
+        tipDict.Add(new TutorialTuple(4, 2, 2), "The iron can be removed by escaping outside!");
         tipDict.Add(new TutorialTuple(5, 1, 1), "A heavy iron can crush a ball.");
-        tipDict.Add(new TutorialTuple(5, 2, 1), "And also, iron can escape outside!");
-        tipDict.Add(new TutorialTuple(5, 2, 2), "And also, iron can escape outside!");
-        tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with iron.");
+        tipDict.Add(new TutorialTuple(5, 2, 1), "The iron can be removed by escaping outside!");
+        tipDict.Add(new TutorialTuple(5, 2, 2), "The iron can be removed by escaping outside!");
+        tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with the iron.");
         tipDict.Add(new TutorialTuple(6, 2, 2), "The iron can cover the fire for a while!");
         tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can step on it!");
-        tipDict.Add(new TutorialTuple(7, 0, 2), "Press the right arrow to close the shutter if the green wall exists.");
-        tipDict.Add(new TutorialTuple(7, 1, 2), "If your ball passes through the green shutter, it will become a wall.");
+        tipDict.Add(new TutorialTuple(7, 0, 2), "Press the right arrow to close the green shutter.");
+        tipDict.Add(new TutorialTuple(7, 0, 0), "Let's use the shutter!");
+        tipDict.Add(new TutorialTuple(7, 1, 2), "If the ball passes through the green shutter, it will become a wall.");
         tipDict.Add(new TutorialTuple(7, 1, 0), "After the shutter becomes a wall, it continues to exist as a wall.");
-        
         tipDict.Add(new TutorialTuple(8, 1, 1), "A walled shutter can also block iron. Don't let iron crush the ball!");
         tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
+        tipDict.Add(new TutorialTuple(8, 2, 1), "The iron cannot activate the shutter. Only the ball can activate the shutter.");
         
 
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
@@ -119,7 +120,7 @@ public class TutorialGuide : MonoBehaviour
     public void SpecificCaseGuide(MapManager.Flag flag){
         switch(flag){
             case MapManager.Flag.Burned:
-                emergencyText = "Your ball burned down!\nPress the shiny retry button to try again.";
+                emergencyText = "The ball burned down!\nPress the shiny retry button to try again.";
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -128,7 +129,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Squashed:
-                emergencyText = "Your ball is crushed by the box!\nPress the shiny retry button to try again.";
+                emergencyText = "The ball is crushed by the iron!\nPress the shiny retry button to try again.";
                 if(CurrentTip != null){
                     HideText(CurrentTip);
                 }
@@ -146,7 +147,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Escaped:
-                emergencyText = "Your ball escaped! Congratulation!";
+                emergencyText = "The ball escaped! Congratulation!";
                 if(GameManager.gm.PlayingMapIndex+1 == 8){
                     emergencyText = "Congratulations!\nYou passed all tutorials!";
                 }
@@ -161,7 +162,7 @@ public class TutorialGuide : MonoBehaviour
         }
     }
 
-    public void retryButtonDown(){
+    public void RetryButtonDown(){
         Debug.Log("BP");
         Destroy(CurrentTip);
         for(int j=0;j<tipKeys.Count;j++){
