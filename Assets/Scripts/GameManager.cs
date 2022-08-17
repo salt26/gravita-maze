@@ -34,9 +34,20 @@ public class GameManager : MonoBehaviour
         get{return playingMapIndex;}
     }
 
-    private AudioSource audioSource;
-
+    public AudioSource bgmAudioSource;
     public List<AudioClip> bgms;
+    public float bgmVolume = 0.8f;
+    private List<float> bgmVolumeForEach = new List<float>() { 1f, 0.7f, 1f };
+
+    public AudioSource sfxAudioSource;
+    public List<AudioClip> ballSfxs;
+    public List<AudioClip> ironSfxs;
+    public AudioClip shutterSfx;
+    public AudioClip squashedSfx;
+    public AudioClip burnedSfx;
+    public AudioClip escapedSfx;
+    public AudioClip timeoutSfx;
+    public float sfxVolume = 0.8f;
 
     private void Awake()
     {
@@ -52,7 +63,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
+        sfxAudioSource.volume = Mathf.Clamp01(sfxVolume);
         Initialize();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -139,6 +151,15 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (bgmAudioSource.clip == bgms[i])
+            {
+                bgmAudioSource.volume = Mathf.Clamp01(bgmVolume * bgmVolumeForEach[i]);
+                break;
+            }
+        }
     }
 
     void Initialize()
@@ -148,61 +169,61 @@ public class GameManager : MonoBehaviour
         // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
         if (SceneManager.GetActiveScene().name.Equals("Main"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeMain());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Editor"))
         {
-            if (audioSource.clip != bgms[2])
+            if (bgmAudioSource.clip != bgms[2])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[2];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[2];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeEditor());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Mode"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeMode());
         }
         else if (SceneManager.GetActiveScene().name.Equals("AdventureLevel"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeAdventureLevel());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
-            if (audioSource.clip != bgms[1])
+            if (bgmAudioSource.clip != bgms[1])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[1];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[1];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeTutorial());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
         {
-            if (audioSource.clip != bgms[1])
+            if (bgmAudioSource.clip != bgms[1])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[1];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[1];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeAdventure());
         }
@@ -210,18 +231,55 @@ public class GameManager : MonoBehaviour
 
     public void EditorChangeBGM(EditorManager.EditPhase editPhase)
     {
-        if (editPhase != EditorManager.EditPhase.Test && audioSource.clip != bgms[2])
+        if (editPhase != EditorManager.EditPhase.Test && bgmAudioSource.clip != bgms[2])
         {
-            audioSource.Stop();
-            audioSource.clip = bgms[2];
-            audioSource.Play();
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[2];
+            bgmAudioSource.Play();
         }
-        if (editPhase == EditorManager.EditPhase.Test && audioSource.clip != bgms[1])
+        if (editPhase == EditorManager.EditPhase.Test && bgmAudioSource.clip != bgms[1])
         {
-            audioSource.Stop();
-            audioSource.clip = bgms[1];
-            audioSource.Play();
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[1];
+            bgmAudioSource.Play();
         }
+    }
+
+    public void PlayBallSFX()
+    {
+        int r = UnityEngine.Random.Range(0, 6);
+        sfxAudioSource.PlayOneShot(ballSfxs[r]);
+    }
+
+    public void PlayIronSFX(int moveDistance, float volumeScale = 1f)
+    {
+        if (moveDistance < 1 || moveDistance > 8) return;
+        sfxAudioSource.PlayOneShot(ironSfxs[moveDistance - 1], Mathf.Clamp01(volumeScale * sfxVolume));
+    }
+
+    public void PlayShutterSFX()
+    {
+        sfxAudioSource.PlayOneShot(shutterSfx);
+    }
+
+    public void PlaySquashedSFX()
+    {
+        sfxAudioSource.PlayOneShot(squashedSfx);
+    }
+
+    public void PlayBurnedSFX()
+    {
+        sfxAudioSource.PlayOneShot(burnedSfx);
+    }
+
+    public void PlayEscapedSFX()
+    {
+        sfxAudioSource.PlayOneShot(escapedSfx);
+    }
+
+    public void PlayTimeoutSFX()
+    {
+        sfxAudioSource.PlayOneShot(timeoutSfx);
     }
 
     public void QuitGame()

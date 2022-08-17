@@ -206,6 +206,7 @@ public class MapManager : MonoBehaviour
             if (RemainingTime <= 0f)
             {
                 timeoutPanel.SetActive(true);
+                GameManager.gm.PlayTimeoutSFX();
                 if (afterGravity.GetInvocationList().Length > 0)
                     afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
                 Debug.LogWarning("Map warning: Time over");
@@ -1286,6 +1287,11 @@ public class MapManager : MonoBehaviour
         if (flag == Flag.Escaped)
         {
             HasCleared = true;
+            if (SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Tutorial") ||
+                SceneManager.GetActiveScene().name.Equals("Adventure"))
+            {
+                GameManager.gm.PlayEscapedSFX();
+            }
             StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves));
         }
         else
@@ -1293,9 +1299,36 @@ public class MapManager : MonoBehaviour
             ActionHistory.Substring(0, ActionHistory.Length - 1);
             currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
-            if (flag == Flag.Burned || flag == Flag.Squashed)
+            switch (flag)
             {
-                HasDied = true;
+                case Flag.Squashed:
+                    HasDied = true;
+                    GameManager.gm.PlaySquashedSFX();
+                    break;
+                case Flag.Burned:
+                    HasDied = true;
+                    GameManager.gm.PlayBurnedSFX();
+                    break;
+                case Flag.Continued:
+                    Move ballMove = moves.Find(e => e.movable is Ball);
+                    if (Mathf.Max(Mathf.Abs(ballMove.newX - ballMove.oldX), Mathf.Abs(ballMove.newY - ballMove.oldY)) > 0)
+                    {
+                        GameManager.gm.PlayBallSFX();
+                    }
+                    break;
+            }
+
+            HashSet<int> distances = new HashSet<int>();
+            foreach (Move move in moves)
+            {
+                if (move.movable is Iron)
+                {
+                    distances.Add(Mathf.Max(Mathf.Abs(move.newX - move.oldX), Mathf.Abs(move.newY - move.oldY)));
+                }
+            }
+            foreach (int d in distances)
+            {
+                GameManager.gm.PlayIronSFX(d);
             }
         }
     }
@@ -1481,6 +1514,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
                                             tilemap.SetTile(new Vector3Int(i, k + 1, 0), tiles[mutableMap.mapCoord[i, k + 1] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -1676,6 +1710,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
                                             tilemap.SetTile(new Vector3Int(i, k - 1, 0), tiles[mutableMap.mapCoord[i, k - 1] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -1871,6 +1906,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
                                             tilemap.SetTile(new Vector3Int(k - 1, j, 0), tiles[mutableMap.mapCoord[k - 1, j] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -2178,6 +2214,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
                                             tilemap.SetTile(new Vector3Int(k + 1, j, 0), tiles[mutableMap.mapCoord[k + 1, j] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -2272,6 +2309,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2286,6 +2324,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newY - m.oldY));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Down:
@@ -2311,6 +2354,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 1, m.prevY] -= (int)TileFlag.DownShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2325,6 +2369,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newY - m.oldY));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Left:
@@ -2350,6 +2399,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2364,6 +2414,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newX - m.oldX));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Right:
@@ -2389,6 +2444,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2403,6 +2459,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newX - m.oldX));
+                                }
                             }
                             break;
                     }
