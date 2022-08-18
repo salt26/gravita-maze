@@ -56,12 +56,13 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with the iron.");
         tipDict.Add(new TutorialTuple(6, 2, 2), "The iron can temporarily cover a fire!");
         tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can step on it!");
-        tipDict.Add(new TutorialTuple(7, 0, 2), "Press the right arrow to close the bright green shutter.");
-        tipDict.Add(new TutorialTuple(7, 0, 0), "Let's use the shutter!");
-        tipDict.Add(new TutorialTuple(7, 1, 2), "If the ball passes through the bright green shutter, it will become a wall.");
-        tipDict.Add(new TutorialTuple(7, 1, 0), "Once the shutter becomes a wall, it remains a wall until you retry.");
+        tipDict.Add(new TutorialTuple(7, 1, 2), "Press the right arrow to close the bright green shutter.");
+        tipDict.Add(new TutorialTuple(7, 1, 0), "Let's use the shutter!");
+        tipDict.Add(new TutorialTuple(7, 2, 2), "If the ball passes through the bright green shutter, it will become a wall.");
+        tipDict.Add(new TutorialTuple(7, 2, 0), "Once the shutter becomes a wall, it remains a wall until you retry.");
+        tipDict.Add(new TutorialTuple(7, 0, 1), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
         tipDict.Add(new TutorialTuple(8, 1, 1), "A walled shutter can also block the iron. Don't let the iron squash the ball!");
-        tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter. Press retry button!");
+        tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
         tipDict.Add(new TutorialTuple(8, 2, 1), "The iron cannot make the shutter a wall. Only the ball can close the shutter.");
         
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
@@ -165,7 +166,7 @@ public class TutorialGuide : MonoBehaviour
 
     public void RetryButtonDown()
     {
-        Debug.Log("BP");
+        //Debug.Log("BP");
         HideText(currentTip);
         for (int j = 0; j < tipKeys.Count; j++)
         {

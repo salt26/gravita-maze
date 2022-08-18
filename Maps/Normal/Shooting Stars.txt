@@ -53,5 +53,5 @@ $ | 9 5
 | 7 4
 - 6 4
 - 8 6
-t 20
+t 30
 s d2RzYXNhZHdhd2R3YXdhd2F3YXNkc2F3ZHdhd2R3ZHNk

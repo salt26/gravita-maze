@@ -441,13 +441,24 @@ public class GameManager : MonoBehaviour
         }
         List<WallInfo> walls = new List<WallInfo>();
 
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 1));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 3));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 2));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 4));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
@@ -457,7 +468,6 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 7));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
@@ -467,20 +477,23 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 3, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 4, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 5, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 6, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 7, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 8, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 9, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 10, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 9, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 10, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
@@ -488,12 +501,9 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
@@ -509,13 +519,13 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
-        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
         mm.afterGravity = ModeAfterGravity;
 
-        mm.Initialize(10, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.Initialize(10, 9, walls, objects, "a", float.PositiveInfinity);
         mm.TimeActivate();
         canPlay = true;
     }
@@ -533,16 +543,21 @@ public class GameManager : MonoBehaviour
         }
         List<WallInfo> walls = new List<WallInfo>();
 
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // Insane
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // Hard
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // Normal
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // Easy
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 9));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
@@ -550,7 +565,6 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
@@ -558,27 +572,27 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, 2, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 3, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 4, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 5, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 6, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 7, 5));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 8, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, 8, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
@@ -590,13 +604,13 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
-        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
         mm.afterGravity = AdventureLevelAfterGravity;
 
-        mm.Initialize(8, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.Initialize(8, 9, walls, objects, "a", float.PositiveInfinity);
         mm.TimeActivate();
         canPlay = true;
     }
