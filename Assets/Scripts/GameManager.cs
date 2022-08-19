@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     public AudioClip escapedSfx;
     public AudioClip timeoutSfx;
     public AudioClip retrySfx;
+    public List<AudioClip> buttonSfxs;
     public float sfxVolume = 0.8f;
 
     private void Awake()
@@ -250,7 +251,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayBallSFX()
     {
-        int r = UnityEngine.Random.Range(0, 6);
+        int r = UnityEngine.Random.Range(0, ballSfxs.Count);
         sfxAudioSource.PlayOneShot(ballSfxs[r]);
     }
 
@@ -288,6 +289,12 @@ public class GameManager : MonoBehaviour
     public void PlayRetrySFX()
     {
         sfxAudioSource.PlayOneShot(retrySfx);
+    }
+
+    public void PlayButtonSFX()
+    {
+        int r = UnityEngine.Random.Range(0, buttonSfxs.Count);
+        sfxAudioSource.PlayOneShot(buttonSfxs[r]);
     }
 
     public void QuitGame()

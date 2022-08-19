@@ -17,11 +17,13 @@ public class MessageUI : MonoBehaviour
         {
             messageOKButton.onClick.AddListener(onOKClick);
         }
+        messageOKButton.onClick.AddListener(() => GameManager.gm.PlayButtonSFX());
         messageOKButton.onClick.AddListener(() => gameObject.SetActive(false));
         if (onXClick != null)
         {
             messageXButton.onClick.AddListener(onXClick);
         }
+        messageXButton.onClick.AddListener(() => GameManager.gm.PlayButtonSFX());
         messageXButton.onClick.AddListener(() => gameObject.SetActive(false));
 
         gameObject.SetActive(true);

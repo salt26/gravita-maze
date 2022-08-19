@@ -63,6 +63,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f35ccef122f15224bb484a8d31dc7953, type: 3}
   - {fileID: 8300000, guid: ac7ca0f5f3e70ce48ad390b14f85cb58, type: 3}
   - {fileID: 8300000, guid: ca621504b17a1304192014240352b42e, type: 3}
+  - {fileID: 8300000, guid: ac7ca0f5f3e70ce48ad390b14f85cb58, type: 3}
+  - {fileID: 8300000, guid: ca621504b17a1304192014240352b42e, type: 3}
   ironSfxs:
   - {fileID: 8300000, guid: c452351819228924ea49fafd649b2579, type: 3}
   - {fileID: 8300000, guid: 3adf3f5e4c3038348878996344288e9f, type: 3}
@@ -78,6 +80,15 @@ MonoBehaviour:
   escapedSfx: {fileID: 8300000, guid: 61cb1ccf24f0ad24da5edd9874031b87, type: 3}
   timeoutSfx: {fileID: 8300000, guid: 319fa9ae38b7dce4e9f18d2988d9ebae, type: 3}
   retrySfx: {fileID: 8300000, guid: f649d1a1f24de5a45b5aef7f8e090a48, type: 3}
+  buttonSfxs:
+  - {fileID: 8300000, guid: 9bbf25c47424e0548ace00fff8020b56, type: 3}
+  - {fileID: 8300000, guid: c0c14fe112341fe4cadff4a4d2a2342a, type: 3}
+  - {fileID: 8300000, guid: c479079aba9ee4f4a808aee656a6a69c, type: 3}
+  - {fileID: 8300000, guid: a2aa8424e65a21f48a6d665ba3a72ae4, type: 3}
+  - {fileID: 8300000, guid: 9ac9d386edadf864783822a94883efe2, type: 3}
+  - {fileID: 8300000, guid: 5476205a2bf6e0b448961d586b1140c1, type: 3}
+  - {fileID: 8300000, guid: c0c14fe112341fe4cadff4a4d2a2342a, type: 3}
+  - {fileID: 8300000, guid: a2aa8424e65a21f48a6d665ba3a72ae4, type: 3}
   sfxVolume: 0.8
 --- !u!82 &7063427215363646473
 AudioSource:

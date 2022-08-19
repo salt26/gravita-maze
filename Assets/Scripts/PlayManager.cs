@@ -450,4 +450,9 @@ public class PlayManager : MonoBehaviour
                 break;
         }
     }
+
+    public void PlayButtonSFX()
+    {
+        GameManager.gm.PlayButtonSFX();
+    }
 }
