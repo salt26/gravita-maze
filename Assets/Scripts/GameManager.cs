@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
         get{return playingMapIndex;}
     }
 
+    public GameObject floorStarPrefab;
+
     public AudioSource bgmAudioSource;
     public List<AudioClip> bgms;
     public float bgmVolume = 0.8f;
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviour
     public AudioClip burnedSfx;
     public AudioClip escapedSfx;
     public AudioClip timeoutSfx;
+    public AudioClip retrySfx;
     public float sfxVolume = 0.8f;
 
     private void Awake()
@@ -280,6 +283,11 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx);
+    }
+
+    public void PlayRetrySFX()
+    {
+        sfxAudioSource.PlayOneShot(retrySfx);
     }
 
     public void QuitGame()
@@ -605,6 +613,14 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
+
+        // TODO 각 레벨에서 달성한 별 개수에 따라 생성
+        if (true) {
+            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+            g.transform.localPosition = new Vector3(7f, 8f, 0f);
+            // x좌표: 7f = 1개 이상, 6f = 2개 이상, 5f = 3개
+            // y좌표: 8f = Easy, 6f = Normal, 4f = Hard, 2f = Insane
+        }
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 

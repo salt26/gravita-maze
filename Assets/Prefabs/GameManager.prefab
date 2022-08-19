@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canPlay: 1
   adventureLevel: 0
+  floorStarPrefab: {fileID: 8506760250526722801, guid: 2fa1b0affde6c8149ac0b088c4413b0f,
+    type: 3}
   bgmAudioSource: {fileID: 7063427215363646473}
   bgms:
   - {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
@@ -70,11 +72,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7a15dd4d7757ded43a4644999e991ee5, type: 3}
   - {fileID: 8300000, guid: ece0ba77aafafc34cb6e2d14c4a354bb, type: 3}
   - {fileID: 8300000, guid: 3ec087a1f1ba6264ea0491245f732f60, type: 3}
-  shutterSfx: {fileID: 8300000, guid: 47aa56300f7064b46854124b8f866c9a, type: 3}
+  shutterSfx: {fileID: 8300000, guid: 773786c72df87634b9e151c369dbca96, type: 3}
   squashedSfx: {fileID: 8300000, guid: 7c7a7c0ab7f18d84c9bb69811b77ac89, type: 3}
   burnedSfx: {fileID: 8300000, guid: f4f183e3623dd764b898cf056d09aefe, type: 3}
   escapedSfx: {fileID: 8300000, guid: 61cb1ccf24f0ad24da5edd9874031b87, type: 3}
   timeoutSfx: {fileID: 8300000, guid: 319fa9ae38b7dce4e9f18d2988d9ebae, type: 3}
+  retrySfx: {fileID: 8300000, guid: f649d1a1f24de5a45b5aef7f8e090a48, type: 3}
   sfxVolume: 0.8
 --- !u!82 &7063427215363646473
 AudioSource:

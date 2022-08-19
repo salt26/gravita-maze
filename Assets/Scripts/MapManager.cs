@@ -1133,6 +1133,7 @@ public class MapManager : MonoBehaviour
     public void RetryWithTime()
     {
         if (!IsReady || (RemainingTime > 0f && !HasCleared)) return;
+        GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
     }
@@ -1143,6 +1144,7 @@ public class MapManager : MonoBehaviour
     public void Retry()
     {
         if (!IsReady || RemainingTime <= 0f || HasCleared) return;
+        GameManager.gm.PlayRetrySFX();
         RetryHelper();
     }
 
