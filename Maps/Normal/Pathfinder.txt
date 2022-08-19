@@ -7,5 +7,5 @@ $ - 3 0
 : | 3 4
 : - 4 2
 : - 1 1
-t 30
-s ZGR3d3NzYWFkZHM=
+t 10
+s d3dkZHNzYWFkZHM=
