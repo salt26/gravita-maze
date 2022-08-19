@@ -643,21 +643,8 @@ public class GameManager : MonoBehaviour
 
         //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
 
-        for (int i = 0; i < pm.MapFiles.Count; i++)
-        {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                mm.TimeActivate();
-                canPlay = true;
-                yield break;
-            }
-        }
+        playingMapIndex = -1;
+        PlayNext();
     }
     
     IEnumerator InitializeAdventure()
@@ -706,21 +693,8 @@ public class GameManager : MonoBehaviour
 
         mm.afterGravity = pm.PlayAfterGravity;
 
-        for (int i = 0; i < pm.MapFiles.Count; i++)
-        {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                mm.TimeActivate();
-                canPlay = true;
-                yield break;
-            }
-        }
+        playingMapIndex = -1;
+        PlayNext();
     }
 
     public void MainAfterGravity(MapManager.Flag flag)
@@ -755,7 +729,7 @@ public class GameManager : MonoBehaviour
             case MapManager.Flag.Custom:
                 // TODO
                 break;
-            case MapManager.Flag.Survival:
+            case MapManager.Flag.Training:
                 // TODO
                 break;
         }
@@ -792,27 +766,8 @@ public class GameManager : MonoBehaviour
             if (obj.gameObject.name.Equals("Objects")) continue;
             Destroy(obj.gameObject);
         }
-        for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
-        {
-            if (pm.HasClearedAll)
-            {
-                // TODO Victory
-                break;
-            }
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                pm.TutorialAfterGravity(MapManager.Flag.Continued);
-                mm.TimeActivate();
-                canPlay = true;
-                break;
-            }
-        }
+
+        PlayNext();
     }
 
     public void PlayNext()
@@ -834,6 +789,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                //Debug.Log("Map name: " + pm.MapFiles[i].name);
                 playingMapIndex = i;
                 pm.PlayAfterGravity(MapManager.Flag.Continued);
                 mm.TimeActivate();
