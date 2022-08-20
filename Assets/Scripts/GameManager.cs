@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     public AudioClip timeoutSfx;
     public AudioClip retrySfx;
     public List<AudioClip> buttonSfxs;
+    public AudioClip removeSfx;
     public float sfxVolume = 0.8f;
 
     private void Awake()
@@ -301,6 +302,11 @@ public class GameManager : MonoBehaviour
     {
         int r = UnityEngine.Random.Range(0, buttonSfxs.Count);
         sfxAudioSource.PlayOneShot(buttonSfxs[r]);
+    }
+
+    public void PlayRemoveSFX()
+    {
+        sfxAudioSource.PlayOneShot(removeSfx);
     }
 
     public void QuitGame()
