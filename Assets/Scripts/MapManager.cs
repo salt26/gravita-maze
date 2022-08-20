@@ -230,6 +230,10 @@ public class MapManager : MonoBehaviour
         map = null;
         movables = new List<Movable>();
         fixedObjects = new List<FixedObject>();
+        foreach (GameObject t in traces)
+        {
+            Destroy(t);
+        }
         traces = new List<GameObject>();
         ActionHistory = "";
         Rotation = RotationStatus.Original;
