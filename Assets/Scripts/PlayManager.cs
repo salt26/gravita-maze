@@ -37,6 +37,8 @@ public class PlayManager : MonoBehaviour
     [SerializeField]
     private List<TextAsset> adventureEasyMapFiles = new List<TextAsset>();
     [SerializeField]
+    private List<string> adventureEasyMapSeries = new List<string>();
+    [SerializeField]
     private int adventureEasyPlayLength = int.MaxValue;
     [SerializeField]
     private int adventureEasyLife = 5;
@@ -44,6 +46,8 @@ public class PlayManager : MonoBehaviour
     [Header("Normal")]
     [SerializeField]
     private List<TextAsset> adventureNormalMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private List<string> adventureNormalMapSeries = new List<string>();
     [SerializeField]
     private int adventureNormalPlayLength = int.MaxValue;
     [SerializeField]
@@ -53,6 +57,8 @@ public class PlayManager : MonoBehaviour
     [SerializeField]
     private List<TextAsset> adventureHardMapFiles = new List<TextAsset>();
     [SerializeField]
+    private List<string> adventureHardMapSeries = new List<string>();
+    [SerializeField]
     private int adventureHardPlayLength = int.MaxValue;
     [SerializeField]
     private int adventureHardLife = 5;
@@ -60,6 +66,8 @@ public class PlayManager : MonoBehaviour
     [Header("Insane")]
     [SerializeField]
     private List<TextAsset> adventureInsaneMapFiles = new List<TextAsset>();
+    [SerializeField]
+    private List<string> adventureInsaneMapSeries = new List<string>();
     [SerializeField]
     private int adventureInsanePlayLength = int.MaxValue;
     [SerializeField]
@@ -144,25 +152,25 @@ public class PlayManager : MonoBehaviour
                 PlayLength = _mapFiles.Count;
                 break;
             case Mode.AdvEasy:
-                _mapFiles = adventureEasyMapFiles;
+                _mapFiles = SeriesToMapFiles(adventureEasyMapSeries, adventureEasyMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureEasyLife;
                 PlayLength = Mathf.Clamp(adventureEasyPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvNormal:
-                _mapFiles = adventureNormalMapFiles;
+                _mapFiles = SeriesToMapFiles(adventureNormalMapSeries, adventureNormalMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureNormalLife;
                 PlayLength = Mathf.Clamp(adventureNormalPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvHard:
-                _mapFiles = adventureHardMapFiles;
+                _mapFiles = SeriesToMapFiles(adventureHardMapSeries, adventureHardMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureHardLife;
                 PlayLength = Mathf.Clamp(adventureHardPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvInsane:
-                _mapFiles = adventureInsaneMapFiles;
+                _mapFiles = SeriesToMapFiles(adventureInsaneMapSeries, adventureInsaneMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureInsaneLife;
                 PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count - Life + 1);
@@ -177,7 +185,7 @@ public class PlayManager : MonoBehaviour
 
         if (_mapFiles == null || _mapFiles.Count < 1 || maxPlayLength < 1) return;
 
-        Debug.Log("Remaining life: " + Life);
+        //Debug.Log("Remaining life: " + Life);
 
         if (IsRandomOrder)
         {
@@ -185,6 +193,18 @@ public class PlayManager : MonoBehaviour
             _mapFiles = tempList;
         }
         IsReady = true;
+    }
+
+    private List<TextAsset> SeriesToMapFiles(List<string> series, List<TextAsset> maps)
+    {
+        List<TextAsset> mapFiles = new List<TextAsset>();
+        foreach (string s in series)
+        {
+            string[] splits = s.Split(',');
+            int index = int.Parse(splits[UnityEngine.Random.Range(0, splits.Length)]);
+            mapFiles.Add(maps[index]);
+        }
+        return mapFiles;
     }
 
     public void Pause()
@@ -433,5 +453,10 @@ public class PlayManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void PlayButtonSFX()
+    {
+        GameManager.gm.PlayButtonSFX();
     }
 }

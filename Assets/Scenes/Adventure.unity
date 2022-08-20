@@ -497,7 +497,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 240, y: 12}
-  m_SizeDelta: {x: 210, y: 210}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &382429608
 MonoBehaviour:
@@ -965,6 +965,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1430318116}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+        m_MethodName: PlayButtonSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &520449378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,6 +1190,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1430318116}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+        m_MethodName: PlayButtonSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1744,9 +1768,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1430318116}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1430318116}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -1754,8 +1798,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayButtonSFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: PlayManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: PlayManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267994070261204123, guid: 5837cb1ab10fad04d8d2009264f988f1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3825228073622206985, guid: 5837cb1ab10fad04d8d2009264f988f1,
         type: 3}
@@ -2632,7 +2696,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -240, y: 12}
-  m_SizeDelta: {x: 210, y: 210}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1209234942
 MonoBehaviour:
@@ -2842,6 +2906,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1430318116}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+        m_MethodName: PlayButtonSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1264283928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2916,7 +2992,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -228}
-  m_SizeDelta: {x: 210, y: 210}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1287567347
 MonoBehaviour:
@@ -3305,6 +3381,21 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 37bd4005c2cea664bb3c077ad3e4507e, type: 3}
   - {fileID: 4900000, guid: 4893b969bc9fa7e438f84b071994765e, type: 3}
   - {fileID: 4900000, guid: b04122bdbd012a4448ee861b69491b41, type: 3}
+  adventureEasyMapSeries:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
   adventureEasyPlayLength: 10
   adventureEasyLife: 5
   adventureNormalMapFiles:
@@ -3312,57 +3403,129 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 13cf1e667d78ffc40af77635e448ff1b, type: 3}
   - {fileID: 4900000, guid: 569e26ee926c5c24cbda8dbc019ecb1c, type: 3}
   - {fileID: 4900000, guid: fe6f974974ed80240a722773cd253897, type: 3}
-  - {fileID: 4900000, guid: 0e37dbfda511edf45a694fc7dfd5c504, type: 3}
+  - {fileID: 4900000, guid: d32ae8aab65689542a5ecf131671f55e, type: 3}
   - {fileID: 4900000, guid: b4ff577702e484c4e8ac1c28d3ba98f1, type: 3}
   - {fileID: 4900000, guid: 7003bdf68e5500d459f1f9ec9d0fb7c7, type: 3}
   - {fileID: 4900000, guid: a32f0f8b2caf5a64bbe3eeccd2a1cfea, type: 3}
-  - {fileID: 4900000, guid: d1c8088351589994da90f11a5b831628, type: 3}
+  - {fileID: 4900000, guid: 4f0f111f76905e64abddaafc1ff9f929, type: 3}
   - {fileID: 4900000, guid: 99778d8268a297d44bc24e802fa002d4, type: 3}
   - {fileID: 4900000, guid: dbf64d4fe8ac4314b8a4e346198d9205, type: 3}
-  - {fileID: 4900000, guid: 8d2ba5bac9d8bc14db802183c0bbdd3f, type: 3}
-  - {fileID: 4900000, guid: 9c53c7ea184adda4ea958f99d1ef53de, type: 3}
   - {fileID: 4900000, guid: 28be81769f0f3c44baa6f445d41fc3ac, type: 3}
+  - {fileID: 4900000, guid: 9c53c7ea184adda4ea958f99d1ef53de, type: 3}
+  - {fileID: 4900000, guid: 2a59397e9b0238d45b36c29dec2478fc, type: 3}
+  - {fileID: 4900000, guid: f84aace2d4342484cbcda89cab1e8325, type: 3}
+  - {fileID: 4900000, guid: 115a753274805314b9002fa433497816, type: 3}
+  - {fileID: 4900000, guid: 8d2ba5bac9d8bc14db802183c0bbdd3f, type: 3}
+  adventureNormalMapSeries:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13,14,15,16
   adventureNormalPlayLength: 10
   adventureNormalLife: 5
   adventureHardMapFiles:
   - {fileID: 4900000, guid: ec57bf43042e65c4995676586e606df6, type: 3}
   - {fileID: 4900000, guid: f7021cb363cda0b4897abd69e8b05795, type: 3}
   - {fileID: 4900000, guid: 32426f3345e848a4fab1d77bc7d6a232, type: 3}
-  - {fileID: 4900000, guid: de4e5ac2b9a23d54799551a1a25d4e52, type: 3}
-  - {fileID: 4900000, guid: 00cc3435b36a94e4299c6bb16196c41e, type: 3}
-  - {fileID: 4900000, guid: df5d9270c0328ba4c98a057f7b9ff509, type: 3}
-  - {fileID: 4900000, guid: a6808832bbcd87f49a6b93981c5d44db, type: 3}
-  - {fileID: 4900000, guid: bf919c42579498649b2e1c73e1478e24, type: 3}
-  - {fileID: 4900000, guid: 6aeeb3492a0d5e344abc4d27da61cbce, type: 3}
-  - {fileID: 4900000, guid: a04e22cab2124204a9aebafd4603070a, type: 3}
+  - {fileID: 4900000, guid: 87b72ae5f08dc684e9ca0374b5d7af09, type: 3}
   - {fileID: 4900000, guid: b55cc4ee49785c545967b2fcaded30c9, type: 3}
   - {fileID: 4900000, guid: 25ea3bda4baf821439998049e3cb2c96, type: 3}
+  - {fileID: 4900000, guid: a6808832bbcd87f49a6b93981c5d44db, type: 3}
+  - {fileID: 4900000, guid: bf919c42579498649b2e1c73e1478e24, type: 3}
+  - {fileID: 4900000, guid: 421c24f67db548a43b93ed6875d94bb5, type: 3}
+  - {fileID: 4900000, guid: a04e22cab2124204a9aebafd4603070a, type: 3}
+  - {fileID: 4900000, guid: de4e5ac2b9a23d54799551a1a25d4e52, type: 3}
+  - {fileID: 4900000, guid: df5d9270c0328ba4c98a057f7b9ff509, type: 3}
+  - {fileID: 4900000, guid: 00cc3435b36a94e4299c6bb16196c41e, type: 3}
   - {fileID: 4900000, guid: c6770d6472664ed4db25dde3667f2836, type: 3}
-  - {fileID: 4900000, guid: 87b72ae5f08dc684e9ca0374b5d7af09, type: 3}
   - {fileID: 4900000, guid: 242db7b5497596343bb8e629c95ea7df, type: 3}
-  - {fileID: 4900000, guid: 55ca6ab41fa0c27409cf4d252ae05770, type: 3}
+  - {fileID: 4900000, guid: 65359362a33f8ba48b817236b1876f3d, type: 3}
+  - {fileID: 4900000, guid: 96e09276dfcf144429224728a6d6529b, type: 3}
+  - {fileID: 4900000, guid: 540e17a3444984347acf9388ec72ce64, type: 3}
+  - {fileID: 4900000, guid: de5245747aa76ed46923f786e180bcfe, type: 3}
+  - {fileID: 4900000, guid: 0667892ac78559e4bac05023a7fb11e6, type: 3}
+  - {fileID: 4900000, guid: 17ebbd090fa56c247b08a60895054730, type: 3}
+  - {fileID: 4900000, guid: 3a4d87611c200db41a45d270049c3c64, type: 3}
+  - {fileID: 4900000, guid: b57d5c8c6f42aae40b27d12331e40dba, type: 3}
+  - {fileID: 4900000, guid: c29cc8795190e1a45a6f7ee569297605, type: 3}
+  - {fileID: 4900000, guid: 96b5d8f0e605a6a4180116552528a783, type: 3}
+  - {fileID: 4900000, guid: be15ff5e291b5ef45b0c155396e57347, type: 3}
+  adventureHardMapSeries:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10,24,25
+  - 11,23
+  - 12,22
+  - 13,20,21
+  - 14,17,18,19
+  - 15,16
   adventureHardPlayLength: 10
   adventureHardLife: 7
   adventureInsaneMapFiles:
   - {fileID: 4900000, guid: 961baa2594a7c6848b5fc076787a47da, type: 3}
   - {fileID: 4900000, guid: 807ed45f08d5fec44880ac7ff701da51, type: 3}
   - {fileID: 4900000, guid: 0e38c854a2c00bf4d9b47faba602af70, type: 3}
-  - {fileID: 4900000, guid: e74d0a9c88992ad4cb1abaca28ba633e, type: 3}
+  - {fileID: 4900000, guid: b8a2773da608a9c409ed16fb95411a53, type: 3}
   - {fileID: 4900000, guid: 9411b94b0305c6344bf4a1f7a9fc470d, type: 3}
-  - {fileID: 4900000, guid: 8c2eca6084e77304d8db5fe801c7babf, type: 3}
+  - {fileID: 4900000, guid: 4ccf4eb83f02fea428567b1502832e44, type: 3}
   - {fileID: 4900000, guid: 356e0438709a3a240be38f172432c206, type: 3}
   - {fileID: 4900000, guid: 2d1efbf0b4b84ae48998ffd5a0fc012a, type: 3}
-  - {fileID: 4900000, guid: f3c0adccd0848a04eb19053a375cc9ef, type: 3}
+  - {fileID: 4900000, guid: 3d016b1bace9e82418fb0705ee569edd, type: 3}
   - {fileID: 4900000, guid: 1e206f92c39fb5946b91d6f70e3d59f6, type: 3}
-  - {fileID: 4900000, guid: aea9d16cf47cc9e4b9ab1c489c880ff5, type: 3}
+  - {fileID: 4900000, guid: 29afa3696e7d1784180f7d18f6798436, type: 3}
   - {fileID: 4900000, guid: 219c4c53e4275fe4994f651cac00c2c5, type: 3}
   - {fileID: 4900000, guid: 3e8bd92f953803a49bb8eded94a9ea6d, type: 3}
-  - {fileID: 4900000, guid: e2c5d1427beed4c45b0612cb81dc36a9, type: 3}
-  - {fileID: 4900000, guid: 29afa3696e7d1784180f7d18f6798436, type: 3}
-  - {fileID: 4900000, guid: 3d016b1bace9e82418fb0705ee569edd, type: 3}
-  - {fileID: 4900000, guid: 4ccf4eb83f02fea428567b1502832e44, type: 3}
-  - {fileID: 4900000, guid: b8a2773da608a9c409ed16fb95411a53, type: 3}
   - {fileID: 4900000, guid: f212fe43339a69b4fa6bde7f32106a04, type: 3}
+  - {fileID: 4900000, guid: aea9d16cf47cc9e4b9ab1c489c880ff5, type: 3}
+  - {fileID: 4900000, guid: f3c0adccd0848a04eb19053a375cc9ef, type: 3}
+  - {fileID: 4900000, guid: b83dd985d4d7ee04e9be262b73374789, type: 3}
+  - {fileID: 4900000, guid: e74d0a9c88992ad4cb1abaca28ba633e, type: 3}
+  - {fileID: 4900000, guid: 8c2eca6084e77304d8db5fe801c7babf, type: 3}
+  - {fileID: 4900000, guid: 30f886a536d309e4ca5e3373af6c208a, type: 3}
+  - {fileID: 4900000, guid: 4a185806769bcf943b613f55766f63d1, type: 3}
+  - {fileID: 4900000, guid: 8093fcf139178d24d8f28b3cc6d1e081, type: 3}
+  - {fileID: 4900000, guid: 16d91433355571b45a2f48ad6de72b80, type: 3}
+  - {fileID: 4900000, guid: 41dbeb0c8b4bdbe44afe7240ae1baa9c, type: 3}
+  - {fileID: 4900000, guid: 6ea4c787c8f626a429d442cb4d57cd81, type: 3}
+  - {fileID: 4900000, guid: 80f259ff543415248937ec87bb7e607d, type: 3}
+  adventureInsaneMapSeries:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14,25
+  - 15,24
+  - 16,23
+  - 17,22
+  - 18,19,20,21
   adventureInsanePlayLength: 10
   adventureInsaneLife: 10
 --- !u!1001 &1484046093
@@ -3967,6 +4130,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600192151}
   m_CullTransparentMesh: 0
+--- !u!1001 &1632441562
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7063427215363646516, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646518, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1db10a05a0fc004418a1b36bde2c72b0, type: 3}
 --- !u!224 &1635276894 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9082494344251303291, guid: 4542b2e8185596e4683fe00f2dfae572,
@@ -4104,152 +4336,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1642279424}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1682911773
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1682911775}
-  - component: {fileID: 1682911774}
-  - component: {fileID: 1682911776}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1682911774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682911773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5768e0ac72ca8548b25f168429ca205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canPlay: 1
-  adventureLevel: 0
-  bgms:
-  - {fileID: 8300000, guid: 12cb5d8a61ddc5449943dcb8f717b3b7, type: 3}
-  - {fileID: 8300000, guid: 4f86b9e3f190f414587a9847632d689f, type: 3}
-  - {fileID: 0}
---- !u!4 &1682911775
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682911773}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &1682911776
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682911773}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 0.8
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1755156423
 GameObject:
   m_ObjectHideFlags: 0
@@ -5199,7 +5285,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 252}
-  m_SizeDelta: {x: 210, y: 210}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2068695179
 MonoBehaviour:

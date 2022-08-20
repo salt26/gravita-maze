@@ -11,9 +11,9 @@ using UnityEngine.SceneManagement;
 public class MapManager : MonoBehaviour
 {
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
-        Adventure = 7, Tutorial = 8, Custom = 9, Survival = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
+        Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
     public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
-        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Survival = 59049, AdvEasy = 177147,
+        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
         AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969 }
     // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
     // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
@@ -206,6 +206,7 @@ public class MapManager : MonoBehaviour
             if (RemainingTime <= 0f)
             {
                 timeoutPanel.SetActive(true);
+                GameManager.gm.PlayTimeoutSFX();
                 if (afterGravity.GetInvocationList().Length > 0)
                     afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
                 Debug.LogWarning("Map warning: Time over");
@@ -273,7 +274,7 @@ public class MapManager : MonoBehaviour
         {
             int r = UnityEngine.Random.Range(0, 8);
             Rotation = (RotationStatus)r;
-            Debug.Log(Rotation);
+            //Debug.Log(Rotation);
         }
         else
         {
@@ -692,7 +693,7 @@ public class MapManager : MonoBehaviour
                         initialMapCoord[x - 1, y - 1] += (int)TileFlag.Custom;     // 19683
                         break;
                     case FixedObject.Type.Survival:
-                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Survival;   // 59049
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Training;   // 59049
                         break;
                     case FixedObject.Type.AdvEasy:
                         initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvEasy;    // 177147
@@ -1132,6 +1133,7 @@ public class MapManager : MonoBehaviour
     public void RetryWithTime()
     {
         if (!IsReady || (RemainingTime > 0f && !HasCleared)) return;
+        GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
     }
@@ -1142,6 +1144,7 @@ public class MapManager : MonoBehaviour
     public void Retry()
     {
         if (!IsReady || RemainingTime <= 0f || HasCleared) return;
+        GameManager.gm.PlayRetrySFX();
         RetryHelper();
     }
 
@@ -1286,6 +1289,11 @@ public class MapManager : MonoBehaviour
         if (flag == Flag.Escaped)
         {
             HasCleared = true;
+            if (SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Tutorial") ||
+                SceneManager.GetActiveScene().name.Equals("Adventure"))
+            {
+                GameManager.gm.PlayEscapedSFX();
+            }
             StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves));
         }
         else
@@ -1293,9 +1301,36 @@ public class MapManager : MonoBehaviour
             ActionHistory.Substring(0, ActionHistory.Length - 1);
             currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
-            if (flag == Flag.Burned || flag == Flag.Squashed)
+            switch (flag)
             {
-                HasDied = true;
+                case Flag.Squashed:
+                    HasDied = true;
+                    GameManager.gm.PlaySquashedSFX();
+                    break;
+                case Flag.Burned:
+                    HasDied = true;
+                    GameManager.gm.PlayBurnedSFX();
+                    break;
+                case Flag.Continued:
+                    Move ballMove = moves.Find(e => e.movable is Ball);
+                    if (Mathf.Max(Mathf.Abs(ballMove.newX - ballMove.oldX), Mathf.Abs(ballMove.newY - ballMove.oldY)) > 0)
+                    {
+                        GameManager.gm.PlayBallSFX();
+                    }
+                    break;
+            }
+
+            HashSet<int> distances = new HashSet<int>();
+            foreach (Move move in moves)
+            {
+                if (move.movable is Iron)
+                {
+                    distances.Add(Mathf.Max(Mathf.Abs(move.newX - move.oldX), Mathf.Abs(move.newY - move.oldY)));
+                }
+            }
+            foreach (int d in distances)
+            {
+                GameManager.gm.PlayIronSFX(d);
             }
         }
     }
@@ -1382,9 +1417,9 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
-                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1436,9 +1471,9 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
-                                    Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1481,6 +1516,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
                                             tilemap.SetTile(new Vector3Int(i, k + 1, 0), tiles[mutableMap.mapCoord[i, k + 1] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -1577,9 +1613,9 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
-                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1631,9 +1667,9 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
-                                    Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1676,6 +1712,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(i, k, 0), tiles[mutableMap.mapCoord[i, k] % 81]);
                                             tilemap.SetTile(new Vector3Int(i, k - 1, 0), tiles[mutableMap.mapCoord[i, k - 1] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -1772,9 +1809,9 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
-                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1826,9 +1863,9 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
-                                    Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1871,6 +1908,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
                                             tilemap.SetTile(new Vector3Int(k - 1, j, 0), tiles[mutableMap.mapCoord[k - 1, j] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -1967,9 +2005,9 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
-                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -2056,9 +2094,9 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Survival))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Training))
                                 {
-                                    flag = Flag.Survival;
+                                    flag = Flag.Training;
                                     ballX = k + 1;
                                     ballY = j + 1;
                                     move.newX = k + 1;
@@ -2133,9 +2171,9 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
-                                    Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                     if (!isSimulation)
                                     {
+                                        Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -2178,6 +2216,7 @@ public class MapManager : MonoBehaviour
                                         {
                                             tilemap.SetTile(new Vector3Int(k, j, 0), tiles[mutableMap.mapCoord[k, j] % 81]);
                                             tilemap.SetTile(new Vector3Int(k + 1, j, 0), tiles[mutableMap.mapCoord[k + 1, j] % 81]);
+                                            GameManager.gm.PlayShutterSFX();
                                         }
                                     }
                                 }
@@ -2272,6 +2311,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2286,6 +2326,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newY - m.oldY));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Down:
@@ -2311,6 +2356,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 1, m.prevY] -= (int)TileFlag.DownShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2325,6 +2371,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newY - m.oldY));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Left:
@@ -2350,6 +2401,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2364,6 +2416,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newX - m.oldX));
+                                }
                             }
                             break;
                         case GameManager.GravityDirection.Right:
@@ -2389,6 +2446,7 @@ public class MapManager : MonoBehaviour
                                     mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
+                                    GameManager.gm.PlayShutterSFX();
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2403,6 +2461,11 @@ public class MapManager : MonoBehaviour
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                {
+                                    GameManager.gm.PlayIronSFX(Mathf.Abs(m.newX - m.oldX));
+                                }
                             }
                             break;
                     }

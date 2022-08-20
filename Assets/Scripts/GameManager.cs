@@ -34,9 +34,24 @@ public class GameManager : MonoBehaviour
         get{return playingMapIndex;}
     }
 
-    private AudioSource audioSource;
+    public GameObject floorStarPrefab;
 
+    public AudioSource bgmAudioSource;
     public List<AudioClip> bgms;
+    public float bgmVolume = 0.8f;
+    private List<float> bgmVolumeForEach = new List<float>() { 1f, 0.7f, 1f };
+
+    public AudioSource sfxAudioSource;
+    public List<AudioClip> ballSfxs;
+    public List<AudioClip> ironSfxs;
+    public AudioClip shutterSfx;
+    public AudioClip squashedSfx;
+    public AudioClip burnedSfx;
+    public AudioClip escapedSfx;
+    public AudioClip timeoutSfx;
+    public AudioClip retrySfx;
+    public List<AudioClip> buttonSfxs;
+    public float sfxVolume = 0.8f;
 
     private void Awake()
     {
@@ -52,7 +67,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
+        sfxAudioSource.volume = Mathf.Clamp01(sfxVolume);
         Initialize();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -139,6 +155,15 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (bgmAudioSource.clip == bgms[i])
+            {
+                bgmAudioSource.volume = Mathf.Clamp01(bgmVolume * bgmVolumeForEach[i]);
+                break;
+            }
+        }
     }
 
     void Initialize()
@@ -148,61 +173,61 @@ public class GameManager : MonoBehaviour
         // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
         if (SceneManager.GetActiveScene().name.Equals("Main"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeMain());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Editor"))
         {
-            if (audioSource.clip != bgms[2])
+            if (bgmAudioSource.clip != bgms[2])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[2];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[2];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeEditor());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Mode"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeMode());
         }
         else if (SceneManager.GetActiveScene().name.Equals("AdventureLevel"))
         {
-            if (audioSource.clip != bgms[0])
+            if (bgmAudioSource.clip != bgms[0])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[0];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeAdventureLevel());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
-            if (audioSource.clip != bgms[1])
+            if (bgmAudioSource.clip != bgms[1])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[1];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[1];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeTutorial());
         }
         else if (SceneManager.GetActiveScene().name.Equals("Adventure"))
         {
-            if (audioSource.clip != bgms[1])
+            if (bgmAudioSource.clip != bgms[1])
             {
-                audioSource.Stop();
-                audioSource.clip = bgms[1];
-                audioSource.Play();
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[1];
+                bgmAudioSource.Play();
             }
             StartCoroutine(InitializeAdventure());
         }
@@ -210,18 +235,66 @@ public class GameManager : MonoBehaviour
 
     public void EditorChangeBGM(EditorManager.EditPhase editPhase)
     {
-        if (editPhase != EditorManager.EditPhase.Test && audioSource.clip != bgms[2])
+        if (editPhase != EditorManager.EditPhase.Test && bgmAudioSource.clip != bgms[2])
         {
-            audioSource.Stop();
-            audioSource.clip = bgms[2];
-            audioSource.Play();
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[2];
+            bgmAudioSource.Play();
         }
-        if (editPhase == EditorManager.EditPhase.Test && audioSource.clip != bgms[1])
+        if (editPhase == EditorManager.EditPhase.Test && bgmAudioSource.clip != bgms[1])
         {
-            audioSource.Stop();
-            audioSource.clip = bgms[1];
-            audioSource.Play();
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[1];
+            bgmAudioSource.Play();
         }
+    }
+
+    public void PlayBallSFX()
+    {
+        int r = UnityEngine.Random.Range(0, ballSfxs.Count);
+        sfxAudioSource.PlayOneShot(ballSfxs[r]);
+    }
+
+    public void PlayIronSFX(int moveDistance, float volumeScale = 1f)
+    {
+        if (moveDistance < 1 || moveDistance > 8) return;
+        sfxAudioSource.PlayOneShot(ironSfxs[moveDistance - 1], Mathf.Clamp01(volumeScale * sfxVolume));
+    }
+
+    public void PlayShutterSFX()
+    {
+        sfxAudioSource.PlayOneShot(shutterSfx);
+    }
+
+    public void PlaySquashedSFX()
+    {
+        sfxAudioSource.PlayOneShot(squashedSfx);
+    }
+
+    public void PlayBurnedSFX()
+    {
+        sfxAudioSource.PlayOneShot(burnedSfx);
+    }
+
+    public void PlayEscapedSFX()
+    {
+        sfxAudioSource.PlayOneShot(escapedSfx);
+    }
+
+    public void PlayTimeoutSFX()
+    {
+        sfxAudioSource.PlayOneShot(timeoutSfx);
+    }
+
+    public void PlayRetrySFX()
+    {
+        sfxAudioSource.PlayOneShot(retrySfx);
+    }
+
+    public void PlayButtonSFX()
+    {
+        int r = UnityEngine.Random.Range(0, buttonSfxs.Count);
+        sfxAudioSource.PlayOneShot(buttonSfxs[r]);
     }
 
     public void QuitGame()
@@ -383,13 +456,25 @@ public class GameManager : MonoBehaviour
         }
         List<WallInfo> walls = new List<WallInfo>();
 
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 1));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 3));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 2));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 4));  // TODO 나중에 해금
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
@@ -399,7 +484,6 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 7));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
@@ -417,12 +501,14 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
@@ -430,12 +516,9 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
@@ -451,13 +534,13 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
-        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
         mm.afterGravity = ModeAfterGravity;
 
-        mm.Initialize(10, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.Initialize(10, 9, walls, objects, "a", float.PositiveInfinity);
         mm.TimeActivate();
         canPlay = true;
     }
@@ -475,16 +558,22 @@ public class GameManager : MonoBehaviour
         }
         List<WallInfo> walls = new List<WallInfo>();
 
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 6));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 5));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 8));
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 1));  // Insane
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 3));  // Hard
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 5));  // Normal
-        //walls.Add(new WallInfo(WallInfo.Type.Vertical, 7, 7));  // Easy
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 7));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 9));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 8));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 7));
@@ -492,7 +581,6 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 7));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 7));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 6));
@@ -506,21 +594,20 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 3));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 4));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 4));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
@@ -532,13 +619,21 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
-        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 4));
+        walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
+
+        // TODO 각 레벨에서 달성한 별 개수에 따라 생성
+        if (true) {
+            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+            g.transform.localPosition = new Vector3(7f, 8f, 0f);
+            // x좌표: 7f = 1개 이상, 6f = 2개 이상, 5f = 3개
+            // y좌표: 8f = Easy, 6f = Normal, 4f = Hard, 2f = Insane
+        }
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
         mm.afterGravity = AdventureLevelAfterGravity;
 
-        mm.Initialize(8, 8, walls, objects, "a", float.PositiveInfinity);
+        mm.Initialize(8, 9, walls, objects, "a", float.PositiveInfinity);
         mm.TimeActivate();
         canPlay = true;
     }
@@ -571,21 +666,8 @@ public class GameManager : MonoBehaviour
 
         //mapList = Directory.GetFiles("Assets/PredefinedMaps/Tutorial/", "*.txt").ToList();
 
-        for (int i = 0; i < pm.MapFiles.Count; i++)
-        {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                mm.TimeActivate();
-                canPlay = true;
-                yield break;
-            }
-        }
+        playingMapIndex = -1;
+        PlayNext();
     }
     
     IEnumerator InitializeAdventure()
@@ -634,21 +716,8 @@ public class GameManager : MonoBehaviour
 
         mm.afterGravity = pm.PlayAfterGravity;
 
-        for (int i = 0; i < pm.MapFiles.Count; i++)
-        {
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                mm.TimeActivate();
-                canPlay = true;
-                yield break;
-            }
-        }
+        playingMapIndex = -1;
+        PlayNext();
     }
 
     public void MainAfterGravity(MapManager.Flag flag)
@@ -683,7 +752,7 @@ public class GameManager : MonoBehaviour
             case MapManager.Flag.Custom:
                 // TODO
                 break;
-            case MapManager.Flag.Survival:
+            case MapManager.Flag.Training:
                 // TODO
                 break;
         }
@@ -720,27 +789,8 @@ public class GameManager : MonoBehaviour
             if (obj.gameObject.name.Equals("Objects")) continue;
             Destroy(obj.gameObject);
         }
-        for (int i = playingMapIndex + 1; i <= pm.MapFiles.Count; i++)
-        {
-            if (pm.HasClearedAll)
-            {
-                // TODO Victory
-                break;
-            }
-            MapManager.OpenFileFlag openFileFlag = mm.InitializeFromText(pm.MapFiles[i].text, out _, out _, out _, out _, out _, out _);
-            if (openFileFlag != MapManager.OpenFileFlag.Success)
-            {
-                continue;
-            }
-            else
-            {
-                playingMapIndex = i;
-                pm.TutorialAfterGravity(MapManager.Flag.Continued);
-                mm.TimeActivate();
-                canPlay = true;
-                break;
-            }
-        }
+
+        PlayNext();
     }
 
     public void PlayNext()
@@ -762,6 +812,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                //Debug.Log("Map name: " + pm.MapFiles[i].name);
                 playingMapIndex = i;
                 pm.PlayAfterGravity(MapManager.Flag.Continued);
                 mm.TimeActivate();

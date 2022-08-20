@@ -2687,6 +2687,11 @@ public class EditorManager : MonoBehaviour
         editorOpenButton6.interactable = false;
     }
 
+    public void PlayButtonSFX()
+    {
+        GameManager.gm.PlayButtonSFX();
+    }
+
     private class EditActionInfo
     {
         public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval, MassChange }

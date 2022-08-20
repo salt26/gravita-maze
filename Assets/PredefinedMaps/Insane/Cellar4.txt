@@ -47,5 +47,5 @@ $ | 8 7
 - 6 6
 | 4 3
 | 6 6
-t 20
+t 19
 s ZHdkd2F3ZHNkd2RzZHdkc2R3ZHNkd2RzZHdkc2Q=

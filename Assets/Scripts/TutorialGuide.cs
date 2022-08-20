@@ -19,6 +19,8 @@ public class TutorialGuide : MonoBehaviour
     int storedI;
     int nowI;
 
+    bool hasIronRemovedInTutorial4;
+
     public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
     public List<TutorialTuple> tipKeys;
 
@@ -56,16 +58,18 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(5, 2, 0), "Now, you can just escape with the iron.");
         tipDict.Add(new TutorialTuple(6, 2, 2), "The iron can temporarily cover a fire!");
         tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can step on it!");
-        tipDict.Add(new TutorialTuple(7, 0, 2), "Press the right arrow to close the bright green shutter.");
-        tipDict.Add(new TutorialTuple(7, 0, 0), "Let's use the shutter!");
-        tipDict.Add(new TutorialTuple(7, 1, 2), "If the ball passes through the bright green shutter, it will become a wall.");
-        tipDict.Add(new TutorialTuple(7, 1, 0), "Once the shutter becomes a wall, it remains a wall until you retry.");
+        tipDict.Add(new TutorialTuple(7, 1, 2), "Press the right arrow to close the bright green shutter.");
+        tipDict.Add(new TutorialTuple(7, 1, 0), "Let's use the shutter!");
+        tipDict.Add(new TutorialTuple(7, 2, 2), "If the ball passes through the bright green shutter, it will become a wall.");
+        tipDict.Add(new TutorialTuple(7, 2, 0), "Once the shutter becomes a wall, it remains a wall until you retry.");
+        tipDict.Add(new TutorialTuple(7, 0, 1), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
         tipDict.Add(new TutorialTuple(8, 1, 1), "A walled shutter can also block the iron. Don't let the iron squash the ball!");
-        tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter. Press retry button!");
+        tipDict.Add(new TutorialTuple(8, 4, 0), "Of course, sometimes you can be trapped by the shutter, too. Press retry button!");
         tipDict.Add(new TutorialTuple(8, 2, 1), "The iron cannot make the shutter a wall. Only the ball can close the shutter.");
         
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
-        
+
+        hasIronRemovedInTutorial4 = false;
     }
 
     public bool IsBallThere(TutorialTuple tutorialTuple)
@@ -165,12 +169,13 @@ public class TutorialGuide : MonoBehaviour
 
     public void RetryButtonDown()
     {
-        Debug.Log("BP");
+        //Debug.Log("BP");
         HideText(currentTip);
         for (int j = 0; j < tipKeys.Count; j++)
         {
             tipKeys[j].isPassed = false;
         }
+        hasIronRemovedInTutorial4 = false;
     }
 
 
@@ -196,8 +201,6 @@ public class TutorialGuide : MonoBehaviour
                             tips = GameObject.FindGameObjectsWithTag("Tip");
                             if (currentTip != null)
                             {
-                                // tipskeys[]
-                                // tips[0].SetActive(fasle);
                                 Destroy(tips[0]);
                             }
 
@@ -217,12 +220,62 @@ public class TutorialGuide : MonoBehaviour
                         tipKeys[storedI].isPassed = false;
                     }
                     // 이전의 것 다시 안 나오게 하기
-                    // 이상한 길로 갔을 때 다른 말 나오개 하기
+                    // 이상한 길로 갔을 때 다른 말 나오게 하기
                 }
+                else if (GameManager.gm.PlayingMapIndex + 1 == 4)
+                {
+                    bool hasIronExists = false;
+                    foreach (Movable m in mm.currentMovableCoord)
+                    {
+                        if (m != null && m is Iron)
+                        {
+                            hasIronExists = true;
+                            break;
+                        }
+                    }
 
+                    if (!hasIronRemovedInTutorial4 && !hasIronExists)
+                    {
+                        if (currentTip != null)
+                        {
+                            HideText(currentTip);
+                        }
+
+                        if (currentTip == null)
+                        {
+                            ShowText("The iron that was blocking the exit has been removed. Let's escape!");
+                        }
+                        hasIronRemovedInTutorial4 = true;
+                    }
+
+                    if (hasIronExists && IsBallThere(tipKeys[i]))
+                    {
+                        storedI = i;
+                        if (!tipKeys[i].isPassed)
+                        {
+                            tips = GameObject.FindGameObjectsWithTag("Tip");
+                            if (currentTip != null)
+                            {
+                                Destroy(tips[0]);
+                            }
+
+                            if (tips.Length == 0)
+                            {
+                                ShowText(tipDict[tipKeys[i]]);
+                                tipKeys[i].isPassed = true;
+                            }
+
+                            nowI = i;
+                        }
+                    }
+
+                    if (storedI != nowI)
+                    {
+                        tipKeys[storedI].isPassed = false;
+                    }
+                }
                 else
                 {
-
                     if (IsBallThere(tipKeys[i]))
                     {
 
@@ -232,8 +285,6 @@ public class TutorialGuide : MonoBehaviour
                             tips = GameObject.FindGameObjectsWithTag("Tip");
                             if (currentTip != null)
                             {
-                                // tipskeys[]
-                                // tips[0].SetActive(fasle);
                                 Destroy(tips[0]);
                             }
 
