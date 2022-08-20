@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class PlayManager : MonoBehaviour
 {
@@ -46,6 +47,10 @@ public class PlayManager : MonoBehaviour
 
     private Mode playMode;
     private CustomPhase customPhase;
+
+    public Mode PlayMode{
+        get{return playMode;}
+    }
 
     [Header("Tutorial")]
     [SerializeField]
@@ -281,6 +286,11 @@ public class PlayManager : MonoBehaviour
 
     public void Ending()
     {
+        if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
+        {    
+            var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
+            file.Close();
+        }
         resultUI.Initialize(playMode);
     }
 
