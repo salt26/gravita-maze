@@ -310,8 +310,47 @@ public class PlayManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
         {    
-            var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
-            file.Close();
+            //var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
+            //file.Close();
+            StreamReader sr = null;
+            StreamWriter sw = null;
+
+            try
+            {
+                sr = new StreamReader(Application.persistentDataPath + "/TutorialDone.txt");
+                sr.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                try
+                {
+                    sr.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+
+            sw = new StreamWriter(Application.persistentDataPath + "/TutorialDone.txt");
+
+            try
+            {
+                sw.WriteLine("3");
+            }
+            catch (Exception)
+            {
+                Debug.LogError("File invalid: exception while saving a map");
+                throw;
+            }
+            finally
+            {
+                sw.Close();
+            }
         }
         resultUI.Initialize(playMode);
     }
