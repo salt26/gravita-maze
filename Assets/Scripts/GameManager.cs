@@ -128,19 +128,23 @@ public class GameManager : MonoBehaviour
                     if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
                     {
                         pm.TutorialNext();
+                        PlayButtonSFX();
                     }
                     else
                     {
                         pm.PlayNext();
+                        PlayButtonSFX();
                     }
-                }
-                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
-                {
-                    pm.Ending();
                 }
                 else if (pm.resultUI.gameObject.activeInHierarchy)
                 {
                     pm.Quit();
+                    PlayButtonSFX();
+                }
+                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                {
+                    pm.Ending();
+                    PlayButtonSFX();
                 }
                 else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageOKButton.interactable)
                 {
@@ -152,6 +156,7 @@ public class GameManager : MonoBehaviour
                 if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
                 {
                     pm.Pause();
+                    PlayButtonSFX();
                 }
                 else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageXButton.interactable)
                 {
