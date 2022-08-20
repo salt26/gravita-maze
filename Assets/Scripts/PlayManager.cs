@@ -243,7 +243,6 @@ public class PlayManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
         {    
-            Debug.Log("ADs");
             var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
             file.Close();
         }
