@@ -25,6 +25,10 @@ public class PlayManager : MonoBehaviour
 
     private Mode playMode;
 
+    public Mode PlayMode{
+        get{return playMode;}
+    }
+
     [Header("Tutorial")]
     [SerializeField]
     private List<TextAsset> tutorialMapFiles = new List<TextAsset>();
