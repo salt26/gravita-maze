@@ -22,6 +22,10 @@ public class ResultUI : MonoBehaviour
 
     Animator starBang;
 
+    private float star3Life;
+    private float star2Life;
+    private float levelMaxLife;
+
     public bool Ended = false;
 
     public float starDelay = 0.5f;
@@ -170,6 +174,7 @@ public class ResultUI : MonoBehaviour
             mapsSkippedCount.color = Color.blue;
             livesLeftCount.color = Color.red;
         }
+
         gameObject.SetActive(true);
         
         if (mode == PlayManager.Mode.Tutorial)
@@ -186,10 +191,15 @@ public class ResultUI : MonoBehaviour
         {
             if (pm.HasClearedAll)
             {
-                if(pm.Life >= 4){
+                levelMaxLife = pm.AdventureEasyLife;
+
+                star3Life = levelMaxLife * 0.8f;
+                star2Life = levelMaxLife * 0.5f;
+
+                if(pm.Life >= star3Life){
                     StartCoroutine(ResultAnimation(3));
                 }
-                else if(pm.Life >= 3){
+                else if(pm.Life >= star2Life){
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
@@ -211,10 +221,15 @@ public class ResultUI : MonoBehaviour
         {
             if (pm.HasClearedAll)
             {
-                if(pm.Life >= 4){
+                levelMaxLife = pm.AdventureEasyLife;
+
+                star3Life = levelMaxLife * 0.8f;
+                star2Life = levelMaxLife * 0.5f;
+
+                if(pm.Life >= star3Life){
                     StartCoroutine(ResultAnimation(3));
                 }
-                else if(pm.Life >= 3){
+                else if(pm.Life >= star2Life){
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
@@ -236,10 +251,15 @@ public class ResultUI : MonoBehaviour
         {
             if (pm.HasClearedAll)
             {
-                if(pm.Life >= 8){
+                levelMaxLife = pm.AdventureEasyLife;
+
+                star3Life = levelMaxLife * 0.8f;
+                star2Life = levelMaxLife * 0.5f;
+
+                if(pm.Life >= star3Life){
                     StartCoroutine(ResultAnimation(3));
                 }
-                else if(pm.Life >= 5){
+                else if(pm.Life >= star2Life){
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
@@ -261,10 +281,15 @@ public class ResultUI : MonoBehaviour
         {
             if (pm.HasClearedAll)
             {
-                if(pm.Life >= 8){
+                levelMaxLife = pm.AdventureEasyLife;
+
+                star3Life = levelMaxLife * 0.8f;
+                star2Life = levelMaxLife * 0.5f;
+
+                if(pm.Life >= star3Life){
                     StartCoroutine(ResultAnimation(3));
                 }
-                else if(pm.Life >= 5){
+                else if(pm.Life >= star2Life){
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{

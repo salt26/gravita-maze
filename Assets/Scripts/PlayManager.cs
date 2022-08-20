@@ -75,6 +75,31 @@ public class PlayManager : MonoBehaviour
 
     private List<TextAsset> _mapFiles;
 
+
+    public int AdventureEasyLife{
+        get{
+            return adventureEasyLife;
+        }
+    }
+
+    public int AdventureNormalLife{
+        get{
+            return adventureNormalLife;
+        }
+    }
+
+    public int AdventureHardLife{
+        get{
+            return adventureHardLife;
+        }
+    }
+
+    public int AdventureInsaneLife{
+        get{
+            return adventureInsaneLife;
+        }
+    }
+
     public List<TextAsset> MapFiles
     {
         get
