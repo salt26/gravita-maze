@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
     public AudioClip retrySfx;
     public List<AudioClip> buttonSfxs;
     public AudioClip removeSfx;
+    public AudioClip fallSfx;
+    public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
     
     private void Awake()
@@ -373,6 +375,16 @@ public class GameManager : MonoBehaviour
         sfxAudioSource.PlayOneShot(removeSfx);
     }
 
+    public void PlayFallSFX(float volume)
+    {
+        sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+    }
+
+    public void PlayStarSFX(int num)
+    {
+        sfxAudioSource.PlayOneShot(starSfxs[num]);
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -477,6 +489,8 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 3));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 5, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));

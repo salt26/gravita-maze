@@ -333,4 +333,14 @@ public class ResultUI : MonoBehaviour
 
     }
 
+    public void PlayFallSFX(float volume)
+    {
+        GameManager.gm.PlayFallSFX(volume);
+    }
+
+    public void PlayStarSFX(int num)
+    {
+        GameManager.gm.PlayStarSFX(num);
+    }
+
 }
