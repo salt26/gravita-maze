@@ -406,6 +406,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayWallSFX();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                     hasChanged = true;
@@ -442,6 +443,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayWallSFX();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                     hasChanged = true;
@@ -482,6 +484,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayShutterSFX();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
                     hasChanged = true;
@@ -518,6 +521,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayShutterSFX();
                     }
                     walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
                     hasChanged = true;
@@ -556,6 +560,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -568,6 +573,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -603,6 +609,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -615,6 +622,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -650,6 +658,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -662,6 +671,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -697,6 +707,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -709,6 +720,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -744,6 +756,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -756,6 +769,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -791,6 +805,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -803,6 +818,7 @@ public class EditorManager : MonoBehaviour
                             redoStack.Clear();
                             solution = "";
                             dirtyBit = true;
+                            GameManager.gm.PlayEscapedSFX();
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -1042,6 +1058,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayBallSFX();
                     }
                     objects.Remove(objects.Find((i) => i.type == ObjectInfo.Type.Ball));
                 }
@@ -1054,6 +1071,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayBallSFX();
                     }
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Ball, a, b));
@@ -1085,6 +1103,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
+                    GameManager.gm.PlayIronSFX(UnityEngine.Random.Range(1, 9));
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
                 hasChanged = true;
@@ -1115,6 +1134,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
+                    GameManager.gm.PlayBurnedSFX();
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Fire, a, b));
                 hasChanged = true;

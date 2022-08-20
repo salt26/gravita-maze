@@ -74,6 +74,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7a15dd4d7757ded43a4644999e991ee5, type: 3}
   - {fileID: 8300000, guid: ece0ba77aafafc34cb6e2d14c4a354bb, type: 3}
   - {fileID: 8300000, guid: 3ec087a1f1ba6264ea0491245f732f60, type: 3}
+  wallSfx: {fileID: 8300000, guid: c6ce59939637a2941b374f9888c695aa, type: 3}
   shutterSfx: {fileID: 8300000, guid: 773786c72df87634b9e151c369dbca96, type: 3}
   squashedSfx: {fileID: 8300000, guid: 7c7a7c0ab7f18d84c9bb69811b77ac89, type: 3}
   burnedSfx: {fileID: 8300000, guid: f4f183e3623dd764b898cf056d09aefe, type: 3}

@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     public AudioSource sfxAudioSource;
     public List<AudioClip> ballSfxs;
     public List<AudioClip> ironSfxs;
+    public AudioClip wallSfx;
     public AudioClip shutterSfx;
     public AudioClip squashedSfx;
     public AudioClip burnedSfx;
@@ -259,6 +260,11 @@ public class GameManager : MonoBehaviour
     {
         if (moveDistance < 1 || moveDistance > 8) return;
         sfxAudioSource.PlayOneShot(ironSfxs[moveDistance - 1], Mathf.Clamp01(volumeScale * sfxVolume));
+    }
+
+    public void PlayWallSFX()
+    {
+        sfxAudioSource.PlayOneShot(wallSfx);
     }
 
     public void PlayShutterSFX()
