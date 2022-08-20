@@ -6,7 +6,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.IO;
 
 public class PlayManager : MonoBehaviour
 {
@@ -227,6 +226,7 @@ public class PlayManager : MonoBehaviour
                 break;
             case Mode.Custom:
                 CustomOpenPhase();
+                Life = int.MaxValue;
                 break;
             default:
                 IsRandomOrder = isRandomOrder;
@@ -535,6 +535,7 @@ public class PlayManager : MonoBehaviour
     public void CustomOpenPhase()
     {
         customPhase = CustomPhase.Open;
+        GameManager.gm.CustomChangeBGM(customPhase);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -775,6 +776,7 @@ public class PlayManager : MonoBehaviour
                     customOpen.SetActive(false);
                     customIngame.SetActive(true);
                     customPhase = CustomPhase.Ingame;
+                    GameManager.gm.CustomChangeBGM(customPhase);
 
                     ClearOpenScrollItems();
 
@@ -811,7 +813,7 @@ public class PlayManager : MonoBehaviour
         messagePanel.SetActive(false);
         CustomOpenPhase();
         customPhase = CustomPhase.Open;
-        
+        GameManager.gm.CustomChangeBGM(customPhase);
         GameManager.gm.canPlay = false;
     }
 }

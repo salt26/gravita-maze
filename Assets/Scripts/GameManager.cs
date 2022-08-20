@@ -289,6 +289,21 @@ public class GameManager : MonoBehaviour
     }
 
     // 나중에 CustoChangeBGM 만들어야지 !!
+    public void CustomChangeBGM(PlayManager.CustomPhase customPhase)
+    {
+        if (customPhase == PlayManager.CustomPhase.Open && bgmAudioSource.clip != bgms[0])
+            {
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[0];
+            bgmAudioSource.Play();
+            }
+        if (customPhase == PlayManager.CustomPhase.Ingame && bgmAudioSource.clip != bgms[1])
+        {
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[1];
+            bgmAudioSource.Play();
+        }
+    }
 
     public void PlayBallSFX()
     {
