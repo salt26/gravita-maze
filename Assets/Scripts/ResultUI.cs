@@ -312,27 +312,23 @@ public class ResultUI : MonoBehaviour
 
     IEnumerator ResultAnimation(int starNum){
         yield return new WaitForSeconds(2.0f);
-        Debug.LogError("Star Fallen");
 
         if(starNum >= 1){
             star1.SetActive(true);
             starBang.SetTrigger("Star1");
             yield return new WaitForSeconds(0.3f);
-            Debug.LogError("Star1");
         }
 
         if(starNum >= 2){
             star2.SetActive(true);
             starBang.SetTrigger("Star2");
             yield return new WaitForSeconds(0.3f);
-            Debug.LogError("Star2");
 
         }
 
         if(starNum >= 3){
             star3.SetActive(true);
             starBang.SetTrigger("Star3");
-            Debug.LogError("Star3");
         }
 
     }

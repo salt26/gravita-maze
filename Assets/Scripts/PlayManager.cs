@@ -6,7 +6,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.IO;
 
 public class PlayManager : MonoBehaviour
 {
