@@ -270,6 +270,16 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.Play();
             }
         }
+
+        else if (SceneManager.GetActiveScene().name.Equals("Credit"))
+        {
+            if (bgmAudioSource.clip != bgms[0])
+            {
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
+            }
+        }
     }
 
     public void EditorChangeBGM(EditorManager.EditPhase editPhase)
@@ -429,6 +439,11 @@ public class GameManager : MonoBehaviour
     public void LoadFirst()
     {
         StartCoroutine(SceneLoading("First"));
+    }
+
+    public void LoadCredit()
+    {
+        StartCoroutine(SceneLoading("Credit"));
     }
 
     IEnumerator SceneLoading(string sceneName)
