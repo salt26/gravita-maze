@@ -20,6 +20,7 @@ public class OpenSaveScrollItem : MonoBehaviour
     public Sprite highlightedFolderIcon;
 
     public EditorManager em;
+    public PlayManager pm;
 
     public bool isFolder = false;
     public bool isUpOneLevel = false;
@@ -32,6 +33,24 @@ public class OpenSaveScrollItem : MonoBehaviour
     {
         this.type = type;
         this.em = em;
+        this.isFolder = isFolder;
+        this.isUpOneLevel = isFolder & isUpOneLevel;
+        this.path = path.Replace('\\', '/');
+        if (isFolder)
+        {
+            labelName = this.path.Substring(this.path.LastIndexOf('/') + 1);
+        }
+        else
+        {
+            labelName = Path.GetFileNameWithoutExtension(this.path);
+        }
+        Update();
+    }
+
+    public void Initialize(Type type, string path, bool isFolder, PlayManager pm, bool isUpOneLevel = false)
+    {
+        this.type = type;
+        this.pm = pm;
         this.isFolder = isFolder;
         this.isUpOneLevel = isFolder & isUpOneLevel;
         this.path = path.Replace('\\', '/');
@@ -94,13 +113,26 @@ public class OpenSaveScrollItem : MonoBehaviour
 
     public void Select()
     {
-        switch (type) {
-            case Type.Open:
-                em.EditOpenItemSelect(this);
-                break;
-            case Type.Save:
-                em.EditSaveItemSelect(this);
-                break;
+        if (em != null)
+        {
+            switch (type)
+            {
+                case Type.Open:
+                    em.EditOpenItemSelect(this);
+                    break;
+                case Type.Save:
+                    em.EditSaveItemSelect(this);
+                    break;
+            }
+        }
+        else if (pm != null)
+        {
+            switch (type)
+            {
+                case Type.Open:
+                    pm.EditOpenItemSelect(this);
+                    break;
+            }
         }
     }
 }

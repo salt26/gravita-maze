@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -10,6 +12,8 @@ public class PlayManager : MonoBehaviour
 {
     public enum Mode { Tutorial = 0, Custom = 1, Survival = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
+
+    public enum CustomPhase { Open = 1, Ingame = 2}
 
     public Button pauseButton;                   // quitHighlightedButton이 활성화될 때 비활성화
     public Button quitHighlightedButton;        // 모든 맵을 탈출하거나 라이프가 0이 되어 게임이 종료될 때 활성화
@@ -21,10 +25,28 @@ public class PlayManager : MonoBehaviour
     public MessageUI messageUI;
     public GameObject messagePanel;
     public ResultUI resultUI;
+    public GameObject tooltipUI;
+    public GameObject timerUI;
+
+    private OpenSaveScrollItem selectedOpenScrollItem;
+    public GameObject customOpenScrollContent;
+    public Button customOpenButton;
+    public Button customOpenHighlightedButton;
+    public StatusUI statusUI;
+    private string currentOpenPath = MapManager.MAP_ROOT_PATH;
+    public Text customOpenPathText;
+    public GameObject openScrollItemPrefab;
+    public Scrollbar customOpenScrollbar;
+    public GameObject customOpenScrollEmptyText;
+    private float openItemSelectTime = 0f;
+
+    public GameObject customOpen;
+    public GameObject customIngame;
 
     public TutorialGuide tutorialGuide;//추가
 
     private Mode playMode;
+    private CustomPhase customPhase;
 
     public Mode PlayMode{
         get{return playMode;}
@@ -75,6 +97,8 @@ public class PlayManager : MonoBehaviour
     private int adventureInsaneLife = 5;
 
     private List<TextAsset> _mapFiles;
+
+
 
     public List<TextAsset> MapFiles
     {
@@ -143,7 +167,10 @@ public class PlayManager : MonoBehaviour
         playMode = mode;
         messageUI.gameObject.SetActive(false);
         messagePanel.SetActive(false);
-        resultUI.gameObject.SetActive(false);
+        if (mode != Mode.Custom)
+        { 
+            resultUI.gameObject.SetActive(false); 
+        }
         switch (playMode)
         {
             case Mode.Tutorial:
@@ -176,6 +203,9 @@ public class PlayManager : MonoBehaviour
                 Life = adventureInsaneLife;
                 PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
+            case Mode.Custom:
+                CustomOpenPhase();
+                break;
             default:
                 IsRandomOrder = isRandomOrder;
                 Life = Mathf.Max(initialLife, 1);
@@ -190,7 +220,7 @@ public class PlayManager : MonoBehaviour
 
         if (IsRandomOrder)
         {
-            List<TextAsset> tempList = _mapFiles.OrderBy(_ => Random.value).ToList();
+            List<TextAsset> tempList = _mapFiles.OrderBy(_ => UnityEngine.Random.value).ToList();
             _mapFiles = tempList;
         }
         IsReady = true;
@@ -213,19 +243,34 @@ public class PlayManager : MonoBehaviour
         pauseButton.interactable = false;
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
-        messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
-            () => resultUI.Initialize(playMode),
-            () =>
-            {
-                GameManager.mm.TimeResume();
-                messagePanel.SetActive(false);
-                pauseButton.interactable = true;
-            }) ;
+        if (SceneManager.GetActiveScene().name == "Adventure" || SceneManager.GetActiveScene().name == "Tutorial")
+        { messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+                () => resultUI.Initialize(playMode),
+                () =>
+                {
+                    GameManager.mm.TimeResume();
+                    messagePanel.SetActive(false);
+                    pauseButton.interactable = true;
+                })
+                    ;
+        }
+        else if (SceneManager.GetActiveScene().name == "Custom")
+        {
+            messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+                  () => CustomIngameToOpen(),
+                  () =>
+                  {
+                      GameManager.mm.TimeResume();
+                      messagePanel.SetActive(false);
+                      pauseButton.interactable = true;
+                  })
+                      ;
+        }
     }
 
     public void Quit()
     {
-        if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+        if (SceneManager.GetActiveScene().name.Equals("Tutorial") || SceneManager.GetActiveScene().name.Equals("Custom"))
         {
             GameManager.gm.LoadMode();
         }
@@ -463,5 +508,288 @@ public class PlayManager : MonoBehaviour
     public void PlayButtonSFX()
     {
         GameManager.gm.PlayButtonSFX();
+    }
+
+    public void CustomOpenPhase()
+    {
+        customPhase = CustomPhase.Open;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
+        {
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            }
+            if (!Directory.Exists(Path.GetDirectoryName(MapManager.ROOT_PATH)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(MapManager.ROOT_PATH));
+            }
+        }
+        catch (Exception e)
+        {
+            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            return;
+        }
+#endif
+
+        try
+        {
+            if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
+            {
+                Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
+                Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+            }
+        }
+        catch (Exception e)
+        {
+            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            Debug.LogError(e.Message);
+            return;
+        }
+
+        RenderOpenScrollView(MapManager.MAP_ROOT_PATH);
+
+        statusUI.SetStatusMessage("Choose a map to open.");
+    }
+
+    private void RenderOpenScrollView(string openPath)
+    {
+        ClearOpenScrollItems();
+
+        const float SCROLL_ITEM_HEIGHT = 84f;
+
+        openPath = openPath.Replace('\\', '/');
+        string[] files = null;
+        string[] dirs = null;
+        int index = 0;
+        int length = 0;
+        bool isRoot = true;
+        try
+        {
+            files = Directory.GetFiles(openPath, "*.txt");
+            dirs = Directory.GetDirectories(openPath);
+            length = dirs.Length + files.Length;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("File invalid: cannot open the path \"" + openPath + "\"");
+            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+        }
+
+        if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
+        {
+            isRoot = false;
+            length++;
+        }
+
+        currentOpenPath = openPath.TrimEnd('/');
+        //Debug.Log(currentOpenPath);
+
+        string currentPath = currentOpenPath.Substring(currentOpenPath.LastIndexOf('/') + 1);
+        if (currentOpenPath.Length <= 21)
+        {
+            customOpenPathText.text = currentOpenPath;
+        }
+        else if (currentPath.Length <= 17)
+        {
+            string tempPath = currentOpenPath.Substring(currentOpenPath.Length - 17);
+            tempPath = tempPath.Substring(tempPath.IndexOf('/') + 1);
+            customOpenPathText.text = ".../" + tempPath;
+        }
+        else
+        {
+            customOpenPathText.text = ".../" + currentPath.Remove(14) + "...";
+        }
+
+        customOpenScrollContent.GetComponent<RectTransform>().sizeDelta =
+            new Vector2(customOpenScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
+
+        if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
+        {
+            GameObject g = Instantiate(openScrollItemPrefab, customOpenScrollContent.transform);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().anchoredPosition =
+                new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('/')), true, this, true);
+            index++;
+        }
+
+        if (dirs != null)
+        {
+            foreach (string s in dirs)
+            {
+                GameObject g = Instantiate(openScrollItemPrefab, customOpenScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, true, this, false);
+                index++;
+            }
+        }
+
+        if (files != null)
+        {
+            foreach (string s in files)
+            {
+                GameObject g = Instantiate(openScrollItemPrefab, customOpenScrollContent.transform);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
+                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
+                index++;
+            }
+        }
+
+        customOpenScrollbar.numberOfSteps = Mathf.Max(1, length - 4);
+
+        if (length == 0)
+        {
+            customOpenScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, 0f, 0f);
+            customOpenScrollEmptyText.SetActive(true);
+        }
+        else if (!isRoot && length == 1)
+        {
+            customOpenScrollEmptyText.GetComponent<RectTransform>().offsetMax = new Vector3(0f, -42f, 0f);
+            customOpenScrollEmptyText.SetActive(true);
+        }
+        else
+        {
+            customOpenScrollEmptyText.SetActive(false);
+        }
+    }
+
+    private void ClearOpenScrollItems()
+    {
+        selectedOpenScrollItem = null;
+        foreach (OpenSaveScrollItem i in customOpenScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        {
+            Destroy(i.gameObject);
+        }
+
+        customOpenButton.gameObject.SetActive(true);
+        customOpenHighlightedButton.gameObject.SetActive(false);
+
+        customOpenButton.interactable = false;
+        customOpenHighlightedButton.interactable = false;
+    }
+
+    public void EditOpenItemSelect(OpenSaveScrollItem caller)
+    {
+        float selectTime = Time.time;
+        if (caller != null && caller.Equals(selectedOpenScrollItem) &&
+            openItemSelectTime > 0f && selectTime - openItemSelectTime < 0.5f)
+        {
+            // Double click
+            EditOpen();
+            return;
+        }
+        openItemSelectTime = selectTime;
+
+        foreach (OpenSaveScrollItem i in customOpenScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        {
+            i.isSelected = false;
+        }
+        caller.isSelected = true;
+        selectedOpenScrollItem = caller;
+
+        if (caller.isFolder)
+        {
+            customOpenButton.gameObject.SetActive(true);
+            customOpenHighlightedButton.gameObject.SetActive(false);
+            customOpenButton.interactable = true;
+            GameManager.mm.Initialize();
+        }
+        else
+        {
+            bool b = EditOpenFile(selectedOpenScrollItem.path, true);
+            customOpenHighlightedButton.gameObject.SetActive(b);
+            customOpenButton.gameObject.SetActive(!b);
+            customOpenButton.interactable = b;
+            customOpenHighlightedButton.interactable = b;
+        }
+    }
+
+    public void EditOpen()
+    {
+        if (customPhase != CustomPhase.Open || selectedOpenScrollItem is null) return;
+
+        if (selectedOpenScrollItem.isFolder)
+        {
+            RenderOpenScrollView(selectedOpenScrollItem.path);
+            GameManager.mm.Initialize();
+        }
+        else
+        {
+            EditOpenFile(selectedOpenScrollItem.path, false);
+        }
+    }
+
+    public bool EditOpenFile(string path, bool isPreview)
+    {
+        MapManager.OpenFileFlag openFileFlag = GameManager.mm.InitializeFromFile(path, out int sizeX, out int sizeY,
+            out List<ObjectInfo> objects, out List<WallInfo> walls,
+            out string solution, out float timeLimit, statusUI);
+
+        switch (openFileFlag)
+        {
+            case MapManager.OpenFileFlag.Restore:
+                GameManager.mm.Initialize();
+                return false;
+            case MapManager.OpenFileFlag.Success:
+                if (isPreview)
+                {
+                    return true;
+                }
+                else
+                {
+                    GameManager.mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
+
+                    customOpen.SetActive(false);
+                    customIngame.SetActive(true);
+                    customPhase = CustomPhase.Ingame;
+
+                    ClearOpenScrollItems();
+
+                    foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
+                    {
+                        Destroy(t.gameObject);
+                    }
+                    statusUI.gameObject.SetActive(false);
+                    timerUI.SetActive(true);
+                    GameManager.gm.canPlay = true;
+                    GameManager.mm.TimeActivate();
+                    
+
+                    
+
+                    return true;
+                }
+            case MapManager.OpenFileFlag.Failed:
+            default:
+                return false;
+        }
+    }
+
+    public void CustomIngameToOpen()
+    {
+        if (customPhase != CustomPhase.Ingame) return;
+
+        customIngame.SetActive(false);
+        customOpen.SetActive(true);
+        GameManager.mm.Initialize();
+        statusUI.gameObject.SetActive(true);
+        timerUI.SetActive(false);
+        nextButton.interactable = false;
+        messagePanel.SetActive(false);
+        CustomOpenPhase();
+        customPhase = CustomPhase.Open;
+        
+        GameManager.gm.canPlay = false;
     }
 }
