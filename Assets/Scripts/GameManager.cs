@@ -477,7 +477,6 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 3));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
@@ -506,6 +505,7 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
@@ -852,6 +852,9 @@ public class GameManager : MonoBehaviour
                 break;
             case MapManager.Flag.QuitGame:
                 QuitGame();
+                break;
+            case MapManager.Flag.Credit:
+                LoadCredit();
                 break;
         }
     }
