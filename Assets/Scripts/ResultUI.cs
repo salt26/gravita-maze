@@ -172,134 +172,114 @@ public class ResultUI : MonoBehaviour
         }
         gameObject.SetActive(true);
         
-        uiOnce = true;
-
-        /*
-            if(uiTimer >= 2.3){
-                ScoreStars(pm.PlayMode);
-                uiOnce = true;
-            }
-        }
-        */
         if (mode == PlayManager.Mode.Tutorial)
         {
             if (pm.HasClearedAll)
             {
                 StartCoroutine(ResultAnimation(3));
             }
+            else{
+                StartCoroutine(ResultAnimation(0));
+            }
         }
         else if (mode == PlayManager.Mode.AdvEasy)
         {
-            modeText.text = "Adventure";
-            difficultyText.text = "Easy";
-            difficultyText.color = Color.blue;
             if (pm.HasClearedAll)
             {
-                upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Nice! Your journey has started!";
-                StartCoroutine(ResultAnimation(3));
-
+                if(pm.Life >= 4){
+                    StartCoroutine(ResultAnimation(3));
+                }
+                else if(pm.Life >= 3){
+                    StartCoroutine(ResultAnimation(2));
+                }
+                else{
+                    StartCoroutine(ResultAnimation(1));
+                }
+                
             }
             else if (pm.Life == 0)
             {
-                upperMessage.text = "Failed";
-                lowerMessage.text = "You can do better next time!";
+                StartCoroutine(ResultAnimation(0));
             }
             else 
             {
-                upperMessage.text = "Your Result";
-                lowerMessage.text = "You can try again at any time.";
+                StartCoroutine(ResultAnimation(0));
             }
-            mapsPassedCount.text = pm.EscapedCount.ToString();
-            mapsSkippedCount.text = pm.SkippedCount.ToString();
-            livesLeftCount.text = pm.Life.ToString();
-            mapsPassedCount.color = new Color(0f, 100 / 255f, 0f);
-            mapsSkippedCount.color = Color.blue;
-            livesLeftCount.color = Color.red;
         }
 
         else if (mode == PlayManager.Mode.AdvNormal)
         {
-            modeText.text = "Adventure";
-            difficultyText.text = "Normal";
-            difficultyText.color = new Color(0f, 100 / 255f, 0f);
             if (pm.HasClearedAll)
             {
-                upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Great! You have the potential of a master!";
+                if(pm.Life >= 4){
+                    StartCoroutine(ResultAnimation(3));
+                }
+                else if(pm.Life >= 3){
+                    StartCoroutine(ResultAnimation(2));
+                }
+                else{
+                    StartCoroutine(ResultAnimation(1));
+                }
+                
             }
             else if (pm.Life == 0)
             {
-                upperMessage.text = "Failed";
-                lowerMessage.text = "You can do better next time!";
+                StartCoroutine(ResultAnimation(0));
             }
-            else
+            else 
             {
-                upperMessage.text = "Your Result";
-                lowerMessage.text = "You can try again at any time.";
+                StartCoroutine(ResultAnimation(0));
             }
-            mapsPassedCount.text = pm.EscapedCount.ToString();
-            mapsSkippedCount.text = pm.SkippedCount.ToString();
-            livesLeftCount.text = pm.Life.ToString();
-            mapsPassedCount.color = new Color(0f, 100 / 255f, 0f);
-            mapsSkippedCount.color = Color.blue;
-            livesLeftCount.color = Color.red;
         }
 
         else if (mode == PlayManager.Mode.AdvHard)
         {
-            modeText.text = "Adventure";
-            difficultyText.text = "Hard";
-            difficultyText.color = new Color(1f, 165 / 255f, 0f);
             if (pm.HasClearedAll)
             {
-                upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Wow! How did you do this?!";
+                if(pm.Life >= 8){
+                    StartCoroutine(ResultAnimation(3));
+                }
+                else if(pm.Life >= 5){
+                    StartCoroutine(ResultAnimation(2));
+                }
+                else{
+                    StartCoroutine(ResultAnimation(1));
+                }
+                
             }
             else if (pm.Life == 0)
             {
-                upperMessage.text = "Failed";
-                lowerMessage.text = "You can do better next time!";
+                StartCoroutine(ResultAnimation(0));
             }
-            else
+            else 
             {
-                upperMessage.text = "Your Result";
-                lowerMessage.text = "You can try again at any time.";
+                StartCoroutine(ResultAnimation(0));
             }
-            mapsPassedCount.text = pm.EscapedCount.ToString();
-            mapsSkippedCount.text = pm.SkippedCount.ToString();
-            livesLeftCount.text = pm.Life.ToString();
-            mapsPassedCount.color = new Color(0f, 100 / 255f, 0f);
-            mapsSkippedCount.color = Color.blue;
-            livesLeftCount.color = Color.red;
         }
 
         else if (mode == PlayManager.Mode.AdvInsane)
         {
-            modeText.text = "Adventure";
-            difficultyText.text = "Insane";
-            difficultyText.color = Color.red;
             if (pm.HasClearedAll)
             {
-                upperMessage.text = "Congratulations!";
-                lowerMessage.text = "Unbelievable! You overwhelmed the map creators...";
+                if(pm.Life >= 8){
+                    StartCoroutine(ResultAnimation(3));
+                }
+                else if(pm.Life >= 5){
+                    StartCoroutine(ResultAnimation(2));
+                }
+                else{
+                    StartCoroutine(ResultAnimation(1));
+                }
+                
             }
             else if (pm.Life == 0)
             {
-                upperMessage.text = "Failed";
-                lowerMessage.text = "You can do better next time!";
+                StartCoroutine(ResultAnimation(0));
             }
-            else
+            else 
             {
-                upperMessage.text = "Your Result";
-                lowerMessage.text = "You can try again at any time.";
+                StartCoroutine(ResultAnimation(0));
             }
-            mapsPassedCount.text = pm.EscapedCount.ToString();
-            mapsSkippedCount.text = pm.SkippedCount.ToString();
-            livesLeftCount.text = pm.Life.ToString();
-            mapsPassedCount.color = new Color(0f, 100 / 255f, 0f);
-            mapsSkippedCount.color = Color.blue;
-            livesLeftCount.color = Color.red;
         }
 
 
@@ -332,62 +312,4 @@ public class ResultUI : MonoBehaviour
 
     }
 
-    public void Update(){
-
-/*
-        if(pm.EscapedCount == 8){
-            Ended = true;
-        }
-
-        starBang.SetBool("Ended", Ended);
-
-        if(uiOnce){
-            uiTimer = uiTimer+Time.deltaTime;
-            if(uiTimer >= 2){
-                ScoreStars(pm.PlayMode);
-                uiOnce = false;
-            }
-        }
-        */
-    }
-
-
-/*
-    public void ScoreStars(PlayManager.Mode mode){
-        // 1-> 3-> 2 순서대로 줌
-
-        if (mode == PlayManager.Mode.Tutorial)
-        {
-            if(pm.HasClearedAll){
-                
-                star2.SetActive(true);
-                star1.SetActive(true);
-                star3.SetActive(true);
-            }
-        }
-
-        else if (mode == PlayManager.Mode.AdvEasy)
-        {
-            
-        }
-
-        else if (mode == PlayManager.Mode.AdvNormal)
-        {
-            
-        }
-
-        else if (mode == PlayManager.Mode.AdvHard)
-        {
-            
-        }
-
-        else if (mode == PlayManager.Mode.AdvInsane)
-        {
-            
-        }
-
-    }
-
-
-*/
 }
