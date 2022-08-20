@@ -13,7 +13,6 @@ public class TutorialManager : MonoBehaviour
     }
     public void PlayTutorial()
     {
-        DoTutorialSave();
         GameManager.gm.LoadTutorial();
     }
     public void PlayButtonSFX()

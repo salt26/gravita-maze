@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class PlayManager : MonoBehaviour
 {
@@ -240,7 +241,12 @@ public class PlayManager : MonoBehaviour
 
     public void Ending()
     {
-
+        if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
+        {    
+            Debug.Log("ADs");
+            var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
+            file.Close();
+        }
         resultUI.Initialize(playMode);
     }
 
