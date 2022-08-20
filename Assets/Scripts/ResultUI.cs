@@ -14,6 +14,24 @@ public class ResultUI : MonoBehaviour
     public Text mapsSkippedCount;
     public Text livesLeftCount;
 
+    public float uiTimer = 0;
+    public bool uiOnce = false;
+    public GameObject star1;
+    public GameObject star2;
+    public GameObject star3;
+
+    public void Start(){
+        star1 = GameObject.Find("Star1");
+        star2 = GameObject.Find("Star2");
+        star3 = GameObject.Find("Star3");
+
+        star1.SetActive(false);
+        star2.SetActive(false);
+        star3.SetActive(false);
+        
+    }
+    
+
     public PlayManager pm;
 
     public void Initialize(PlayManager.Mode mode)
@@ -150,10 +168,75 @@ public class ResultUI : MonoBehaviour
             mapsSkippedCount.color = Color.blue;
             livesLeftCount.color = Color.red;
         }
-
         gameObject.SetActive(true);
+        
+        uiOnce = true;
+
+        /*
+            if(uiTimer >= 2.3){
+                ScoreStars(pm.PlayMode);
+                uiOnce = true;
+            }
+        }
+        */
     }
 
+    public void Update(){
+        if(uiOnce){
+            uiTimer = uiTimer+Time.deltaTime;
+            if(uiTimer >= 2){
+                ScoreStars(pm.PlayMode);
+                uiOnce = false;
+            }
+        }
+
+    }
+
+
+    public void ScoreStars(PlayManager.Mode mode){
+        // 1-> 3-> 2 순서대로 줌
+
+        if (mode == PlayManager.Mode.Tutorial)
+        {
+            if(pm.EscapedCount >= 3){
+                Animation star1ani = star1.GetComponent<Animation>();
+                star1ani.Play();
+                star1.SetActive(true);
+                
+            }
+            if(pm.EscapedCount >= 6){
+                Animation star3ani = star3.GetComponent<Animation>();
+                star3ani.Play();
+                star3.SetActive(true);
+            }
+            if(pm.EscapedCount == 8){
+                Animation star2ani = star2.GetComponent<Animation>();
+                star2ani.Play();
+                star2.SetActive(true);
+            }
+        }
+
+        else if (mode == PlayManager.Mode.AdvEasy)
+        {
+            
+        }
+
+        else if (mode == PlayManager.Mode.AdvNormal)
+        {
+            
+        }
+
+        else if (mode == PlayManager.Mode.AdvHard)
+        {
+            
+        }
+
+        else if (mode == PlayManager.Mode.AdvInsane)
+        {
+            
+        }
+
+    }
 
 
 
