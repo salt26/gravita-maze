@@ -231,6 +231,16 @@ public class GameManager : MonoBehaviour
             }
             StartCoroutine(InitializeAdventure());
         }
+        else if (SceneManager.GetActiveScene().name.Equals("Custom"))
+        {
+            if (bgmAudioSource.clip != bgms[0])
+            {
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
+            }
+            StartCoroutine(InitializeCustom());
+        }
     }
 
     public void EditorChangeBGM(EditorManager.EditPhase editPhase)
@@ -248,6 +258,8 @@ public class GameManager : MonoBehaviour
             bgmAudioSource.Play();
         }
     }
+
+    // 나중에 CustoChangeBGM 만들어야지 !!
 
     public void PlayBallSFX()
     {
@@ -329,6 +341,11 @@ public class GameManager : MonoBehaviour
     public void LoadTutorial()
     {
         StartCoroutine(SceneLoading("Tutorial"));
+    }
+
+    public void LoadCustom()
+    {
+        StartCoroutine(SceneLoading("Custom"));
     }
 
     public void LoadAdventureEasy()
@@ -443,6 +460,35 @@ public class GameManager : MonoBehaviour
         canPlay = false;
     }
 
+    IEnumerator InitializeCustom()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
+            yield return null;
+        }
+        canPlay = false;
+
+        while (pm == null)
+        {
+            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+            if (pm != null) break;
+            else
+            {
+                pm = GameObject.Find("PlayManager").GetComponent<PlayManager>();
+            }
+            yield return null;
+        }
+
+        pm.Initialize(PlayManager.Mode.Custom);
+
+        mm.afterGravity = pm.PlayAfterGravity;
+    }
+
     IEnumerator InitializeMode()
     {
         while (mm == null)
@@ -464,7 +510,7 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 2));  // TODO 나중에 해금
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 4));  // TODO 나중에 해금
+        // walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 4));  // TODO 나중에 해금
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 8));
@@ -750,7 +796,7 @@ public class GameManager : MonoBehaviour
                 LoadTutorial();
                 break;
             case MapManager.Flag.Custom:
-                // TODO
+                LoadCustom();
                 break;
             case MapManager.Flag.Training:
                 // TODO

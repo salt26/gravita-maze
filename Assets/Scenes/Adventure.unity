@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3364,6 +3364,18 @@ MonoBehaviour:
   messageUI: {fileID: 1484046095}
   messagePanel: {fileID: 4501142658914459346}
   resultUI: {fileID: 859230049}
+  tooltipUI: {fileID: 0}
+  timerUI: {fileID: 0}
+  customOpenScrollContent: {fileID: 0}
+  customOpenButton: {fileID: 0}
+  customOpenHighlightedButton: {fileID: 0}
+  statusUI: {fileID: 0}
+  customOpenPathText: {fileID: 0}
+  openScrollItemPrefab: {fileID: 0}
+  customOpenScrollbar: {fileID: 0}
+  customOpenScrollEmptyText: {fileID: 0}
+  customOpen: {fileID: 0}
+  customIngame: {fileID: 0}
   tutorialGuide: {fileID: 0}
   tutorialMapFiles: []
   adventureEasyMapFiles:
@@ -4499,10 +4511,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 956023d207ba2d847b977778568738d4, type: 2}
   - {fileID: 11400000, guid: 332952d2162d32040a64322647631bcb, type: 2}
   - {fileID: 11400000, guid: 6c52a95565bffae48a70e908d6fb26e7, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
   loadingPanel: {fileID: 1642279426}
   timeoutPanel: {fileID: 1811126592}
+  tryCount: 0
+  beforeFirstAction: 0
 --- !u!4 &1755156425
 Transform:
   m_ObjectHideFlags: 0

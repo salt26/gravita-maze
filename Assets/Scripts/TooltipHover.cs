@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -18,6 +19,7 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     TooltipBox myTooltipUI;
     Button button;
     EditorManager em;
+    PlayManager pm;
     float lastEnterTime;
 
     void Awake()
@@ -25,7 +27,15 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         myTooltipUI = null;
         button = GetComponent<Button>();
         myTransform = GetComponent<RectTransform>();
-        em = GameObject.FindGameObjectWithTag("EditorManager").GetComponent<EditorManager>();
+        if (SceneManager.GetActiveScene().name.Equals("Editor"))
+        {
+            em = GameObject.FindGameObjectWithTag("EditorManager").GetComponent<EditorManager>();
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("Custom"))
+        {
+            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+        }
+        
         lastEnterTime = -1f;
     }
 
@@ -34,7 +44,15 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         lastEnterTime = Time.time;
         if (!button.interactable && myTooltipUI == null)
         {
-            myTooltipUI = Instantiate(tooltipPrefab, em.tooltipUI.transform).GetComponent<TooltipBox>();
+            if (SceneManager.GetActiveScene().name.Equals("Editor"))
+            {
+                myTooltipUI = Instantiate(tooltipPrefab, em.tooltipUI.transform).GetComponent<TooltipBox>();
+            }
+            else if (SceneManager.GetActiveScene().name.Equals("Custom"))
+            {
+                myTooltipUI = Instantiate(tooltipPrefab, pm.tooltipUI.transform).GetComponent<TooltipBox>();
+            }
+            
             switch (pivot)
             {
                 case Pivot.TopRight:

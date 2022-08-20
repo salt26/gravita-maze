@@ -88,6 +88,9 @@ public class MapManager : MonoBehaviour
     private float _timeLimit;
     private bool _isReady = false;
 
+    public int tryCount = 0;
+    public bool beforeFirstAction = false;
+
     public int SizeX
     {
         get
@@ -270,7 +273,8 @@ public class MapManager : MonoBehaviour
 
         if (canRotate && !(SceneManager.GetActiveScene().name.Equals("Main") ||
             SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Mode") ||
-            SceneManager.GetActiveScene().name.Equals("AdventureLevel") || SceneManager.GetActiveScene().name.Equals("Tutorial")))
+            SceneManager.GetActiveScene().name.Equals("AdventureLevel") || SceneManager.GetActiveScene().name.Equals("Tutorial") || 
+            SceneManager.GetActiveScene().name.Equals("Custom")))
         {
             int r = UnityEngine.Random.Range(0, 8);
             Rotation = (RotationStatus)r;
@@ -809,6 +813,8 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
+        tryCount = 0;
+        beforeFirstAction = true;
         //PrintMapCoord();
     }
 
@@ -1136,6 +1142,7 @@ public class MapManager : MonoBehaviour
         GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
+        beforeFirstAction = true;
     }
 
     /// <summary>
@@ -1205,6 +1212,11 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         IsTimePassing = true;
+        if (beforeFirstAction)
+        {
+            tryCount++;
+            beforeFirstAction = false;
+        }
         gravityBall.anchoredPosition = new Vector3(0f, 264f);
         gravityUpButton.interactable = false;
         gravityDownButton.interactable = true;
@@ -1223,6 +1235,11 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         IsTimePassing = true;
+        if (beforeFirstAction)
+        {
+            tryCount++;
+            beforeFirstAction = false;
+        }
         gravityBall.anchoredPosition = new Vector3(0f, -264f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = false;
@@ -1241,6 +1258,11 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         IsTimePassing = true;
+        if (beforeFirstAction)
+        {
+            tryCount++;
+            beforeFirstAction = false;
+        }
         gravityBall.anchoredPosition = new Vector3(-264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -1259,6 +1281,11 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
         IsTimePassing = true;
+        if (beforeFirstAction)
+        {
+            tryCount++;
+            beforeFirstAction = false;
+        }
         gravityBall.anchoredPosition = new Vector3(264f, 0f);
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
