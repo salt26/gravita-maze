@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public AudioClip retrySfx;
     public List<AudioClip> buttonSfxs;
     public float sfxVolume = 0.8f;
-
+    
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
     {
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
         sfxAudioSource.volume = Mathf.Clamp01(sfxVolume);
-        Initialize();
+        Initialize();   
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
@@ -174,13 +174,31 @@ public class GameManager : MonoBehaviour
         // TODO: 씬 바뀔 때마다 적절한 레벨 선택하고 MapManager 찾아서 맵 로드해야 함
         if (SceneManager.GetActiveScene().name.Equals("Main"))
         {
-            if (bgmAudioSource.clip != bgms[0])
+            bool isTutorialDone = true;
+            try
             {
-                bgmAudioSource.Stop();
-                bgmAudioSource.clip = bgms[0];
-                bgmAudioSource.Play();
+                if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+                {
+                    LoadFirst();
+                    isTutorialDone = false;
+                    
+                }
             }
-            StartCoroutine(InitializeMain());
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+
+            if (isTutorialDone)
+            {
+                if (bgmAudioSource.clip != bgms[0])
+                {
+                    bgmAudioSource.Stop();
+                    bgmAudioSource.clip = bgms[0];
+                    bgmAudioSource.Play();
+                }
+                StartCoroutine(InitializeMain());
+            }
         }
         else if (SceneManager.GetActiveScene().name.Equals("Editor"))
         {
@@ -231,6 +249,15 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.Play();
             }
             StartCoroutine(InitializeAdventure());
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("First"))
+        {
+            if (bgmAudioSource.clip != bgms[0])
+            {
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
+            }
         }
     }
 
@@ -359,6 +386,11 @@ public class GameManager : MonoBehaviour
     {
         adventureLevel = AdventureLevel.Insane;
         StartCoroutine(SceneLoading("Adventure"));
+    }
+
+    public void LoadFirst()
+    {
+        StartCoroutine(SceneLoading("First"));
     }
 
     IEnumerator SceneLoading(string sceneName)
