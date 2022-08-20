@@ -860,6 +860,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal || i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
                     hasChanged = true;
@@ -896,6 +897,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical || i.type == WallInfo.Type.ExitVertical || i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
                     hasChanged = true;
@@ -928,6 +930,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
@@ -960,6 +963,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitVertical && i.x == a && i.y == b));
                     hasChanged = true;
@@ -992,6 +996,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
@@ -1024,6 +1029,7 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
                     }
                     walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal && i.x == a && i.y == b));
                     hasChanged = true;
@@ -1167,6 +1173,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
+                    GameManager.gm.PlayRemoveSFX();
                 }
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
@@ -1240,6 +1247,7 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
             }
             dirtyBit = true;
+            GameManager.gm.PlayRemoveSFX();
         }
     }
 
