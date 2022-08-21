@@ -90,6 +90,8 @@ public class MapManager : MonoBehaviour
 
     public int tryCount = 0;
     public bool beforeFirstAction = false;
+    public bool tryCountUpTrigger = false;
+    public bool hasClearedOnce = false;
 
     public int SizeX
     {
@@ -820,7 +822,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
-        tryCount = 0;
+        tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
     }
@@ -858,7 +860,7 @@ public class MapManager : MonoBehaviour
             throw;
         }
 
-        FileStream fs = new FileStream(path, FileMode.Open);
+        FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
         #region parsing text file
@@ -1233,7 +1235,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = true;
         if (beforeFirstAction)
         {
-            tryCount++;
+            tryCountUpTrigger = true;
             beforeFirstAction = false;
         }
         gravityBall.anchoredPosition = new Vector3(0f, 264f);
@@ -1256,7 +1258,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = true;
         if (beforeFirstAction)
         {
-            tryCount++;
+            tryCountUpTrigger = true;
             beforeFirstAction = false;
         }
         gravityBall.anchoredPosition = new Vector3(0f, -264f);
@@ -1279,7 +1281,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = true;
         if (beforeFirstAction)
         {
-            tryCount++;
+            tryCountUpTrigger = true;
             beforeFirstAction = false;
         }
         gravityBall.anchoredPosition = new Vector3(-264f, 0f);
@@ -1302,7 +1304,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = true;
         if (beforeFirstAction)
         {
-            tryCount++;
+            tryCountUpTrigger = true;
             beforeFirstAction = false;
         }
         gravityBall.anchoredPosition = new Vector3(264f, 0f);
@@ -1317,6 +1319,21 @@ public class MapManager : MonoBehaviour
         }
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(flag);
+    }
+
+    public void TryCountUp(PlayManager pm, string metaPath, string mapHash)
+    {
+        if (pm == null) return;
+        tryCountUpTrigger = false;
+        Debug.Log("TryCount");
+        if (hasClearedOnce) return;
+        tryCount++;
+        Debug.Log(tryCount);
+        FileStream fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+        sw.WriteLine(tryCount.ToString());
+        sw.WriteLine("False");
+        sw.WriteLine(mapHash);
     }
 
     /// <summary>
