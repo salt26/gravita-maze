@@ -1425,6 +1425,8 @@ public class PlayManager : MonoBehaviour
         }
         finally
         {
+            GameManager.mm.hasClearedOnce = false;
+            GameManager.mm.tryCount = 0;
             sr.Close();
             fs.Close();
         }
