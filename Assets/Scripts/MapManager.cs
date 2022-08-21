@@ -1106,6 +1106,11 @@ public class MapManager : MonoBehaviour
         if (!IsReady || !IsTimeActivated) return;
         HasTimePaused = false;
         RemainingTime = 0f;
+        timeoutPanel.SetActive(true);
+        GameManager.gm.PlayTimeoutSFX();
+        if (afterGravity.GetInvocationList().Length > 0)
+            afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
+        Debug.LogWarning("Map warning: Time over");
     }
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)

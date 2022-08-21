@@ -24,40 +24,17 @@ public class PauseUI : MonoBehaviour
         transform.GetChild(0).transform.GetChild(7).GetComponent<Slider>().value = sfxVolume;
     }
 
-    void Update(){
+    void Update()
+    {
+        if (GameManager.mm == null || !GameManager.mm.IsReady) return;
+        if (GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
+        {
+            pauseSkipButton.interactable = true;
+        }
+        else if (GameManager.mm.IsTimeActivated && (GameManager.mm.RemainingTime <= 0f || GameManager.mm.HasCleared))
+        {
+            pauseSkipButton.interactable = false;
+        }
         
     }
-    /*
-    public virtual void Initialize(UnityAction onPassClick = null, UnityAction onReturnClick = null, UnityAction onExitClick = null){
-        pausePassButton.onClick.RemoveAllListeners();
-        pauseReturnButton.onClick.RemoveAllListeners();
-        pauseReturnButton.onClick.RemoveAllListeners();
-
-        if (onPassClick != null)
-        {
-        
-            pauseExitButton.onClick.AddListener(onExitClick);
-        }
-        pausePassButton.onClick.AddListener(() => GameManager.gm.PlayButtonSFX());
-        pausePassButton.onClick.AddListener(() => gameObject.SetActive(false));
-        
-        if (onReturnClick != null)
-        {
-            pauseReturnButton.onClick.AddListener(onReturnClick);
-        }
-        pauseReturnButton.onClick.AddListener(() => GameManager.gm.PlayButtonSFX());
-        pauseReturnButton.onClick.AddListener(() => gameObject.SetActive(false));
-
-        if (onExitClick != null)
-        {
-            pauseExitButton.onClick.AddListener(onExitClick);
-        }
-        pauseExitButton.onClick.AddListener(() => GameManager.gm.PlayButtonSFX());
-        pauseExitButton.onClick.AddListener(() => gameObject.SetActive(false));
-
-        gameObject.SetActive(true);
-
-
-    }
-    */
 }
