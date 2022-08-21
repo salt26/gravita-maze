@@ -24,7 +24,7 @@ public class PlayManager : MonoBehaviour
     public Button retryHighlightedButton;       // Burned 또는 Squashed일 때 활성화
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
-    // public MessageUI messageUI;
+    public MessageUI messageUI;
     public PauseUI pauseUI;
     public GameObject pausePanel;
     public ResultUI resultUI;
