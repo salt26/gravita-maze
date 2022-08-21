@@ -790,12 +790,56 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        // TODO 각 레벨에서 달성한 별 개수에 따라 생성
-        if (true) {
-            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
-            g.transform.localPosition = new Vector3(7f, 8f, 0f);
-            // x좌표: 7f = 1개 이상, 6f = 2개 이상, 5f = 3개
-            // y좌표: 8f = Easy, 6f = Normal, 4f = Hard, 2f = Insane
+        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        {
+            try
+            {
+                FileStream fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
+                using (sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+                    float endx = 7f;
+                    float starty = 0f;
+                    while ((line = sr.ReadLine()) != null) {
+                        for(int i = 0; i < Convert.ToInt32(line); i++){
+                            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                            g.transform.localPosition = new Vector3(endx, 8 - 2 * starty, 0f);
+                            endx--;
+                        }
+                        endx = 7f;
+                        starty++;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
         }
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
@@ -990,6 +1034,58 @@ public class GameManager : MonoBehaviour
                 mm.TimeActivate();
                 canPlay = true;
                 break;
+            }
+        }
+    }
+
+    public void ReviseStar(PlayManager.Mode mode, int star)
+    {
+        FileStream fs = null;
+        StreamWriter sw = null;
+        StreamReader sr = null;
+
+        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        {
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+
+        fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
+        using (sr = new StreamReader(fs, Encoding.UTF8))
+        using (sw = new StreamWriter(fs, Encoding.UTF8))
+        {
+            string line;
+            List<string> lines = new List<string>();
+            while ((line = sr.ReadLine()) != null) {
+                lines.Add(line.TrimEnd());
+            }
+
+            fs.Position = 0;
+            int i = 11;
+            foreach (string l in lines)
+            {                
+                if ((int) pm.PlayMode == i)
+                {
+                    sw.WriteLine(Math.Max(Convert.ToInt32(l), star));
+                }
+                else
+                {
+                    sw.WriteLine(Convert.ToInt32(l));
+                }
+                i++;
             }
         }
     }
