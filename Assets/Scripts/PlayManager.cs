@@ -950,55 +950,55 @@ public class PlayManager : MonoBehaviour
             case TrainingMapSelect.Root:
                 length = trainingFolders.Count;
                 isRoot = true;
-                openPathText.text = "Maps";
+                openPathText.text = "Training";
                 break;
             case TrainingMapSelect.Basic:
                 files = trainingBasicMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Basic";
+                openPathText.text = "Training/Basic";
                 name = "Basic";
                 break;
             case TrainingMapSelect.Fire:
                 files = trainingFireMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Fire";
+                openPathText.text = "Training/Fire";
                 name = "Fire";
                 break;
             case TrainingMapSelect.Iron:
                 files = trainingIronMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Iron";
+                openPathText.text = "Training/Iron";
                 name = "Iron";
                 break;
             case TrainingMapSelect.Block:
                 files = trainingBlockMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Block";
+                openPathText.text = "Training/Block";
                 name = "Block";
                 break;
             case TrainingMapSelect.Exit:
                 files = trainingExitMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Exit";
+                openPathText.text = "Training/Exit";
                 name = "Exit";
                 break;
             case TrainingMapSelect.Shutter:
                 files = trainingShutterMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Shutter";
+                openPathText.text = "Training/Shutter";
                 name = "Shutter";
                 break;
             case TrainingMapSelect.Gate:
                 files = trainingGateMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Maps/Gate";
+                openPathText.text = "Training/Gate";
                 name = "Gate";
                 break;
         }
