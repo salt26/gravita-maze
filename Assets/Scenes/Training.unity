@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -389,6 +389,11 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 386166163}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 222567254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
 --- !u!224 &165664661 stripped
@@ -954,6 +959,8 @@ MonoBehaviour:
   - Exit
   - Shutter
   - Gate
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles: []
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
@@ -1775,6 +1782,7 @@ MonoBehaviour:
   loadingPanel: {fileID: 1649814708}
   timeoutPanel: {fileID: 2117067564}
   tryCount: 0
+  tryNumber: 0
   beforeFirstAction: 0
 --- !u!4 &386166164
 Transform:
@@ -5602,6 +5610,11 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 386166163}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 222567254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
 --- !u!224 &1553784214 stripped

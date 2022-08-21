@@ -13,8 +13,8 @@ public class PlayManager : MonoBehaviour
     public enum Mode { Tutorial = 0, Custom = 1, Training = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
 
-    public enum CustomPhase { Open = 0, Ingame = 1 }
-    public enum TrainingPhase { Open = 0, Ingame = 1 }
+    public enum CustomPhase { Default = 0, Open = 1, Ingame = 2 }
+    public enum TrainingPhase { Default = 0, Open = 1, Ingame = 2 }
 
     public enum TrainingMapSelect { Root = -1, Basic = 0, Fire = 1, Iron = 2, Block = 3, Exit = 4, Shutter = 5, Gate = 6 }
    
@@ -52,8 +52,8 @@ public class PlayManager : MonoBehaviour
     public List<string> trainingFolders = new List<string>();
 
     private Mode playMode;
-    private CustomPhase customPhase;
-    private TrainingPhase trainingPhase;
+    public CustomPhase customPhase;
+    public TrainingPhase trainingPhase;
 
     private TrainingMapSelect selection;
     private string mapPath;
