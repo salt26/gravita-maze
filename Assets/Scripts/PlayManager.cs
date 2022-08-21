@@ -327,6 +327,7 @@ public class PlayManager : MonoBehaviour
             );
             */
         }
+
         // TODO
         /* else if (SceneManager.GetActiveScene().name == "Training")
         {
@@ -1281,6 +1282,7 @@ public class PlayManager : MonoBehaviour
         nextButton.interactable = false;
         pauseButton.interactable = true;
         pausePanel.SetActive(false);
+        pauseButton.interactable = true;
         CustomOpenPhase();
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
