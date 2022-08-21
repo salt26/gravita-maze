@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PauseUI : MonoBehaviour
 {
-    public Button pausePassButton;
+    public Button pauseSkipButton;
     public Button pauseReturnButton;
     public Button pauseExitButton;
     public Slider pauseBgmVolume;
@@ -27,7 +27,7 @@ public class PauseUI : MonoBehaviour
     void Update(){
         
     }
-
+    /*
     public virtual void Initialize(UnityAction onPassClick = null, UnityAction onReturnClick = null, UnityAction onExitClick = null){
         pausePassButton.onClick.RemoveAllListeners();
         pauseReturnButton.onClick.RemoveAllListeners();
@@ -59,4 +59,5 @@ public class PauseUI : MonoBehaviour
 
 
     }
+    */
 }

@@ -356,7 +356,7 @@ public class GameManager : MonoBehaviour
     public void PlayBallSFX()
     {
         int r = UnityEngine.Random.Range(0, ballSfxs.Count);
-        sfxAudioSource.PlayOneShot(ballSfxs[r]);
+        sfxAudioSource.PlayOneShot(ballSfxs[r], Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayIronSFX(int moveDistance, float volumeScale = 1f)
@@ -367,48 +367,48 @@ public class GameManager : MonoBehaviour
 
     public void PlayWallSFX()
     {
-        sfxAudioSource.PlayOneShot(wallSfx);
+        sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayShutterSFX()
     {
-        sfxAudioSource.PlayOneShot(shutterSfx);
+        sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlaySquashedSFX()
     {
-        sfxAudioSource.PlayOneShot(squashedSfx);
+        sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayBurnedSFX()
     {
-        sfxAudioSource.PlayOneShot(burnedSfx);
+        sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayEscapedSFX()
     {
-        sfxAudioSource.PlayOneShot(escapedSfx);
+        sfxAudioSource.PlayOneShot(escapedSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayTimeoutSFX()
     {
-        sfxAudioSource.PlayOneShot(timeoutSfx);
+        sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayRetrySFX()
     {
-        sfxAudioSource.PlayOneShot(retrySfx);
+        sfxAudioSource.PlayOneShot(retrySfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayButtonSFX()
     {
         int r = UnityEngine.Random.Range(0, buttonSfxs.Count);
-        sfxAudioSource.PlayOneShot(buttonSfxs[r]);
+        sfxAudioSource.PlayOneShot(buttonSfxs[r], Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayRemoveSFX()
     {
-        sfxAudioSource.PlayOneShot(removeSfx);
+        sfxAudioSource.PlayOneShot(removeSfx, Mathf.Clamp01(sfxVolume));
     }
 
     public void PlayFallSFX(float volume)
@@ -418,7 +418,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayStarSFX(int num)
     {
-        sfxAudioSource.PlayOneShot(starSfxs[num]);
+        sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
     }
 
     public void QuitGame()

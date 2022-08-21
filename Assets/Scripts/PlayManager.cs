@@ -26,7 +26,7 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
     // public MessageUI messageUI;
     public PauseUI pauseUI;
-    public GameObject messagePanel;
+    public GameObject pausePanel;
     public ResultUI resultUI;
     public GameObject tooltipUI;
     public GameObject timerUI;
@@ -216,7 +216,7 @@ public class PlayManager : MonoBehaviour
         playMode = mode;
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
-        messagePanel.SetActive(false);
+        pausePanel.SetActive(false);
         if (mode != Mode.Custom && mode != Mode.Training)
         { 
             resultUI.gameObject.SetActive(false); 
@@ -296,32 +296,39 @@ public class PlayManager : MonoBehaviour
     public void Pause()
     {
         pauseButton.interactable = false;
-        messagePanel.SetActive(true);
+        pausePanel.SetActive(true);
+        pauseUI.gameObject.SetActive(true);
         GameManager.mm.TimePause();
         if (SceneManager.GetActiveScene().name == "Adventure" || SceneManager.GetActiveScene().name == "Tutorial")
-        { pauseUI.Initialize( // "<b>Paused</b>\n\nDo you want to quit game?",
+        {
+            /*
+            pauseUI.Initialize(
                 () => resultUI.Initialize(playMode),
                 () =>
                 {
                     GameManager.mm.TimeResume();
-                    messagePanel.SetActive(false);
+                    pausePanel.SetActive(false);
                     pauseButton.interactable = true;
-                })
-                    ;
+                }
+            );
+            */
         }
         else if (SceneManager.GetActiveScene().name == "Custom")
         {
-            pauseUI.Initialize(// "<b>Paused</b>\n\nDo you want to quit game?",
-                  () => CustomIngameToOpen(),
-                  () =>
-                  {
-                      GameManager.mm.TimeResume();
-                      messagePanel.SetActive(false);
-                      pauseButton.interactable = true;
-                  })
-                      ;
+            /*
+            pauseUI.Initialize(
+                () => CustomIngameToOpen(),
+                () =>
+                {
+                    GameManager.mm.TimeResume();
+                    pausePanel.SetActive(false);
+                    pauseButton.interactable = true;
+                }
+            );
+            */
         }
-        else if (SceneManager.GetActiveScene().name == "Training")
+        // TODO
+        /* else if (SceneManager.GetActiveScene().name == "Training")
         {
             messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
                   () => TrainingIngameToOpen(),
@@ -332,7 +339,7 @@ public class PlayManager : MonoBehaviour
                       pauseButton.interactable = true;
                   })
                       ;
-        }
+        } */
     }
 
     public void Quit()
@@ -728,6 +735,16 @@ public class PlayManager : MonoBehaviour
     public void PlayButtonSFX()
     {
         GameManager.gm.PlayButtonSFX();
+    }
+
+    public void SetBGMVolume(Slider slider)
+    {
+        GameManager.gm.bgmVolume = slider.value;
+    }
+
+    public void SetSFXVolume(Slider slider)
+    {
+        GameManager.gm.sfxVolume = slider.value;
     }
 
     public void CustomOpenPhase()
@@ -1263,7 +1280,7 @@ public class PlayManager : MonoBehaviour
         timerUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
-        messagePanel.SetActive(false);
+        pausePanel.SetActive(false);
         CustomOpenPhase();
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
@@ -1281,7 +1298,8 @@ public class PlayManager : MonoBehaviour
         timerUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
-        messagePanel.SetActive(false);
+        // TODO
+        // messagePanel.SetActive(false);
         TrainingOpenPhase(selection);
         trainingPhase = TrainingPhase.Open;
         GameManager.gm.TrainingChangeBGM(trainingPhase);
