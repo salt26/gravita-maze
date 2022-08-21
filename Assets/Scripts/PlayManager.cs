@@ -327,7 +327,7 @@ public class PlayManager : MonoBehaviour
             );
             */
         }
-
+        
         // TODO
         /* else if (SceneManager.GetActiveScene().name == "Training")
         {
