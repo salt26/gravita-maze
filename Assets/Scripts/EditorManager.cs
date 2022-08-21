@@ -66,7 +66,7 @@ public class EditorManager : MonoBehaviour
     public Image editorTimerLabel10;
     public Image editorTimerLabel1;
     public StatusUI statusUI;
-    public PauseUI pauseUI;
+    public MessageUI messageUI;
     public InputMessageUI inputMessageUI;
     public GameObject tooltipUI;
     public List<GameObject> editorPhases;
@@ -113,7 +113,7 @@ public class EditorManager : MonoBehaviour
 
         statusUI.gameObject.SetActive(true);
         timerUI.gameObject.SetActive(false);
-        pauseUI.gameObject.SetActive(false);
+        messageUI.gameObject.SetActive(false);
         editorPhases[0].SetActive(true);
         editorPhases[1].SetActive(false);
         editorPhases[2].SetActive(false);
@@ -1256,21 +1256,21 @@ public class EditorManager : MonoBehaviour
         if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Request) return;
         if (dirtyBit)
         {
-            // ��� �޽��� ����
+            // 경고 메시지 띄우기
             if (phase == (int)EditPhase.Initialize)
             {
-                // �� ���� �� 1�������� ������ ��ư�� ������ ���
-                pauseUI.Initialize(/*"<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?",*/ () => GameManager.gm.LoadMain(), null);
+                // 맵 변경 후 1페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
-                // �� ���� �� ������ �Ϸ������� ������� ���� ���¿��� 3�������� ������ ��ư�� ������ ���
-                pauseUI.Initialize(/*"<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?",*/ () => GameManager.gm.LoadMain(), null);
+                // 맵 변경 후 검증은 완료했지만 저장되지 않은 상태에서 3페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else
             {
-                // �� ���� �� ������ ���� �ʰ� 3�������� ������ ��ư�� ������ ���
-                pauseUI.Initialize(/*"<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", */() => GameManager.gm.LoadMain(), null);
+                // 맵 변경 후 검증을 하지 않고 3페이즈의 나가기 버튼을 누르는 경우
+                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
         }
         else
@@ -1494,9 +1494,8 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // ditryBit == true�̸� ���� ��� �޽��� ���� -> �� �ص� �ɵ�?
-        // UI �����
-        // Maps ������ ��� ���� �ҷ��ͼ� ��Ͽ� ����ֱ�
+        // UI 만들기
+        // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -1780,8 +1779,8 @@ public class EditorManager : MonoBehaviour
         if (solution == null || solution == "" || !dirtyBit ||
             mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
 
-        // UI �����
-        // Maps ������ ��� ���� �ҷ��ͼ� ��Ͽ� ����ֱ�
+        // UI 만들기
+        // Maps 폴더의 모든 맵을 불러와서 목록에 띄워주기
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -2122,13 +2121,13 @@ public class EditorManager : MonoBehaviour
         {
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
-                // ���� �̸��� ������ �ִµ� �׷��� ������ ������ �޽����� �����
+                // 같은 이름의 파일이 있는데 그래도 저장할 것인지 메시지로 물어보기
                 string truncated = mapName;
                 if (truncated.Length > editorMapNameInputs[0].characterLimit)
                 {
                     truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
                 }
-                pauseUI.Initialize(/*"<b>Check Save As</b>\n\nMap \"" + truncated + "\" already exists.\nDo you want to overwrite it?",*/ () => EditSaveHelper(), () => { isSaving = false; });
+                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + truncated + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
             {
@@ -2226,7 +2225,6 @@ public class EditorManager : MonoBehaviour
         switch (editPhase)
         {
             case EditPhase.Initialize:
-                // TODO ��ȯ �ִϸ��̼�
                 editorMapNameInputs[0].interactable = true;
                 editorSizeXDropdowns[0].interactable = true;
                 editorSizeYDropdowns[0].interactable = true;
@@ -2407,7 +2405,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-#pragma warning disable CS0162 // ������ �� ���� �ڵ尡 �ֽ��ϴ�.
+#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
     public void EditUndo()
     {
         if (undoStack.Count == 0) return;
@@ -2520,9 +2518,9 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ������ �� ���� �ڵ尡 �ֽ��ϴ�.
+#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
-#pragma warning disable CS0162 // ������ �� ���� �ڵ尡 �ֽ��ϴ�.
+#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
     public void EditRedo()
     {
         if (redoStack.Count == 0) return;
@@ -2633,7 +2631,7 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ������ �� ���� �ڵ尡 �ֽ��ϴ�.
+#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
     public void EditTimer()
     {
@@ -2757,8 +2755,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MapName
         /// </summary>
-        /// <param name="oldMapName">������ ""</param>
-        /// <param name="newMapName">������ ""</param>
+        /// <param name="oldMapName">없으면 ""</param>
+        /// <param name="newMapName">없으면 ""</param>
         public EditActionInfo(string oldMapName, string newMapName)
         {
             type = Type.MapName;
@@ -2769,7 +2767,7 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: SizeX, SizeY
         /// </summary>
-        /// <param name="isX">sizeX ���� �� true, sizeY ���� �� false</param>
+        /// <param name="isX">sizeX 변경 시 true, sizeY 변경 시 false</param>
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
@@ -2794,8 +2792,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Wall
         /// </summary>
-        /// <param name="oldWallInfo">������ null</param>
-        /// <param name="newWallInfo">������ null</param>
+        /// <param name="oldWallInfo">없으면 null</param>
+        /// <param name="newWallInfo">없으면 null</param>
         public EditActionInfo(WallInfo oldWallInfo, WallInfo newWallInfo)
         {
             type = Type.Wall;
@@ -2806,8 +2804,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Object
         /// </summary>
-        /// <param name="oldObjectInfo">������ null</param>
-        /// <param name="newObjectInfo">������ null</param>
+        /// <param name="oldObjectInfo">없으면 null</param>
+        /// <param name="newObjectInfo">없으면 null</param>
         public EditActionInfo(ObjectInfo oldObjectInfo, ObjectInfo newObjectInfo)
         {
             type = Type.Object;
