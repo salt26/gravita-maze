@@ -671,16 +671,16 @@ public class PlayManager : MonoBehaviour
                 pauseButton.interactable = false;
 
                 GameManager.mm.hasClearedOnce = true;
-                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                 streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                 fileStream.Position = 0;
                 streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
                 streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
                 streamWriter.WriteLine(mapHash);
                 streamWriter?.Close();
-                //fileStream?.Close();
+                fileStream?.Close();
                 streamWriter = null;
-                //fileStream = null;
+                fileStream = null;
                 break;
             case MapManager.Flag.Burned:
             case MapManager.Flag.Squashed:
@@ -1251,7 +1251,7 @@ public class PlayManager : MonoBehaviour
                             streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                             streamWriter.WriteLine("0");
                             streamWriter.WriteLine("False");
-                            streamWriter.WriteLine(mapHash);    
+                            streamWriter.WriteLine(mapHash);
                             GameManager.mm.tryCount = 0;
                         }
                     }
@@ -1263,9 +1263,9 @@ public class PlayManager : MonoBehaviour
                     try
                     {
                         streamWriter?.Close();
-                        //fileStream?.Close();
+                        fileStream?.Close();
                         streamWriter = null;
-                        //fileStream = null;
+                        fileStream = null;
                     }
                     catch (Exception e)
                     {
@@ -1410,7 +1410,7 @@ public class PlayManager : MonoBehaviour
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
         try
         {
-            string text = sr.ReadToEnd();
+            string text = sr.ReadToEnd().Trim();
             mapHash = GetHash(text.Trim());
         }
         catch (Exception e)
@@ -1447,8 +1447,6 @@ public class PlayManager : MonoBehaviour
                 sw.WriteLine("0");
                 sw.WriteLine("False");
                 sw.WriteLine(mapHash); //Hash code
-                sw.Close();
-                fs.Close();
             }
             catch (Exception e)
             {
@@ -1469,14 +1467,14 @@ public class PlayManager : MonoBehaviour
         }
         else
         {
-            fs = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            sr = new StreamReader(fs, Encoding.UTF8);
-
             try
             {
+                fs = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                sr = new StreamReader(fs, Encoding.UTF8);
                 int tryCount = int.Parse(sr.ReadLine().Trim());
                 bool hasClearedOnce = bool.Parse(sr.ReadLine().Trim());
-                string metaHash = GetHash(sr.ReadToEnd());
+                string metaHash = GetHash(sr.ReadToEnd().Trim());
+                sr.Close();
                 if (metaHash.Equals(mapHash))
                 {
                     //tryNum 표시하기
@@ -1493,10 +1491,13 @@ public class PlayManager : MonoBehaviour
                     sw.WriteLine(mapHash);
                     sw.Close();
                 }
+                fs.Close();
             }
             catch (Exception e)
             {
-                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                sr?.Close();
+                fs?.Close();
+                fileStream = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
                 streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                 streamWriter.WriteLine("0");
                 streamWriter.WriteLine("False");
@@ -1506,11 +1507,6 @@ public class PlayManager : MonoBehaviour
                 GameManager.mm.tryCount = 0;
                 GameManager.mm.hasClearedOnce = false;
                 //Debug.LogError(e.Message);
-            }
-            finally
-            {
-                sr.Close();
-                fs.Close();
             }
             
         }
