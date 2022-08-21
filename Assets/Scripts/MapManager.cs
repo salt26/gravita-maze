@@ -867,7 +867,7 @@ public class MapManager : MonoBehaviour
         try
         {
             // sizeX, sizeY
-            string text = sr.ReadToEnd();
+            string text = sr.ReadToEnd().Trim();
             return InitializeFromText(text, out tempSizeX, out tempSizeY, out tempObjects, out tempWalls, out tempSolution, out tempTimeLimit, statusUI);
         }
         catch (Exception e)
@@ -1334,6 +1334,17 @@ public class MapManager : MonoBehaviour
         sw.WriteLine(tryCount.ToString());
         sw.WriteLine("False");
         sw.WriteLine(mapHash);
+        try
+        {
+            sw?.Close();
+            fs?.Close();
+            sw = null;
+            fs = null;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     /// <summary>
