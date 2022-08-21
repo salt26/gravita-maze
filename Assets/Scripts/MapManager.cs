@@ -1101,6 +1101,13 @@ public class MapManager : MonoBehaviour
         HasTimePaused = false;
     }
 
+    public void TimeSkip()
+    {
+        if (!IsReady || !IsTimeActivated) return;
+        HasTimePaused = false;
+        RemainingTime = 0f;
+    }
+
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
     {
         Movable[,] mutableMovableCoord = (Movable[,])initialMovableCoord.Clone();

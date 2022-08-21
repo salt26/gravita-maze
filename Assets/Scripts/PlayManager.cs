@@ -23,7 +23,7 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
     // public MessageUI messageUI;
     public PauseUI pauseUI;
-    public GameObject messagePanel;
+    public GameObject pausePanel;
     public ResultUI resultUI;
     public GameObject tooltipUI;
     public GameObject timerUI;
@@ -189,7 +189,7 @@ public class PlayManager : MonoBehaviour
         playMode = mode;
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
-        messagePanel.SetActive(false);
+        pausePanel.SetActive(false);
         if (mode != Mode.Custom)
         { 
             resultUI.gameObject.SetActive(false); 
@@ -265,31 +265,38 @@ public class PlayManager : MonoBehaviour
     public void Pause()
     {
         pauseButton.interactable = false;
-        messagePanel.SetActive(true);
+        pausePanel.SetActive(true);
+        pauseUI.gameObject.SetActive(true);
         GameManager.mm.TimePause();
         if (SceneManager.GetActiveScene().name == "Adventure" || SceneManager.GetActiveScene().name == "Tutorial")
-        { pauseUI.Initialize( // "<b>Paused</b>\n\nDo you want to quit game?",
+        {
+            /*
+            pauseUI.Initialize(
                 () => resultUI.Initialize(playMode),
                 () =>
                 {
                     GameManager.mm.TimeResume();
-                    messagePanel.SetActive(false);
+                    pausePanel.SetActive(false);
                     pauseButton.interactable = true;
-                })
-                    ;
+                }
+            );
+            */
         }
         else if (SceneManager.GetActiveScene().name == "Custom")
         {
-            pauseUI.Initialize(// "<b>Paused</b>\n\nDo you want to quit game?",
-                  () => CustomIngameToOpen(),
-                  () =>
-                  {
-                      GameManager.mm.TimeResume();
-                      messagePanel.SetActive(false);
-                      pauseButton.interactable = true;
-                  })
-                      ;
+            /*
+            pauseUI.Initialize(
+                () => CustomIngameToOpen(),
+                () =>
+                {
+                    GameManager.mm.TimeResume();
+                    pausePanel.SetActive(false);
+                    pauseButton.interactable = true;
+                }
+            );
+            */
         }
+        // TODO Training 씬에서의 코드 추가
     }
 
     public void Quit()
@@ -580,6 +587,16 @@ public class PlayManager : MonoBehaviour
         GameManager.gm.PlayButtonSFX();
     }
 
+    public void SetBGMVolume(Slider slider)
+    {
+        GameManager.gm.bgmVolume = slider.value;
+    }
+
+    public void SetSFXVolume(Slider slider)
+    {
+        GameManager.gm.sfxVolume = slider.value;
+    }
+
     public void CustomOpenPhase()
     {
         customPhase = CustomPhase.Open;
@@ -858,7 +875,7 @@ public class PlayManager : MonoBehaviour
         statusUI.gameObject.SetActive(true);
         timerUI.SetActive(false);
         nextButton.interactable = false;
-        messagePanel.SetActive(false);
+        pausePanel.SetActive(false);
         CustomOpenPhase();
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
