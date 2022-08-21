@@ -91,6 +91,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c0c14fe112341fe4cadff4a4d2a2342a, type: 3}
   - {fileID: 8300000, guid: a2aa8424e65a21f48a6d665ba3a72ae4, type: 3}
   removeSfx: {fileID: 8300000, guid: 287f3869d29156d479220ab28623e7a6, type: 3}
+  fallSfx: {fileID: 8300000, guid: 8892493b5c3e137439eb726784c2e852, type: 3}
+  starSfxs:
+  - {fileID: 8300000, guid: 281a84b2d98ea13489a110a4e4ce13a7, type: 3}
+  - {fileID: 8300000, guid: 9e45771741afe5e4bb10e627001b6b88, type: 3}
+  - {fileID: 8300000, guid: e39bb02166b999548be6ee2da061aea7, type: 3}
   sfxVolume: 0.8
 --- !u!82 &7063427215363646473
 AudioSource:

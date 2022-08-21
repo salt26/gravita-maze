@@ -24,7 +24,8 @@ public class PlayManager : MonoBehaviour
     public Button retryHighlightedButton;       // Burned 또는 Squashed일 때 활성화
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
-    public MessageUI messageUI;
+    // public MessageUI messageUI;
+    public PauseUI pauseUI;
     public GameObject messagePanel;
     public ResultUI resultUI;
     public GameObject tooltipUI;
@@ -213,7 +214,8 @@ public class PlayManager : MonoBehaviour
         EscapedCount = 0;
         SkippedCount = 0;
         playMode = mode;
-        messageUI.gameObject.SetActive(false);
+        // messageUI.gameObject.SetActive(false);
+        pauseUI.gameObject.SetActive(false);
         messagePanel.SetActive(false);
         if (mode != Mode.Custom && mode != Mode.Training)
         { 
@@ -297,7 +299,7 @@ public class PlayManager : MonoBehaviour
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         if (SceneManager.GetActiveScene().name == "Adventure" || SceneManager.GetActiveScene().name == "Tutorial")
-        { messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+        { pauseUI.Initialize( // "<b>Paused</b>\n\nDo you want to quit game?",
                 () => resultUI.Initialize(playMode),
                 () =>
                 {
@@ -309,7 +311,7 @@ public class PlayManager : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "Custom")
         {
-            messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+            pauseUI.Initialize(// "<b>Paused</b>\n\nDo you want to quit game?",
                   () => CustomIngameToOpen(),
                   () =>
                   {
@@ -353,9 +355,55 @@ public class PlayManager : MonoBehaviour
     public void Ending()
     {
         if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
-        {    
-            var file = File.CreateText(Application.persistentDataPath + "/TutorialDone.txt");
-            file.Close();
+        {
+            //StreamReader sr = null;
+            StreamWriter sw = null;
+            //bool hasReadSuccess = true;
+
+            /*
+            try
+            {
+                sr = new StreamReader(Application.persistentDataPath + "/TutorialDone.txt");
+                sr.ReadLine();
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("File invalid: TutorialDone.txt seems to be corrupted");
+                hasReadSuccess = false;
+            }
+            finally
+            {
+                try
+                {
+                    sr.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+            */
+
+            try
+            {
+                sw = new StreamWriter(Application.persistentDataPath + "/TutorialDone.txt");
+                sw.WriteLine("3");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                try
+                {
+                    sw.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
         }
         resultUI.Initialize(playMode);
     }

@@ -1256,20 +1256,20 @@ public class EditorManager : MonoBehaviour
         if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Request) return;
         if (dirtyBit)
         {
-            // °æ°í ¸Ş½ÃÁö ¶ç¿ì±â
+            // ê²½ê³  ë©”ì‹œì§€ ë„ìš°ê¸°
             if (phase == (int)EditPhase.Initialize)
             {
-                // ¸Ê º¯°æ ÈÄ 1ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
+                // ë§µ ë³€ê²½ í›„ 1í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
-                // ¸Ê º¯°æ ÈÄ °ËÁõÀº ¿Ï·áÇßÁö¸¸ ÀúÀåµÇÁö ¾ÊÀº »óÅÂ¿¡¼­ 3ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
+                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì€ ì™„ë£Œí–ˆì§€ë§Œ ì €ì¥ë˜ì§€ ì•Šì€ ìƒíƒœì—ì„œ 3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else
             {
-                // ¸Ê º¯°æ ÈÄ °ËÁõÀ» ÇÏÁö ¾Ê°í 3ÆäÀÌÁîÀÇ ³ª°¡±â ¹öÆ°À» ´©¸£´Â °æ¿ì
+                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì„ í•˜ì§€ ì•Šê³  3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
         }
@@ -1494,9 +1494,8 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // ditryBit == trueÀÌ¸é ¸ÕÀú °æ°í ¸Ş½ÃÁö ¶ç¿ì±â -> ¾È ÇØµµ µÉµí?
-        // UI ¸¸µé±â
-        // Maps Æú´õÀÇ ¸ğµç ¸ÊÀ» ºÒ·¯¿Í¼­ ¸ñ·Ï¿¡ ¶ç¿öÁÖ±â
+        // UI ë§Œë“¤ê¸°
+        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -1780,8 +1779,8 @@ public class EditorManager : MonoBehaviour
         if (solution == null || solution == "" || !dirtyBit ||
             mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
 
-        // UI ¸¸µé±â
-        // Maps Æú´õÀÇ ¸ğµç ¸ÊÀ» ºÒ·¯¿Í¼­ ¸ñ·Ï¿¡ ¶ç¿öÁÖ±â
+        // UI ë§Œë“¤ê¸°
+        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -2122,7 +2121,7 @@ public class EditorManager : MonoBehaviour
         {
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
-                // °°Àº ÀÌ¸§ÀÇ ÆÄÀÏÀÌ ÀÖ´Âµ¥ ±×·¡µµ ÀúÀåÇÒ °ÍÀÎÁö ¸Ş½ÃÁö·Î ¹°¾îº¸±â
+                // ê°™ì€ ì´ë¦„ì˜ íŒŒì¼ì´ ìˆëŠ”ë° ê·¸ë˜ë„ ì €ì¥í•  ê²ƒì¸ì§€ ë©”ì‹œì§€ë¡œ ë¬¼ì–´ë³´ê¸°
                 string truncated = mapName;
                 if (truncated.Length > editorMapNameInputs[0].characterLimit)
                 {
@@ -2226,7 +2225,6 @@ public class EditorManager : MonoBehaviour
         switch (editPhase)
         {
             case EditPhase.Initialize:
-                // TODO ÀüÈ¯ ¾Ö´Ï¸ŞÀÌ¼Ç
                 editorMapNameInputs[0].interactable = true;
                 editorSizeXDropdowns[0].interactable = true;
                 editorSizeYDropdowns[0].interactable = true;
@@ -2407,7 +2405,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-#pragma warning disable CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
+#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
     public void EditUndo()
     {
         if (undoStack.Count == 0) return;
@@ -2520,9 +2518,9 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
+#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
 
-#pragma warning disable CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
+#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
     public void EditRedo()
     {
         if (redoStack.Count == 0) return;
@@ -2633,7 +2631,7 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // Á¢±ÙÇÒ ¼ö ¾ø´Â ÄÚµå°¡ ÀÖ½À´Ï´Ù.
+#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
 
     public void EditTimer()
     {
@@ -2757,8 +2755,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MapName
         /// </summary>
-        /// <param name="oldMapName">¾øÀ¸¸é ""</param>
-        /// <param name="newMapName">¾øÀ¸¸é ""</param>
+        /// <param name="oldMapName">ì—†ìœ¼ë©´ ""</param>
+        /// <param name="newMapName">ì—†ìœ¼ë©´ ""</param>
         public EditActionInfo(string oldMapName, string newMapName)
         {
             type = Type.MapName;
@@ -2769,7 +2767,7 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: SizeX, SizeY
         /// </summary>
-        /// <param name="isX">sizeX º¯°æ ½Ã true, sizeY º¯°æ ½Ã false</param>
+        /// <param name="isX">sizeX ë³€ê²½ ì‹œ true, sizeY ë³€ê²½ ì‹œ false</param>
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
@@ -2794,8 +2792,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Wall
         /// </summary>
-        /// <param name="oldWallInfo">¾øÀ¸¸é null</param>
-        /// <param name="newWallInfo">¾øÀ¸¸é null</param>
+        /// <param name="oldWallInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="newWallInfo">ì—†ìœ¼ë©´ null</param>
         public EditActionInfo(WallInfo oldWallInfo, WallInfo newWallInfo)
         {
             type = Type.Wall;
@@ -2806,8 +2804,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Object
         /// </summary>
-        /// <param name="oldObjectInfo">¾øÀ¸¸é null</param>
-        /// <param name="newObjectInfo">¾øÀ¸¸é null</param>
+        /// <param name="oldObjectInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="newObjectInfo">ì—†ìœ¼ë©´ null</param>
         public EditActionInfo(ObjectInfo oldObjectInfo, ObjectInfo newObjectInfo)
         {
             type = Type.Object;
@@ -2818,8 +2816,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MassRemoval (Reset, New)
         /// </summary>
-        /// <param name="oldRemovedWalls">¾øÀ¸¸é null</param>
-        /// <param name="oldRemovedObjects">¾øÀ¸¸é null</param>
+        /// <param name="oldRemovedWalls">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ null</param>
+        /// <param name="oldRemovedObjects">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ null</param>
         public EditActionInfo(List<WallInfo> oldRemovedWalls, List<ObjectInfo> oldRemovedObjects)
         {
             type = Type.MassRemoval;

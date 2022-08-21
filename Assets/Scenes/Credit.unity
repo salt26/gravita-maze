@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 134266228}
   - component: {fileID: 134266227}
   m_Layer: 5
-  m_Name: SkipTutorialButton
+  m_Name: QuitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 300, y: 264}
+  m_AnchoredPosition: {x: 0, y: 120}
   m_SizeDelta: {x: 240, y: 180}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &134266227
@@ -216,6 +216,18 @@ MonoBehaviour:
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: GameManager.SkipTutorial
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1942339280}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+        m_MethodName: PlayButtonSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &134266228
@@ -459,7 +471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -223}
+  m_AnchoredPosition: {x: 0, y: -226}
   m_SizeDelta: {x: 660, y: 108}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &396222758
@@ -484,11 +496,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-    m_FontSize: 72
+    m_FontSize: 85
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 7
-    m_MaxSize: 72
+    m_MaxSize: 85
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -667,7 +679,6 @@ GameObject:
   - component: {fileID: 1420595142}
   - component: {fileID: 1420595145}
   - component: {fileID: 1420595144}
-  - component: {fileID: 1420595143}
   m_Layer: 5
   m_Name: FirstPanel
   m_TagString: Untagged
@@ -701,25 +712,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1420595143
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420595141}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aa84c69278ba5af49b2ce90406e64e88, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1420595144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,7 +827,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -418}
+  m_AnchoredPosition: {x: 0, y: -485}
   m_SizeDelta: {x: 960, y: 960}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1688603937
@@ -954,9 +946,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.5
+    y: 0
     width: 1
-    height: 0.5
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -990,6 +982,89 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1942339279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1942339281}
+  - component: {fileID: 1942339280}
+  m_Layer: 0
+  m_Name: PlayManager
+  m_TagString: PlayManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1942339280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942339279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135ea80f837062e4eb5e82b82900430f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseButton: {fileID: 0}
+  quitHighlightedButton: {fileID: 0}
+  nextButton: {fileID: 134266227}
+  retryButton: {fileID: 0}
+  retryHighlightedButton: {fileID: 0}
+  retryTimeButton: {fileID: 0}
+  retryTimeHighlightedButton: {fileID: 0}
+  pauseUI: {fileID: 0}
+  messagePanel: {fileID: 0}
+  resultUI: {fileID: 0}
+  tooltipUI: {fileID: 0}
+  timerUI: {fileID: 0}
+  customOpenScrollContent: {fileID: 0}
+  customOpenButton: {fileID: 0}
+  customOpenHighlightedButton: {fileID: 0}
+  statusUI: {fileID: 0}
+  customOpenPathText: {fileID: 0}
+  openScrollItemPrefab: {fileID: 0}
+  customOpenScrollbar: {fileID: 0}
+  customOpenScrollEmptyText: {fileID: 0}
+  customOpen: {fileID: 0}
+  customIngame: {fileID: 0}
+  tutorialGuide: {fileID: 0}
+  tutorialMapFiles: []
+  adventureEasyMapFiles: []
+  adventureEasyMapSeries: []
+  adventureEasyPlayLength: 0
+  adventureEasyLife: 0
+  adventureNormalMapFiles: []
+  adventureNormalMapSeries: []
+  adventureNormalPlayLength: 0
+  adventureNormalLife: 0
+  adventureHardMapFiles: []
+  adventureHardMapSeries: []
+  adventureHardPlayLength: 0
+  adventureHardLife: 0
+  adventureInsaneMapFiles: []
+  adventureInsaneMapSeries: []
+  adventureInsanePlayLength: 0
+  adventureInsaneLife: 0
+--- !u!4 &1942339281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942339279}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2007018313
 GameObject:

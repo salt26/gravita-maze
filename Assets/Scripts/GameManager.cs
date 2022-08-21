@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
@@ -53,6 +54,8 @@ public class GameManager : MonoBehaviour
     public AudioClip retrySfx;
     public List<AudioClip> buttonSfxs;
     public AudioClip removeSfx;
+    public AudioClip fallSfx;
+    public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
     
     private void Awake()
@@ -88,6 +91,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(pm != null && pm.IsReady){
+            bgmAudioSource.volume = Mathf.Clamp01(pm.pauseUI.bgmVolume);
+            sfxAudioSource.volume = Mathf.Clamp01(pm.pauseUI.sfxVolume);
+        }
+        
         // 입력 담당
         if (mm is null || !mm.IsReady) return;
 
@@ -126,23 +134,27 @@ public class GameManager : MonoBehaviour
                     if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
                     {
                         pm.TutorialNext();
+                        PlayButtonSFX();
                     }
                     else
                     {
                         pm.PlayNext();
+                        PlayButtonSFX();
                     }
-                }
-                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
-                {
-                    pm.Ending();
                 }
                 else if (pm.resultUI.gameObject.activeInHierarchy)
                 {
                     pm.Quit();
+                    PlayButtonSFX();
                 }
-                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageOKButton.interactable)
+                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
                 {
-                    pm.messageUI.messageOKButton.onClick.Invoke();
+                    pm.Ending();
+                    PlayButtonSFX();
+                }
+                else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseExitButton.interactable)
+                {
+                    pm.pauseUI.pauseExitButton.onClick.Invoke();
                 }
             }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
@@ -150,10 +162,11 @@ public class GameManager : MonoBehaviour
                 if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
                 {
                     pm.Pause();
+                    PlayButtonSFX();
                 }
-                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageXButton.interactable)
+                else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {
-                    pm.messageUI.messageXButton.onClick.Invoke();
+                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
                 }
             }
         }
@@ -398,6 +411,16 @@ public class GameManager : MonoBehaviour
         sfxAudioSource.PlayOneShot(removeSfx);
     }
 
+    public void PlayFallSFX(float volume)
+    {
+        sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+    }
+
+    public void PlayStarSFX(int num)
+    {
+        sfxAudioSource.PlayOneShot(starSfxs[num]);
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -507,7 +530,8 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 3));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 5, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
@@ -536,6 +560,7 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 2));
+        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 2));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 1));
@@ -715,6 +740,49 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
+        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        {
+            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+            try
+            {
+                string line = sr.ReadLine();
+                if (line.TrimEnd().Equals("3"))
+                {
+                    GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    g.transform.localPosition = new Vector3(7f, 6f, 0f);
+                    GameObject h = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    h.transform.localPosition = new Vector3(8f, 6f, 0f);
+                    GameObject j = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    j.transform.localPosition = new Vector3(9f, 6f, 0f);
+                }
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("File warning: TutorialDone.txt seems to be corrupted");
+                StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+                try
+                {
+                    fs.Position = 0;
+                    sw.WriteLine("0");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+                finally
+                {
+                    sw.Close();
+                }
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+        }
+
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
         mm.afterGravity = ModeAfterGravity;
@@ -800,12 +868,119 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        // TODO 각 레벨에서 달성한 별 개수에 따라 생성
-        if (true) {
-            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
-            g.transform.localPosition = new Vector3(7f, 8f, 0f);
-            // x좌표: 7f = 1개 이상, 6f = 2개 이상, 5f = 3개
-            // y좌표: 8f = Easy, 6f = Normal, 4f = Hard, 2f = Insane
+        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        {
+            FileStream fs = null;
+            StreamWriter sw = null;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                try
+                {
+                    sw.Close();
+                    fs.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+        }
+        else
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            List<GameObject> floorStars = new List<GameObject>();
+            bool hasReadSuccess = true;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
+                using (sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+                    float endX = 7f;
+                    float startY = 0f;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        line = sr.ReadLine().Trim();
+                        if (int.TryParse(line, out int stars) && stars >= 0 && stars <= 3)
+                        {
+                            for (int i = 0; i < stars; i++)
+                            {
+                                GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(endX, 8 - 2 * startY, 0f);
+                                floorStars.Add(g);
+                                endX--;
+                            }
+                            endX = 7f;
+                            startY++;
+                        }
+                        else
+                        {
+                            hasReadSuccess = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                hasReadSuccess = false;
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+
+            if (!hasReadSuccess)
+            {
+                Debug.LogWarning("File warning: AdventureLevel.txt seems to be corrupted");
+                FileStream fs2 = null;
+                StreamWriter sw = null;
+                try
+                {
+                    fs2 = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                    sw = new StreamWriter(fs2, Encoding.UTF8);
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+                finally
+                {
+                    try
+                    {
+                        sw.Close();
+                        fs2.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e.Message);
+                    }
+                }
+                foreach (GameObject g in floorStars)
+                {
+                    Destroy(g);
+                }
+            }
         }
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
@@ -912,6 +1087,9 @@ public class GameManager : MonoBehaviour
             case MapManager.Flag.QuitGame:
                 QuitGame();
                 break;
+            case MapManager.Flag.Credit:
+                LoadCredit();
+                break;
         }
     }
 
@@ -998,6 +1176,105 @@ public class GameManager : MonoBehaviour
                 canPlay = true;
                 break;
             }
+        }
+    }
+
+    public void ReviseStar(PlayManager.Mode mode, int star)
+    {
+        FileStream fs = null;
+        StreamWriter sw = null;
+        StreamReader sr = null;
+
+        if (star < 0 || star > 3) return;
+
+        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        {
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+
+        try
+        {
+            fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
+            using (sr = new StreamReader(fs, Encoding.UTF8))
+            using (sw = new StreamWriter(fs, Encoding.UTF8))
+            {
+                string line;
+                List<string> lines = new List<string>();
+                bool hasReadSuccess = true;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    line = sr.ReadLine();
+                    if (line != null)
+                    {
+                        lines.Add(line.Trim());
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                        break;
+                    }
+                }
+
+                if (hasReadSuccess)
+                {
+                    fs.Position = 0;
+                    int i = (int)PlayManager.Mode.AdvEasy;
+                    foreach (string l in lines)
+                    {
+                        hasReadSuccess = int.TryParse(l, out int oldStar);
+                        if (!hasReadSuccess || oldStar < 0 || oldStar > 3)
+                        {
+                            break;
+                        }
+
+                        if ((int)mode == i)
+                        {
+                            sw.WriteLine(Math.Max(oldStar, star));
+                        }
+                        else
+                        {
+                            sw.WriteLine(oldStar);
+                        }
+                        i++;
+                    }
+                }
+
+                if (!hasReadSuccess)
+                {
+                    Debug.LogWarning("File warning: AdventureLevel.txt seems to be corrupted");
+                    fs.Position = 0;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if ((int)mode == (int)PlayManager.Mode.AdvEasy + j)
+                        {
+                            sw.WriteLine(star);
+                        }
+                        else
+                        {
+                            sw.WriteLine("0");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
         }
     }
 }
