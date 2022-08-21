@@ -6,7 +6,7 @@ using System.IO;
 
 public class OpenSaveScrollItem : MonoBehaviour
 {
-    public enum Type { Open = 0, Save = 1 };
+    public enum Type { Open = 0, Save = 1, TrainingOpen = 2 };
     public Type type;
 
     public Image icon;
@@ -26,6 +26,7 @@ public class OpenSaveScrollItem : MonoBehaviour
     public bool isUpOneLevel = false;
     public string path = "";
     public string labelName = "";
+    public TextAsset textAsset = null;
 
     public bool isSelected = false;
 
@@ -62,6 +63,18 @@ public class OpenSaveScrollItem : MonoBehaviour
         {
             labelName = Path.GetFileNameWithoutExtension(this.path);
         }
+        Update();
+    }
+
+    public void Initialize(string name, bool isFolder, PlayManager pm, TextAsset textAsset = null, bool isUpOneLevel = false)
+    {
+        this.type = Type.TrainingOpen;
+        this.pm = pm;
+        this.isFolder = isFolder;
+        this.isUpOneLevel = isFolder & isUpOneLevel;
+        this.path = name;
+        labelName = name;
+        this.textAsset = textAsset;
         Update();
     }
 
@@ -127,12 +140,7 @@ public class OpenSaveScrollItem : MonoBehaviour
         }
         else if (pm != null)
         {
-            switch (type)
-            {
-                case Type.Open:
-                    pm.EditOpenItemSelect(this);
-                    break;
-            }
+            pm.OpenItemSelect(this);
         }
     }
 }

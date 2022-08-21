@@ -702,18 +702,19 @@ MonoBehaviour:
   resultUI: {fileID: 0}
   tooltipUI: {fileID: 1561156650}
   timerUI: {fileID: 583662298}
-  customOpenScrollContent: {fileID: 21237445}
-  customOpenButton: {fileID: 1150334311}
-  customOpenHighlightedButton: {fileID: 1707545011}
+  openScrollContent: {fileID: 21237445}
+  openButton: {fileID: 1150334311}
+  openHighlightedButton: {fileID: 1707545011}
   statusUI: {fileID: 286166421}
-  customOpenPathText: {fileID: 156508370}
+  openPathText: {fileID: 156508370}
   openScrollItemPrefab: {fileID: 6403598737929353914, guid: 9b785f5e7a7a8b34186e005884bb8744,
     type: 3}
-  customOpenScrollbar: {fileID: 735985414}
-  customOpenScrollEmptyText: {fileID: 1448485172}
-  customOpen: {fileID: 1851494649}
-  customIngame: {fileID: 363787297}
+  openScrollbar: {fileID: 735985414}
+  openScrollEmptyText: {fileID: 1448485172}
+  openUI: {fileID: 1851494649}
+  ingameUI: {fileID: 363787297}
   tutorialGuide: {fileID: 0}
+  trainingFolders: []
   tutorialMapFiles: []
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
@@ -731,6 +732,13 @@ MonoBehaviour:
   adventureInsaneMapSeries: []
   adventureInsanePlayLength: 0
   adventureInsaneLife: 0
+  trainingBasicMapFiles: []
+  trainingFireMapFiles: []
+  trainingIronMapFiles: []
+  trainingBlockMapFiles: []
+  trainingExitMapFiles: []
+  trainingShutterMapFiles: []
+  trainingGateMapFiles: []
 --- !u!4 &121398294
 Transform:
   m_ObjectHideFlags: 0
@@ -1208,7 +1216,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
@@ -1923,7 +1931,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
@@ -3162,7 +3170,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
@@ -3388,7 +3396,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
-        m_MethodName: EditOpen
+        m_MethodName: CustomOpen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3398,8 +3406,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
+      - m_Target: {fileID: 121398293}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
         m_Arguments:
@@ -3901,7 +3909,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
-        m_MethodName: Ending
+        m_MethodName: CustomIngameToOpen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3911,7 +3919,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
@@ -4367,8 +4375,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
+      - m_Target: {fileID: 121398293}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
         m_Arguments:
@@ -4740,7 +4748,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 121398293}
         m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
-        m_MethodName: EditOpen
+        m_MethodName: CustomOpen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4750,8 +4758,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
+      - m_Target: {fileID: 121398293}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
         m_MethodName: PlayButtonSFX
         m_Mode: 1
         m_Arguments:

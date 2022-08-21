@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
                 {
                     LoadFirst();
                     isTutorialDone = false;
-                    
+
                 }
             }
             catch (Exception e)
@@ -270,7 +270,6 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.Play();
             }
         }
-
         else if (SceneManager.GetActiveScene().name.Equals("Credit"))
         {
             if (bgmAudioSource.clip != bgms[0])
@@ -280,8 +279,19 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.Play();
             }
         }
-    }
 
+        else if (SceneManager.GetActiveScene().name.Equals("Training"))
+        {
+            if (bgmAudioSource.clip != bgms[0])
+            {
+                bgmAudioSource.Stop();
+                bgmAudioSource.clip = bgms[0];
+                bgmAudioSource.Play();
+            }
+            StartCoroutine(InitializeTraining());
+        }
+    }
+    
     public void EditorChangeBGM(EditorManager.EditPhase editPhase)
     {
         if (editPhase != EditorManager.EditPhase.Test && bgmAudioSource.clip != bgms[2])
@@ -298,7 +308,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 나중에 CustoChangeBGM 만들어야지 !!
+    public void TrainingChangeBGM(PlayManager.TrainingPhase trainingPhase)
+    {
+        if (trainingPhase == PlayManager.TrainingPhase.Open && bgmAudioSource.clip != bgms[0])
+        {
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[0];
+            bgmAudioSource.Play();
+        }
+        if (trainingPhase == PlayManager.TrainingPhase.Ingame && bgmAudioSource.clip != bgms[1])
+        {
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgms[1];
+            bgmAudioSource.Play();
+        }
+    }
+
     public void CustomChangeBGM(PlayManager.CustomPhase customPhase)
     {
         if (customPhase == PlayManager.CustomPhase.Open && bgmAudioSource.clip != bgms[0])
@@ -412,6 +437,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SceneLoading("Custom"));
     }
 
+    public void LoadTraining()
+    {
+        StartCoroutine(SceneLoading("Training"));
+
+    }
     public void LoadAdventureEasy()
     {
         adventureLevel = AdventureLevel.Easy;
@@ -560,7 +590,36 @@ public class GameManager : MonoBehaviour
 
         pm.Initialize(PlayManager.Mode.Custom);
 
-        mm.afterGravity = pm.PlayAfterGravity;
+        mm.afterGravity = pm.CustomAfterGravity;
+    }
+
+    IEnumerator InitializeTraining()
+    {
+        while (mm == null)
+        {
+            mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
+            if (mm == null)
+            {
+                mm = GameObject.Find("MapManager").GetComponent<MapManager>();
+            }
+            yield return null;
+        }
+        canPlay = false;
+
+        while (pm == null)
+        {
+            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+            if (pm != null) break;
+            else
+            {
+                pm = GameObject.Find("PlayManager").GetComponent<PlayManager>();
+            }
+            yield return null;
+        }
+
+        pm.Initialize(PlayManager.Mode.Training);
+
+        mm.afterGravity = pm.TrainingAfterGravity;
     }
 
     IEnumerator InitializeMode()
@@ -583,7 +642,7 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 2, 5));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 3, 3));
-        walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 2));  // TODO 나중에 해금
+        // walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 2));  // TODO 나중에 해금
         // walls.Add(new WallInfo(WallInfo.Type.Vertical, 9, 4));  // TODO 나중에 해금
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 8));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 8));
@@ -834,7 +893,7 @@ public class GameManager : MonoBehaviour
                 yield break;
         }
 
-        mm.afterGravity = pm.PlayAfterGravity;
+        mm.afterGravity = pm.AdventureAfterGravity;
 
         playingMapIndex = -1;
         PlayNext();
@@ -873,7 +932,7 @@ public class GameManager : MonoBehaviour
                 LoadCustom();
                 break;
             case MapManager.Flag.Training:
-                // TODO
+                LoadTraining();
                 break;
         }
     }
@@ -934,7 +993,7 @@ public class GameManager : MonoBehaviour
             {
                 //Debug.Log("Map name: " + pm.MapFiles[i].name);
                 playingMapIndex = i;
-                pm.PlayAfterGravity(MapManager.Flag.Continued);
+                pm.AdventureAfterGravity(MapManager.Flag.Continued);
                 mm.TimeActivate();
                 canPlay = true;
                 break;

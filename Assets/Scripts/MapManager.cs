@@ -278,7 +278,7 @@ public class MapManager : MonoBehaviour
         if (canRotate && !(SceneManager.GetActiveScene().name.Equals("Main") ||
             SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Mode") ||
             SceneManager.GetActiveScene().name.Equals("AdventureLevel") || SceneManager.GetActiveScene().name.Equals("Tutorial") || 
-            SceneManager.GetActiveScene().name.Equals("Custom")))
+            SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")))
         {
             int r = UnityEngine.Random.Range(0, 8);
             Rotation = (RotationStatus)r;
@@ -1321,7 +1321,8 @@ public class MapManager : MonoBehaviour
         {
             HasCleared = true;
             if (SceneManager.GetActiveScene().name.Equals("Editor") || SceneManager.GetActiveScene().name.Equals("Tutorial") ||
-                SceneManager.GetActiveScene().name.Equals("Adventure"))
+                SceneManager.GetActiveScene().name.Equals("Adventure") || SceneManager.GetActiveScene().name.Equals("Custom") ||
+                SceneManager.GetActiveScene().name.Equals("Training"))
             {
                 GameManager.gm.PlayEscapedSFX();
             }
