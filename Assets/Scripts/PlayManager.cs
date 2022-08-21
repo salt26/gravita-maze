@@ -21,7 +21,8 @@ public class PlayManager : MonoBehaviour
     public Button retryHighlightedButton;       // Burned 또는 Squashed일 때 활성화
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
-    public MessageUI messageUI;
+    // public MessageUI messageUI;
+    public PauseUI pauseUI;
     public GameObject messagePanel;
     public ResultUI resultUI;
     public GameObject tooltipUI;
@@ -186,7 +187,8 @@ public class PlayManager : MonoBehaviour
         EscapedCount = 0;
         SkippedCount = 0;
         playMode = mode;
-        messageUI.gameObject.SetActive(false);
+        // messageUI.gameObject.SetActive(false);
+        pauseUI.gameObject.SetActive(false);
         messagePanel.SetActive(false);
         if (mode != Mode.Custom)
         { 
@@ -266,7 +268,7 @@ public class PlayManager : MonoBehaviour
         messagePanel.SetActive(true);
         GameManager.mm.TimePause();
         if (SceneManager.GetActiveScene().name == "Adventure" || SceneManager.GetActiveScene().name == "Tutorial")
-        { messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+        { pauseUI.Initialize( // "<b>Paused</b>\n\nDo you want to quit game?",
                 () => resultUI.Initialize(playMode),
                 () =>
                 {
@@ -278,7 +280,7 @@ public class PlayManager : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "Custom")
         {
-            messageUI.Initialize("<b>Paused</b>\n\nDo you want to quit game?",
+            pauseUI.Initialize(// "<b>Paused</b>\n\nDo you want to quit game?",
                   () => CustomIngameToOpen(),
                   () =>
                   {

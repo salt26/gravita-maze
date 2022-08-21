@@ -90,6 +90,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(pm != null && pm.IsReady){
+            bgmAudioSource.volume = Mathf.Clamp01(pm.pauseUI.bgmVolume);
+            sfxAudioSource.volume = Mathf.Clamp01(pm.pauseUI.sfxVolume);
+        }
+        
         // 입력 담당
         if (mm is null || !mm.IsReady) return;
 
@@ -142,9 +147,9 @@ public class GameManager : MonoBehaviour
                 {
                     pm.Quit();
                 }
-                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageOKButton.interactable)
+                else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseExitButton.interactable)
                 {
-                    pm.messageUI.messageOKButton.onClick.Invoke();
+                    pm.pauseUI.pauseExitButton.onClick.Invoke();
                 }
             }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
@@ -153,9 +158,9 @@ public class GameManager : MonoBehaviour
                 {
                     pm.Pause();
                 }
-                else if (pm.messageUI.gameObject.activeInHierarchy && pm.messageUI.messageXButton.interactable)
+                else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {
-                    pm.messageUI.messageXButton.onClick.Invoke();
+                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
                 }
             }
         }
