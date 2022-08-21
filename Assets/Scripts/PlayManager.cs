@@ -56,7 +56,12 @@ public class PlayManager : MonoBehaviour
     private TrainingPhase trainingPhase;
 
     private TrainingMapSelect selection;
-    private string customSelectedPath;
+    private string mapPath;
+    private FileStream fileStream;
+    private StreamWriter streamWriter;
+    private StreamReader streamReader;
+    private string mapHash;
+    private string metaPath;
 
     public Mode PlayMode{
         get{return playMode;}
@@ -292,6 +297,17 @@ public class PlayManager : MonoBehaviour
             mapFiles.Add(maps[index]);
         }
         return mapFiles;
+    }
+
+    private void Update() {
+        if (GameManager.mm == null || !GameManager.mm.IsReady) return;
+        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")) 
+        {
+            if (GameManager.mm.tryCountUpTrigger) {
+                Debug.Log("TryCountUp in PM ");
+                GameManager.mm.TryCountUp(this, metaPath, mapHash);
+            }
+        }
     }
 
     public void Pause()
@@ -653,6 +669,18 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
+
+                GameManager.mm.hasClearedOnce = true;
+                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                fileStream.Position = 0;
+                streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
+                streamWriter.WriteLine(mapHash);
+                streamWriter?.Close();
+                //fileStream?.Close();
+                streamWriter = null;
+                //fileStream = null;
                 break;
             case MapManager.Flag.Burned:
             case MapManager.Flag.Squashed:
@@ -1104,9 +1132,9 @@ public class PlayManager : MonoBehaviour
             if (caller.type == OpenSaveScrollItem.Type.Open)
             {
                 string s = selectedOpenScrollItem.path;
-                s = "Meta" + s.Substring(4);
+                s = "/Meta" + s.Substring(4);
                 CreateMeta(s);
-                Debug.Log(s);
+                Debug.Log(metaPath);
                 bool b = CustomOpenFile(selectedOpenScrollItem.path, true);
                 openHighlightedButton.gameObject.SetActive(b);
                 openButton.gameObject.SetActive(!b);
@@ -1210,6 +1238,40 @@ public class PlayManager : MonoBehaviour
                     customPhase = CustomPhase.Ingame;
                     GameManager.gm.CustomChangeBGM(customPhase);
 
+                    metaPath = Application.persistentDataPath + "/Meta" + mapPath.Substring(4);
+                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    streamReader = new StreamReader(fileStream, Encoding.UTF8);
+                    try
+                    {
+                        bool b = int.TryParse(streamReader.ReadLine().Trim(), out GameManager.mm.tryCount);
+                        streamReader.Close();
+                        if (!b)
+                        {
+                            Debug.LogError("Meta invalid");
+                            streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                            streamWriter.WriteLine("0");
+                            streamWriter.WriteLine("False");
+                            streamWriter.WriteLine(mapHash);    
+                            GameManager.mm.tryCount = 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError("Meta invalid: " + e.Message);
+                    }
+
+                    try
+                    {
+                        streamWriter?.Close();
+                        //fileStream?.Close();
+                        streamWriter = null;
+                        //fileStream = null;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+
                     ClearOpenScrollItems();
 
                     foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
@@ -1291,6 +1353,12 @@ public class PlayManager : MonoBehaviour
         CustomOpenPhase();
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
+        streamReader?.Close();
+        streamWriter?.Close();
+        fileStream?.Close();
+        streamReader = null;
+        streamWriter = null;
+        fileStream = null;
         GameManager.gm.canPlay = false;
     }
 
@@ -1315,19 +1383,72 @@ public class PlayManager : MonoBehaviour
 
     public void CreateMeta(string s)
     {
-        string mapPath = selectedOpenScrollItem.path;
-        if (!File.Exists(Application.persistentDataPath + "/" + s))
+        mapPath = selectedOpenScrollItem.path;
+        try
         {
-            FileStream fs = null;
+            if (!File.Exists(mapPath))
+            {
+                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
+                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                return;
+            }
+            else if (Path.GetExtension(mapPath) != ".txt")
+            {
+                Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
+                statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
+                return;
+            }
+        }
+        catch (Exception)
+        {
+            Debug.LogError("File invalid: exception while checking a file");
+            statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
+            throw;
+        }
+
+        FileStream fs = new FileStream(mapPath, FileMode.Open);
+        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+        try
+        {
+            string text = sr.ReadToEnd();
+            mapHash = GetHash(text.Trim());
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("File invalid: exception while opening a map");
+            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+            Debug.LogException(e);
+            return;
+        }
+        finally
+        {
+            sr.Close();
+            fs.Close();
+        }
+
+        metaPath = Application.persistentDataPath + '/' + s;
+        if (!File.Exists(metaPath))
+        {
             StreamWriter sw = null;
+            string path = Application.persistentDataPath;
+            string[] dirs = s.Split('/');
+            int len = dirs.Length - 1;
+            for (int i = 0; i < len; i++) {
+                string dir = dirs[i];
+                path += '/' + dir;
+                if (!Directory.Exists(path)) {
+                    Directory.CreateDirectory(path);
+                }
+            }
             try
             {
-            fs = new FileStream(Application.persistentDataPath + "/" + s, FileMode.Create);
-            sw = new StreamWriter(fs, Encoding.UTF8);
-            sw.WriteLine("0");
-            sw.WriteLine("adsdfq"); //Hash code
-            sw.Close();
-            fs.Close();
+                fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("False");
+                sw.WriteLine(mapHash); //Hash code
+                sw.Close();
+                fs.Close();
             }
             catch (Exception e)
             {
@@ -1348,74 +1469,48 @@ public class PlayManager : MonoBehaviour
         }
         else
         {
-            try
-            {
-                if (!File.Exists(mapPath))
-                {
-                    Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
-                    statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
-                    return;
-                }
-                else if (Path.GetExtension(mapPath) != ".txt")
-                {
-                    Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
-                    statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-                Debug.LogError("File invalid: exception while checking a file");
-                statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
-                throw;
-            }
+            fs = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            sr = new StreamReader(fs, Encoding.UTF8);
 
-            FileStream fs = new FileStream(mapPath, FileMode.Open);
-            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-            string mapHash;
             try
             {
-                string text = sr.ReadToEnd();
-                mapHash = GetHash(text);
+                int tryCount = int.Parse(sr.ReadLine().Trim());
+                bool hasClearedOnce = bool.Parse(sr.ReadLine().Trim());
+                string metaHash = GetHash(sr.ReadToEnd());
+                if (metaHash.Equals(mapHash))
+                {
+                    //tryNum 표시하기
+                    GameManager.mm.tryCount = tryCount;
+                    GameManager.mm.hasClearedOnce = hasClearedOnce;
+                }
+                else
+                {
+                    //다를 경우
+                    StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+                    fs.Position = 0;
+                    sw.WriteLine("0");
+                    sw.WriteLine("False");
+                    sw.WriteLine(mapHash);
+                    sw.Close();
+                }
             }
             catch (Exception e)
             {
-                Debug.LogError("File invalid: exception while opening a map");
-                statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
-                Debug.LogException(e);
-                return;
+                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                streamWriter.WriteLine("0");
+                streamWriter.WriteLine("False");
+                streamWriter.WriteLine(mapHash); //Hash code
+                streamWriter.Close();
+                fileStream.Close();
+                GameManager.mm.tryCount = 0;
+                GameManager.mm.hasClearedOnce = false;
+                //Debug.LogError(e.Message);
             }
             finally
             {
                 sr.Close();
                 fs.Close();
-            }
-
-            fs = new FileStream(Application.persistentDataPath + "/" + s, FileMode.Open, FileAccess.ReadWrite);
-            sr = new StreamReader(fs, Encoding.UTF8);
-
-            try
-            {
-                string tryNum = sr.ReadLine();
-                string metaHash = GetHash(sr.ReadToEnd());
-                if (metaHash.Equals(mapHash))
-                {
-                    //tryNum 표시하기
-                }
-                else
-                {
-                    fs.Position = 0;
-                    StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
-                    //다를 경우
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-            finally
-            {
-                
             }
             
         }
