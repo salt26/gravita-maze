@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2963,6 +2963,7 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 1404637733}
   retryTimeButton: {fileID: 1061809501}
   retryTimeHighlightedButton: {fileID: 1783891383}
+  messageUI: {fileID: 0}
   pauseUI: {fileID: 1788800191545070119}
   pausePanel: {fileID: 1961683076}
   resultUI: {fileID: 2093335829947089830}
@@ -3016,7 +3017,7 @@ MonoBehaviour:
   adventureNormalMapFiles:
   - {fileID: 4900000, guid: 4ea1771b936d373458499d4bef1861f3, type: 3}
   - {fileID: 4900000, guid: 13cf1e667d78ffc40af77635e448ff1b, type: 3}
-  - {fileID: 4900000, guid: 569e26ee926c5c24cbda8dbc019ecb1c, type: 3}
+  - {fileID: 4900000, guid: b945ffe02e938ec45ba5bc70ecd5d383, type: 3}
   - {fileID: 4900000, guid: fe6f974974ed80240a722773cd253897, type: 3}
   - {fileID: 4900000, guid: d32ae8aab65689542a5ecf131671f55e, type: 3}
   - {fileID: 4900000, guid: b4ff577702e484c4e8ac1c28d3ba98f1, type: 3}
