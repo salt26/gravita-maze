@@ -24,32 +24,21 @@ public class TutorialManager : MonoBehaviour
     }
     public void DoTutorialSave()
     {
-        if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
         {
-            FileStream fs = null;
-            StreamWriter sw = null;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Create);
-                sw = new StreamWriter(fs, Encoding.UTF8);
+                FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
+                sw.Close();
+                fs.Close();
             }
             catch (Exception e)
             {
                 Debug.LogError(e.Message);
             }
-            finally
-            {
-                try
-                {
-                    sw.Close();
-                    fs.Close();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e.Message);
-                }
-            }
         }
+        
     }
 }

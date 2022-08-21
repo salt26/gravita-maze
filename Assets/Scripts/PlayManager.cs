@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Text;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -1102,6 +1103,10 @@ public class PlayManager : MonoBehaviour
         {
             if (caller.type == OpenSaveScrollItem.Type.Open)
             {
+                string s = selectedOpenScrollItem.path;
+                s = "Meta" + s.Substring(4);
+                CreateMeta(s);
+                Debug.Log(s);
                 bool b = CustomOpenFile(selectedOpenScrollItem.path, true);
                 openHighlightedButton.gameObject.SetActive(b);
                 openButton.gameObject.SetActive(!b);
@@ -1306,5 +1311,119 @@ public class PlayManager : MonoBehaviour
         trainingPhase = TrainingPhase.Open;
         GameManager.gm.TrainingChangeBGM(trainingPhase);
         GameManager.gm.canPlay = false;
+    }
+
+    public void CreateMeta(string s)
+    {
+        string mapPath = selectedOpenScrollItem.path;
+        if (!File.Exists(Application.persistentDataPath + "/" + s))
+        {
+            FileStream fs = null;
+            StreamWriter sw = null;
+            try
+            {
+            fs = new FileStream(Application.persistentDataPath + "/" + s, FileMode.Create);
+            sw = new StreamWriter(fs, Encoding.UTF8);
+            sw.WriteLine("0");
+            sw.WriteLine("adsdfq"); //Hash code
+            sw.Close();
+            fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                try
+                {
+                    sw.Close();
+                    fs.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                if (!File.Exists(mapPath))
+                {
+                    Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
+                    statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                    return;
+                }
+                else if (Path.GetExtension(mapPath) != ".txt")
+                {
+                    Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
+                    statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                Debug.LogError("File invalid: exception while checking a file");
+                statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
+                throw;
+            }
+
+            FileStream fs = new FileStream(mapPath, FileMode.Open);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            string mapHash;
+            try
+            {
+                string text = sr.ReadToEnd();
+                mapHash = GetHash(text);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("File invalid: exception while opening a map");
+                statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+                Debug.LogException(e);
+                return;
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+
+            fs = new FileStream(Application.persistentDataPath + "/" + s, FileMode.Open, FileAccess.ReadWrite);
+            sr = new StreamReader(fs, Encoding.UTF8);
+
+            try
+            {
+                string tryNum = sr.ReadLine();
+                string metaHash = GetHash(sr.ReadToEnd());
+                if (metaHash.Equals(mapHash))
+                {
+                    //tryNum 표시하기
+                }
+                else
+                {
+                    fs.Position = 0;
+                    StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+                    //다를 경우
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                
+            }
+            
+        }
+    }
+
+    public string GetHash(string text)
+    {
+        string hash = "asd";
+        return hash;
     }
 }
