@@ -674,7 +674,7 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(false);
 
                 pauseButton.interactable = true;
-                nextButton.interactable = true;
+                nextButton.interactable = false;
 
                 break;
         }
@@ -856,19 +856,19 @@ public class PlayManager : MonoBehaviour
         //Debug.Log(currentOpenPath);
 
         string currentPath = currentOpenPath.Substring(currentOpenPath.LastIndexOf('/') + 1);
-        if (currentOpenPath.Length <= 21)
+        if (currentOpenPath.Length <= 14)
         {
             openPathText.text = currentOpenPath;
         }
-        else if (currentPath.Length <= 17)
+        else if (currentPath.Length <= 10)
         {
-            string tempPath = currentOpenPath.Substring(currentOpenPath.Length - 17);
+            string tempPath = currentOpenPath.Substring(currentOpenPath.Length - 10);
             tempPath = tempPath.Substring(tempPath.IndexOf('/') + 1);
             openPathText.text = ".../" + tempPath;
         }
         else
         {
-            openPathText.text = ".../" + currentPath.Remove(14) + "...";
+            openPathText.text = ".../" + currentPath.Remove(7) + "...";
         }
 
         openScrollContent.GetComponent<RectTransform>().sizeDelta =
@@ -991,7 +991,7 @@ public class PlayManager : MonoBehaviour
                 files = trainingShutterMapFiles;
                 length = files.Count + 1;
                 isRoot = false;
-                openPathText.text = "Training/Shutter";
+                openPathText.text = ".../Shutter";
                 name = "Shutter";
                 break;
             case TrainingMapSelect.Gate:
