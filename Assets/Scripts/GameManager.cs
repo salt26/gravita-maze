@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
@@ -674,6 +675,38 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 9, 1));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
+
+        // TODO 각 레벨에서 달성한 별 개수에 따라 생성
+        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt")) {
+            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+            try
+            {
+                string line = sr.ReadLine();
+                if (line.TrimEnd().Equals("3")) {
+                    GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    g.transform.localPosition = new Vector3(7f, 6f, 0f);
+                    GameObject h = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    h.transform.localPosition = new Vector3(8f, 6f, 0f);
+                    GameObject j = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                    j.transform.localPosition = new Vector3(9f, 6f, 0f);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+
+            
+            // x좌표: 7f = 1개 이상, 6f = 2개 이상, 5f = 3개
+            // y좌표: 8f = Easy, 6f = Normal, 4f = Hard, 2f = Insane
+        }
 
         List<ObjectInfo> objects = new List<ObjectInfo>();
 
