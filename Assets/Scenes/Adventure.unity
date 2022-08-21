@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2967,18 +2967,19 @@ MonoBehaviour:
   messagePanel: {fileID: 4501142658914459346}
   resultUI: {fileID: 2093335829947089830}
   tooltipUI: {fileID: 0}
-  timerUI: {fileID: 0}
-  customOpenScrollContent: {fileID: 0}
-  customOpenButton: {fileID: 0}
-  customOpenHighlightedButton: {fileID: 0}
+  timerUI: {fileID: 1304023981}
+  openScrollContent: {fileID: 0}
+  openButton: {fileID: 0}
+  openHighlightedButton: {fileID: 0}
   statusUI: {fileID: 0}
-  customOpenPathText: {fileID: 0}
+  openPathText: {fileID: 0}
   openScrollItemPrefab: {fileID: 0}
-  customOpenScrollbar: {fileID: 0}
-  customOpenScrollEmptyText: {fileID: 0}
-  customOpen: {fileID: 0}
-  customIngame: {fileID: 0}
+  openScrollbar: {fileID: 0}
+  openScrollEmptyText: {fileID: 0}
+  openUI: {fileID: 0}
+  ingameUI: {fileID: 0}
   tutorialGuide: {fileID: 0}
+  trainingFolders: []
   tutorialMapFiles: []
   adventureEasyMapFiles:
   - {fileID: 4900000, guid: ceeb98c8fcd68ce4ab4d275b2baa49b7, type: 3}
@@ -3142,6 +3143,13 @@ MonoBehaviour:
   - 18,19,20,21
   adventureInsanePlayLength: 10
   adventureInsaneLife: 10
+  trainingBasicMapFiles: []
+  trainingFireMapFiles: []
+  trainingIronMapFiles: []
+  trainingBlockMapFiles: []
+  trainingExitMapFiles: []
+  trainingShutterMapFiles: []
+  trainingGateMapFiles: []
 --- !u!1001 &1484046093
 PrefabInstance:
   m_ObjectHideFlags: 0

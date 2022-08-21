@@ -35,6 +35,10 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
         }
+        else if (SceneManager.GetActiveScene().name.Equals("Training"))
+        {
+            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+        }
         
         lastEnterTime = -1f;
     }
@@ -52,7 +56,11 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             {
                 myTooltipUI = Instantiate(tooltipPrefab, pm.tooltipUI.transform).GetComponent<TooltipBox>();
             }
-            
+            else if (SceneManager.GetActiveScene().name.Equals("Training"))
+            {
+                myTooltipUI = Instantiate(tooltipPrefab, pm.tooltipUI.transform).GetComponent<TooltipBox>();
+            }
+
             switch (pivot)
             {
                 case Pivot.TopRight:
