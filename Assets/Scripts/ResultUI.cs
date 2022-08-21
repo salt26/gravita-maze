@@ -197,12 +197,15 @@ public class ResultUI : MonoBehaviour
                 star2Life = levelMaxLife * 0.5f;
 
                 if(pm.Life >= star3Life){
+                    GameManager.gm.ReviseStar(mode, 3);
                     StartCoroutine(ResultAnimation(3));
                 }
                 else if(pm.Life >= star2Life){
+                    GameManager.gm.ReviseStar(mode, 2);
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
+                    GameManager.gm.ReviseStar(mode, 1);
                     StartCoroutine(ResultAnimation(1));
                 }
                 
@@ -227,12 +230,15 @@ public class ResultUI : MonoBehaviour
                 star2Life = levelMaxLife * 0.5f;
 
                 if(pm.Life >= star3Life){
+                    GameManager.gm.ReviseStar(mode, 3);
                     StartCoroutine(ResultAnimation(3));
                 }
                 else if(pm.Life >= star2Life){
+                    GameManager.gm.ReviseStar(mode, 2);
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
+                    GameManager.gm.ReviseStar(mode, 3);
                     StartCoroutine(ResultAnimation(1));
                 }
                 
@@ -257,12 +263,15 @@ public class ResultUI : MonoBehaviour
                 star2Life = levelMaxLife * 0.5f;
 
                 if(pm.Life >= star3Life){
+                    GameManager.gm.ReviseStar(mode, 3);
                     StartCoroutine(ResultAnimation(3));
                 }
                 else if(pm.Life >= star2Life){
+                    GameManager.gm.ReviseStar(mode, 2);
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
+                    GameManager.gm.ReviseStar(mode, 1);
                     StartCoroutine(ResultAnimation(1));
                 }
                 
@@ -287,12 +296,15 @@ public class ResultUI : MonoBehaviour
                 star2Life = levelMaxLife * 0.5f;
 
                 if(pm.Life >= star3Life){
+                    GameManager.gm.ReviseStar(mode, 3);
                     StartCoroutine(ResultAnimation(3));
                 }
                 else if(pm.Life >= star2Life){
+                    GameManager.gm.ReviseStar(mode, 2);
                     StartCoroutine(ResultAnimation(2));
                 }
                 else{
+                    GameManager.gm.ReviseStar(mode, 1);
                     StartCoroutine(ResultAnimation(1));
                 }
                 
