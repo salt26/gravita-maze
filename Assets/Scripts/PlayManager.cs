@@ -310,17 +310,20 @@ public class PlayManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name.Equals("Tutorial") && HasClearedAll)
         {
-            StreamReader sr = null;
+            //StreamReader sr = null;
             StreamWriter sw = null;
+            //bool hasReadSuccess = true;
 
+            /*
             try
             {
                 sr = new StreamReader(Application.persistentDataPath + "/TutorialDone.txt");
                 sr.ReadLine();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.LogError(e.Message);
+                Debug.LogWarning("File invalid: TutorialDone.txt seems to be corrupted");
+                hasReadSuccess = false;
             }
             finally
             {
@@ -333,7 +336,7 @@ public class PlayManager : MonoBehaviour
                     Debug.LogError(e.Message);
                 }
             }
-
+            */
 
             try
             {

@@ -678,7 +678,7 @@ public class GameManager : MonoBehaviour
 
         if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
         {
-            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open);
+            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
             try
@@ -694,9 +694,23 @@ public class GameManager : MonoBehaviour
                     j.transform.localPosition = new Vector3(9f, 6f, 0f);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.LogError(e.Message);
+                Debug.LogWarning("File warning: TutorialDone.txt seems to be corrupted");
+                StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+                try
+                {
+                    fs.Position = 0;
+                    sw.WriteLine("0");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+                finally
+                {
+                    sw.Close();
+                }
             }
             finally
             {
@@ -792,44 +806,16 @@ public class GameManager : MonoBehaviour
 
         if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
         {
-            try
-            {
-                FileStream fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
-                StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
-                sw.WriteLine("0");
-                sw.WriteLine("0");
-                sw.WriteLine("0");
-                sw.WriteLine("0");
-                sw.Close();
-                fs.Close();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-        }
-        else
-        {
             FileStream fs = null;
-            StreamReader sr = null;
+            StreamWriter sw = null;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
-                using (sr = new StreamReader(fs, Encoding.UTF8))
-                {
-                    string line;
-                    float endx = 7f;
-                    float starty = 0f;
-                    while ((line = sr.ReadLine()) != null) {
-                        for(int i = 0; i < Convert.ToInt32(line); i++){
-                            GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
-                            g.transform.localPosition = new Vector3(endx, 8 - 2 * starty, 0f);
-                            endx--;
-                        }
-                        endx = 7f;
-                        starty++;
-                    }
-                }
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                sw = new StreamWriter(fs, Encoding.UTF8);
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
+                sw.WriteLine("0");
             }
             catch (Exception e)
             {
@@ -837,8 +823,99 @@ public class GameManager : MonoBehaviour
             }
             finally
             {
+                try
+                {
+                    sw.Close();
+                    fs.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+        }
+        else
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            List<GameObject> floorStars = new List<GameObject>();
+            bool hasReadSuccess = true;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
+                using (sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+                    float endX = 7f;
+                    float startY = 0f;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        line = sr.ReadLine().Trim();
+                        if (int.TryParse(line, out int stars) && stars >= 0 && stars <= 3)
+                        {
+                            for (int i = 0; i < stars; i++)
+                            {
+                                GameObject g = Instantiate(floorStarPrefab, new Vector3(), Quaternion.identity, mm.movableAndFixedGameObjects.transform);
+                                g.transform.localPosition = new Vector3(endX, 8 - 2 * startY, 0f);
+                                floorStars.Add(g);
+                                endX--;
+                            }
+                            endX = 7f;
+                            startY++;
+                        }
+                        else
+                        {
+                            hasReadSuccess = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                hasReadSuccess = false;
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
                 sr.Close();
                 fs.Close();
+            }
+
+            if (!hasReadSuccess)
+            {
+                Debug.LogWarning("File warning: AdventureLevel.txt seems to be corrupted");
+                FileStream fs2 = null;
+                StreamWriter sw = null;
+                try
+                {
+                    fs2 = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                    sw = new StreamWriter(fs2, Encoding.UTF8);
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                    sw.WriteLine("0");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+                finally
+                {
+                    try
+                    {
+                        sw.Close();
+                        fs2.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e.Message);
+                    }
+                }
+                foreach (GameObject g in floorStars)
+                {
+                    Destroy(g);
+                }
             }
         }
 
@@ -1044,6 +1121,8 @@ public class GameManager : MonoBehaviour
         StreamWriter sw = null;
         StreamReader sr = null;
 
+        if (star < 0 || star > 3) return;
+
         if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
         {
             try
@@ -1063,30 +1142,75 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
-        using (sr = new StreamReader(fs, Encoding.UTF8))
-        using (sw = new StreamWriter(fs, Encoding.UTF8))
+        try
         {
-            string line;
-            List<string> lines = new List<string>();
-            while ((line = sr.ReadLine()) != null) {
-                lines.Add(line.TrimEnd());
-            }
+            fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
+            using (sr = new StreamReader(fs, Encoding.UTF8))
+            using (sw = new StreamWriter(fs, Encoding.UTF8))
+            {
+                string line;
+                List<string> lines = new List<string>();
+                bool hasReadSuccess = true;
 
-            fs.Position = 0;
-            int i = 11;
-            foreach (string l in lines)
-            {                
-                if ((int) pm.PlayMode == i)
+                for (int j = 0; j < 4; j++)
                 {
-                    sw.WriteLine(Math.Max(Convert.ToInt32(l), star));
+                    line = sr.ReadLine();
+                    if (line != null)
+                    {
+                        lines.Add(line.Trim());
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                        break;
+                    }
                 }
-                else
+
+                if (hasReadSuccess)
                 {
-                    sw.WriteLine(Convert.ToInt32(l));
+                    fs.Position = 0;
+                    int i = (int)PlayManager.Mode.AdvEasy;
+                    foreach (string l in lines)
+                    {
+                        hasReadSuccess = int.TryParse(l, out int oldStar);
+                        if (!hasReadSuccess || oldStar < 0 || oldStar > 3)
+                        {
+                            break;
+                        }
+
+                        if ((int)mode == i)
+                        {
+                            sw.WriteLine(Math.Max(oldStar, star));
+                        }
+                        else
+                        {
+                            sw.WriteLine(oldStar);
+                        }
+                        i++;
+                    }
                 }
-                i++;
+
+                if (!hasReadSuccess)
+                {
+                    Debug.LogWarning("File warning: AdventureLevel.txt seems to be corrupted");
+                    fs.Position = 0;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if ((int)mode == (int)PlayManager.Mode.AdvEasy + j)
+                        {
+                            sw.WriteLine(star);
+                        }
+                        else
+                        {
+                            sw.WriteLine("0");
+                        }
+                    }
+                }
             }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
         }
     }
 }
