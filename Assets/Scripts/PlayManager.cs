@@ -677,7 +677,14 @@ public class PlayManager : MonoBehaviour
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                     streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                     fileStream.Position = 0;
-                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    if (GameManager.mm.ActionHistory.Length == 1)
+                    {
+                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                    }
+                    else
+                    {
+                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    }
                     streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
                     streamWriter.WriteLine(mapHash);
                     streamWriter?.Close();
@@ -745,7 +752,14 @@ public class PlayManager : MonoBehaviour
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                     streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                     fileStream.Position = 0;
-                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    if (GameManager.mm.ActionHistory.Length == 1)
+                    {
+                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                    }
+                    else
+                    {
+                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    }
                     streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
                     streamWriter.WriteLine(mapHash);
                     streamWriter?.Close();
@@ -1502,7 +1516,7 @@ public class PlayManager : MonoBehaviour
             try
             {
                 mapinfo = sr.ReadToEnd().Trim();
-                mapHash = GetHash(sha256Hash, mapinfo.Trim());
+                mapHash = GetHash(sha256Hash, mapinfo);
             }
             catch (Exception e)
             {
@@ -1587,12 +1601,16 @@ public class PlayManager : MonoBehaviour
                 else
                 {
                     //다를 경우
+                    fs.Close();
+                    fs = new FileStream(metaPath, FileMode.Create, FileAccess.Write, FileShare.None);
                     StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
                     fs.Position = 0;
                     sw.WriteLine("0");
                     sw.WriteLine("False");
                     sw.WriteLine(mapHash);
                     sw.Close();
+                    GameManager.mm.tryCount = 0;
+                    GameManager.mm.hasClearedOnce = false;
                 }
                 fs.Close();
             }
@@ -1600,7 +1618,7 @@ public class PlayManager : MonoBehaviour
             {
                 sr?.Close();
                 fs?.Close();
-                fileStream = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                fileStream = new FileStream(metaPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
                 streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                 streamWriter.WriteLine("0");
                 streamWriter.WriteLine("False");
