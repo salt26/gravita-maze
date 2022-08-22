@@ -24,7 +24,7 @@ public class TutorialManager : MonoBehaviour
     }
     public void DoTutorialSave()
     {
-        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
         {
             try
             {
