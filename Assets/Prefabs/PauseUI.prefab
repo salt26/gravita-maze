@@ -438,6 +438,7 @@ GameObject:
   - component: {fileID: 1788800190199287466}
   - component: {fileID: 1788800190199287469}
   - component: {fileID: 1788800190199287468}
+  - component: {fileID: 5207843850411096629}
   m_Layer: 5
   m_Name: ReturnToGameButton
   m_TagString: Untagged
@@ -533,9 +534,9 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 21300000, guid: 17123f6463157734cb9a6b5a1858c285, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: f6c342c30a609b2469beda746612192d, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 21300000, guid: 17123f6463157734cb9a6b5a1858c285, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: f6c342c30a609b2469beda746612192d, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -607,6 +608,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!95 &5207843850411096629
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788800190199287470}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d0013d7a4c8ddbc4aaa702004710ec6c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1788800190277157778
 GameObject:
   m_ObjectHideFlags: 0
