@@ -33,7 +33,7 @@ public class PlayManager : MonoBehaviour
     public GameObject tooltipUI;
     public GameObject timerUI;
 
-    private OpenSaveScrollItem selectedOpenScrollItem;
+    private OpenScrollItemWithMark selectedOpenScrollItem;
     public GameObject openScrollContent;
     public Button openButton;
     public Button openHighlightedButton;
@@ -944,7 +944,7 @@ public class PlayManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('/')), true, this, true);
+            g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, currentOpenPath.Remove(currentOpenPath.LastIndexOf('/')), true, this, true);
             index++;
         }
 
@@ -958,23 +958,83 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, true, this, false);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, true, this, false);
                 index++;
             }
         }
 
         if (files != null)
         {
+            string[] metafiles;
+            SHA256 sha256Hash = SHA256.Create();
+            Debug.Log(openPath);
+            string metaPath = Application.persistentDataPath + "/Meta/" + openPath;
+            string path = Application.persistentDataPath;
+
+            string[] dirs2 = ("Meta/" + openPath.Replace('\\', '/')).Split('/');
+            int len = dirs2.Length;
+            for (int i = 0; i < len; i++) {
+                string dir = dirs2[i];
+                path += '/' + dir;
+                if (!Directory.Exists(path)) {
+                    Directory.CreateDirectory(path);
+                }
+            }
+
+            metafiles = Directory.GetFiles(metaPath, "*.txt");
+            List<string> metafiles2 = metafiles.ToList<string>();
+
             foreach (string s in files)
             {
+                bool isCleared = false;
+                string s2 = Application.persistentDataPath + "/Meta/" + s;
+                
+
+                if (metafiles2.Contains(s2))
+                {
+                    try
+                    {
+                        FileStream fs = new FileStream(s2.Replace('\\', '/'), FileMode.Open);
+                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                        sr.ReadLine();
+                        bool b = bool.TryParse(sr.ReadLine(), out isCleared);
+                        if (!b) isCleared = false;
+                        string metaHash = sr.ReadToEnd().Trim();
+                        
+                        FileStream fileStream = new FileStream(s.Replace('\\', '/'), FileMode.Open);
+                        StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8);
+                        string mapHash = GetHash(sha256Hash, streamReader.ReadToEnd().Trim());
+                        if (!metaHash.Equals(mapHash))
+                        {
+                            isCleared = false;
+                        }
+                        streamReader.Close();
+                        fileStream.Close();
+                        
+                        sr.Close();
+                        fs.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e.Message);
+                    }
+                    metafiles2.Remove(s2);
+                }
+
                 GameObject g = Instantiate(openScrollItemPrefab, openScrollContent.transform);
                 g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, false, isCleared, this);
                 index++;
             }
+
+            foreach (string s in metafiles2)
+            {
+                File.Delete(s.Replace('\\', '/'));
+            }
+
         }
 
         openScrollbar.numberOfSteps = Mathf.Max(1, length - 4);
@@ -1067,6 +1127,42 @@ public class PlayManager : MonoBehaviour
 
         openScrollContent.GetComponent<RectTransform>().sizeDelta =
             new Vector2(openScrollContent.GetComponent<RectTransform>().sizeDelta.x, SCROLL_ITEM_HEIGHT * length);
+    
+        string[] metafiles;
+        SHA256 sha256Hash = SHA256.Create();
+        Debug.Log(openPathText.text);
+
+        string metaPath = Application.persistentDataPath + "/Meta";
+        if(openPathText.text.TrimEnd('/').LastIndexOf('/') >= 1)
+        {
+            metaPath += "/" + openPathText.text.Substring(0, openPathText.text.TrimEnd('/').LastIndexOf('/'));
+        }
+        else
+        {
+            metaPath += "/Training";
+        }
+        string path = Application.persistentDataPath;
+        string[] dirs2;
+
+        if(openPathText.text.TrimEnd('/').LastIndexOf('/') >= 1)
+        {
+            dirs2 = ("Meta/" + openPathText.text.Substring(0, openPathText.text.TrimEnd('/').LastIndexOf('/'))).Split('/');
+        }
+        else
+        {
+            dirs2 = ("Meta/Training").Split('/');
+        }
+        int len = dirs2.Length;
+        for (int i = 0; i < len; i++) {
+            string dir = dirs2[i];
+            path += '/' + dir;
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+        }
+
+        metafiles = Directory.GetFiles(metaPath.Replace("...", "Training"), "*.txt");
+        List<string> metafiles2 = metafiles.ToList<string>();
 
         if (!isRoot)
         {
@@ -1076,7 +1172,7 @@ public class PlayManager : MonoBehaviour
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-            g.GetComponent<OpenSaveScrollItem>().Initialize(name, true, this, null, true);
+            g.GetComponent<OpenScrollItemWithMark>().Initialize(name, true, this, null, true);
             index++;
         }
 
@@ -1090,7 +1186,7 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
-                g.GetComponent<OpenSaveScrollItem>().Initialize(s, true, this, null, false);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(s, true, this, null, false);
                 index++;
             }
         }
@@ -1099,23 +1195,50 @@ public class PlayManager : MonoBehaviour
         {
             foreach (TextAsset s in files)
             {
+                bool isCleared = false;
+                string s2 = Application.persistentDataPath + "/Meta/Training\\" + s.name + ".txt";
+                if (metafiles2.Contains(s2))
+                {
+                    try
+                    {
+                        FileStream fs = new FileStream(s2.Replace('\\', '/'), FileMode.Open);
+                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                        sr.ReadLine();
+                        bool b = bool.TryParse(sr.ReadLine(), out isCleared);
+                        if (!b) isCleared = false;
+                        string metaHash = sr.ReadToEnd().Trim();
+                        string mapHash = GetHash(sha256Hash, s.text.Trim());
+                        if (!metaHash.Equals(mapHash))
+                        {
+                            isCleared = false;
+                        }
+                        
+                        sr.Close();
+                        fs.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e.Message);
+                    }
+                    metafiles2.Remove(s2);
+                }
                 GameObject g = Instantiate(openScrollItemPrefab, openScrollContent.transform);
                 g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenSaveScrollItem>().Initialize(s.name, false, this, s, false);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(s.name, false, isCleared, this, s, false);
                 index++;
             }
         }
-
+        //남은거 삭제
         openScrollbar.numberOfSteps = Mathf.Max(1, length - 4);
     }
 
     private void ClearOpenScrollItems()
     {
         selectedOpenScrollItem = null;
-        foreach (OpenSaveScrollItem i in openScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        foreach (OpenScrollItemWithMark i in openScrollContent.GetComponentsInChildren<OpenScrollItemWithMark>())
         {
             Destroy(i.gameObject);
         }
@@ -1127,7 +1250,7 @@ public class PlayManager : MonoBehaviour
         openHighlightedButton.interactable = false;
     }
 
-    public void OpenItemSelect(OpenSaveScrollItem caller)
+    public void OpenItemSelect(OpenScrollItemWithMark caller)
     {
         float selectTime = Time.time;
         if (caller != null && caller.Equals(selectedOpenScrollItem) &&
@@ -1146,7 +1269,7 @@ public class PlayManager : MonoBehaviour
         }
         openItemSelectTime = selectTime;
 
-        foreach (OpenSaveScrollItem i in openScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
+        foreach (OpenScrollItemWithMark i in openScrollContent.GetComponentsInChildren<OpenScrollItemWithMark>())
         {
             i.isSelected = false;
         }
@@ -1162,7 +1285,7 @@ public class PlayManager : MonoBehaviour
         }
         else
         {
-            if (caller.type == OpenSaveScrollItem.Type.Open)
+            if (caller.type == OpenScrollItemWithMark.Type.Open)
             {
                 string s = selectedOpenScrollItem.path;
                 s = "/Meta/" + s;
@@ -1174,7 +1297,7 @@ public class PlayManager : MonoBehaviour
                 openButton.interactable = b;
                 openHighlightedButton.interactable = b;
             }
-            else if (caller.type == OpenSaveScrollItem.Type.TrainingOpen)
+            else if (caller.type == OpenScrollItemWithMark.Type.TrainingOpen)
             {
                 string s = selectedOpenScrollItem.path;
                 Debug.Log(s);

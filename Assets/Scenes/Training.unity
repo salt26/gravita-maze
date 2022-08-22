@@ -944,7 +944,7 @@ MonoBehaviour:
   openHighlightedButton: {fileID: 1340382089}
   statusUI: {fileID: 194870466}
   openPathText: {fileID: 1830794540}
-  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 9b785f5e7a7a8b34186e005884bb8744,
+  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 6beff4dd0d7b1cf4eb5e3310e12d613a,
     type: 3}
   openScrollbar: {fileID: 222247441}
   openScrollEmptyText: {fileID: 0}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -577,8 +577,9 @@ MonoBehaviour:
   loadingPanel: {fileID: 38331145807211207}
   timeoutPanel: {fileID: 551491372}
   tryCount: 0
-  tryNumber: 0
   beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &57608225
 Transform:
   m_ObjectHideFlags: 0
@@ -709,7 +710,7 @@ MonoBehaviour:
   openHighlightedButton: {fileID: 1707545011}
   statusUI: {fileID: 286166421}
   openPathText: {fileID: 156508370}
-  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 9b785f5e7a7a8b34186e005884bb8744,
+  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 6beff4dd0d7b1cf4eb5e3310e12d613a,
     type: 3}
   openScrollbar: {fileID: 735985414}
   openScrollEmptyText: {fileID: 1448485172}
