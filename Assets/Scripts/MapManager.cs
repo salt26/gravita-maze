@@ -1326,9 +1326,9 @@ public class MapManager : MonoBehaviour
         if (pm == null) return;
         tryCountUpTrigger = false;
         Debug.Log("TryCount");
-        if (hasClearedOnce) return;
         tryCount++;
         Debug.Log(tryCount);
+        if (hasClearedOnce) return;
         FileStream fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
         sw.WriteLine(tryCount.ToString());

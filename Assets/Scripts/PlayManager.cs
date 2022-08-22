@@ -671,17 +671,20 @@ public class PlayManager : MonoBehaviour
 
                 pauseButton.interactable = false;
 
-                GameManager.mm.hasClearedOnce = true;
-                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                fileStream.Position = 0;
-                streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
-                streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                streamWriter.WriteLine(mapHash);
-                streamWriter?.Close();
-                fileStream?.Close();
-                streamWriter = null;
-                fileStream = null;
+                if (!GameManager.mm.hasClearedOnce)
+                {
+                    GameManager.mm.hasClearedOnce = true;
+                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                    fileStream.Position = 0;
+                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
+                    streamWriter.WriteLine(mapHash);
+                    streamWriter?.Close();
+                    fileStream?.Close();
+                    streamWriter = null;
+                    fileStream = null;
+                }
                 break;
             case MapManager.Flag.Burned:
             case MapManager.Flag.Squashed:
@@ -735,18 +738,21 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
-
-                GameManager.mm.hasClearedOnce = true;
-                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                fileStream.Position = 0;
-                streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
-                streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                streamWriter.WriteLine(mapHash);
-                streamWriter?.Close();
-                fileStream?.Close();
-                streamWriter = null;
-                fileStream = null;
+                
+                if (!GameManager.mm.hasClearedOnce)
+                {
+                    GameManager.mm.hasClearedOnce = true;
+                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                    fileStream.Position = 0;
+                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
+                    streamWriter.WriteLine(mapHash);
+                    streamWriter?.Close();
+                    fileStream?.Close();
+                    streamWriter = null;
+                    fileStream = null;
+                }
                 break;
             case MapManager.Flag.Burned:
             case MapManager.Flag.Squashed:
@@ -1145,7 +1151,7 @@ public class PlayManager : MonoBehaviour
             if (caller.type == OpenSaveScrollItem.Type.Open)
             {
                 string s = selectedOpenScrollItem.path;
-                s = "/Meta" + s;
+                s = "/Meta/" + s;
                 CreateMeta(s);
                 Debug.Log(metaPath);
                 bool b = CustomOpenFile(selectedOpenScrollItem.path, true);
@@ -1158,7 +1164,7 @@ public class PlayManager : MonoBehaviour
             {
                 string s = selectedOpenScrollItem.path;
                 Debug.Log(s);
-                s = "/Meta/Training/" + s;
+                s = "/Meta/Training/" + s + ".txt";
                 CreateMeta(s);
                 bool b = TrainingOpenFile(selectedOpenScrollItem.textAsset, true);
                 openHighlightedButton.gameObject.SetActive(b);
@@ -1255,12 +1261,25 @@ public class PlayManager : MonoBehaviour
                     customPhase = CustomPhase.Ingame;
                     GameManager.gm.CustomChangeBGM(customPhase);
 
-                    metaPath = Application.persistentDataPath + "/Meta" + mapPath.Substring(4);
+                    metaPath = Application.persistentDataPath + "/Meta/" + mapPath;
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
                     streamReader = new StreamReader(fileStream, Encoding.UTF8);
+
+                    int tryCount;
                     try
                     {
-                        bool b = int.TryParse(streamReader.ReadLine().Trim(), out GameManager.mm.tryCount);
+                        bool b = int.TryParse(streamReader.ReadLine().Trim(), out tryCount);
+                        bool hasClearedOnce = bool.Parse(streamReader.ReadLine().Trim());
+
+                        if (!hasClearedOnce)
+                        {
+                            GameManager.mm.tryCount = tryCount;
+                        }
+                        else
+                        {
+                            GameManager.mm.tryCount = 0;
+                        }
+
                         streamReader.Close();
                         if (!b)
                         {
@@ -1331,6 +1350,53 @@ public class PlayManager : MonoBehaviour
                     ingameUI.SetActive(true);
                     trainingPhase = TrainingPhase.Ingame;
                     GameManager.gm.TrainingChangeBGM(trainingPhase);
+
+                    metaPath = Application.persistentDataPath + "/Meta/" + mapPath;
+                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    streamReader = new StreamReader(fileStream, Encoding.UTF8);
+
+                    int tryCount;
+                    try
+                    {
+                        bool b = int.TryParse(streamReader.ReadLine().Trim(), out tryCount);
+                        bool hasClearedOnce = bool.Parse(streamReader.ReadLine().Trim());
+
+                        if (!hasClearedOnce)
+                        {
+                            GameManager.mm.tryCount = tryCount;
+                        }
+                        else
+                        {
+                            GameManager.mm.tryCount = 0;
+                        }
+
+                        streamReader.Close();
+                        if (!b)
+                        {
+                            Debug.LogError("Meta invalid");
+                            streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                            streamWriter.WriteLine("0");
+                            streamWriter.WriteLine("False");
+                            streamWriter.WriteLine(mapHash);
+                            GameManager.mm.tryCount = 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError("Meta invalid: " + e.Message);
+                    }
+
+                    try
+                    {
+                        streamWriter?.Close();
+                        fileStream?.Close();
+                        streamWriter = null;
+                        fileStream = null;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
 
                     ClearOpenScrollItems();
 
@@ -1455,6 +1521,7 @@ public class PlayManager : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name.Equals("Training"))
         {
+            mapPath = "Training/" + selectedOpenScrollItem.path + ".txt";
             mapinfo = selectedOpenScrollItem.textAsset.text.Trim();
             mapHash = GetHash(sha256Hash, mapinfo);
         }
@@ -1514,8 +1581,8 @@ public class PlayManager : MonoBehaviour
                 if (VerifyHash(sha256Hash, mapinfo.Trim(), metaHash))
                 {
                     //tryNum 표시하기
-                    GameManager.mm.tryCount = tryCount;
                     GameManager.mm.hasClearedOnce = hasClearedOnce;
+                    GameManager.mm.tryCount = tryCount;
                 }
                 else
                 {
