@@ -8,6 +8,9 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+#if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine.Android;
+#endif
 
 public class PlayManager : MonoBehaviour
 {
