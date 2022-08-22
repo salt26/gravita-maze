@@ -677,7 +677,14 @@ public class PlayManager : MonoBehaviour
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                     streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                     fileStream.Position = 0;
-                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    if (GameManager.mm.ActionHistory.Length == 1)
+                    {
+                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                    }
+                    else
+                    {
+                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    }
                     streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
                     streamWriter.WriteLine(mapHash);
                     streamWriter?.Close();
@@ -745,7 +752,14 @@ public class PlayManager : MonoBehaviour
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
                     streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
                     fileStream.Position = 0;
-                    streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    if (GameManager.mm.ActionHistory.Length == 1)
+                    {
+                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                    }
+                    else
+                    {
+                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                    }
                     streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
                     streamWriter.WriteLine(mapHash);
                     streamWriter?.Close();
