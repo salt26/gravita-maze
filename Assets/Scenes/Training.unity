@@ -853,7 +853,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1962399330}
   m_HandleRect: {fileID: 1962399329}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -944,7 +944,7 @@ MonoBehaviour:
   openHighlightedButton: {fileID: 1340382089}
   statusUI: {fileID: 194870466}
   openPathText: {fileID: 1830794540}
-  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 9b785f5e7a7a8b34186e005884bb8744,
+  openScrollItemPrefab: {fileID: 6403598737929353914, guid: 6beff4dd0d7b1cf4eb5e3310e12d613a,
     type: 3}
   openScrollbar: {fileID: 222247441}
   openScrollEmptyText: {fileID: 0}
@@ -1782,7 +1782,6 @@ MonoBehaviour:
   loadingPanel: {fileID: 1649814708}
   timeoutPanel: {fileID: 2117067564}
   tryCount: 0
-  tryNumber: 0
   beforeFirstAction: 0
   tryCountUpTrigger: 0
   hasClearedOnce: 0

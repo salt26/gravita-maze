@@ -126,6 +126,7 @@ public class OpenSaveScrollItem : MonoBehaviour
 
     public void Select()
     {
+        Debug.Log("select");
         if (em != null)
         {
             switch (type)
@@ -140,7 +141,7 @@ public class OpenSaveScrollItem : MonoBehaviour
         }
         else if (pm != null)
         {
-            pm.OpenItemSelect(this);
+            pm.OpenItemSelect((OpenScrollItemWithMark)this);
         }
     }
 }
