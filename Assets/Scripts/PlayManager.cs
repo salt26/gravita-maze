@@ -1200,7 +1200,7 @@ public class PlayManager : MonoBehaviour
             {
                 bool isCleared = false;
                 string s2 = Application.persistentDataPath + "/Meta/Training\\" + s.name + ".txt";
-                if (metafiles2.Contains(s2))
+                if (metafiles2.Contains(s2.Replace('\\', '/')) || metafiles2.Contains(s2))
                 {
                     try
                     {
