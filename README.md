@@ -178,7 +178,7 @@
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)!
 * Download `GravitaMaze.v1.4.0.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
-* You can download `GravitaMaze.zip` and unzip it in root directory of `GravitaMaze.exe` to enjoy the custom maps.
+* You can download `GravitaMaze.zip` and unzip, and move the `Maps` folder to the root directory of `GravitaMaze.exe` to enjoy the custom maps.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
   * Time passes even if the ball is dead.
