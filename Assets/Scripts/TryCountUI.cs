@@ -23,7 +23,7 @@ public class TryCountUI : MonoBehaviour
             return;
         }
 
-        if (mm.tryCount> 999)
+        if (mm.tryCount > 999)
         {
             tryCountLabel100.sprite = numberLabels[9];
             tryCountLabel10.sprite = numberLabels[9];
@@ -36,4 +36,6 @@ public class TryCountUI : MonoBehaviour
             tryCountLabel1.sprite = numberLabels[mm.tryCount % 10];
         }
     }
+
+    
 }

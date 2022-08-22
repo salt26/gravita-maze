@@ -389,6 +389,11 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 386166163}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 222567254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
 --- !u!224 &165664661 stripped
@@ -954,6 +959,8 @@ MonoBehaviour:
   - Exit
   - Shutter
   - Gate
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles: []
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
@@ -1775,6 +1782,7 @@ MonoBehaviour:
   loadingPanel: {fileID: 1649814708}
   timeoutPanel: {fileID: 2117067564}
   tryCount: 0
+  tryNumber: 0
   beforeFirstAction: 0
   tryCountUpTrigger: 0
   hasClearedOnce: 0
@@ -5604,6 +5612,11 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 386166163}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 222567254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
 --- !u!224 &1553784214 stripped
