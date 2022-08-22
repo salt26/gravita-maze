@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using System;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -13,8 +14,8 @@ public class PlayManager : MonoBehaviour
     public enum Mode { Tutorial = 0, Custom = 1, Training = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
 
-    public enum CustomPhase { Open = 0, Ingame = 1 }
-    public enum TrainingPhase { Open = 0, Ingame = 1 }
+    public enum CustomPhase { Default = 0, Open = 1, Ingame = 2 }
+    public enum TrainingPhase { Default = 0, Open = 1, Ingame = 2 }
 
     public enum TrainingMapSelect { Root = -1, Basic = 0, Fire = 1, Iron = 2, Block = 3, Exit = 4, Shutter = 5, Gate = 6 }
    
@@ -52,8 +53,8 @@ public class PlayManager : MonoBehaviour
     public List<string> trainingFolders = new List<string>();
 
     private Mode playMode;
-    private CustomPhase customPhase;
-    private TrainingPhase trainingPhase;
+    public CustomPhase customPhase;
+    public TrainingPhase trainingPhase;
 
     private TrainingMapSelect selection;
     private string mapPath;
@@ -1384,6 +1385,8 @@ public class PlayManager : MonoBehaviour
     public void CreateMeta(string s)
     {
         mapPath = selectedOpenScrollItem.path;
+        SHA256 sha256Hash = SHA256.Create();
+        string mapinfo;
         try
         {
             if (!File.Exists(mapPath))
@@ -1410,8 +1413,8 @@ public class PlayManager : MonoBehaviour
         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
         try
         {
-            string text = sr.ReadToEnd().Trim();
-            mapHash = GetHash(text.Trim());
+            mapinfo = sr.ReadToEnd().Trim();
+            mapHash = GetHash(sha256Hash, mapinfo.Trim());
         }
         catch (Exception e)
         {
@@ -1422,6 +1425,8 @@ public class PlayManager : MonoBehaviour
         }
         finally
         {
+            GameManager.mm.hasClearedOnce = false;
+            GameManager.mm.tryCount = 0;
             sr.Close();
             fs.Close();
         }
@@ -1456,6 +1461,8 @@ public class PlayManager : MonoBehaviour
             {
                 try
                 {
+                    GameManager.mm.hasClearedOnce = false;
+                    GameManager.mm.tryCount = 0;
                     sw.Close();
                     fs.Close();
                 }
@@ -1473,9 +1480,9 @@ public class PlayManager : MonoBehaviour
                 sr = new StreamReader(fs, Encoding.UTF8);
                 int tryCount = int.Parse(sr.ReadLine().Trim());
                 bool hasClearedOnce = bool.Parse(sr.ReadLine().Trim());
-                string metaHash = GetHash(sr.ReadToEnd().Trim());
+                string metaHash = sr.ReadToEnd().Trim();
                 sr.Close();
-                if (metaHash.Equals(mapHash))
+                if (VerifyHash(sha256Hash, mapinfo.Trim(), metaHash))
                 {
                     //tryNum 표시하기
                     GameManager.mm.tryCount = tryCount;
@@ -1512,9 +1519,28 @@ public class PlayManager : MonoBehaviour
         }
     }
 
-    public string GetHash(string text)
+    public string GetHash(HashAlgorithm hashAlgorithm, string text)
     {
-        string hash = "asd";
-        return hash;
+        byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
+
+        var sBuilder = new StringBuilder();
+
+        for (int i = 0; i < data.Length; i++)
+        {
+            sBuilder.Append(data[i].ToString("x2"));
+        }
+
+        return sBuilder.ToString();
+    }
+
+    public bool VerifyHash(HashAlgorithm hashAlgorithm, string input, string hash)
+    {
+        // Hash the input.
+        var hashOfInput = GetHash(hashAlgorithm, input);
+
+        // Create a StringComparer an compare the hashes.
+        StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+        return comparer.Compare(hashOfInput, hash) == 0;
     }
 }

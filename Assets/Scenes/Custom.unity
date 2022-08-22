@@ -577,6 +577,7 @@ MonoBehaviour:
   loadingPanel: {fileID: 38331145807211207}
   timeoutPanel: {fileID: 551491372}
   tryCount: 0
+  tryNumber: 0
   beforeFirstAction: 0
 --- !u!4 &57608225
 Transform:
@@ -716,6 +717,8 @@ MonoBehaviour:
   ingameUI: {fileID: 363787297}
   tutorialGuide: {fileID: 0}
   trainingFolders: []
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles: []
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
@@ -955,6 +958,11 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 57608224}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 121398293}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
 --- !u!224 &165664661 stripped
@@ -6823,5 +6831,10 @@ PrefabInstance:
       propertyPath: mm
       value: 
       objectReference: {fileID: 57608224}
+    - target: {fileID: 2672423829272442783, guid: d838f6f282b36a043ab18477971ef80d,
+        type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 121398293}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d838f6f282b36a043ab18477971ef80d, type: 3}
