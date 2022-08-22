@@ -1,5 +1,5 @@
 # GravitaMaze (중력 미로)
-[![Version badge](https://img.shields.io/badge/Version-1.3.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.3.1)  
+[![Version badge](https://img.shields.io/badge/Version-1.4.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -8,10 +8,56 @@
 * Puzzle game
   * Manipulate gravity to escape the ball!
 * English is fully available!
-* This version(v1.3.1) is also a prototype.
 
 ### Download
-#### [v1.3.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.3.1)
+#### [v1.4.0 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)
+
+### Updates (v1.3.1 -> v1.4.0)
+#### Sound
+* Add various sound effects
+* Add background music for editor scene
+
+#### Considerations for First-time Users
+* Add a first-time user scene that allows users to start the tutorial immediately after installing the app.
+  * Skip is also available.
+* Provide a detailed tutorial tooltip.
+* Minor changes in tutorial maps
+
+#### Add New Modes
+* Add Custom mode
+  * You can play by selecting the map you want.
+  * From now, you don't need to enter editor mode to play custom maps.
+  * For each map, record the number of attempts until the first time you clear it and keep it stuffed semi-permanently.
+* Add Training mode
+  * You can practice by type of gimmicks.
+  * For each map, record the number of attempts until the first time you clear it and keep it stuffed semi-permanently.
+* Add credit scene
+
+#### Giving a Sense of Accomplishment and Motivation
+* Reorganize result UI of Tutorial and Adventure mode with some animations and SFXs.
+* Add star system
+  * If you clear the Tutorial, you will receive three stars.
+  * If you clear one of the four Adventure levels, you will receive stars differently depending on the number of lives left.
+  * In the mode selection scene and the adventure level selection scene, you can see the highest number of stars acquired at each level. It remains after restarting or updating the app.
+* Add series of map system to Adventure mode
+  * You can experience various maps than before.
+  * It increases the life of a repeat play.
+* Add 'God' difficulty to custom mode
+  * Maps that require 20 to 50 tries or more for an expert player.
+* Add new maps and adjust map balance
+
+#### Improving convenience and user experience
+* Expand the size of the four types of gravity manipulation buttons.
+* All the letters of iron were changed to bright colors overall.
+* In the mode selection scene and the adventure level selection scene, maps are reorganized so that there is no need to press the retry button.
+* Reorganize menu UI displayed when game is paused in Tutorial, Adventure, Custom and Training mode.
+  * Background volume and sound effects volume can be adjusted from the Pause menu.
+  * You can skip the map (make remaining time to zero) from the Pause menu.
+* Change the folder name so that map folders appear in ascending order for difficulty in Custom mode.
+* Change the image and add animation of the portal.
+
+<details>
+<summary>Click here to expand or collapse the old update logs!</summary>
 
 ### Updates (v1.3.0 -> v1.3.1)
 #### Common
@@ -34,9 +80,6 @@
 #### Android
 * The continuous integration(CI) targets Android API level to 28. (Android 9.0 'Pie')
   * This is because there are issues related to storage read/write permission when the target API level is 29 or higher.
-
-<details>
-<summary>Click here to expand or collapse the old update logs!</summary>
 
 ### Updates (v.1.2.1 -> v1.3.0)
 #### Common
@@ -117,8 +160,8 @@
 
 ## How to Play
 #### Android
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.3.1)!
-* Download `GravitaMaze.v1.3.1.a.zip` on your Android cell phone, unzip it, and execute `GravitaMaze.apk` to install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)!
+* Download `GravitaMaze.v1.4.0.a.zip` on your Android cell phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * You may need to allow "Install unknown apps" (in "Settings" - "Apps" - "..." - "Special access" - "Install unknown apps")
   * When you run the app for the first time, you need to allow permission to write to external/internal storage.
     * If you deny permission, the app will not be able to create or load maps.
@@ -132,10 +175,10 @@
   * If you time out, you lose one life.
 
 #### Windows
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.3.1)!
-* Download `GravitaMaze.v1.3.1.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)!
+* Download `GravitaMaze.v1.4.0.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
-* You don't need to download `GravitaMaze.zip` since the file is already included in `GravitaMaze.v1.3.1.w.zip`.
+* You can download `GravitaMaze.zip` and unzip it in root directory of `GravitaMaze.exe` to enjoy the custom maps.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
 * Whenever the ball dies, you can press "retry"(space) button to retry the map.
   * Time passes even if the ball is dead.
@@ -143,8 +186,8 @@
   * If you time out, you lose one life.
 
 #### macOS
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.3.1)!
-* Download `GravitaMaze.v1.3.1.m.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.0)!
+* Download `GravitaMaze.v1.4.0.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
 * You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of `GravitaMaze.app` to enjoy the custom maps.
 * The gravity can be manipulated by pressing the four "arrow" buttons.
@@ -155,11 +198,9 @@
 
 ### Map Editor
 * You can use the map editor to make your own custom maps!
-  * Also you can test and play the custom maps in the map editor.
 
 ### Play Modes
-* There are a Tutorial mode and four Adventure modes.
-* Other modes like Custom and Training will be available in the next version. (Coming soon!)
+* There are a Tutorial mode, four Adventure modes, Custom modes and Training mode.
 
 ![Screenshot1](./Figures/Screenshot1.v1.3.1.png)
 
