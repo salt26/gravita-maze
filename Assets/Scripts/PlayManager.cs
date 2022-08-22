@@ -734,6 +734,18 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
+
+                GameManager.mm.hasClearedOnce = true;
+                fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                fileStream.Position = 0;
+                streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
+                streamWriter.WriteLine(mapHash);
+                streamWriter?.Close();
+                fileStream?.Close();
+                streamWriter = null;
+                fileStream = null;
                 break;
             case MapManager.Flag.Burned:
             case MapManager.Flag.Squashed:
@@ -1132,7 +1144,7 @@ public class PlayManager : MonoBehaviour
             if (caller.type == OpenSaveScrollItem.Type.Open)
             {
                 string s = selectedOpenScrollItem.path;
-                s = "/Meta" + s.Substring(4);
+                s = "/Meta" + s;
                 CreateMeta(s);
                 Debug.Log(metaPath);
                 bool b = CustomOpenFile(selectedOpenScrollItem.path, true);
@@ -1143,6 +1155,10 @@ public class PlayManager : MonoBehaviour
             }
             else if (caller.type == OpenSaveScrollItem.Type.TrainingOpen)
             {
+                string s = selectedOpenScrollItem.path;
+                Debug.Log(s);
+                s = "/Meta/Training/" + s;
+                CreateMeta(s);
                 bool b = TrainingOpenFile(selectedOpenScrollItem.textAsset, true);
                 openHighlightedButton.gameObject.SetActive(b);
                 openButton.gameObject.SetActive(!b);
@@ -1383,49 +1399,61 @@ public class PlayManager : MonoBehaviour
 
     public void CreateMeta(string s)
     {
-        mapPath = selectedOpenScrollItem.path;
-        try
+        FileStream fs = null;
+        StreamReader sr = null;
+
+        if (SceneManager.GetActiveScene().name.Equals("Custom"))
         {
-            if (!File.Exists(mapPath))
+            mapPath = selectedOpenScrollItem.path;
+            try
             {
-                Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
-                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                if (!File.Exists(mapPath))
+                {
+                    Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
+                    statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                    return;
+                }
+                else if (Path.GetExtension(mapPath) != ".txt")
+                {
+                    Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
+                    statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                Debug.LogError("File invalid: exception while checking a file");
+                statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
+                throw;
+            }
+
+            fs = new FileStream(mapPath, FileMode.Open);
+            sr = new StreamReader(fs, Encoding.UTF8);
+            try
+            {
+                string text = sr.ReadToEnd().Trim();
+                mapHash = GetHash(text);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("File invalid: exception while opening a map");
+                statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+                Debug.LogException(e);
                 return;
             }
-            else if (Path.GetExtension(mapPath) != ".txt")
+            finally
             {
-                Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
-                statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
-                return;
+                GameManager.mm.hasClearedOnce = false;
+                GameManager.mm.tryCount = 0;
+                sr.Close();
+                fs.Close();
             }
         }
-        catch (Exception)
+        else if (SceneManager.GetActiveScene().name.Equals("Training"))
         {
-            Debug.LogError("File invalid: exception while checking a file");
-            statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
-            throw;
+            string mapText = selectedOpenScrollItem.textAsset.text.Trim();
+            mapHash = GetHash(mapText);
         }
-
-        FileStream fs = new FileStream(mapPath, FileMode.Open);
-        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-        try
-        {
-            string text = sr.ReadToEnd().Trim();
-            mapHash = GetHash(text.Trim());
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("File invalid: exception while opening a map");
-            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
-            Debug.LogException(e);
-            return;
-        }
-        finally
-        {
-            sr.Close();
-            fs.Close();
-        }
-
         metaPath = Application.persistentDataPath + '/' + s;
         if (!File.Exists(metaPath))
         {
@@ -1510,6 +1538,7 @@ public class PlayManager : MonoBehaviour
             }
             
         }
+        
     }
 
     public string GetHash(string text)
