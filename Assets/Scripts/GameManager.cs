@@ -91,16 +91,22 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("canPlay: " + canPlay);
+        Debug.Log("pm == null: " + pm == null);
+        if (pm != null) Debug.Log("pm. IsReady: " + pm.IsReady);
+
         if(pm != null && pm.IsReady){
             bgmAudioSource.volume = Mathf.Clamp01(pm.pauseUI.bgmVolume);
             sfxAudioSource.volume = Mathf.Clamp01(pm.pauseUI.sfxVolume);
         }
         
         // 입력 담당
-        if (mm is null || !mm.IsReady) return;
+        
 
         if (canPlay)
         {
+            if (mm is null || !mm.IsReady) return; // mm : 맵의 미리보기가 떴을 때 또는 플레이 도중에만 값이 할당되어 있는 듯??
+
             if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)) && mm.gravityDownButton.interactable)
             {
                 mm.ManipulateGravityDown();
@@ -167,6 +173,53 @@ public class GameManager : MonoBehaviour
                 else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {
                     pm.pauseUI.pauseReturnButton.onClick.Invoke();
+                }
+            }
+        }
+        else 
+        {
+            if (Input.GetKeyUp(KeyCode.Return) && pm != null && !pm.IsReady) //Custom이나 Training은 IsReady가 항상 False인데 이유가 있나??
+            {
+                Debug.Log("Here is okay");
+                if (SceneManager.GetActiveScene().name.Equals("Custom"))
+                {
+                    if (pm.customPhase == PlayManager.CustomPhase.Open) //Custom 모드에서 인게임이 아닐 때.
+                    {
+                        if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                        {
+                            pm.openButton.onClick.Invoke();
+                        }
+                        else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                        {
+                            if (mm is null || !mm.IsReady) return;
+                            pm.openHighlightedButton.onClick.Invoke();
+                        }
+                        else
+                        {
+                            Debug.Log("Exception: canPlay == false, but customPhase != Open");
+                            Debug.Log(pm.customPhase);
+                        }
+                    }
+                }
+                else if (SceneManager.GetActiveScene().name.Equals("Training")) 
+                {
+                    if (pm.trainingPhase == PlayManager.TrainingPhase.Open) 
+                    {
+                        if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                        {
+                            pm.openButton.onClick.Invoke();
+                        }
+                        else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                        {
+                            if (mm is null || !mm.IsReady) return;
+                            pm.openHighlightedButton.onClick.Invoke();
+                        }
+                        else
+                        {
+                            Debug.Log("Exception: canPlay == false, but trainingPhase != Open");
+                            Debug.Log(pm.trainingPhase);
+                        }
+                    }
                 }
             }
         }

@@ -312,6 +312,7 @@ public class PlayManager : MonoBehaviour
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
+
     }
 
     public void Pause()
@@ -1459,6 +1460,15 @@ public class PlayManager : MonoBehaviour
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
+                    nextButton.gameObject.SetActive(true);
+                    nextButton.interactable = false;
+                    quitHighlightedButton.gameObject.SetActive(false);
+
+                    retryButton.gameObject.SetActive(true);
+                    retryHighlightedButton.gameObject.SetActive(false);
+                    //quitHighlightedButton.interactable = false;
+                    retryTimeHighlightedButton.gameObject.SetActive(false);
+
                     return true;
                 }
             case MapManager.OpenFileFlag.Failed:
@@ -1549,8 +1559,14 @@ public class PlayManager : MonoBehaviour
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
+                    nextButton.gameObject.SetActive(true);
+                    nextButton.interactable = false;
+                    quitHighlightedButton.gameObject.SetActive(false);
 
-
+                    retryButton.gameObject.SetActive(true);
+                    retryHighlightedButton.gameObject.SetActive(false);
+                    //quitHighlightedButton.interactable = false;
+                    retryTimeHighlightedButton.gameObject.SetActive(false);
 
                     return true;
                 }
