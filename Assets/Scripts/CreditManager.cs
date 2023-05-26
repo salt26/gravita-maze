@@ -6,6 +6,6 @@ using UnityEngine.SceneManagement;
 public class CreditManager : MonoBehaviour
 {
     public void BackMainButtonDown(){
-        GameManager.gm.LoadMain();
+        GameManager.gm.LoadSetting();
     }
 }
