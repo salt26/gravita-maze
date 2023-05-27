@@ -2447,6 +2447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 208470215}
   - component: {fileID: 208470216}
+  - component: {fileID: 208470217}
   m_Layer: 5
   m_Name: EditorTimerSlider
   m_TagString: Untagged
@@ -2529,7 +2530,34 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1073929001}
         m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
-        m_MethodName: EditTimer
+        m_MethodName: EditTimerDragging
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &208470217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208470214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3383860e292e6cf45b668bb6d35310c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPointerUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1073929001}
+        m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
+        m_MethodName: EditTimerDragUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5069,6 +5097,10 @@ MonoBehaviour:
   - {fileID: 0}
   loadingPanel: {fileID: 38331146116544568}
   timeoutPanel: {fileID: 628789790}
+  tryCount: 0
+  beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &387881937
 Transform:
   m_ObjectHideFlags: 0
@@ -5350,8 +5382,8 @@ RectTransform:
   m_Father: {fileID: 350572919}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.4827586, y: 0}
-  m_AnchorMax: {x: 0.4827586, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 36, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5604,7 +5636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &423043110
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6974,7 +7006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &546415786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20683,7 +20715,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.4827586, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -2237,7 +2237,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Build:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2260,7 +2260,7 @@ public class EditorManager : MonoBehaviour
                 // Validation finished
                 timerUI.gameObject.SetActive(false);
                 statusUI.gameObject.SetActive(true);
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2270,7 +2270,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.EditorChangeBGM(editPhase);
                 break;
             case EditPhase.Save:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[5].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2305,7 +2305,7 @@ public class EditorManager : MonoBehaviour
             case EditPhase.Test:
                 timerUI.gameObject.SetActive(false);
                 statusUI.gameObject.SetActive(true);
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2331,7 +2331,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Save:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[5].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2633,18 +2633,28 @@ public class EditorManager : MonoBehaviour
     }
 #pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
-    public void EditTimer()
+    public void EditTimerDragging()
     {
         if (mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
         timeLimit = Mathf.Max(3f, editorTimerSlider.value);
-        mm.TimeLimit = timeLimit;
-        solution = "";
-        dirtyBit = true;
-
-        SetEditTimerUI();
+        SetEditTimerUI(timeLimit);
     }
 
-    private void SetEditTimerUI()
+    public void EditTimerDragUp()
+    {
+        if (mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
+        timeLimit = Mathf.Max(3f, editorTimerSlider.value);
+        if (mm.TimeLimit != timeLimit)
+        {
+            mm.TimeLimit = timeLimit;
+            solution = "";
+            dirtyBit = true;
+        }
+
+        SetEditTimerUI(mm.TimeLimit);
+    }
+
+    private void SetEditTimerUI(float displayingTimeLimit)
     {
         //Debug.Log("SetEditTimerUI");
         if (!mm.IsReady)
@@ -2655,7 +2665,7 @@ public class EditorManager : MonoBehaviour
             return;
         }
 
-        if (mm.TimeLimit > 99f)
+        if (displayingTimeLimit > 99f)
         {
             editorTimerSlider.SetValueWithoutNotify(editorTimerSlider.maxValue);
             editorTimerLabel10.sprite = timerUI.numberLabels[9];
@@ -2663,9 +2673,9 @@ public class EditorManager : MonoBehaviour
         }
         else
         {
-            editorTimerSlider.SetValueWithoutNotify(mm.TimeLimit);
-            editorTimerLabel10.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) / 10];
-            editorTimerLabel1.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) % 10];
+            editorTimerSlider.SetValueWithoutNotify(displayingTimeLimit);
+            editorTimerLabel10.sprite = timerUI.numberLabels[Mathf.CeilToInt(displayingTimeLimit) / 10];
+            editorTimerLabel1.sprite = timerUI.numberLabels[Mathf.CeilToInt(displayingTimeLimit) % 10];
         }
     }
 
