@@ -73,4 +73,4 @@ crashlytics-build.properties
 
 ignore/*
 .vscode/
-.DS_Store
+*/.DS_Store
