@@ -321,6 +321,7 @@ public class EditorManager : MonoBehaviour
         else
         {
             editorQuitButton3.gameObject.SetActive(true);
+            editorQuitButton3.interactable = false;
             editorQuitHighlightedButton3.gameObject.SetActive(false);
         }
 
@@ -2372,6 +2373,7 @@ public class EditorManager : MonoBehaviour
                 editorRetryButton.gameObject.SetActive(false);
                 editorRetryHighlightedButton.gameObject.SetActive(false);
                 editorRetryTimeButton.gameObject.SetActive(true);
+                editorRetryTimeButton.interactable = false;
                 editorRetryTimeHighlightedButton.gameObject.SetActive(false);
 
                 editorNextButton4.interactable = true;
