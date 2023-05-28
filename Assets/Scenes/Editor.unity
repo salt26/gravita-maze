@@ -3078,6 +3078,7 @@ GameObject:
   - component: {fileID: 275147235}
   - component: {fileID: 275147234}
   - component: {fileID: 275147236}
+  - component: {fileID: 275147237}
   m_Layer: 5
   m_Name: EditorButtonRetryTime
   m_TagString: Untagged
@@ -3210,6 +3211,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &275147237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275147232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30b0b7bc47b28c4e9954eb9a2907322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: Press the next button\to complete the test.
+  tooltipWidth: 876
+  tooltipHeight: 216
+  pivot: 3
 --- !u!1 &279014922
 GameObject:
   m_ObjectHideFlags: 0
@@ -4604,10 +4623,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
     type: 3}
-  tooltipMessage: Test the map\first to see if\you can escape.
-  tooltipWidth: 660
-  tooltipHeight: 264
-  pivot: 1
+  tooltipMessage: Confirm the map\is playable.
+  tooltipWidth: 672
+  tooltipHeight: 216
+  pivot: 0
 --- !u!1 &379493352
 GameObject:
   m_ObjectHideFlags: 0
@@ -21417,6 +21436,7 @@ GameObject:
   - component: {fileID: 1909207576}
   - component: {fileID: 1909207575}
   - component: {fileID: 1909207574}
+  - component: {fileID: 1909207577}
   m_Layer: 5
   m_Name: EditorButtonQuit3
   m_TagString: Untagged
@@ -21549,6 +21569,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909207572}
   m_CullTransparentMesh: 0
+--- !u!114 &1909207577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909207572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30b0b7bc47b28c4e9954eb9a2907322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: Confirm the map\is playable.
+  tooltipWidth: 672
+  tooltipHeight: 216
+  pivot: 0
 --- !u!1 &1921349113
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TooltipBox : MonoBehaviour
 {
-    public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
+    public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2, BottomLeft = 3 }
 
     RectTransform myTransform;
     float lifetime;
@@ -28,6 +28,9 @@ public class TooltipBox : MonoBehaviour
                 break;
             case Pivot.TopLeft:
                 myTransform.localPosition = new Vector2(pivotPosition.x + width / 2f, pivotPosition.y + height / 2f);
+                break;
+            case Pivot.BottomLeft:
+                myTransform.localPosition = new Vector2(pivotPosition.x + width / 2f, pivotPosition.y - height / 2f);
                 break;
         }
         myTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
