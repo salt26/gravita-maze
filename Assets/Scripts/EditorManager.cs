@@ -1286,20 +1286,20 @@ public class EditorManager : MonoBehaviour
         if (phase != (int)EditPhase.Initialize && phase != (int)EditPhase.Request) return;
         if (dirtyBit)
         {
-            // ê²½ê³  ë©”ì‹œì§? ?„?š°ê¸?
+            // ê²½ê³  ë©”ì‹œì§€ ë„ìš°ê¸°
             if (phase == (int)EditPhase.Initialize)
             {
-                // ë§? ë³?ê²? ?›„ 1?˜?´ì¦ˆì˜ ?‚˜ê°?ê¸? ë²„íŠ¼?„ ?ˆ„ë¥´ëŠ” ê²½ìš°
+                // ë§µ ë³€ê²½ í›„ 1í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
-                // ë§? ë³?ê²? ?›„ ê²?ì¦ì?? ?™„ë£Œí–ˆì§?ë§? ????¥?˜ì§? ?•Š??? ?ƒ?ƒœ?—?„œ 3?˜?´ì¦ˆì˜ ?‚˜ê°?ê¸? ë²„íŠ¼?„ ?ˆ„ë¥´ëŠ” ê²½ìš°
+                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì€ ì™„ë£Œí–ˆì§€ë§Œ ì €ì¥ë˜ì§€ ì•Šì€ ìƒíƒœì—ì„œ 3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
             else
             {
-                // ë§? ë³?ê²? ?›„ ê²?ì¦ì„ ?•˜ì§? ?•Šê³? 3?˜?´ì¦ˆì˜ ?‚˜ê°?ê¸? ë²„íŠ¼?„ ?ˆ„ë¥´ëŠ” ê²½ìš°
+                // ë§µ ë³€ê²½ í›„ ê²€ì¦ì„ í•˜ì§€ ì•Šê³  3í˜ì´ì¦ˆì˜ ë‚˜ê°€ê¸° ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ê²½ìš°
                 messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
             }
         }
@@ -1524,8 +1524,8 @@ public class EditorManager : MonoBehaviour
     {
         if (editPhase != EditPhase.Initialize) return;
 
-        // UI ë§Œë“¤ê¸?
-        // Maps ?´?”?˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬????„œ ëª©ë¡?— ?„?›Œì£¼ê¸°
+        // UI ë§Œë“¤ê¸°
+        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -1809,8 +1809,8 @@ public class EditorManager : MonoBehaviour
         if (solution == null || solution == "" || !dirtyBit ||
             mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
 
-        // UI ë§Œë“¤ê¸?
-        // Maps ?´?”?˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬????„œ ëª©ë¡?— ?„?›Œì£¼ê¸°
+        // UI ë§Œë“¤ê¸°
+        // Maps í´ë”ì˜ ëª¨ë“  ë§µì„ ë¶ˆëŸ¬ì™€ì„œ ëª©ë¡ì— ë„ì›Œì£¼ê¸°
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -2151,7 +2151,7 @@ public class EditorManager : MonoBehaviour
         {
             if (File.Exists(currentSavePath + "/" + mapName + ".txt"))
             {
-                // ê°™ì?? ?´ë¦„ì˜ ?ŒŒ?¼?´ ?ˆ?Š”?° ê·¸ë˜?„ ????¥?•  ê²ƒì¸ì§? ë©”ì‹œì§?ë¡? ë¬¼ì–´ë³´ê¸°
+                // ê°™ì€ ì´ë¦„ì˜ íŒŒì¼ì´ ìˆëŠ”ë° ê·¸ë˜ë„ ì €ì¥í•  ê²ƒì¸ì§€ ë©”ì‹œì§€ë¡œ ë¬¼ì–´ë³´ê¸°
                 string truncated = mapName;
                 if (truncated.Length > editorMapNameInputs[0].characterLimit)
                 {
@@ -2436,7 +2436,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-#pragma warning disable CS0162 // ? ‘ê·¼í•  ?ˆ˜ ?—†?Š” ì½”ë“œê°? ?ˆ?Šµ?‹ˆ?‹¤.
+#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
     public void EditUndo()
     {
         if (undoStack.Count == 0) return;
@@ -2549,9 +2549,9 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ? ‘ê·¼í•  ?ˆ˜ ?—†?Š” ì½”ë“œê°? ?ˆ?Šµ?‹ˆ?‹¤.
+#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
 
-#pragma warning disable CS0162 // ? ‘ê·¼í•  ?ˆ˜ ?—†?Š” ì½”ë“œê°? ?ˆ?Šµ?‹ˆ?‹¤.
+#pragma warning disable CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
     public void EditRedo()
     {
         if (redoStack.Count == 0) return;
@@ -2662,7 +2662,7 @@ public class EditorManager : MonoBehaviour
         solution = "";
         dirtyBit = true;
     }
-#pragma warning restore CS0162 // ? ‘ê·¼í•  ?ˆ˜ ?—†?Š” ì½”ë“œê°? ?ˆ?Šµ?‹ˆ?‹¤.
+#pragma warning restore CS0162 // ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” ì½”ë“œê°€ ìˆìŠµë‹ˆë‹¤.
 
     public void EditTimer()
     {
@@ -2786,8 +2786,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MapName
         /// </summary>
-        /// <param name="oldMapName">?—†?œ¼ë©? ""</param>
-        /// <param name="newMapName">?—†?œ¼ë©? ""</param>
+        /// <param name="oldMapName">ì—†ìœ¼ë©´ ""</param>
+        /// <param name="newMapName">ì—†ìœ¼ë©´ ""</param>
         public EditActionInfo(string oldMapName, string newMapName)
         {
             type = Type.MapName;
@@ -2798,7 +2798,7 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: SizeX, SizeY
         /// </summary>
-        /// <param name="isX">sizeX ë³?ê²? ?‹œ true, sizeY ë³?ê²? ?‹œ false</param>
+        /// <param name="isX">sizeX ë³€ê²½ ì‹œ true, sizeY ë³€ê²½ ì‹œ false</param>
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
@@ -2823,8 +2823,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Wall
         /// </summary>
-        /// <param name="oldWallInfo">?—†?œ¼ë©? null</param>
-        /// <param name="newWallInfo">?—†?œ¼ë©? null</param>
+        /// <param name="oldWallInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="newWallInfo">ì—†ìœ¼ë©´ null</param>
         public EditActionInfo(WallInfo oldWallInfo, WallInfo newWallInfo)
         {
             type = Type.Wall;
@@ -2835,8 +2835,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: Object
         /// </summary>
-        /// <param name="oldObjectInfo">?—†?œ¼ë©? null</param>
-        /// <param name="newObjectInfo">?—†?œ¼ë©? null</param>
+        /// <param name="oldObjectInfo">ì—†ìœ¼ë©´ null</param>
+        /// <param name="newObjectInfo">ì—†ìœ¼ë©´ null</param>
         public EditActionInfo(ObjectInfo oldObjectInfo, ObjectInfo newObjectInfo)
         {
             type = Type.Object;
