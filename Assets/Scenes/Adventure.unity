@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1452,7 +1452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2085,7 +2085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2981,6 +2981,8 @@ MonoBehaviour:
   ingameUI: {fileID: 0}
   tutorialGuide: {fileID: 0}
   trainingFolders: []
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles: []
   adventureEasyMapFiles:
   - {fileID: 4900000, guid: ceeb98c8fcd68ce4ab4d275b2baa49b7, type: 3}
@@ -4116,6 +4118,8 @@ MonoBehaviour:
   timeoutPanel: {fileID: 1811126592}
   tryCount: 0
   beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &1755156425
 Transform:
   m_ObjectHideFlags: 0

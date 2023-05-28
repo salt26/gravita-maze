@@ -2447,6 +2447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 208470215}
   - component: {fileID: 208470216}
+  - component: {fileID: 208470217}
   m_Layer: 5
   m_Name: EditorTimerSlider
   m_TagString: Untagged
@@ -2529,7 +2530,34 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1073929001}
         m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
-        m_MethodName: EditTimer
+        m_MethodName: EditTimerDragging
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &208470217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208470214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3383860e292e6cf45b668bb6d35310c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPointerUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1073929001}
+        m_TargetAssemblyTypeName: EditorManager, Assembly-CSharp
+        m_MethodName: EditTimerDragUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5885,7 +5913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11728,7 +11756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13562,7 +13590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -16775,7 +16803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
