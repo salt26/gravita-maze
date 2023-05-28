@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2254,7 +2254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c56cb04cf4d094d40813df1f4e508807, type: 3}
-  m_Color: {r: 0.69803923, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.827451, g: 0.43137255, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3226,22 +3226,26 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 1404637733}
   retryTimeButton: {fileID: 1061809501}
   retryTimeHighlightedButton: {fileID: 1783891383}
+  messageUI: {fileID: 0}
   pauseUI: {fileID: 1782627619}
   pausePanel: {fileID: 4462461048705734384}
   resultUI: {fileID: 5}
   tooltipUI: {fileID: 0}
   timerUI: {fileID: 0}
-  customOpenScrollContent: {fileID: 0}
-  customOpenButton: {fileID: 0}
-  customOpenHighlightedButton: {fileID: 0}
+  openScrollContent: {fileID: 0}
+  openButton: {fileID: 0}
+  openHighlightedButton: {fileID: 0}
   statusUI: {fileID: 0}
-  customOpenPathText: {fileID: 0}
+  openPathText: {fileID: 0}
   openScrollItemPrefab: {fileID: 0}
-  customOpenScrollbar: {fileID: 0}
-  customOpenScrollEmptyText: {fileID: 0}
-  customOpen: {fileID: 0}
-  customIngame: {fileID: 0}
+  openScrollbar: {fileID: 0}
+  openScrollEmptyText: {fileID: 0}
+  openUI: {fileID: 0}
+  ingameUI: {fileID: 0}
   tutorialGuide: {fileID: 224579977}
+  trainingFolders: []
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
@@ -3267,6 +3271,13 @@ MonoBehaviour:
   adventureInsaneMapSeries: []
   adventureInsanePlayLength: 0
   adventureInsaneLife: 0
+  trainingBasicMapFiles: []
+  trainingFireMapFiles: []
+  trainingIronMapFiles: []
+  trainingBlockMapFiles: []
+  trainingExitMapFiles: []
+  trainingShutterMapFiles: []
+  trainingGateMapFiles: []
 --- !u!1 &1517296249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3948,6 +3959,8 @@ MonoBehaviour:
   timeoutPanel: {fileID: 1811126592}
   tryCount: 0
   beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &1755156425
 Transform:
   m_ObjectHideFlags: 0
