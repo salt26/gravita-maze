@@ -11,10 +11,10 @@ using UnityEngine.SceneManagement;
 public class MapManager : MonoBehaviour
 {
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
-        Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14, Credit = 15 }
+        Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14, Setting = 15 }
     public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
         Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
-        AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969, Credit = 14348907 }
+        AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969, Setting = 14348907 }
     // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
     // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
     public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
@@ -717,8 +717,8 @@ public class MapManager : MonoBehaviour
                     case FixedObject.Type.AdvInsane:
                         initialMapCoord[x - 1, y - 1] += (int)TileFlag.AdvInsane;  // 4782969
                         break;
-                    case FixedObject.Type.Credit:
-                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Credit;     // 14348907
+                    case FixedObject.Type.Setting:
+                        initialMapCoord[x - 1, y - 1] += (int)TileFlag.Setting;     // 14348907
                         break;
                 }
             }
@@ -2239,9 +2239,9 @@ public class MapManager : MonoBehaviour
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
-                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Credit))
+                                if (mutableMovableCoord[i, j] is Ball && CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.Setting))
                                 {
-                                    flag = Flag.Credit;
+                                    flag = Flag.Setting;
                                     ballX = k + 1;
                                     ballY = j + 1;
                                     move.newX = k + 1;
