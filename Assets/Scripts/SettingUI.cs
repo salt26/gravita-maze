@@ -10,6 +10,9 @@ public class SettingUI : MonoBehaviour
     public Slider settingBgmVolume;
     public Slider settingSfxVolume;
 
+    public Dropdown dropdown;
+    public GameObject fillImage;
+
     public bool m_IsButtonDowning;
     public Text option;
     private bool changed;
@@ -25,6 +28,15 @@ public class SettingUI : MonoBehaviour
         transform.GetChild(1).transform.GetChild(2).GetComponent<Slider>().value = bgmVolume;
         transform.GetChild(1).transform.GetChild(4).GetComponent<Slider>().value = sfxVolume;
         changed = false;
+
+        if (dropdown.options.Count > 2)
+        {
+            fillImage.SetActive(false);
+        }
+        else
+        {
+            fillImage.SetActive(true);
+        }
     }
 
     void Update()
@@ -32,14 +44,14 @@ public class SettingUI : MonoBehaviour
         if (m_IsButtonDowning && !changed)
         {
             Vector3 temp = option.transform.position;
-            temp.y -= 20;
+            temp.y -= 24;
             option.transform.position = temp;
             changed = true;
         }
         if (!m_IsButtonDowning && changed) {
 
             Vector3 temp = option.transform.position;
-            temp.y += 20;
+            temp.y += 24;
             option.transform.position = temp;
             changed = false;
         }

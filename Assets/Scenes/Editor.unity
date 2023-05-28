@@ -5069,6 +5069,10 @@ MonoBehaviour:
   - {fileID: 0}
   loadingPanel: {fileID: 38331146116544568}
   timeoutPanel: {fileID: 628789790}
+  tryCount: 0
+  beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &387881937
 Transform:
   m_ObjectHideFlags: 0
