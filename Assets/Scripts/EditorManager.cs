@@ -95,6 +95,8 @@ public class EditorManager : MonoBehaviour
     private float saveItemSelectTime = 0f;
     private string folderName = "";
     private TooltipHover editorSaveButton3Hover;
+    private TooltipHover editorQuitButton3Hover;
+    
 
     private int currentTouchX;
     private int currentTouchY;
@@ -108,6 +110,7 @@ public class EditorManager : MonoBehaviour
     void Start()
     {
         editorSaveButton3Hover = editorSaveButton3.GetComponent<TooltipHover>();
+        editorQuitButton3Hover = editorQuitButton3.GetComponent<TooltipHover>();
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
@@ -304,13 +307,15 @@ public class EditorManager : MonoBehaviour
         editorSaveButton3.interactable = solution != null && solution != "" && dirtyBit;
         if (solution == null || solution == "")
         {
-            editorSaveButton3Hover.tooltipMessage = "Test the map\\first to see if\\you can escape.";
-            editorSaveButton3Hover.tooltipWidth = 660f;
+            editorSaveButton3Hover.tooltipMessage = "Confirm the map\\is playable.";
+            editorSaveButton3Hover.tooltipWidth = 672f;
+            editorSaveButton3Hover.tooltipHeight = 216f;
         }
         else if (!dirtyBit)
         {
-            editorSaveButton3.GetComponent<TooltipHover>().tooltipMessage = "No changes\\since the\\last save.";
+            editorSaveButton3Hover.tooltipMessage = "No changes\\since the\\last save.";
             editorSaveButton3Hover.tooltipWidth = 480f;
+            editorSaveButton3Hover.tooltipHeight = 264f;
         }
 
         if (solution != null && solution != "" && hasSavedOnce)
@@ -323,6 +328,18 @@ public class EditorManager : MonoBehaviour
             editorQuitButton3.gameObject.SetActive(true);
             editorQuitButton3.interactable = false;
             editorQuitHighlightedButton3.gameObject.SetActive(false);
+
+            if (solution != null && solution != "")
+            {
+                editorQuitButton3Hover .tooltipMessage = "Save the map\\before you quit.";
+                editorQuitButton3Hover.tooltipWidth = 696f;
+            }
+            else
+            {
+                editorQuitButton3Hover .tooltipMessage = "Confirm the map\\is playable.";
+                editorQuitButton3Hover.tooltipWidth = 672f;
+            }
+            //revise
         }
 
         if (solution != null && solution != "")
