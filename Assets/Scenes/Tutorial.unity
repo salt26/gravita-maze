@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3250,11 +3250,11 @@ MonoBehaviour:
   - {fileID: 4900000, guid: ec9f22c95d99a7a4e90bd58005e15c88, type: 3}
   - {fileID: 4900000, guid: 5dfbb74525f5aa14da8f5f73018a15cb, type: 3}
   - {fileID: 4900000, guid: 452fc9083ff6d624e9d13430df56e3a7, type: 3}
-  - {fileID: 4900000, guid: ce3cb5b3216abfb488b55b84a130dbba, type: 3}
-  - {fileID: 4900000, guid: 92523361af9f3094b891015498ab8441, type: 3}
+  - {fileID: 4900000, guid: 2e36cef8879be4b78815c39e3c1647aa, type: 3}
+  - {fileID: 4900000, guid: 8802ebaa125b64ff8adf6b2020ab7cc5, type: 3}
   - {fileID: 4900000, guid: ce2de00ea00011543bf70ebc8d48d38e, type: 3}
   - {fileID: 4900000, guid: e4f1f5c37c6506a4d8a58b4da10726e0, type: 3}
-  - {fileID: 4900000, guid: 469a9b2b0a7443d4bb4cde5557f19510, type: 3}
+  - {fileID: 4900000, guid: a663f193a63a14606a2c57870a2f54dd, type: 3}
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
   adventureEasyPlayLength: 0

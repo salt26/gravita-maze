@@ -321,6 +321,7 @@ public class EditorManager : MonoBehaviour
         else
         {
             editorQuitButton3.gameObject.SetActive(true);
+            editorQuitButton3.interactable = false;
             editorQuitHighlightedButton3.gameObject.SetActive(false);
         }
 
@@ -392,24 +393,27 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
-                        break;
-                    }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.HorizontalShutter, a, b), 
+                                new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayWallSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                    hasChanged = true;
                 }
                 else
                 {
@@ -429,24 +433,27 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
                         break;
                     }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
-                        break;
-                    }
 
                     if (verbose) Debug.Log("Add vertical wall at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.VerticalShutter, a, b), 
+                                new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayWallSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                    hasChanged = true;
                 }
                 break;
 #endregion
@@ -470,24 +477,27 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
                         break;
                     }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
-                        break;
-                    }
 
                     if (verbose) Debug.Log("Add horizontal shutter at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.Horizontal, a, b), 
+                                new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayShutterSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
-                    hasChanged = true;
                 }
                 else
                 {
@@ -507,24 +517,27 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
                         break;
                     }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
-                        break;
-                    }
 
                     if (verbose) Debug.Log("Add vertical shutter at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.Vertical, a, b), 
+                                new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayShutterSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
-                    hasChanged = true;
                 }
                 break;
 #endregion
@@ -2372,6 +2385,7 @@ public class EditorManager : MonoBehaviour
                 editorRetryButton.gameObject.SetActive(false);
                 editorRetryHighlightedButton.gameObject.SetActive(false);
                 editorRetryTimeButton.gameObject.SetActive(true);
+                editorRetryTimeButton.interactable = false;
                 editorRetryTimeHighlightedButton.gameObject.SetActive(false);
 
                 editorNextButton4.interactable = true;
