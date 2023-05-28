@@ -293,6 +293,7 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.clip = bgms[0];
                 bgmAudioSource.Play();
             }
+            canPlay = false;
         }
 
         else if (SceneManager.GetActiveScene().name.Equals("Training"))

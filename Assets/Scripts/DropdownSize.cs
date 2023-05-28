@@ -9,7 +9,6 @@ public class DropdownSize : MonoBehaviour
     
     void Start()
     {
-        Debug.Log("Srart");
         if(dropdown.options.Count > 2)
         {
             fillImage.SetActive(false);

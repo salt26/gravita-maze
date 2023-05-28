@@ -25,8 +25,8 @@ public class SettingUI : MonoBehaviour
         bgmVolume = GameManager.gm.bgmVolume;
         sfxVolume = GameManager.gm.sfxVolume;
 
-        transform.GetChild(1).transform.GetChild(2).GetComponent<Slider>().value = bgmVolume;
-        transform.GetChild(1).transform.GetChild(4).GetComponent<Slider>().value = sfxVolume;
+        settingBgmVolume.GetComponent<Slider>().value = bgmVolume;
+        settingSfxVolume.GetComponent<Slider>().value = sfxVolume;
         changed = false;
 
         if (dropdown.options.Count > 2)
