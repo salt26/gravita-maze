@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class TutorialGuide : MonoBehaviour
 {
+    public string tableName = "StringTable";
+
     public GameObject tutorialTip;
     public string emergencyText;
     public float tooltipWidth;
@@ -39,29 +43,29 @@ public class TutorialGuide : MonoBehaviour
 
         // You can manipulate the direction of gravity using the arrow buttons.
 
-        tipDict.Add(new TutorialTuple(1, 2, 0), "Press the left arrow to make the ball roll to the left!");
-        tipDict.Add(new TutorialTuple(1, 0, 0), "Great job!\nNow, let's press the up arrow to make the ball roll up.");
-        tipDict.Add(new TutorialTuple(1, 0, 1), "Okay! Then let's get the ball out!");
-        tipDict.Add(new TutorialTuple(2, 2, 0), "Next is a more complicated maze...\nGood luck!");
-        tipDict.Add(new TutorialTuple(2, 0, 0), "Oh, that's a good choice!");
-        tipDict.Add(new TutorialTuple(2, 0, 2), "Oh, that's a good choice!");
-        tipDict.Add(new TutorialTuple(2, 1, 2), "We're almost there...");
-        tipDict.Add(new TutorialTuple(2, 1, 1), "Here's only one step left!");
-        tipDict.Add(new TutorialTuple(2, 0, 1), "Here's only one step left!");
-        tipDict.Add(new TutorialTuple(3, 1, 0), "Fire can burn the ball...");
-        tipDict.Add(new TutorialTuple(4, 2, 1), "A heavy iron can squash a ball...");
-        tipDict.Add(new TutorialTuple(4, 2, 0), "Now it won't get in the way of our escape!");
-        tipDict.Add(new TutorialTuple(5, 2, 0), "The iron block can be removed from the maze just like the ball.");
-        tipDict.Add(new TutorialTuple(6, 2, 2), "The iron can temporarily cover a fire!");
-        tipDict.Add(new TutorialTuple(6, 2, 0), "Now that the iron has blocked the fire, you can escape!");
-        tipDict.Add(new TutorialTuple(7, 1, 2), "Press the right arrow to close the bright green shutter.");
-        tipDict.Add(new TutorialTuple(7, 1, 0), "Let's use the shutter!");
-        tipDict.Add(new TutorialTuple(7, 2, 2), "If the ball passes through the bright green shutter, it will become a wall.");
-        tipDict.Add(new TutorialTuple(7, 2, 0), "Once the shutter becomes a wall, it remains a wall until you retry.");
-        tipDict.Add(new TutorialTuple(7, 0, 1), "Of course, sometimes you can be trapped by the shutter, too. Press the retry button!");
-        tipDict.Add(new TutorialTuple(8, 1, 1), "A walled shutter can also block the iron. Don't let the iron squash the ball!");
-        tipDict.Add(new TutorialTuple(8, 3, 1), "The iron cannot make the shutter a wall. Only the ball can close the shutter.");
-        tipDict.Add(new TutorialTuple(8, 0, 3), "Great, you found the exit! Let's escape!");
+        tipDict.Add(new TutorialTuple(1, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_01"));
+        tipDict.Add(new TutorialTuple(1, 0, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_02"));
+        tipDict.Add(new TutorialTuple(1, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_03"));
+        tipDict.Add(new TutorialTuple(2, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_04"));
+        tipDict.Add(new TutorialTuple(2, 0, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_05"));
+        tipDict.Add(new TutorialTuple(2, 0, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_05"));
+        tipDict.Add(new TutorialTuple(2, 1, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_06"));
+        tipDict.Add(new TutorialTuple(2, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_07"));
+        tipDict.Add(new TutorialTuple(2, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_07"));
+        tipDict.Add(new TutorialTuple(3, 1, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_08"));
+        tipDict.Add(new TutorialTuple(4, 2, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_09"));
+        tipDict.Add(new TutorialTuple(4, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_10"));
+        tipDict.Add(new TutorialTuple(5, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_11"));
+        tipDict.Add(new TutorialTuple(6, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_12"));
+        tipDict.Add(new TutorialTuple(6, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_13"));
+        tipDict.Add(new TutorialTuple(7, 1, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_14"));
+        tipDict.Add(new TutorialTuple(7, 1, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_15"));
+        tipDict.Add(new TutorialTuple(7, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_16"));
+        tipDict.Add(new TutorialTuple(7, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_17"));
+        tipDict.Add(new TutorialTuple(7, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_18"));
+        tipDict.Add(new TutorialTuple(8, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
+        tipDict.Add(new TutorialTuple(8, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
+        tipDict.Add(new TutorialTuple(8, 0, 3), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
         
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
 
@@ -129,7 +133,7 @@ public class TutorialGuide : MonoBehaviour
         switch (flag)
         {
             case MapManager.Flag.Burned:
-                emergencyText = "The ball burned down!\nPress the shiny retry button to try again.";
+                emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_22");
                 if (currentTip != null)
                 {
                     HideText(currentTip);
@@ -139,7 +143,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Squashed:
-                emergencyText = "The ball got squashed! Press the shiny retry button to try again.";
+                emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_23");
                 if (currentTip != null)
                 {
                     HideText(currentTip);
@@ -148,7 +152,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.TimeOver:
-                emergencyText = "Oh no, time's up!\nPress the shiny retry button to try again.";
+                emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_24");
                 if (currentTip != null)
                 {
                     HideText(currentTip);
@@ -159,10 +163,10 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Escaped:
-                emergencyText = "The ball escaped! Congratulations!";
+                emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_25");
                 if (GameManager.gm.PlayingMapIndex + 1 == 8)
                 {
-                    emergencyText = "\nCongratulations!\nYou passed all tutorials!";
+                    emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_26");
                 }
                 if (currentTip != null)
                 {
@@ -284,7 +288,7 @@ public class TutorialGuide : MonoBehaviour
 
                         if (currentTip == null)
                         {
-                            ShowText("The iron that was blocking the exit has been removed. Let's escape!");
+                            ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_27"));
                         }
                         hasIronRemovedInTutorial5 = true;
                     }
