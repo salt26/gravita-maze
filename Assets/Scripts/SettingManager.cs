@@ -13,7 +13,10 @@ public class SettingManager : MonoBehaviour
 
     public bool isCredit=false;
     public bool isOnce = false;
+
+    public Dropdown languageSetting;
     Animator PanelAnimation;
+
     private void Start()
     {
         PanelAnimation = CreditPanel.GetComponent<Animator>();
@@ -23,14 +26,12 @@ public class SettingManager : MonoBehaviour
     {
         if (isCredit && !isOnce)
         {
-            if (!isOnce)
-            {
-                isOnce = true;
-                QuitButton.interactable = false;
-                CreditButton.interactable = false;
-                CreditPanel.SetActive(true);
-                StartCoroutine(SoundEffect());
-            }
+            isOnce = true;
+            QuitButton.interactable = false;
+            CreditButton.interactable = false;
+            CreditPanel.SetActive(true);
+            StartCoroutine(SoundEffect());
+
             if (Input.GetKeyUp(KeyCode.Return))
             {
                 isOnce = false;
@@ -69,7 +70,6 @@ public class SettingManager : MonoBehaviour
         CreditPanel.SetActive(false);
     }
 
-    public Dropdown languageSetting;
     public void BackMainButtonDown()
     {
         GameManager.gm.LoadMain();
