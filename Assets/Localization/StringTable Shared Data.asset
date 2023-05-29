@@ -14,7 +14,487 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: StringTable
   m_TableCollectionNameGuidString: e140a6e03d69147b0bf89b55f6cb603e
-  m_Entries: []
+  m_Entries:
+  - m_Id: 486441738240
+    m_Key: editor_start_welcome
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486475292672
+    m_Key: editor_update_begin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486479486976
+    m_Key: editor_update_test_prompt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486479486977
+    m_Key: editor_update_no_change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069888
+    m_Key: editor_update_save_prompt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069889
+    m_Key: editor_update_save_ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069890
+    m_Key: editor_update_set_time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069891
+    m_Key: editor_update_set_map_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069892
+    m_Key: editor_update_set_save_path
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069893
+    m_Key: editor_warning_add_wall
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069894
+    m_Key: editor_warning_add_shutter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069895
+    m_Key: edtior_warning_add_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069896
+    m_Key: editor_warning_add_ball
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069897
+    m_Key: editor_warning_add_iron
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069898
+    m_Key: editor_warning_add_fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069899
+    m_Key: editor_warning_duplicate_exits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069900
+    m_Key: editor_warning_duplicate_balls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069901
+    m_Key: editor_warning_remove_wall
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069902
+    m_Key: editor_warning_remove_multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069903
+    m_Key: editor_warning_remove_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069904
+    m_Key: editor_warning_remove_object
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069905
+    m_Key: editor_guide_add_ball
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069906
+    m_Key: editor_guide_add_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069907
+    m_Key: editor_guide_add_fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264192
+    m_Key: editor_guide_add_iron
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264193
+    m_Key: editor_guide_add_wall
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264194
+    m_Key: editor_guide_add_shutter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264195
+    m_Key: editor_guide_remove_multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264196
+    m_Key: editor_guide_remove_object
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264197
+    m_Key: editor_reset_initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264198
+    m_Key: editor_reset_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264199
+    m_Key: editor_quit_changed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264200
+    m_Key: editor_quit_unsaved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264201
+    m_Key: editor_quit_untested
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264202
+    m_Key: editor_warning_illegal_file_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264203
+    m_Key: editor_open_map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264204
+    m_Key: editor_reinitialize_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264205
+    m_Key: editor_create_folder_initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264206
+    m_Key: editor_warning_illegal_folder_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264207
+    m_Key: editor_warning_cannot_create_folder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264208
+    m_Key: editor_create_folder_success_part1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264209
+    m_Key: editor_create_folder_success_part2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264210
+    m_Key: editor_create_folder_fail_part1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264211
+    m_Key: editor_create_folder_fail_part2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264212
+    m_Key: editor_create_map_not_validated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264213
+    m_Key: editor_create_map_not_saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264214
+    m_Key: editor_create_map_duplicate_name_ask_part1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264215
+    m_Key: editor_create_map_duplicate_name_ask_part2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264216
+    m_Key: editor_create_map_success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264217
+    m_Key: editor_create_map_reinitialize_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264218
+    m_Key: editor_warning_map_not_saved_yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264219
+    m_Key: editor_undo_map_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264220
+    m_Key: editor_undo_multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264221
+    m_Key: editor_undo_object
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264222
+    m_Key: editor_undo_map_size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264223
+    m_Key: editor_undo_reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264224
+    m_Key: editor_undo_reintialization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264225
+    m_Key: editor_redo_map_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264226
+    m_Key: editor_redo_multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264227
+    m_Key: editor_redo_object
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264228
+    m_Key: editor_redo_map_size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264229
+    m_Key: editor_redo_reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264230
+    m_Key: editor_redo_reinitialization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264231
+    m_Key: warning_invalid_path
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264232
+    m_Key: warning_no_such_file
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264233
+    m_Key: warning_invalid_map_file
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264234
+    m_Key: warning_exception_while_save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264235
+    m_Key: warning_exception_while_check
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264236
+    m_Key: warning_invalid_map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264237
+    m_Key: warning_size_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264238
+    m_Key: warning_ball_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264239
+    m_Key: warning_iron_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264240
+    m_Key: warning_fire_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264241
+    m_Key: warning_exit_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264242
+    m_Key: warning_wall_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264243
+    m_Key: warning_shutter_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264244
+    m_Key: warning_time_limit_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264245
+    m_Key: warning_solution_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264246
+    m_Key: warning_multiple_solutions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264247
+    m_Key: warning_invalid_solution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264248
+    m_Key: warning_unknown_symbols
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264249
+    m_Key: warning_validation_fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264250
+    m_Key: open_map_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264251
+    m_Key: result_ui_upper_message_pass
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264252
+    m_Key: result_ui_upper_message_fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264253
+    m_Key: result_ui_upper_message_abort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264254
+    m_Key: result_ui_lower_message_fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458496
+    m_Key: result_ui_lower_message_abort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458497
+    m_Key: result_ui_lower_message_pass_tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458498
+    m_Key: result_ui_lower_message_pass_easy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458499
+    m_Key: result_ui_lower_message_pass_normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458500
+    m_Key: result_ui_lower_message_pass_hard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458501
+    m_Key: result_ui_lower_message_pass_insane
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458502
+    m_Key: tutorial_message_01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458503
+    m_Key: tutorial_message_02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458504
+    m_Key: tutorial_message_03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458505
+    m_Key: tutorial_message_04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458506
+    m_Key: tutorial_message_05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458507
+    m_Key: tutorial_message_06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458508
+    m_Key: tutorial_message_07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458509
+    m_Key: tutorial_message_08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458510
+    m_Key: tutorial_message_09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458511
+    m_Key: tutorial_message_10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458512
+    m_Key: tutorial_message_11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458513
+    m_Key: tutorial_message_12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458514
+    m_Key: tutorial_message_13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458515
+    m_Key: tutorial_message_14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458516
+    m_Key: tutorial_message_15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458517
+    m_Key: tutorial_message_16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458518
+    m_Key: tutorial_message_17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458519
+    m_Key: tutorial_message_18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458520
+    m_Key: tutorial_message_19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458521
+    m_Key: tutorial_message_20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458522
+    m_Key: tutorial_message_21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458523
+    m_Key: tutorial_message_22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458524
+    m_Key: tutorial_message_23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458525
+    m_Key: tutorial_message_24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458526
+    m_Key: tutorial_message_25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458527
+    m_Key: tutorial_message_26
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458528
+    m_Key: tutorial_message_27
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

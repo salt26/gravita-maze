@@ -16,7 +16,519 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: e140a6e03d69147b0bf89b55f6cb603e, type: 2}
   m_Metadata:
-    m_Items: []
-  m_TableData: []
+    m_Items:
+    - id: 0
+  m_TableData:
+  - m_Id: 486441738240
+    m_Localized: Welcome to the map editor!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486475292672
+    m_Localized: All right!\nLet's move on to the next step.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486479486976
+    m_Localized: Confirm the map\\is playable.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486479486977
+    m_Localized: No changes\\since the\\last save.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069888
+    m_Localized: Save the map\\before you quit.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069889
+    m_Localized: Now you can save your map.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069890
+    m_Localized: Set the time limit and\nrun the map test.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069891
+    m_Localized: Set your map name.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069892
+    m_Localized: Choose a path to save.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069893
+    m_Localized: Cannot add a wall there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069894
+    m_Localized: Cannot add a shutter there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069895
+    m_Localized: Cannot add a exit there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069896
+    m_Localized: Cannot add a ball there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069897
+    m_Localized: Cannot add an iron there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069898
+    m_Localized: Cannot add a fire there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069899
+    m_Localized: Only one exit can be placed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069900
+    m_Localized: Only one ball can be placed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069901
+    m_Localized: Cannot remove walls there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069902
+    m_Localized: Cannot remove walls or\nshutters or exits there.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069903
+    m_Localized: Cannot remove exits there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069904
+    m_Localized: Cannot remove objects there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486492069905
+    m_Localized: Touch the map to add a ball.\nThere must be one ball.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069906
+    m_Localized: Touch the map to add an exit.\nThere must be one exit.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486492069907
+    m_Localized: Touch the map to add fires.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264192
+    m_Localized: Touch the map to add irons.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264193
+    m_Localized: Touch the map to add walls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264194
+    m_Localized: Touch the map to add shutters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264195
+    m_Localized: Touch the map to remove\nwalls or shutters or exits.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264196
+    m_Localized: Touch the map to remove objects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264197
+    m_Localized: Build your own map!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264198
+    m_Localized: The map has been reset.\nYou can undo this action.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264199
+    m_Localized: <b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit
+      anyway?
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264200
+    m_Localized: <b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you
+      want to quit anyway?
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264201
+    m_Localized: <b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo
+      you want to quit anyway?
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264202
+    m_Localized: Illegal file name.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264203
+    m_Localized: Choose a map to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264204
+    m_Localized: The map has been reinitialized.\nYou can undo this action.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264205
+    m_Localized: <b>Create folder</b>\n\nEnter new\nfolder name.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264206
+    m_Localized: Illegal folder name.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264207
+    m_Localized: Cannot create the folder:\nillegal folder name.
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264208
+    m_Localized: New folder "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264209
+    m_Localized: '" has created!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264210
+    m_Localized: 'Cannot create the folder: folder "'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264211
+    m_Localized: '" already exists.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264212
+    m_Localized: Cannot save your map:\nimpossible to clear
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264213
+    m_Localized: 'Cannot save your map: '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264214
+    m_Localized: <b>Check Save As</b>\n\nMap "
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264215
+    m_Localized: '" already exists.\nDo you want to overwrite it?'
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264216
+    m_Localized: 'You''re done!\nSaved as '
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 486496264217
+    m_Localized: You can reinitialize your map.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264218
+    m_Localized: The map has not been saved yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264219
+    m_Localized: 'Undo: the map name'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264220
+    m_Localized: 'Undo: a wall or a shutter\nor an exit'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264221
+    m_Localized: 'Undo: an object'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264222
+    m_Localized: 'Undo: the map size'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264223
+    m_Localized: 'Undo: reset'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264224
+    m_Localized: 'Undo: reinitialization'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264225
+    m_Localized: 'Redo: the map name'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264226
+    m_Localized: 'Redo: a wall or a shutter\nor an exit'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264227
+    m_Localized: 'Redo: an object'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264228
+    m_Localized: 'Redo: the map size'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264229
+    m_Localized: 'Redo: reset'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264230
+    m_Localized: 'Redo: reinitialization'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264231
+    m_Localized: The path doesn't exist anymore.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264232
+    m_Localized: The map doesn't exist anymore.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264233
+    m_Localized: The file is not a valid map file.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264234
+    m_Localized: 'File invalid: execption while saving a map'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264235
+    m_Localized: Something went wrong while checking a file.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264236
+    m_Localized: Cannot open the map:\ninvalid map file
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264237
+    m_Localized: Cannot open the map:\nsize error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264238
+    m_Localized: Cannot open the map:\nball error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264239
+    m_Localized: Cannot open the map:\niron error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264240
+    m_Localized: Cannot open the map:\nfire error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264241
+    m_Localized: Cannot open the map:\nexit error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264242
+    m_Localized: Cannot open the map:\nwall error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264243
+    m_Localized: Cannot open the map:\nshutter error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264244
+    m_Localized: Cannot open the map:\ntime limit error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264245
+    m_Localized: Cannot open the map:\nsolution error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264246
+    m_Localized: Cannot open the map:\nmultiple solutions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264247
+    m_Localized: Cannot open the map:\ninvalid solution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264248
+    m_Localized: Cannot open the map:\nunknown_symbols
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264249
+    m_Localized: Cannot open the map:\ninvalid map or impossible to clear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264250
+    m_Localized: Choose a map to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264251
+    m_Localized: Congratulations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264252
+    m_Localized: Failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264253
+    m_Localized: Your Result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486496264254
+    m_Localized: You can do better next time!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458496
+    m_Localized: You can try again at any time.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458497
+    m_Localized: You seems very good at this game...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458498
+    m_Localized: Nice! Your journey has started!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458499
+    m_Localized: Great! You have the potential of a master!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458500
+    m_Localized: Wow! How did you do this?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458501
+    m_Localized: Unbelievable! You overwhelmed the map creators...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458502
+    m_Localized: Press the left arrow to make the ball roll to the left!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458503
+    m_Localized: Great job!\nNow, let's press the up arrow to make the ball roll
+      up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458504
+    m_Localized: Okay! Then let's get the ball out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458505
+    m_Localized: Next is a more complicated maze...\nGood luck!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458506
+    m_Localized: Oh, that's a good choice!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458507
+    m_Localized: We're almost there...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458508
+    m_Localized: Here's only one step left!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458509
+    m_Localized: Fire can burn the ball...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458510
+    m_Localized: A heavy iron can squash a ball...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458511
+    m_Localized: Now it won't get in the way of our escape!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458512
+    m_Localized: The iron block can be removed from the maze just like the ball.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458513
+    m_Localized: The iron can temporarily cover a fire!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458514
+    m_Localized: Now that the iron has blocked the fire, you can escape!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458515
+    m_Localized: Press the right arrow to close the bright green shutter.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458516
+    m_Localized: Let's use the shutter!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458517
+    m_Localized: If the ball passes through the bright green shutter, it will become
+      a wall.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458518
+    m_Localized: Once the shutter becomes a wall, it remains a wall until you retry.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458519
+    m_Localized: Of course, sometimes you can be trapped by the shutter, too. Press
+      the retry button!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458520
+    m_Localized: A walled shutter can also block the iron. Don't let the iron squash
+      the ball!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458521
+    m_Localized: The iron cannot make the shutter a wall. Only the ball can close
+      the shutter.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458522
+    m_Localized: Great, you found the exit! Let's escape!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458523
+    m_Localized: The ball burned down!\nPress the shiny retry button to try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458524
+    m_Localized: The ball got squashed! Press the shiny retry button to try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458525
+    m_Localized: Oh no, time's up!\nPress the shiny retry button to try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458526
+    m_Localized: The ball escaped! Congratulations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458527
+    m_Localized: \nCongratulations!\nYou passed all tutorials!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 486500458528
+    m_Localized: The iron that was blocking the exit has been removed. Let's escape!
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f4571000000
