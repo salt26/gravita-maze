@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;   // UI¿Í °ü·ÃµÈ ½ºÅ©¸³Æ® ÀÛ¾÷À» À§ÇØ¼­ Ãß°¡ÇØ ÁÖ¾î¾ß ÇÑ´Ù.
+using UnityEngine.UI;   // UIì™€ ê´€ë ¨ëœ ìŠ¤í¬ë¦½íŠ¸ ì‘ì—…ì„ ìœ„í•´ì„œ ì¶”ê°€í•´ ì£¼ì–´ì•¼ í•œë‹¤.
 using System.Collections;
 
 public class DropdownSize : MonoBehaviour
