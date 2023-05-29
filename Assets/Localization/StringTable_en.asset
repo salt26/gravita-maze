@@ -252,7 +252,8 @@ MonoBehaviour:
   - m_Id: 486496264220
     m_Localized: 'Undo: a wall or a shutter\nor an exit'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264221
     m_Localized: 'Undo: an object'
     m_Metadata:
@@ -276,7 +277,8 @@ MonoBehaviour:
   - m_Id: 486496264226
     m_Localized: 'Redo: a wall or a shutter\nor an exit'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264227
     m_Localized: 'Redo: an object'
     m_Metadata:
@@ -316,59 +318,73 @@ MonoBehaviour:
   - m_Id: 486496264236
     m_Localized: Cannot open the map:\ninvalid map file
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264237
     m_Localized: Cannot open the map:\nsize error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264238
     m_Localized: Cannot open the map:\nball error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264239
     m_Localized: Cannot open the map:\niron error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264240
     m_Localized: Cannot open the map:\nfire error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264241
     m_Localized: Cannot open the map:\nexit error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264242
     m_Localized: Cannot open the map:\nwall error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264243
     m_Localized: Cannot open the map:\nshutter error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264244
     m_Localized: Cannot open the map:\ntime limit error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264245
     m_Localized: Cannot open the map:\nsolution error
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264246
     m_Localized: Cannot open the map:\nmultiple solutions
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264247
     m_Localized: Cannot open the map:\ninvalid solution
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264248
     m_Localized: Cannot open the map:\nunknown_symbols
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264249
     m_Localized: Cannot open the map:\ninvalid map or impossible to clear
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264250
     m_Localized: Choose a map to open.
     m_Metadata:
@@ -421,7 +437,8 @@ MonoBehaviour:
     m_Localized: Great job!\nNow, let's press the up arrow to make the ball roll
       up.
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458504
     m_Localized: Okay! Then let's get the ball out!
     m_Metadata:
@@ -429,7 +446,8 @@ MonoBehaviour:
   - m_Id: 486500458505
     m_Localized: Next is a more complicated maze...\nGood luck!
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458506
     m_Localized: Oh, that's a good choice!
     m_Metadata:
@@ -505,7 +523,8 @@ MonoBehaviour:
   - m_Id: 486500458523
     m_Localized: The ball burned down!\nPress the shiny retry button to try again.
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458524
     m_Localized: The ball got squashed! Press the shiny retry button to try again.
     m_Metadata:
@@ -513,7 +532,8 @@ MonoBehaviour:
   - m_Id: 486500458525
     m_Localized: Oh no, time's up!\nPress the shiny retry button to try again.
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458526
     m_Localized: The ball escaped! Congratulations!
     m_Metadata:
@@ -521,7 +541,8 @@ MonoBehaviour:
   - m_Id: 486500458527
     m_Localized: \nCongratulations!\nYou passed all tutorials!
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458528
     m_Localized: The iron that was blocking the exit has been removed. Let's escape!
     m_Metadata:
@@ -859,4 +880,4 @@ MonoBehaviour:
     00000000:
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f4571000000
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af4571000000
