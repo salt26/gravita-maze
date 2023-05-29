@@ -526,6 +526,334 @@ MonoBehaviour:
     m_Localized: The iron that was blocking the exit has been removed. Let's escape!
     m_Metadata:
       m_Items: []
+  - m_Id: 164806647603200
+    m_Localized: 'BGM
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165160818827264
+    m_Localized: 'Lives Left:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165244017041408
+    m_Localized: 'Maps Passed:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165287633608704
+    m_Localized: 'Maps Skipped:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165336484667392
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165355212234752
+    m_Localized: 'SFX
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165390494720000
+    m_Localized: 'Skip
+
+      this map'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165437433176064
+    m_Localized: 'Return
+
+      to game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165465119776768
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165502885289984
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165704832638976
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 165923439763456
+    m_Localized: Credit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167413608865792
+    m_Localized: 'Project Manager,
+
+      Main Programmer,
+
+      Sound Designer,
+
+      UI/UX
+      Designer
+
+      and Map Maker
+
+      <size=60><i>DanTae An</i></size>
+
+
+      Sub
+      Programmer
+
+      <size=60><i>JunWoo Eom</i></size>
+
+
+      Map Maker
+
+      <size=60><i>DongHwan
+      Yang</i></size>
+
+
+      Marketor
+
+      <size=60><i>SuIn Lee</i></size>
+
+
+      Assistant
+
+      <size=60><i>Diane
+      Kim, YongChan Jo, Jaehee Hong</i></size>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167868644712448
+    m_Localized: 'BGM
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167920012353536
+    m_Localized: Empty!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167945413058560
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167983132434432
+    m_Localized: 'SFX
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168024756707328
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168044683845632
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168062677409792
+    m_Localized: 'Return
+
+      to game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168120571387904
+    m_Localized: 'Skip
+
+      this map'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168241920991232
+    m_Localized: Empty!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168297738788864
+    m_Localized: Empty!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168490139901952
+    m_Localized: Enter the map name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168590564122624
+    m_Localized: Enter the map name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168656062373888
+    m_Localized: Map name <color=#FF00DC>required</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168774387884032
+    m_Localized: Enter the map name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168792230453248
+    m_Localized: Folder name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 168827580047360
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169313049763840
+    m_Localized: 'You''re a gravity manipulator.
+
+
+      Your goal is to escape the
+      ball to the exit.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169428787388416
+    m_Localized: Welcome!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169542926983168
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169606495854592
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169656898805760
+    m_Localized: 'BGM
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 169839971786752
+    m_Localized: 'Project Manager,
+
+      Main Programmer,
+
+      Sound Designer,
+
+      UI/UX
+      Designer
+
+      and Map Maker
+
+      <size=60><i>DanTae An</i></size>
+
+
+      Sub
+      Programmer
+
+      <size=60><i>JunWoo Eom</i></size>
+
+
+      Map Maker
+
+      <size=60><i>DongHwan
+      Yang</i></size>
+
+
+      Marketor
+
+      <size=60><i>SuIn Lee</i></size>
+
+
+      Assistant
+
+      <size=60><i>Diane
+      Kim, YongChan Jo, Jaehee Hong</i></size>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170078573158400
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170098437382144
+    m_Localized: Credit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170175784542208
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170197498454016
+    m_Localized: 'SFX
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170232315371520
+    m_Localized: Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170767890243584
+    m_Localized: 'BGM
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170796554117120
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170818960089088
+    m_Localized: 'SFX
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170842775347200
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170862224334848
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170877630013440
+    m_Localized: 'Return
+
+      to game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170898291154944
+    m_Localized: 'Skip
+
+      this map'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 170979144753152
+    m_Localized: 'BGM
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171031661633536
+    m_Localized: 'Maps Passed:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171075227869184
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171095343751168
+    m_Localized: 'SFX
+
+      Volume'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171112083218432
+    m_Localized: Time out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171147529281536
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171166206517248
+    m_Localized: 'Return
+
+      to game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 171187530358784
+    m_Localized: 'Skip
+
+      this map'
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
     00000000:

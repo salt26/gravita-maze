@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -887,6 +887,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3183877530010568909, guid: ee2ae56dffbb07140b8f4228cfc061c5,
+        type: 3}
+      propertyPath: m_Text
+      value: Loading...
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee2ae56dffbb07140b8f4228cfc061c5, type: 3}
@@ -2032,6 +2037,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1851242258}
     m_Modifications:
+    - target: {fileID: 4947973752511735336, guid: a97aafa8dc7aae24993ae294c8359b43,
+        type: 3}
+      propertyPath: m_Text
+      value: "\uC2DC\uAC04 \uCD08\uACFC!"
+      objectReference: {fileID: 0}
     - target: {fileID: 7497914685017812010, guid: a97aafa8dc7aae24993ae294c8359b43,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2156,6 +2166,63 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 821921397}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &821921400 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3942173205810548199, guid: a97aafa8dc7aae24993ae294c8359b43,
+    type: 3}
+  m_PrefabInstance: {fileID: 821921397}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &821921401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4947973752511735336, guid: a97aafa8dc7aae24993ae294c8359b43,
+    type: 3}
+  m_PrefabInstance: {fileID: 821921397}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821921400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &821921402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821921400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 821921401}
+        m_TrackedProperties:
+          items:
+          - id: 1
+        m_UpdateType: 0
+    00000001:
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          m_TableEntryReference:
+            m_KeyId: 165704832638976
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_Text
 --- !u!1001 &822893527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4082,6 +4149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5220dc5b513fc3b4c94e3a0bfcaf3c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableName: StringTable
   movables: []
   fixedObjects: []
   traces: []
@@ -4222,6 +4290,8 @@ MonoBehaviour:
   timeoutPanel: {fileID: 821921398}
   tryCount: 0
   beforeFirstAction: 0
+  tryCountUpTrigger: 0
+  hasClearedOnce: 0
 --- !u!4 &1755156425
 Transform:
   m_ObjectHideFlags: 0
