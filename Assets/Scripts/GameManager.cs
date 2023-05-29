@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public static GameManager gm;
     public static MapManager mm = null;
     public static PlayManager pm = null;
+    public static EditorManager em = null;
 
     public enum GravityDirection { Up, Down, Left, Right }
 
@@ -91,10 +92,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("canPlay: " + canPlay);
-        Debug.Log("pm == null: " + pm == null);
-        if (pm != null) Debug.Log("pm. IsReady: " + pm.IsReady);
-
         if(pm != null && pm.IsReady){
             bgmAudioSource.volume = Mathf.Clamp01(pm.pauseUI.bgmVolume);
             sfxAudioSource.volume = Mathf.Clamp01(pm.pauseUI.sfxVolume);
@@ -178,47 +175,75 @@ public class GameManager : MonoBehaviour
         }
         else 
         {
-            if (Input.GetKeyUp(KeyCode.Return) && pm != null && !pm.IsReady) //Custom이나 Training은 IsReady가 항상 False인데 이유가 있나??
+            if (Input.GetKeyUp(KeyCode.Return)) 
             {
-                Debug.Log("Here is okay");
-                if (SceneManager.GetActiveScene().name.Equals("Custom"))
+                if (pm != null && !pm.IsReady) //Custom, Training: pm의 객체에 속한 버튼을 누름
                 {
-                    if (pm.customPhase == PlayManager.CustomPhase.Open) //Custom 모드에서 인게임이 아닐 때.
+                    if (SceneManager.GetActiveScene().name.Equals("Custom"))
                     {
-                        if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                        if (pm.customPhase == PlayManager.CustomPhase.Open) //Custom 모드에서 인게임이 아닐 때.
                         {
-                            pm.openButton.onClick.Invoke();
+                            if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                            {
+                                pm.openButton.onClick.Invoke();
+                            }
+                            else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                            {
+                                if (mm is null || !mm.IsReady) return;
+                                pm.openHighlightedButton.onClick.Invoke();
+                            }
+                            else
+                            {
+                                Debug.Log("Exception: canPlay == false, but customPhase != Open");
+                                Debug.Log(pm.customPhase);
+                            }
                         }
-                        else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                    }
+                    else if (SceneManager.GetActiveScene().name.Equals("Training"))
+                    {
+                        if (pm.trainingPhase == PlayManager.TrainingPhase.Open)
                         {
-                            if (mm is null || !mm.IsReady) return;
-                            pm.openHighlightedButton.onClick.Invoke();
-                        }
-                        else
-                        {
-                            Debug.Log("Exception: canPlay == false, but customPhase != Open");
-                            Debug.Log(pm.customPhase);
+                            if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                            {
+                                pm.openButton.onClick.Invoke(); //open folder
+                            }
+                            else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                            {
+                                if (mm is null || !mm.IsReady) return;
+                                pm.openHighlightedButton.onClick.Invoke(); //open map
+                            }
+                            else
+                            {
+                                Debug.Log("Exception: canPlay == false, but trainingPhase != Open");
+                                Debug.Log(pm.trainingPhase);
+                            }
                         }
                     }
                 }
-                else if (SceneManager.GetActiveScene().name.Equals("Training")) 
+                else if (SceneManager.GetActiveScene().name.Equals("Editor") && em != null) // Editor: em의 객체에 속한 버튼을 누름
                 {
-                    if (pm.trainingPhase == PlayManager.TrainingPhase.Open) 
+                    switch (em.editPhase)
                     {
-                        if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
-                        {
-                            pm.openButton.onClick.Invoke();
-                        }
-                        else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
-                        {
-                            if (mm is null || !mm.IsReady) return;
-                            pm.openHighlightedButton.onClick.Invoke();
-                        }
-                        else
-                        {
-                            Debug.Log("Exception: canPlay == false, but trainingPhase != Open");
-                            Debug.Log(pm.trainingPhase);
-                        }
+                        case EditorManager.EditPhase.Open:
+                            if (em.editorOpenButton5.gameObject.activeInHierarchy && em.editorOpenButton5.interactable)
+                            {
+                                em.editorOpenButton5.onClick.Invoke();
+                            }
+                            else if (em.editorOpenHighlightedButton5.gameObject.activeInHierarchy && em.editorOpenHighlightedButton5.interactable)
+                            {
+                                em.editorOpenHighlightedButton5.onClick.Invoke();
+                            }
+                            break;
+                        case EditorManager.EditPhase.Save:
+                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable)
+                            {
+                                em.editorOpenButton6.onClick.Invoke();
+                            }
+                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable)
+                            {
+                                em.editorSaveButton6.onClick.Invoke();
+                            }
+                            break;
                     }
                 }
             }
@@ -640,6 +665,14 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         canPlay = false;
+
+        while (em == null) {
+            em = GameObject.FindGameObjectWithTag("EditorManager").GetComponent<EditorManager>();
+            if (em == null) {
+                em = GameObject.Find("EditorManager").GetComponent<EditorManager>();
+            }
+            yield return null;
+        }
     }
 
     IEnumerator InitializeCustom()
