@@ -7,9 +7,13 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class MapManager : MonoBehaviour
 {
+    public string tableName = "StringTable";
+
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
         Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14, Setting = 15 }
     public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
@@ -843,20 +847,20 @@ public class MapManager : MonoBehaviour
             if (!File.Exists(path))
             {
                 Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(path) + "\"");
-                statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_no_such_file"), 2f);
                 return OpenFileFlag.Failed;
             }
             else if (Path.GetExtension(path) != ".txt")
             {
                 Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(path) + "\" is not a .txt file");
-                statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_map_file"), 2f);
                 return OpenFileFlag.Failed;
             }
         }
         catch (Exception)
         {
             Debug.LogError("File invalid: exception while checking a file");
-            statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_exception_while_check"), 3f);
             throw;
         }
 
@@ -873,7 +877,7 @@ public class MapManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("File invalid: exception while opening a map");
-            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+            statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_map"), 1.5f);
             Debug.LogException(e);
             return OpenFileFlag.Restore;
         }
@@ -904,7 +908,7 @@ public class MapManager : MonoBehaviour
         if (token.Length != 2)
         {
             Debug.LogError("File invalid: map size (" + line + ")");
-            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nsize error", 1.5f);
+            statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_size_error"), 1.5f);
             return OpenFileFlag.Failed;
         }
 
@@ -924,7 +928,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 3)
                     {
                         Debug.LogError("File invalid: ball (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nball error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_ball_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Ball, int.Parse(token[1]), int.Parse(token[2])));
@@ -933,7 +937,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 3)
                     {
                         Debug.LogError("File invalid: iron (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\niron error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_iron_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Iron, int.Parse(token[1]), int.Parse(token[2])));
@@ -942,7 +946,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 3)
                     {
                         Debug.LogError("File invalid: fire (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nfire error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_fire_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
@@ -951,7 +955,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 4)
                     {
                         Debug.LogError("File invalid: exit (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_exit_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
 
@@ -966,7 +970,7 @@ public class MapManager : MonoBehaviour
                     else
                     {
                         Debug.LogError("File invalid: exit (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nexit error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_exit_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     break;
@@ -974,7 +978,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 3)
                     {
                         Debug.LogError("File invalid: horizontal wall (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_wall_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempWalls.Add(new WallInfo(WallInfo.Type.Horizontal, int.Parse(token[1]), int.Parse(token[2])));
@@ -983,7 +987,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 3)
                     {
                         Debug.LogError("File invalid: vertical wall (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nwall error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_wall_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempWalls.Add(new WallInfo(WallInfo.Type.Vertical, int.Parse(token[1]), int.Parse(token[2])));
@@ -992,7 +996,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 4)
                     {
                         Debug.LogError("File Invalid: shutter (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_shutter_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     if (token[1].Equals("-"))
@@ -1006,7 +1010,7 @@ public class MapManager : MonoBehaviour
                     else
                     {
                         Debug.LogError("File invalid: shutter (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nshutter error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_shutter_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     break;
@@ -1014,7 +1018,7 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 2)
                     {
                         Debug.LogError("File invalid: time limit (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ntime limit error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_time_limit_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     tempTimeLimit = Mathf.Clamp(float.Parse(token[1]), MIN_TIME_LIMIT, MAX_TIME_LIMIT);
@@ -1023,13 +1027,13 @@ public class MapManager : MonoBehaviour
                     if (token.Length != 2)
                     {
                         Debug.LogError("File invalid: solution (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nsolution error", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_solution_error"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     else if (hasSolution)
                     {
                         Debug.LogError("File invalid: solution already exists (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\nmultiple solutions", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_multiple_solutions"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     // http://www.nowan.hu/main.aspx?content=9cff1555-26ca-4e6a-910b-6a73463e22b2
@@ -1046,7 +1050,7 @@ public class MapManager : MonoBehaviour
                     catch (FormatException)
                     {
                         Debug.LogError("File invalid: wrong solution format (" + l + ")");
-                        statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid solution", 1.5f);
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_solution"), 1.5f);
                         return OpenFileFlag.Failed;
                     }
                     hasSolution = true;
@@ -1064,7 +1068,7 @@ public class MapManager : MonoBehaviour
         if (!IsReady)
         {
             Debug.LogError("File invalid: map validation failed");
-            statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map or impossible to clear", 3f);
+            statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_validation_fail"), 3f);
             return OpenFileFlag.Restore;
         }
 
