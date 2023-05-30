@@ -18,13 +18,16 @@ public class SettingManager : MonoBehaviour
     public Dropdown languageSetting;
     Animator PanelAnimation;
 
-    private void Start()
+    void Start()
     {
         PanelAnimation = CreditPanel.GetComponent<Animator>();
         CreditPanel.SetActive(false);
+        string localeRaw = LocalizationSettings.SelectedLocale.ToString();
+        string locale = localeRaw.Substring(0, localeRaw.IndexOf('(')).TrimEnd(' ');
+        languageSetting.value = (int)(GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), locale);
     }
 
-    private void Update()
+    void Update()
     {
         if (isCredit)
         {
@@ -54,6 +57,7 @@ public class SettingManager : MonoBehaviour
             }
         }
     }
+
     IEnumerator SoundEffect()
     {
         yield return new WaitForSeconds(56.0f/60.0f);
@@ -79,18 +83,21 @@ public class SettingManager : MonoBehaviour
     {
         GameManager.gm.LoadMain();
     }
+
     public void InSettingBackButtonDown()
     {
         isOnce = false;
         StartCoroutine(OffCreditAnimation());
         isCredit = false;
     }
+
     public void CreditButtonDown()
     {
         isCredit = true;
         CreditPanel.SetActive(true);
         StartCoroutine(SoundEffect());
     }
+
     public void ChangeLanguage()
     {
         GameManager.Language selected = (GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), languageSetting.options[languageSetting.value].text);
@@ -106,6 +113,7 @@ public class SettingManager : MonoBehaviour
                 break;
         }
     }
+
     public void PlayButtonSFX()
     {
         GameManager.gm.PlayButtonSFX();
