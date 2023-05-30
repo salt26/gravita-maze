@@ -535,14 +535,6 @@ MonoBehaviour:
     m_Key: AdventureLevel/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
-  - m_Id: 165923439763456
-    m_Key: Credit/Canvas/FirstPanel/HeaderText
-    m_Metadata:
-      m_Items: []
-  - m_Id: 167413608865792
-    m_Key: Credit/Canvas/FirstPanel/DesriptionText
-    m_Metadata:
-      m_Items: []
   - m_Id: 167868644712448
     m_Key: Custom/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:

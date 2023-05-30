@@ -645,18 +645,6 @@ MonoBehaviour:
     m_Localized: "\uC2DC\uAC04 \uCD08\uACFC!"
     m_Metadata:
       m_Items: []
-  - m_Id: 165923439763456
-    m_Localized: "\uD06C\uB808\uB527"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 167413608865792
-    m_Localized: "\uD504\uB85C\uC81D\uD2B8 \uAD00\uB9AC,\n\uBA54\uC778 \uD504\uB85C\uADF8\uB798\uBC0D,\n\uC0AC\uC6B4\uB4DC
-      \uB514\uC790\uC778,\nUI/UX \uB514\uC790\uC778,\n\uADF8\uB9AC\uACE0 \uB9F5 \uC81C\uC791\n<size=60><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uC11C\uBE0C
-      \uD504\uB85C\uADF8\uB798\uBC0D\n<size=60><i>\uC5C4\uC900\uC6B0</i></size>\n\n\uB9F5
-      \uC81C\uC791\n<size=60><i>\uC591\uB3D9\uD658</i></size>\n\n\uB9C8\uCF00\uD305\n<size=60><i>\uC774\uC218\uC778</i></size>\n\n\uAC1C\uBC1C
-      \uBCF4\uC870\n<size=60><i>\uAE40\uB2E4\uC778, \uC870\uC6A9\uCC2C, \uD64D\uC7AC\uD76C</i></size>"
-    m_Metadata:
-      m_Items: []
   - m_Id: 167868644712448
     m_Localized: "\uBC30\uACBD\uC74C\n\uC74C\uB7C9"
     m_Metadata:
@@ -744,10 +732,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 169839971786752
     m_Localized: "\uD504\uB85C\uC81D\uD2B8 \uAD00\uB9AC,\n\uBA54\uC778 \uD504\uB85C\uADF8\uB798\uBC0D,\n\uC0AC\uC6B4\uB4DC
-      \uB514\uC790\uC778,\nUI/UX \uB514\uC790\uC778,\n\uADF8\uB9AC\uACE0 \uB9F5 \uC81C\uC791\n<size=60><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uC11C\uBE0C
-      \uD504\uB85C\uADF8\uB798\uBC0D\n<size=60><i>\uC5C4\uC900\uC6B0</i></size>\n\n\uB9F5
-      \uC81C\uC791\n<size=60><i>\uC591\uB3D9\uD658</i></size>\n\n\uB9C8\uCF00\uD305\n<size=60><i>\uC774\uC218\uC778</i></size>\n\n\uAC1C\uBC1C
-      \uBCF4\uC870\n<size=60><i>\uAE40\uB2E4\uC778, \uC870\uC6A9\uCC2C, \uD64D\uC7AC\uD76C</i></size>"
+      \uB514\uC790\uC778,\nUI/UX \uB514\uC790\uC778,\n\uADF8\uB9AC\uACE0 \uB9F5 \uC81C\uC791\n<size=45><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uC11C\uBE0C
+      \uD504\uB85C\uADF8\uB798\uBC0D\n<size=45><i>\uC5C4\uC900\uC6B0</i></size>\n\n\uB9F5
+      \uC81C\uC791\n<size=45><i>\uC591\uB3D9\uD658</i></size>\n\n\uB9C8\uCF00\uD305\n<size=45><i>\uC774\uC218\uC778</i></size>\n\n\uAC1C\uBC1C
+      \uBCF4\uC870\n<size=45><i>\uAE40\uB2E4\uC778</i></size>\n<size=45><i>\uC870\uC6A9\uCC2C</i></size>\n<size=45><i>\uD64D\uC7AC\uD76C</i></size>"
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400

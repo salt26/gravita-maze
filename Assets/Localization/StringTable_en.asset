@@ -597,48 +597,6 @@ MonoBehaviour:
     m_Localized: Time out!
     m_Metadata:
       m_Items: []
-  - m_Id: 165923439763456
-    m_Localized: Credit
-    m_Metadata:
-      m_Items: []
-  - m_Id: 167413608865792
-    m_Localized: 'Project Manager,
-
-      Main Programmer,
-
-      Sound Designer,
-
-      UI/UX
-      Designer
-
-      and Map Maker
-
-      <size=60><i>DanTae An</i></size>
-
-
-      Sub
-      Programmer
-
-      <size=60><i>JunWoo Eom</i></size>
-
-
-      Map Maker
-
-      <size=60><i>DongHwan
-      Yang</i></size>
-
-
-      Marketor
-
-      <size=60><i>SuIn Lee</i></size>
-
-
-      Assistant
-
-      <size=60><i>Diane
-      Kim, YongChan Jo, Jaehee Hong</i></size>'
-    m_Metadata:
-      m_Items: []
   - m_Id: 167868644712448
     m_Localized: 'BGM
 
@@ -749,30 +707,35 @@ MonoBehaviour:
 
       and Map Maker
 
-      <size=60><i>DanTae An</i></size>
+      <size=45><i>DanTae An</i></size>
 
 
       Sub
       Programmer
 
-      <size=60><i>JunWoo Eom</i></size>
+      <size=45><i>JunWoo Eom</i></size>
 
 
       Map Maker
 
-      <size=60><i>DongHwan
+      <size=45><i>DongHwan
       Yang</i></size>
 
 
       Marketor
 
-      <size=60><i>SuIn Lee</i></size>
+      <size=45><i>SuIn Lee</i></size>
 
 
       Assistant
 
-      <size=60><i>Diane
-      Kim, YongChan Jo, Jaehee Hong</i></size>'
+      <size=45><i>Diane
+      Kim</i></size>
+
+      <size=45><i>YongChan Jo</i></size>
+
+      <size=45><i>Jaehee
+      Hong</i></size>'
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400
