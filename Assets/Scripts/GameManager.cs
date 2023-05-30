@@ -616,6 +616,8 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 2));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 4, 1));
         walls.Add(new WallInfo(WallInfo.Type.Vertical, 5, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 6, 1));
+        walls.Add(new WallInfo(WallInfo.Type.Vertical, 1, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 6));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 6));
@@ -626,7 +628,7 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 5, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 6, 5));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 7, 5));
-        walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
+        //walls.Add(new WallInfo(WallInfo.Type.Horizontal, 1, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 2, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 3, 4));
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 4, 4));

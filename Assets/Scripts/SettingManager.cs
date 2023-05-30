@@ -101,7 +101,7 @@ public class SettingManager : MonoBehaviour
     public void ChangeLanguage()
     {
         GameManager.Language selected = (GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), languageSetting.options[languageSetting.value].text);
-        Debug.Log(selected);
+        //Debug.Log(selected);
 
         switch (languageSetting.options[languageSetting.value].text)
         {
