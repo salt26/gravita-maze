@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public static GameManager gm;
     public static MapManager mm = null;
     public static PlayManager pm = null;
+    public static EditorManager em = null;
 
     public enum GravityDirection { Up, Down, Left, Right }
 
@@ -99,10 +100,12 @@ public class GameManager : MonoBehaviour
         }
         
         // 입력 담당
-        if (mm is null || !mm.IsReady) return;
+        
 
         if (canPlay)
         {
+            if (mm is null || !mm.IsReady) return; // mm : 맵의 미리보기가 떴을 때 또는 플레이 도중에만 값이 할당되어 있는 듯??
+
             if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)) && mm.gravityDownButton.interactable)
             {
                 mm.ManipulateGravityDown();
@@ -169,6 +172,81 @@ public class GameManager : MonoBehaviour
                 else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {
                     pm.pauseUI.pauseReturnButton.onClick.Invoke();
+                }
+            }
+        }
+        else 
+        {
+            if (Input.GetKeyUp(KeyCode.Return)) 
+            {
+                if (pm != null && !pm.IsReady) //Custom, Training: pm의 객체에 속한 버튼을 누름
+                {
+                    if (SceneManager.GetActiveScene().name.Equals("Custom"))
+                    {
+                        if (pm.customPhase == PlayManager.CustomPhase.Open) //Custom 모드에서 인게임이 아닐 때.
+                        {
+                            if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                            {
+                                pm.openButton.onClick.Invoke();
+                            }
+                            else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                            {
+                                if (mm is null || !mm.IsReady) return;
+                                pm.openHighlightedButton.onClick.Invoke();
+                            }
+                            else
+                            {
+                                Debug.Log("Exception: canPlay == false, but customPhase != Open");
+                                Debug.Log(pm.customPhase);
+                            }
+                        }
+                    }
+                    else if (SceneManager.GetActiveScene().name.Equals("Training"))
+                    {
+                        if (pm.trainingPhase == PlayManager.TrainingPhase.Open)
+                        {
+                            if (pm.openButton.gameObject.activeInHierarchy && pm.openButton.interactable)
+                            {
+                                pm.openButton.onClick.Invoke(); //open folder
+                            }
+                            else if (pm.openHighlightedButton.gameObject.activeInHierarchy && pm.openHighlightedButton.interactable)
+                            {
+                                if (mm is null || !mm.IsReady) return;
+                                pm.openHighlightedButton.onClick.Invoke(); //open map
+                            }
+                            else
+                            {
+                                Debug.Log("Exception: canPlay == false, but trainingPhase != Open");
+                                Debug.Log(pm.trainingPhase);
+                            }
+                        }
+                    }
+                }
+                else if (SceneManager.GetActiveScene().name.Equals("Editor") && em != null) // Editor: em의 객체에 속한 버튼을 누름
+                {
+                    switch (em.editPhase)
+                    {
+                        case EditorManager.EditPhase.Open:
+                            if (em.editorOpenButton5.gameObject.activeInHierarchy && em.editorOpenButton5.interactable)
+                            {
+                                em.editorOpenButton5.onClick.Invoke();
+                            }
+                            else if (em.editorOpenHighlightedButton5.gameObject.activeInHierarchy && em.editorOpenHighlightedButton5.interactable)
+                            {
+                                em.editorOpenHighlightedButton5.onClick.Invoke();
+                            }
+                            break;
+                        case EditorManager.EditPhase.Save:
+                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable)
+                            {
+                                em.editorOpenButton6.onClick.Invoke();
+                            }
+                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable)
+                            {
+                                em.editorSaveButton6.onClick.Invoke();
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -594,6 +672,14 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         canPlay = false;
+
+        while (em == null) {
+            em = GameObject.FindGameObjectWithTag("EditorManager").GetComponent<EditorManager>();
+            if (em == null) {
+                em = GameObject.Find("EditorManager").GetComponent<EditorManager>();
+            }
+            yield return null;
+        }
     }
 
     IEnumerator InitializeCustom()

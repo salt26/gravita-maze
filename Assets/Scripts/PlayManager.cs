@@ -63,6 +63,7 @@ public class PlayManager : MonoBehaviour
     public CustomPhase customPhase;
     public TrainingPhase trainingPhase;
 
+    private string customSelection;
     private TrainingMapSelect selection;
     private string mapPath;
     private FileStream fileStream;
@@ -268,7 +269,7 @@ public class PlayManager : MonoBehaviour
                 PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.Custom:
-                CustomOpenPhase();
+                CustomOpenPhase(MapManager.MAP_ROOT_PATH);
                 Life = int.MaxValue;
                 break;
             case Mode.Training:
@@ -316,6 +317,7 @@ public class PlayManager : MonoBehaviour
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
+
     }
 
     public void Pause()
@@ -817,7 +819,7 @@ public class PlayManager : MonoBehaviour
         GameManager.gm.sfxVolume = slider.value;
     }
 
-    public void CustomOpenPhase()
+    public void CustomOpenPhase(string path)
     {
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
@@ -843,10 +845,10 @@ public class PlayManager : MonoBehaviour
 
         try
         {
-            if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
+            if (!Directory.Exists(path))
             {
-                Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
-                Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+                Debug.LogWarning("File warning: there is no directory \"" + path + "\"");
+                Directory.CreateDirectory(path);
             }
         }
         catch (Exception e)
@@ -856,7 +858,7 @@ public class PlayManager : MonoBehaviour
             return;
         }
 
-        RenderOpenScrollView(MapManager.MAP_ROOT_PATH);
+        RenderOpenScrollView(path);
 
         statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_open_map"));
     }
@@ -1325,6 +1327,7 @@ public class PlayManager : MonoBehaviour
 
         if (selectedOpenScrollItem.isFolder)
         {
+            customSelection = selectedOpenScrollItem.path;
             RenderOpenScrollView(selectedOpenScrollItem.path);
             GameManager.mm.Initialize();
         }
@@ -1338,7 +1341,7 @@ public class PlayManager : MonoBehaviour
     {
         if (trainingPhase != TrainingPhase.Open || selectedOpenScrollItem is null) return;
 
-        //TrainingMapSelect selection = new TrainingMapSelect();
+        //TrainingMapSelect selection = new TrainingMapSelect(); 
 
         if (selectedOpenScrollItem.isFolder)
         {
@@ -1463,6 +1466,15 @@ public class PlayManager : MonoBehaviour
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
+                    nextButton.gameObject.SetActive(true);
+                    nextButton.interactable = false;
+                    quitHighlightedButton.gameObject.SetActive(false);
+
+                    retryButton.gameObject.SetActive(true);
+                    retryHighlightedButton.gameObject.SetActive(false);
+                    //quitHighlightedButton.interactable = false;
+                    retryTimeHighlightedButton.gameObject.SetActive(false);
+
                     return true;
                 }
             case MapManager.OpenFileFlag.Failed:
@@ -1553,8 +1565,14 @@ public class PlayManager : MonoBehaviour
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
+                    nextButton.gameObject.SetActive(true);
+                    nextButton.interactable = false;
+                    quitHighlightedButton.gameObject.SetActive(false);
 
-
+                    retryButton.gameObject.SetActive(true);
+                    retryHighlightedButton.gameObject.SetActive(false);
+                    //quitHighlightedButton.interactable = false;
+                    retryTimeHighlightedButton.gameObject.SetActive(false);
 
                     return true;
                 }
@@ -1577,7 +1595,7 @@ public class PlayManager : MonoBehaviour
         pauseButton.interactable = true;
         pausePanel.SetActive(false);
         pauseButton.interactable = true;
-        CustomOpenPhase();
+        CustomOpenPhase(customSelection);
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
         streamReader?.Close();
