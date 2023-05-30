@@ -396,21 +396,24 @@ AnimationClip:
   - time: 0.93333334
     functionName: PlayFallSFX
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 8b86b8b3a09e5d248bdb792244cd32f2,
+      type: 3}
     floatParameter: 1
     intParameter: 0
     messageOptions: 0
   - time: 1.3166667
     functionName: PlayFallSFX
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 8b86b8b3a09e5d248bdb792244cd32f2,
+      type: 3}
     floatParameter: 0.75
     intParameter: 0
     messageOptions: 0
   - time: 1.55
     functionName: PlayFallSFX
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 89a49184523ee624497f9bd8fc512ade,
+      type: 3}
     floatParameter: 0.5
     intParameter: 0
     messageOptions: 0

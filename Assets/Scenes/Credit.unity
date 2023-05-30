@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -448,6 +448,7 @@ GameObject:
   - component: {fileID: 396222757}
   - component: {fileID: 396222759}
   - component: {fileID: 396222758}
+  - component: {fileID: 396222760}
   m_Layer: 5
   m_Name: HeaderText
   m_TagString: Untagged
@@ -516,6 +517,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396222756}
   m_CullTransparentMesh: 1
+--- !u!114 &396222760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396222756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 396222758}
+        m_TrackedProperties:
+          items:
+          - id: 1
+        m_UpdateType: 0
+    00000001:
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          m_TableEntryReference:
+            m_KeyId: 165923439763456
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_Text
 --- !u!1 &987824562
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,6 +844,7 @@ GameObject:
   - component: {fileID: 1688603936}
   - component: {fileID: 1688603938}
   - component: {fileID: 1688603937}
+  - component: {fileID: 1688603939}
   m_Layer: 5
   m_Name: DesriptionText
   m_TagString: Untagged
@@ -900,6 +941,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688603935}
   m_CullTransparentMesh: 1
+--- !u!114 &1688603939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688603935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 1688603937}
+        m_TrackedProperties:
+          items:
+          - id: 1
+        m_UpdateType: 0
+    00000001:
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          m_TableEntryReference:
+            m_KeyId: 167413608865792
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_Text
 --- !u!1 &1765992187
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,6 +1092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135ea80f837062e4eb5e82b82900430f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableName: StringTable
   pauseButton: {fileID: 0}
   quitHighlightedButton: {fileID: 0}
   nextButton: {fileID: 134266227}
@@ -1019,22 +1100,26 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 0}
   retryTimeButton: {fileID: 0}
   retryTimeHighlightedButton: {fileID: 0}
+  messageUI: {fileID: 0}
   pauseUI: {fileID: 0}
-  messagePanel: {fileID: 0}
+  pausePanel: {fileID: 0}
   resultUI: {fileID: 0}
   tooltipUI: {fileID: 0}
   timerUI: {fileID: 0}
-  customOpenScrollContent: {fileID: 0}
-  customOpenButton: {fileID: 0}
-  customOpenHighlightedButton: {fileID: 0}
+  openScrollContent: {fileID: 0}
+  openButton: {fileID: 0}
+  openHighlightedButton: {fileID: 0}
   statusUI: {fileID: 0}
-  customOpenPathText: {fileID: 0}
+  openPathText: {fileID: 0}
   openScrollItemPrefab: {fileID: 0}
-  customOpenScrollbar: {fileID: 0}
-  customOpenScrollEmptyText: {fileID: 0}
-  customOpen: {fileID: 0}
-  customIngame: {fileID: 0}
+  openScrollbar: {fileID: 0}
+  openScrollEmptyText: {fileID: 0}
+  openUI: {fileID: 0}
+  ingameUI: {fileID: 0}
   tutorialGuide: {fileID: 0}
+  trainingFolders: []
+  customPhase: 0
+  trainingPhase: 0
   tutorialMapFiles: []
   adventureEasyMapFiles: []
   adventureEasyMapSeries: []
@@ -1052,6 +1137,13 @@ MonoBehaviour:
   adventureInsaneMapSeries: []
   adventureInsanePlayLength: 0
   adventureInsaneLife: 0
+  trainingBasicMapFiles: []
+  trainingFireMapFiles: []
+  trainingIronMapFiles: []
+  trainingBlockMapFiles: []
+  trainingExitMapFiles: []
+  trainingShutterMapFiles: []
+  trainingGateMapFiles: []
 --- !u!4 &1942339281
 Transform:
   m_ObjectHideFlags: 0

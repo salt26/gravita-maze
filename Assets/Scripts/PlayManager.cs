@@ -8,12 +8,16 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
 #endif
 
 public class PlayManager : MonoBehaviour
 {
+    public string tableName = "StringTable";
+
     public enum Mode { Tutorial = 0, Custom = 1, Training = 2,
         AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14 }
 
@@ -856,7 +860,7 @@ public class PlayManager : MonoBehaviour
 
         RenderOpenScrollView(path);
 
-        statusUI.SetStatusMessage("Choose a map to open.");
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_open_map"));
     }
 
     public void TrainingOpenPhase(TrainingMapSelect selected) // 만들다 만 함수
@@ -910,7 +914,7 @@ public class PlayManager : MonoBehaviour
         catch (IOException)
         {
             Debug.LogError("File invalid: cannot open the path \"" + openPath + "\"");
-            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_path"), 2f);
         }
 
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
@@ -1638,20 +1642,20 @@ public class PlayManager : MonoBehaviour
                 if (!File.Exists(mapPath))
                 {
                     Debug.LogError("File invalid: there is no file \"" + Path.GetFileNameWithoutExtension(mapPath) + "\"");
-                    statusUI.SetStatusMessageWithFlashing("The map doesn't exist anymore.", 2f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_no_such_file"), 2f);
                     return;
                 }
                 else if (Path.GetExtension(mapPath) != ".txt")
                 {
                     Debug.LogError("File invalid: \"" + Path.GetFileNameWithoutExtension(mapPath) + "\" is not a .txt file");
-                    statusUI.SetStatusMessageWithFlashing("The file is not a valid map file.", 2f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_map_file"), 2f);
                     return;
                 }
             }
             catch (Exception)
             {
                 Debug.LogError("File invalid: exception while checking a file");
-                statusUI.SetStatusMessageWithFlashing("Something went wrong while checking a file.", 3f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_exception_while_check"), 3f);
                 throw;
             }
 
@@ -1665,7 +1669,7 @@ public class PlayManager : MonoBehaviour
             catch (Exception e)
             {
                 Debug.LogError("File invalid: exception while opening a map");
-                statusUI?.SetStatusMessageWithFlashing("Cannot open the map:\ninvalid map file", 1.5f);
+                statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_map"), 1.5f);
                 Debug.LogException(e);
                 return;
             }

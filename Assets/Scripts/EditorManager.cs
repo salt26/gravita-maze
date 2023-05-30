@@ -7,12 +7,16 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
 #endif
 
 public class EditorManager : MonoBehaviour
 {
+    public string tableName = "StringTable";
+
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
@@ -95,6 +99,8 @@ public class EditorManager : MonoBehaviour
     private float saveItemSelectTime = 0f;
     private string folderName = "";
     private TooltipHover editorSaveButton3Hover;
+    private TooltipHover editorQuitButton3Hover;
+    
 
     private int currentTouchX;
     private int currentTouchY;
@@ -108,6 +114,7 @@ public class EditorManager : MonoBehaviour
     void Start()
     {
         editorSaveButton3Hover = editorSaveButton3.GetComponent<TooltipHover>();
+        editorQuitButton3Hover = editorQuitButton3.GetComponent<TooltipHover>();
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
         sizeY = Mathf.Clamp(editorSizeYDropdowns[0].value + MapManager.MIN_SIZE_Y, MapManager.MIN_SIZE_Y, MapManager.MAX_SIZE_Y);
 
@@ -123,7 +130,7 @@ public class EditorManager : MonoBehaviour
         SetEditModeToNone();
         mm.Initialize();
         editPhase = EditPhase.Initialize;
-        statusUI.SetStatusMessage("Welcome to the map editor!");
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_start_welcome"));
         hasCreated = false;
         hasSavedOnce = false;
         dirtyBit = false;
@@ -269,7 +276,7 @@ public class EditorManager : MonoBehaviour
             editorResetButton.interactable = false;
             if (editPhase == EditPhase.Initialize && !hasPassedInitPhaseOnce)
             {
-                statusUI.SetStatusMessage("All right!\nLet's move on to the next step.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_begin"));
             }
         }
         else if (hasCreated)
@@ -278,7 +285,7 @@ public class EditorManager : MonoBehaviour
             editorResetButton.interactable = true;
             if (editPhase == EditPhase.Initialize && !hasPassedInitPhaseOnce)
             {
-                statusUI.SetStatusMessage("All right!\nLet's move on to the next step.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_begin"));
             }
         }
         else
@@ -304,13 +311,15 @@ public class EditorManager : MonoBehaviour
         editorSaveButton3.interactable = solution != null && solution != "" && dirtyBit;
         if (solution == null || solution == "")
         {
-            editorSaveButton3Hover.tooltipMessage = "Test the map\\first to see if\\you can escape.";
-            editorSaveButton3Hover.tooltipWidth = 660f;
+            editorSaveButton3Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_test_prompt");
+            editorSaveButton3Hover.tooltipWidth = 672f;
+            editorSaveButton3Hover.tooltipHeight = 216f;
         }
         else if (!dirtyBit)
         {
-            editorSaveButton3.GetComponent<TooltipHover>().tooltipMessage = "No changes\\since the\\last save.";
+            editorSaveButton3Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_no_change");
             editorSaveButton3Hover.tooltipWidth = 480f;
+            editorSaveButton3Hover.tooltipHeight = 264f;
         }
 
         if (solution != null && solution != "" && hasSavedOnce)
@@ -321,7 +330,20 @@ public class EditorManager : MonoBehaviour
         else
         {
             editorQuitButton3.gameObject.SetActive(true);
+            editorQuitButton3.interactable = false;
             editorQuitHighlightedButton3.gameObject.SetActive(false);
+
+            if (solution != null && solution != "")
+            {
+                editorQuitButton3Hover .tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_save_prompt");
+                editorQuitButton3Hover.tooltipWidth = 696f;
+            }
+            else
+            {
+                editorQuitButton3Hover .tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_test_prompt");
+                editorQuitButton3Hover.tooltipWidth = 672f;
+            }
+            //revise
         }
 
         if (solution != null && solution != "")
@@ -333,7 +355,7 @@ public class EditorManager : MonoBehaviour
             {
                 if (dirtyBit)
                 {
-                    statusUI.SetStatusMessage("Now you can save your map.");
+                    statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_save_ready"));
                 }
             }
         }
@@ -344,7 +366,7 @@ public class EditorManager : MonoBehaviour
 
             if (editPhase == EditPhase.Request)
             {
-                statusUI.SetStatusMessage("Set the time limit and\nrun the map test.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_set_time"));
             }
         }
 
@@ -355,11 +377,11 @@ public class EditorManager : MonoBehaviour
         {
             if (mapName == null || mapName == "")
             {
-                statusUI.SetStatusMessage("Set your map name.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_set_map_name"));
             }
             else
             {
-                statusUI.SetStatusMessage("Choose a path to save.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_update_set_save_path"));
             }
         }
     }
@@ -383,33 +405,36 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || b < 1 || b > sizeY - 1)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
-                        break;
-                    }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.HorizontalShutter, a, b), 
+                                new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Horizontal, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayWallSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                    hasChanged = true;
                 }
                 else
                 {
@@ -420,33 +445,36 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX - 1 || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
-                        break;
-                    }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a wall there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
 
                     if (verbose) Debug.Log("Add vertical wall at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.VerticalShutter, a, b), 
+                                new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.Vertical, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayWallSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                    hasChanged = true;
                 }
                 break;
 #endregion
@@ -461,33 +489,36 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || b < 1 || b > sizeY - 1)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal shutter position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
-                        break;
-                    }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
 
                     if (verbose) Debug.Log("Add horizontal shutter at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.Horizontal, a, b), 
+                                new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.HorizontalShutter, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayShutterSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
-                    hasChanged = true;
                 }
                 else
                 {
@@ -498,33 +529,36 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX - 1 || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical shutter position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
-                        break;
-                    }
-                    if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
-                    {
-                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a shutter there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
 
                     if (verbose) Debug.Log("Add vertical shutter at (" + a + ", " + b + ")");
                     if (commitAction)
                     {
-                        undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                        {
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
+                            undoStack.Add(new EditActionInfo(new WallInfo(WallInfo.Type.Vertical, a, b), 
+                                new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        }
+                        else
+                        {
+                            undoStack.Add(new EditActionInfo(null, new WallInfo(WallInfo.Type.VerticalShutter, a, b)));
+                        }
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
                         GameManager.gm.PlayShutterSFX();
+                        walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
+                        hasChanged = true;
                     }
-                    walls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
-                    hasChanged = true;
                 }
                 break;
 #endregion
@@ -539,20 +573,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || !(b == 0 || b == sizeY))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -588,20 +622,20 @@ public class EditorManager : MonoBehaviour
                     if (!(a == 0 || a == sizeX) || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -637,20 +671,20 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -686,20 +720,20 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace vertical exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -735,20 +769,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -784,20 +818,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot add a exit there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
                         break;
                     }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
                         if (verbose) Debug.Log("Replace horizontal exit at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Only one exit can be placed.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_exits"), 1f);
                         if (commitAction)
                         {
                             undoStack.Add(new EditActionInfo(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical),
@@ -837,7 +871,7 @@ public class EditorManager : MonoBehaviour
                     if (a < 0 || a > sizeX + 1 || b < 0 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)) &&
@@ -845,7 +879,7 @@ public class EditorManager : MonoBehaviour
                         !walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or\nshutters or exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
                         break;
                     }
 
@@ -874,7 +908,7 @@ public class EditorManager : MonoBehaviour
                     if (a < 0 || a > sizeX || b < 0 || b > sizeY + 1)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)) &&
@@ -882,7 +916,7 @@ public class EditorManager : MonoBehaviour
                         !walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove walls or\nshutters or exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
                         break;
                     }
 
@@ -911,13 +945,13 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
 
@@ -944,13 +978,13 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
 
@@ -977,13 +1011,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
 
@@ -1010,13 +1044,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
                     if (!walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit doesn't exist at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing("Cannot remove exits there.", 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_exit"), 1f);
                         break;
                     }
 
@@ -1044,20 +1078,20 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor warning: ball position at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add a ball there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
                     break;
                 }
 
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
                     if (verbose) Debug.Log("Replace ball at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Only one ball can be placed.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_duplicate_balls"), 1f);
                     if (commitAction)
                     {
                         undoStack.Add(new EditActionInfo(objects.Find((i) => i.type == ObjectInfo.Type.Ball), new ObjectInfo(ObjectInfo.Type.Ball, a, b)));
@@ -1092,13 +1126,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor warning: iron position at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add an iron there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
                     break;
                 }
 
@@ -1123,13 +1157,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor warning: fire position at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
                     break;
                 }
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot add a fire there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
                     break;
                 }
 
@@ -1154,13 +1188,13 @@ public class EditorManager : MonoBehaviour
                 if (a < 1 || a > sizeX || b < 1 || b > sizeY)
                 {
                     if (verbose) Debug.LogWarning("Editor warning: object position at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
                     break;
                 }
                 if (!objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: object doesn't exists at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing("Cannot remove objects there.", 1f);
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
                     break;
                 }
 
@@ -1200,28 +1234,28 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessage("");
                 break;
             case EditMode.Ball:
-                statusUI.SetStatusMessage("Touch the map to add a ball.\nThere must be one ball.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_ball"));
                 break;
             case EditMode.Exit:
-                statusUI.SetStatusMessage("Touch the map to add an exit.\nThere must be one exit.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_exit"));
                 break;
             case EditMode.Fire:
-                statusUI.SetStatusMessage("Touch the map to add fires.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_fire"));
                 break;
             case EditMode.Iron:
-                statusUI.SetStatusMessage("Touch the map to add irons.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_iron"));
                 break;
             case EditMode.Wall:
-                statusUI.SetStatusMessage("Touch the map to add walls.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_wall"));
                 break;
             case EditMode.Shutter:
-                statusUI.SetStatusMessage("Touch the map to add shutters.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_shutter"));
                 break;
             case EditMode.RemoveWall:
-                statusUI.SetStatusMessage("Touch the map to remove\nwalls or shutters or exits.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_remove_multi"));
                 break;
             case EditMode.RemoveObject:
-                statusUI.SetStatusMessage("Touch the map to remove objects.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_remove_object"));
                 break;
         }
     }
@@ -1243,8 +1277,8 @@ public class EditorManager : MonoBehaviour
             redoStack.Clear();
             if (setStatusMessage)
             {
-                statusUI.SetStatusMessage("Build your own map!");
-                statusUI.SetStatusMessageWithFlashing("The map has been reset.\nYou can undo this action.", 2f);
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_message"), 2f);
             }
             dirtyBit = true;
             GameManager.gm.PlayRemoveSFX();
@@ -1260,17 +1294,17 @@ public class EditorManager : MonoBehaviour
             if (phase == (int)EditPhase.Initialize)
             {
                 // 맵 변경 후 1페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
+                messageUI.Initialize(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_quit_changed"), () => GameManager.gm.LoadMain(), null);
             }
             else if (solution != null && solution != "")
             {
                 // 맵 변경 후 검증은 완료했지만 저장되지 않은 상태에서 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
+                messageUI.Initialize(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_quit_unsaved"), () => GameManager.gm.LoadMain(), null);
             }
             else
             {
                 // 맵 변경 후 검증을 하지 않고 3페이즈의 나가기 버튼을 누르는 경우
-                messageUI.Initialize("<b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo you want to quit anyway?", () => GameManager.gm.LoadMain(), null);
+                messageUI.Initialize(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_quit_untested"), () => GameManager.gm.LoadMain(), null);
             }
         }
         else
@@ -1436,7 +1470,7 @@ public class EditorManager : MonoBehaviour
         if (IsBadFileName(newName))
         {
             Debug.LogWarning("Editor warning: illegal file name");
-            statusUI.SetStatusMessageWithFlashing("Illegal file name.", 1f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_illegal_file_name"), 1f);
             mapName = oldMapName;
             foreach (InputField editorMapNameInput in editorMapNameInputs)
                 editorMapNameInput.text = mapName;
@@ -1485,7 +1519,7 @@ public class EditorManager : MonoBehaviour
         EditReset(false);
         if (hasPassedInitPhaseOnce)
         {
-            statusUI.SetStatusMessage("The map has been reset.\nYou can undo this action.");
+            statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_message"));
         }
         hasCreated = true;
     }
@@ -1536,7 +1570,7 @@ public class EditorManager : MonoBehaviour
         editorPhases[4].SetActive(true);
         mm.Initialize();
         editPhase = EditPhase.Open;
-        statusUI.SetStatusMessage("Choose a map to open.");
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_open_map"));
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
         {
@@ -1565,7 +1599,7 @@ public class EditorManager : MonoBehaviour
         catch (IOException)
         {
             Debug.LogError("File invalid: cannot open the path \"" + openPath + "\"");
-            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_path"), 2f);
         }
 
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
@@ -1754,7 +1788,7 @@ public class EditorManager : MonoBehaviour
                     editPhase = EditPhase.Initialize;
                     if (hasPassedInitPhaseOnce)
                     {
-                        statusUI.SetStatusMessage("The map has been reinitialized.\nYou can undo this action.");
+                        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reinitialize_message"));
                     }
 
                     ClearOpenScrollItems();
@@ -1845,7 +1879,7 @@ public class EditorManager : MonoBehaviour
         catch (IOException)
         {
             Debug.LogError("File invalid: cannot open the path \"" + savePath + "\"");
-            statusUI.SetStatusMessageWithFlashing("The path doesn't exist anymore.", 2f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_invalid_path"), 2f);
         }
 
         if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
@@ -2022,7 +2056,7 @@ public class EditorManager : MonoBehaviour
     public void EditNewFolder()
     {
         folderName = "";
-        inputMessageUI.Initialize("<b>Create folder</b>\n\nEnter new\nfolder name.", () => CreateNewFolder(), null);
+        inputMessageUI.Initialize(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_initial"), () => CreateNewFolder(), null);
     }
 
     public void EditNewFolderName(InputField caller)
@@ -2034,7 +2068,7 @@ public class EditorManager : MonoBehaviour
         if (IsBadFileName(newName))
         {
             Debug.LogWarning("Editor warning: illegal folder name");
-            statusUI.SetStatusMessageWithFlashing("Illegal folder name.", 1f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_illegal_folder_name"), 1f);
             folderName = oldFolderName;
             caller.text = folderName;
             return;
@@ -2052,7 +2086,7 @@ public class EditorManager : MonoBehaviour
         if (folderName == null || folderName == "")
         {
             Debug.LogWarning("Editor warning: illegal folder name");
-            statusUI.SetStatusMessageWithFlashing("Cannot create the folder:\nillegal folder name.", 2f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_cannot_create_folder"), 2f);
             return;
         }
 
@@ -2097,7 +2131,7 @@ public class EditorManager : MonoBehaviour
         if (!ValidateMapInGame())
         {
             Debug.LogError("File invalid: map validation failed");
-            statusUI.SetStatusMessageWithFlashing("Cannot save your map:\nimpossible to clear", 1.5f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_not_validated"), 1.5f);
             isSaving = false;
             return;
         }
@@ -2112,7 +2146,7 @@ public class EditorManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("File invalid: exception while creating a directory");
-            statusUI.SetStatusMessageWithFlashing("Cannot save your map: " + e.Message, 3f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_not_saved") + e.Message, 3f);
             isSaving = false;
             throw;
         }
@@ -2137,7 +2171,7 @@ public class EditorManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("File invalid: exception while checking a file");
-            statusUI.SetStatusMessageWithFlashing("Cannot save your map: " + e.Message, 3f);
+            statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_not_saved") + e.Message, 3f);
             isSaving = false;
             throw;
         }
@@ -2211,7 +2245,7 @@ public class EditorManager : MonoBehaviour
             truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
         }
         //Debug.Log("Saved as " + truncated + "!");
-        statusUI.SetStatusMessage("You're done!\nSaved as " + truncated + "!");
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_success") + truncated + "!");
 
         dirtyBit = false;
         hasSavedOnce = true;
@@ -2233,11 +2267,11 @@ public class EditorManager : MonoBehaviour
                 SetEditModeToNone();
                 editPhase = EditPhase.Build;
                 hasPassedInitPhaseOnce = true;
-                statusUI.SetStatusMessage("Build your own map!");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Build:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2260,7 +2294,7 @@ public class EditorManager : MonoBehaviour
                 // Validation finished
                 timerUI.gameObject.SetActive(false);
                 statusUI.gameObject.SetActive(true);
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2270,7 +2304,7 @@ public class EditorManager : MonoBehaviour
                 GameManager.gm.EditorChangeBGM(editPhase);
                 break;
             case EditPhase.Save:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[5].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2291,21 +2325,21 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
-                statusUI.SetStatusMessage("You can reinitialize your map.");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_reinitialize_message"));
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Request:
                 editorPhases[2].SetActive(false);
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
-                statusUI.SetStatusMessage("Build your own map!");
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
                 SetEditModeToNone();
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Test:
                 timerUI.gameObject.SetActive(false);
                 statusUI.gameObject.SetActive(true);
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[3].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
@@ -2321,23 +2355,23 @@ public class EditorManager : MonoBehaviour
                 if (hasCreated)
                 {
                     mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
-                    statusUI.SetStatusMessage("You can reinitialize your map.");
+                    statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_reinitialize_message"));
                 }
                 else
                 {
                     mm.Initialize();
-                    statusUI.SetStatusMessage("Welcome to the map editor!");
+                    statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_start_welcome"));
                 }
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Save:
-                SetEditTimerUI();
+                SetEditTimerUI(mm.TimeLimit);
                 editorPhases[5].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
                 if (!hasSavedOnce)
                 {
-                    statusUI.SetStatusMessage("The map has not been saved yet.");
+                    statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_map_not_saved_yet"));
                 }
                 ClearSaveScrollItems();
                 GameManager.gm.canPlay = false;
@@ -2372,6 +2406,7 @@ public class EditorManager : MonoBehaviour
                 editorRetryButton.gameObject.SetActive(false);
                 editorRetryHighlightedButton.gameObject.SetActive(false);
                 editorRetryTimeButton.gameObject.SetActive(true);
+                editorRetryTimeButton.interactable = false;
                 editorRetryTimeHighlightedButton.gameObject.SetActive(false);
 
                 editorNextButton4.interactable = true;
@@ -2417,7 +2452,7 @@ public class EditorManager : MonoBehaviour
         {
             case EditActionInfo.Type.MapName:
                 EditMapName(eai.oldName);
-                statusUI.SetStatusMessageWithFlashing("Undo: the map name", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_name"), 1f);
                 break;
             case EditActionInfo.Type.Wall:
 #region Undo Wall
@@ -2446,7 +2481,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: a wall or a shutter\nor an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_multi"), 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2476,7 +2511,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: an object", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_object"), 1f);
 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
@@ -2484,20 +2519,20 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: the map size", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: the map size", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: reset", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reset"), 1f);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.oldName);
@@ -2510,7 +2545,7 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Undo: reinitialization", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reintialization"), 1f);
                 break;
         }
         undoStack.RemoveAt(undoStack.Count - 1);
@@ -2532,7 +2567,7 @@ public class EditorManager : MonoBehaviour
         {
             case EditActionInfo.Type.MapName:
                 EditMapName(eai.newName);
-                statusUI.SetStatusMessageWithFlashing("Redo: the map name", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_name"), 1f);
                 break;
             case EditActionInfo.Type.Wall:
 #region Redo Wall
@@ -2561,7 +2596,7 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: a wall or a shutter\nor an exit", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_multi"), 1f);
 #endregion
                 break;
             case EditActionInfo.Type.Object:
@@ -2591,18 +2626,18 @@ public class EditorManager : MonoBehaviour
                     Debug.Log(verboseMessage);
 
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: an object", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_object"), 1f);
 #endregion
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: the map size", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.newSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: the map size", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 foreach (WallInfo wi in eai.oldWalls)
@@ -2610,7 +2645,7 @@ public class EditorManager : MonoBehaviour
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: reset", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reset"), 1f);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.newName);
@@ -2623,7 +2658,7 @@ public class EditorManager : MonoBehaviour
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing("Redo: reinitialization", 1f);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reinitialization"), 1f);
                 break;
         }
         redoStack.RemoveAt(redoStack.Count - 1);
@@ -2633,18 +2668,28 @@ public class EditorManager : MonoBehaviour
     }
 #pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
 
-    public void EditTimer()
+    public void EditTimerDragging()
     {
         if (mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
         timeLimit = Mathf.Max(3f, editorTimerSlider.value);
-        mm.TimeLimit = timeLimit;
-        solution = "";
-        dirtyBit = true;
-
-        SetEditTimerUI();
+        SetEditTimerUI(timeLimit);
     }
 
-    private void SetEditTimerUI()
+    public void EditTimerDragUp()
+    {
+        if (mm == null || !mm.IsReady || editPhase != EditPhase.Request) return;
+        timeLimit = Mathf.Max(3f, editorTimerSlider.value);
+        if (mm.TimeLimit != timeLimit)
+        {
+            mm.TimeLimit = timeLimit;
+            solution = "";
+            dirtyBit = true;
+        }
+
+        SetEditTimerUI(mm.TimeLimit);
+    }
+
+    private void SetEditTimerUI(float displayingTimeLimit)
     {
         //Debug.Log("SetEditTimerUI");
         if (!mm.IsReady)
@@ -2655,7 +2700,7 @@ public class EditorManager : MonoBehaviour
             return;
         }
 
-        if (mm.TimeLimit > 99f)
+        if (displayingTimeLimit > 99f)
         {
             editorTimerSlider.SetValueWithoutNotify(editorTimerSlider.maxValue);
             editorTimerLabel10.sprite = timerUI.numberLabels[9];
@@ -2663,9 +2708,9 @@ public class EditorManager : MonoBehaviour
         }
         else
         {
-            editorTimerSlider.SetValueWithoutNotify(mm.TimeLimit);
-            editorTimerLabel10.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) / 10];
-            editorTimerLabel1.sprite = timerUI.numberLabels[Mathf.CeilToInt(mm.TimeLimit) % 10];
+            editorTimerSlider.SetValueWithoutNotify(displayingTimeLimit);
+            editorTimerLabel10.sprite = timerUI.numberLabels[Mathf.CeilToInt(displayingTimeLimit) / 10];
+            editorTimerLabel1.sprite = timerUI.numberLabels[Mathf.CeilToInt(displayingTimeLimit) % 10];
         }
     }
 

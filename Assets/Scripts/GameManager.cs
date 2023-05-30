@@ -58,7 +58,9 @@ public class GameManager : MonoBehaviour
     public AudioClip fallSfx;
     public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
-    
+
+    public enum Language { English = 0, Korean = 1 }
+
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -361,7 +363,7 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.Play();
             }
         }
-        else if (SceneManager.GetActiveScene().name.Equals("Credit"))
+        else if (SceneManager.GetActiveScene().name.Equals("Setting"))
         {
             if (bgmAudioSource.clip != bgms[0])
             {
@@ -369,6 +371,7 @@ public class GameManager : MonoBehaviour
                 bgmAudioSource.clip = bgms[0];
                 bgmAudioSource.Play();
             }
+            canPlay = false;
         }
 
         else if (SceneManager.GetActiveScene().name.Equals("Training"))
@@ -572,6 +575,10 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SceneLoading("First"));
     }
 
+    public void LoadSetting()
+    {
+        StartCoroutine(SceneLoading("Setting"));
+    }
     public void LoadCredit()
     {
         StartCoroutine(SceneLoading("Credit"));
@@ -1173,8 +1180,8 @@ public class GameManager : MonoBehaviour
             case MapManager.Flag.QuitGame:
                 QuitGame();
                 break;
-            case MapManager.Flag.Credit:
-                LoadCredit();
+            case MapManager.Flag.Setting:
+                LoadSetting();
                 break;
         }
     }

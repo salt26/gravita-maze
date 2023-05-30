@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class ResultUI : MonoBehaviour
 {
+    public string tableName = "StringTable";
 
     public Text modeText;
     public Text difficultyText;
@@ -49,13 +52,13 @@ public class ResultUI : MonoBehaviour
                 //difficultyText.text = "";
                 if (pm.HasClearedAll)
                 {
-                    upperMessage.text = "Congratulations!";
-                    lowerMessage.text = "You seems very good at this game...";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_pass");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_pass_tutorial");
                 }
                 else
                 {
-                    upperMessage.text = "Your Result";
-                    lowerMessage.text = "You can try again at any time.";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_abort");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_abort");
                 }
                 mapsPassedCount.text = pm.EscapedCount.ToString();
                 //mapsSkippedCount.text = "";
@@ -68,18 +71,18 @@ public class ResultUI : MonoBehaviour
                 difficultyText.color = Color.blue;
                 if (pm.HasClearedAll)
                 {
-                    upperMessage.text = "Congratulations!";
-                    lowerMessage.text = "Nice! Your journey has started!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_pass");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_pass_easy");
                 }
                 else if (pm.Life == 0)
                 {
-                    upperMessage.text = "Failed";
-                    lowerMessage.text = "You can do better next time!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_fail");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_fail");
                 }
                 else
                 {
-                    upperMessage.text = "Your Result";
-                    lowerMessage.text = "You can try again at any time.";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_abort");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_abort");
                 }
                 mapsPassedCount.text = pm.EscapedCount.ToString();
                 mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -94,18 +97,18 @@ public class ResultUI : MonoBehaviour
                 difficultyText.color = new Color(0f, 100 / 255f, 0f);
                 if (pm.HasClearedAll)
                 {
-                    upperMessage.text = "Congratulations!";
-                    lowerMessage.text = "Great! You have the potential of a master!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_pass");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_pass_normal");
                 }
                 else if (pm.Life == 0)
                 {
-                    upperMessage.text = "Failed";
-                    lowerMessage.text = "You can do better next time!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_fail");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_fail");
                 }
                 else
                 {
-                    upperMessage.text = "Your Result";
-                    lowerMessage.text = "You can try again at any time.";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_abort");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_abort");
                 }
                 mapsPassedCount.text = pm.EscapedCount.ToString();
                 mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -120,18 +123,18 @@ public class ResultUI : MonoBehaviour
                 difficultyText.color = new Color(1f, 165 / 255f, 0f);
                 if (pm.HasClearedAll)
                 {
-                    upperMessage.text = "Congratulations!";
-                    lowerMessage.text = "Wow! How did you do this?!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_pass");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_pass_hard");
                 }
                 else if (pm.Life == 0)
                 {
-                    upperMessage.text = "Failed";
-                    lowerMessage.text = "You can do better next time!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_fail");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_fail");
                 }
                 else
                 {
-                    upperMessage.text = "Your Result";
-                    lowerMessage.text = "You can try again at any time.";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_abort");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_abort");
                 }
                 mapsPassedCount.text = pm.EscapedCount.ToString();
                 mapsSkippedCount.text = pm.SkippedCount.ToString();
@@ -146,18 +149,18 @@ public class ResultUI : MonoBehaviour
                 difficultyText.color = Color.red;
                 if (pm.HasClearedAll)
                 {
-                    upperMessage.text = "Congratulations!";
-                    lowerMessage.text = "Unbelievable! You overwhelmed the map creators...";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_pass");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_pass_insane");
                 }
                 else if (pm.Life == 0)
                 {
-                    upperMessage.text = "Failed";
-                    lowerMessage.text = "You can do better next time!";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_fail");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_fail");
                 }
                 else
                 {
-                    upperMessage.text = "Your Result";
-                    lowerMessage.text = "You can try again at any time.";
+                    upperMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_upper_message_abort");
+                    lowerMessage.text = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "result_ui_lower_message_abort");
                 }
                 mapsPassedCount.text = pm.EscapedCount.ToString();
                 mapsSkippedCount.text = pm.SkippedCount.ToString();

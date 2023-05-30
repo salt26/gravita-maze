@@ -38,4 +38,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Training.unity
     guid: dd553dc84ceccc64698e56257fed7c02
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Setting.unity
+    guid: 8cb6bc41555541549ad5aec231d7d6e6
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 2140e9d3b1a764718878591800f17f95,
+      type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 4ed864a1026a84cde9194cd7dc31ed65,
+      type: 2}

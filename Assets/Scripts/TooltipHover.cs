@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2 }
+    public enum Pivot { TopRight = 0, BottomRight = 1, TopLeft = 2, BottomLeft = 3 }
 
     public GameObject tooltipPrefab;
     public string tooltipMessage;
@@ -45,6 +45,13 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (em.tooltipUI.transform.childCount >= 1)
+        {
+            for (int i = 0; i < em.tooltipUI.transform.childCount; i++)
+            {
+                Destroy(em.tooltipUI.transform.GetChild(i).gameObject);
+            }
+        }
         lastEnterTime = Time.time;
         if (!button.interactable && myTooltipUI == null)
         {
@@ -73,6 +80,10 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                     break;
                 case Pivot.TopLeft:
                     myTooltipUI.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
+                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
+                    break;
+                case Pivot.BottomLeft:
+                    myTooltipUI.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12),
                         tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
                     break;
             }

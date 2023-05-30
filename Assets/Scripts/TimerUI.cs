@@ -12,7 +12,8 @@ public class TimerUI : MonoBehaviour
     public List<Sprite> numberLabels = new List<Sprite>();
 
     private Color stoppedColor = new Color(1f, 0f, 0.8627452f);
-    private Color flowingColor = new Color(0.6980392f, 0f, 1f);
+    private Color flowingColor1 = new Color(0.6980392f, 0f, 1f);
+    private Color flowingColor2 = new Color(0.827451f, 0.4313726f, 1f);
 
     // Update is called once per frame
     void Update()
@@ -64,9 +65,9 @@ public class TimerUI : MonoBehaviour
 
             if (mm.DoesTimeGoBy)
             {
-                timerLabel10.color = flowingColor;
-                timerLabel1.color = flowingColor;
-                timerBar.color = flowingColor;
+                timerLabel10.color = flowingColor2;
+                timerLabel1.color = flowingColor2;
+                timerBar.color = flowingColor1;
             }
             else
             {
