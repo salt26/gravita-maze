@@ -385,10 +385,6 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - id: 0
-  - m_Id: 486496264250
-    m_Localized: Choose a map to open.
-    m_Metadata:
-      m_Items: []
   - m_Id: 486496264251
     m_Localized: Congratulations!
     m_Metadata:

@@ -418,10 +418,6 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - id: 0
-  - m_Id: 486496264250
-    m_Localized: "\uC5F4\uACE0 \uC2F6\uC740 \uB9F5\uC744 \uC120\uD0DD\uD558\uC138\uC694."
-    m_Metadata:
-      m_Items: []
   - m_Id: 486496264251
     m_Localized: "\uCD95\uD558\uD574\uC694!"
     m_Metadata:

@@ -81,7 +81,6 @@ warning_multiple_solutions,,"Cannot open the map:\nmultiple solutions","맵을 �
 warning_invalid_solution,,"Cannot open the map:\ninvalid solution","맵을 열 수 없음:\n올바르지 않은 솔루션"
 warning_unknown_symbols,,"Cannot open the map:\nunknown_symbols","맵을 열 수 없음:\n알 수 없는 심볼"
 warning_validation_fail,,"Cannot open the map:\ninvalid map or impossible to clear","맵을 열 수 없음:\n올바르지 않은 맵 또는 클리어 불가능 맵"
-open_map_message,,"Choose a map to open.","열고 싶은 맵을 선택하세요."
 result_ui_upper_message_pass,,"Congratulations!","축하해요!"
 result_ui_upper_message_fail,,"Failed","실패"
 result_ui_upper_message_abort,,"Your Result","결과"

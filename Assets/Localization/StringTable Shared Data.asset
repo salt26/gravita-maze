@@ -343,10 +343,6 @@ MonoBehaviour:
     m_Key: warning_validation_fail
     m_Metadata:
       m_Items: []
-  - m_Id: 486496264250
-    m_Key: open_map_message
-    m_Metadata:
-      m_Items: []
   - m_Id: 486496264251
     m_Key: result_ui_upper_message_pass
     m_Metadata:
