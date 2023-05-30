@@ -343,10 +343,6 @@ MonoBehaviour:
     m_Key: warning_validation_fail
     m_Metadata:
       m_Items: []
-  - m_Id: 486496264250
-    m_Key: open_map_message
-    m_Metadata:
-      m_Items: []
   - m_Id: 486496264251
     m_Key: result_ui_upper_message_pass
     m_Metadata:
@@ -539,14 +535,6 @@ MonoBehaviour:
     m_Key: AdventureLevel/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
-  - m_Id: 165923439763456
-    m_Key: Credit/Canvas/FirstPanel/HeaderText
-    m_Metadata:
-      m_Items: []
-  - m_Id: 167413608865792
-    m_Key: Credit/Canvas/FirstPanel/DesriptionText
-    m_Metadata:
-      m_Items: []
   - m_Id: 167868644712448
     m_Key: Custom/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:
@@ -713,6 +701,50 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 171187530358784
     m_Key: Tutorial/Canvas/PauseUI/PauseBox/SkipGameButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 487869532594176
+    m_Key: Custom/Canvas/GravityPanel/CustomOpen/CustomButtonOpen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 488604819251200
+    m_Key: Training/Canvas/GravityPanel/TrainingOpen/TrainingButtonOpen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489289522601984
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 4: Test/EditorButtonBack4'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489351799627776
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 1: Initialize/EditorButtonNext1'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489381340110848
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 2: Build/EditorButtonNext2'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489402718478336
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 4: Test/EditorButtonNext4'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489429658492928
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 5: Open/EditorButtonOpen5'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489467155570688
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 3: Request/EditorButtonQuit3'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489777756364800
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 4: Test/EditorButtonRetryTime'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489821985300480
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 3: Request/EditorButtonSave3'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489854755397632
+    m_Key: 'Editor/Canvas/EditorPanel/Phase 6: Save/EditorButtonSave6'
     m_Metadata:
       m_Items: []
   m_Metadata:

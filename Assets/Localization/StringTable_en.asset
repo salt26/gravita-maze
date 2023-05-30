@@ -69,7 +69,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486492069895
-    m_Localized: Cannot add a exit there.
+    m_Localized: Cannot add an exit there.
     m_Metadata:
       m_Items: []
   - m_Id: 486492069896
@@ -97,7 +97,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486492069902
-    m_Localized: Cannot remove walls or\nshutters or exits there.
+    m_Localized: Cannot remove walls,\nshutters, or exits there.
     m_Metadata:
       m_Items:
       - id: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
-    m_Localized: Touch the map to remove\nwalls or shutters or exits.
+    m_Localized: Touch the map to remove\nwalls, shutters, or exits.
     m_Metadata:
       m_Items:
       - id: 0
@@ -182,7 +182,8 @@ MonoBehaviour:
   - m_Id: 486496264204
     m_Localized: The map has been reinitialized.\nYou can undo this action.
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486496264205
     m_Localized: <b>Create folder</b>\n\nEnter new\nfolder name.
     m_Metadata:
@@ -223,7 +224,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264214
-    m_Localized: <b>Check Save As</b>\n\nMap "
+    m_Localized: <b>Duplicate name</b>\n\nMap "
     m_Metadata:
       m_Items:
       - id: 0
@@ -250,7 +251,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264220
-    m_Localized: 'Undo: a wall or a shutter\nor an exit'
+    m_Localized: 'Undo: a wall, a shutter,\nor an exit'
     m_Metadata:
       m_Items:
       - id: 0
@@ -275,7 +276,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264226
-    m_Localized: 'Redo: a wall or a shutter\nor an exit'
+    m_Localized: 'Redo: a wall, a shutter,\nor an exit'
     m_Metadata:
       m_Items:
       - id: 0
@@ -385,10 +386,6 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - id: 0
-  - m_Id: 486496264250
-    m_Localized: Choose a map to open.
-    m_Metadata:
-      m_Items: []
   - m_Id: 486496264251
     m_Localized: Congratulations!
     m_Metadata:
@@ -402,7 +399,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264254
-    m_Localized: You can do better next time!
+    m_Localized: You will do better next time!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458496
@@ -410,23 +407,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458497
-    m_Localized: You seems very good at this game...
+    m_Localized: You're off to a great start!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458498
-    m_Localized: Nice! Your journey has started!
+    m_Localized: Our journey has just begun!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458499
-    m_Localized: Great! You have the potential of a master!
+    m_Localized: You are crushing it!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458500
-    m_Localized: Wow! How did you do this?!
+    m_Localized: You have mastered the art of GravitaMaze!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458501
-    m_Localized: Unbelievable! You overwhelmed the map creators...
+    m_Localized: No way! How did you pull this off?!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458502
@@ -435,7 +432,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486500458503
     m_Localized: Great job!\nNow, let's press the up arrow to make the ball roll
-      up.
+      upward.
     m_Metadata:
       m_Items:
       - id: 0
@@ -444,12 +441,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458505
-    m_Localized: Next is a more complicated maze...\nGood luck!
+    m_Localized: Next maze is a bit more complicated...\nGood luck!
     m_Metadata:
       m_Items:
       - id: 0
   - m_Id: 486500458506
-    m_Localized: Oh, that's a good choice!
+    m_Localized: Oh, that's a great move!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458507
@@ -457,19 +454,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458508
-    m_Localized: Here's only one step left!
+    m_Localized: We're just one step away!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458509
-    m_Localized: Fire can burn the ball...
+    m_Localized: Fire will burn the ball...
     m_Metadata:
       m_Items: []
   - m_Id: 486500458510
-    m_Localized: A heavy iron can squash a ball...
+    m_Localized: A heavy iron will squash a ball...
     m_Metadata:
       m_Items: []
   - m_Id: 486500458511
-    m_Localized: Now it won't get in the way of our escape!
+    m_Localized: Now it won't get in our way!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458512
@@ -481,7 +478,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458514
-    m_Localized: Now that the iron has blocked the fire, you can escape!
+    m_Localized: Let's get the ball out while the iron is blocking a fire!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458515
@@ -493,31 +490,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458517
-    m_Localized: If the ball passes through the bright green shutter, it will become
-      a wall.
+    m_Localized: A bright green shutter turns into a wall after the ball passes through
+      it.
     m_Metadata:
       m_Items: []
   - m_Id: 486500458518
-    m_Localized: Once the shutter becomes a wall, it remains a wall until you retry.
+    m_Localized: Once the shutter becomes a wall, it remains the same until you retry.
     m_Metadata:
       m_Items: []
   - m_Id: 486500458519
-    m_Localized: Of course, sometimes you can be trapped by the shutter, too. Press
-      the retry button!
+    m_Localized: Of course, sometimes you can get trapped by the shutter. Press the
+      retry button!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458520
-    m_Localized: A walled shutter can also block the iron. Don't let the iron squash
-      the ball!
+    m_Localized: A shutter turned into a wall can also block the iron. Don't let
+      the iron squash the ball!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458521
-    m_Localized: The iron cannot make the shutter a wall. Only the ball can close
+    m_Localized: The iron cannot turn a shutter into a wall. Only the ball can close
       the shutter.
     m_Metadata:
       m_Items: []
   - m_Id: 486500458522
-    m_Localized: Great, you found the exit! Let's escape!
+    m_Localized: Great, you've found the exit! Let's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458523
@@ -526,25 +523,26 @@ MonoBehaviour:
       m_Items:
       - id: 0
   - m_Id: 486500458524
-    m_Localized: The ball got squashed! Press the shiny retry button to try again.
+    m_Localized: The ball got squashed!\nPress the shiny retry button to try again.
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 486500458525
     m_Localized: Oh no, time's up!\nPress the shiny retry button to try again.
     m_Metadata:
       m_Items:
       - id: 0
   - m_Id: 486500458526
-    m_Localized: The ball escaped! Congratulations!
+    m_Localized: The ball escaped the maze! Congratulations!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458527
-    m_Localized: \nCongratulations!\nYou passed all tutorials!
+    m_Localized: \nCongratulations!\nYou just passed all tutorials!
     m_Metadata:
       m_Items:
       - id: 0
   - m_Id: 486500458528
-    m_Localized: The iron that was blocking the exit has been removed. Let's escape!
+    m_Localized: Exit blocking iron has been just removed. Let's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 164806647603200
@@ -597,48 +595,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 165704832638976
     m_Localized: Time out!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 165923439763456
-    m_Localized: Credit
-    m_Metadata:
-      m_Items: []
-  - m_Id: 167413608865792
-    m_Localized: 'Project Manager,
-
-      Main Programmer,
-
-      Sound Designer,
-
-      UI/UX
-      Designer
-
-      and Map Maker
-
-      <size=60><i>DanTae An</i></size>
-
-
-      Sub
-      Programmer
-
-      <size=60><i>JunWoo Eom</i></size>
-
-
-      Map Maker
-
-      <size=60><i>DongHwan
-      Yang</i></size>
-
-
-      Marketor
-
-      <size=60><i>SuIn Lee</i></size>
-
-
-      Assistant
-
-      <size=60><i>Diane
-      Kim, YongChan Jo, Jaehee Hong</i></size>'
     m_Metadata:
       m_Items: []
   - m_Id: 167868644712448
@@ -751,30 +707,35 @@ MonoBehaviour:
 
       and Map Maker
 
-      <size=60><i>DanTae An</i></size>
+      <size=45><i>DanTae An</i></size>
 
 
       Sub
       Programmer
 
-      <size=60><i>JunWoo Eom</i></size>
+      <size=45><i>JunWoo Eom</i></size>
 
 
       Map Maker
 
-      <size=60><i>DongHwan
+      <size=45><i>DongHwan
       Yang</i></size>
 
 
       Marketor
 
-      <size=60><i>SuIn Lee</i></size>
+      <size=45><i>SuIn Lee</i></size>
 
 
       Assistant
 
-      <size=60><i>Diane
-      Kim, YongChan Jo, Jaehee Hong</i></size>'
+      <size=45><i>Diane
+      Kim</i></size>
+
+      <size=45><i>YongChan Jo</i></size>
+
+      <size=45><i>Jaehee
+      Hong</i></size>'
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400
@@ -875,9 +836,53 @@ MonoBehaviour:
       this map'
     m_Metadata:
       m_Items: []
+  - m_Id: 487869532594176
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 488604819251200
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489289522601984
+    m_Localized: Press the next button\to complete the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489351799627776
+    m_Localized: Press the\New or Open\button first.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489381340110848
+    m_Localized: A ball and\an exit must\be placed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489402718478336
+    m_Localized: Escape the map\to complete\the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489429658492928
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489467155570688
+    m_Localized: Confirm the map\is playable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489777756364800
+    m_Localized: Press the next button\to complete the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489821985300480
+    m_Localized: Confirm the map\is playable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489854755397632
+    m_Localized: Set your map\name to save.
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
     00000000:
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af4571000000
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af4571000000

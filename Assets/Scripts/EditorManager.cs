@@ -2093,7 +2093,11 @@ public class EditorManager : MonoBehaviour
         if (!Directory.Exists(currentSavePath.TrimEnd('/') + "/" + folderName))
         {
             Directory.CreateDirectory(currentSavePath.TrimEnd('/') + "/" + folderName);
-            statusUI.SetStatusMessageWithFlashing("New folder \"" + folderName + "\" has created!", 2f);
+            statusUI.SetStatusMessageWithFlashing(
+                LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_success_part1")
+                + folderName
+                + LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_success_part2"),
+                2f);
             RenderSaveScrollView(currentSavePath);
             foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
             {
@@ -2108,7 +2112,11 @@ public class EditorManager : MonoBehaviour
         else
         {
             Debug.LogWarning("Editor warning: folder name already exists");
-            statusUI.SetStatusMessageWithFlashing("Cannot create the folder: folder \"" + folderName + "\" already exists.", 2.5f);
+            statusUI.SetStatusMessageWithFlashing(
+                LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_fail_part1")
+                + folderName
+                + LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_fail_part2"),
+                2.5f);
             foreach (OpenSaveScrollItem i in editorSaveScrollContent.GetComponentsInChildren<OpenSaveScrollItem>())
             {
                 if (i.isFolder && i.labelName != null && i.labelName.Equals(folderName))
@@ -2161,7 +2169,11 @@ public class EditorManager : MonoBehaviour
                 {
                     truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
                 }
-                messageUI.Initialize("<b>Check Save As</b>\n\nMap \"" + truncated + "\" already exists.\nDo you want to overwrite it?", () => EditSaveHelper(), () => { isSaving = false; });
+                messageUI.Initialize(
+                    LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_duplicate_name_ask_part1")
+                    + truncated
+                    + LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_duplicate_name_ask_part2"),
+                    () => EditSaveHelper(), () => { isSaving = false; });
             }
             else
             {

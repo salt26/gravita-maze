@@ -888,7 +888,7 @@ public class PlayManager : MonoBehaviour
 #endif
         RenderOpenScrollViewForTraining(selected);
 
-        statusUI.SetStatusMessage("Choose a map to open");
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_open_map"));
 
 
     }
