@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2056,8 +2056,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+      - m_Target: {fileID: 1185197183}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: SetBGMVolume
         m_Mode: 2
         m_Arguments:
@@ -2202,7 +2202,7 @@ GameObject:
   - component: {fileID: 864389509}
   - component: {fileID: 864389511}
   m_Layer: 5
-  m_Name: FirstPanel
+  m_Name: SettingPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2884,6 +2884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1241311265}
   - component: {fileID: 1241311266}
+  - component: {fileID: 1241311267}
   m_Layer: 5
   m_Name: SfxSlider
   m_TagString: Untagged
@@ -2964,13 +2965,40 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+      - m_Target: {fileID: 1185197183}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: SetSFXVolume
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1241311266}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1241311267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241311264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3383860e292e6cf45b668bb6d35310c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPointerUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1185197183}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: PlayButtonSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3367,7 +3395,7 @@ Animator:
   m_GameObject: {fileID: 1311274127}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9576383960a1fdc44bceefd88aa1cd96, type: 2}
+  m_Controller: {fileID: 9100000, guid: e35b15f428c4a854885a5935e64cc2e6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

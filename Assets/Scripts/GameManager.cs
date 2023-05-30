@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
-        sfxAudioSource.volume = Mathf.Clamp01(sfxVolume);
+        sfxAudioSource.volume = 1f;
         Initialize();   
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -94,14 +94,22 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(pm != null && pm.IsReady){
+        if (pm != null && pm.IsReady)
+        {
             bgmAudioSource.volume = Mathf.Clamp01(pm.pauseUI.bgmVolume);
-            sfxAudioSource.volume = Mathf.Clamp01(pm.pauseUI.sfxVolume);
+            sfxAudioSource.volume = 1f;
         }
-        
-        // 입력 담당
-        
 
+        for (int i = 0; i < 3; i++)
+        {
+            if (bgmAudioSource.clip == bgms[i])
+            {
+                bgmAudioSource.volume = Mathf.Clamp01(bgmVolume * bgmVolumeForEach[i]);
+                break;
+            }
+        }
+
+        // 입력 담당
         if (canPlay)
         {
             if (mm is null || !mm.IsReady) return; // mm : 맵의 미리보기가 떴을 때 또는 플레이 도중에만 값이 할당되어 있는 듯??
@@ -248,15 +256,6 @@ public class GameManager : MonoBehaviour
                             break;
                     }
                 }
-            }
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (bgmAudioSource.clip == bgms[i])
-            {
-                bgmAudioSource.volume = Mathf.Clamp01(bgmVolume * bgmVolumeForEach[i]);
-                break;
             }
         }
     }

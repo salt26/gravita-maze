@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1548,6 +1548,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: "BGM\n\uBCFC\uB968"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945765818278247927, guid: ab016032a72db2d4cb0b255953e0dc4b,
+        type: 3}
+      propertyPath: onPointerUp.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 222567254}
+    - target: {fileID: 1945765818278247927, guid: ab016032a72db2d4cb0b255953e0dc4b,
+        type: 3}
+      propertyPath: onPointerUp.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlayButtonSFX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab016032a72db2d4cb0b255953e0dc4b, type: 3}

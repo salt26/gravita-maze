@@ -23,6 +23,7 @@ public class SettingManager : MonoBehaviour
         PanelAnimation = CreditPanel.GetComponent<Animator>();
         CreditPanel.SetActive(false);
     }
+
     private void Update()
     {
         if (isCredit && !isOnce)
@@ -106,10 +107,20 @@ public class SettingManager : MonoBehaviour
     {
         GameManager.gm.PlayButtonSFX();
     }
+
     public void PlayFallSFX(float volume)
     {
         GameManager.gm.PlayFallSFX(volume);
     }
 
+    public void SetBGMVolume(Slider slider)
+    {
+        GameManager.gm.bgmVolume = slider.value;
+    }
+
+    public void SetSFXVolume(Slider slider)
+    {
+        GameManager.gm.sfxVolume = slider.value;
+    }
 
 }
