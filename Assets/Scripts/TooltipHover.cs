@@ -45,11 +45,24 @@ public class TooltipHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (em.tooltipUI.transform.childCount >= 1)
+        if (SceneManager.GetActiveScene().name.Equals("Editor"))
         {
-            for (int i = 0; i < em.tooltipUI.transform.childCount; i++)
+            if (em.tooltipUI.transform.childCount >= 1)
             {
-                Destroy(em.tooltipUI.transform.GetChild(i).gameObject);
+                for (int i = 0; i < em.tooltipUI.transform.childCount; i++)
+                {
+                    Destroy(em.tooltipUI.transform.GetChild(i).gameObject);
+                }
+            }
+        }
+        else if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training"))
+        {
+            if (pm.tooltipUI.transform.childCount >= 1)
+            {
+                for (int i = 0; i < pm.tooltipUI.transform.childCount; i++)
+                {
+                    Destroy(pm.tooltipUI.transform.GetChild(i).gameObject);
+                }
             }
         }
         lastEnterTime = Time.time;

@@ -26,15 +26,18 @@ public class SettingManager : MonoBehaviour
 
     private void Update()
     {
-        if (isCredit && !isOnce)
+        if (isCredit)
         {
-            isOnce = true;
-            QuitButton.interactable = false;
-            CreditButton.interactable = false;
-            CreditPanel.SetActive(true);
-            StartCoroutine(SoundEffect());
+            if (!isOnce)
+            {
+                isOnce = true;
+                QuitButton.interactable = false;
+                CreditButton.interactable = false;
+                CreditPanel.SetActive(true);
+                StartCoroutine(SoundEffect());
+            }
 
-            if (Input.GetKeyUp(KeyCode.Return))
+            if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Return))
             {
                 isOnce = false;
                 isCredit = false;
