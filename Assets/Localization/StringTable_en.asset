@@ -873,6 +873,50 @@ MonoBehaviour:
       this map'
     m_Metadata:
       m_Items: []
+  - m_Id: 487869532594176
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 488604819251200
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489289522601984
+    m_Localized: Press the next button\to complete the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489351799627776
+    m_Localized: Press the\New or Open\button first.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489381340110848
+    m_Localized: A ball and\an exit must\be placed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489402718478336
+    m_Localized: Escape the map\to complete\the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489429658492928
+    m_Localized: Select a map\or a folder\to open.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489467155570688
+    m_Localized: Confirm the map\is playable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489777756364800
+    m_Localized: Press the next button\to complete the test.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489821985300480
+    m_Localized: Confirm the map\is playable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 489854755397632
+    m_Localized: Set your map\name to save.
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
     00000000:
