@@ -1,24 +1,49 @@
-# GravitaMaze (중력 미로)
+# GravitaMaze
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/salt26/gravita-maze/blob/main/README.md)
-[![ko](https://img.shields.io/badge/lang-ko-blue.svg)](https://github.com/salt26/gravita-maze/blob/main/README.ko.md)
+[![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
+[![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
+
 [![Version badge](https://img.shields.io/badge/Version-1.4.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
+<img src="./Figures/Banner.png" height=300>
+
 ## Introduction
 
+### "Escape complex mazes by manipulating gravity!"
+
 * Puzzle game
-  * Manipulate gravity to escape the ball!
+* Make your own map by using the Map Editor.
 * English and Korean are fully available!
+* This is a pre-release.
+  * 2023 H2 release! Coming soon!
+* Check out our latest news below.
+  * Youtube: https://youtube.com/@Ravita_Studio/
+  * Fantrie (Korean): https://fantrie.com/ravitastudio/
 
-### Download
+## Download
 
-#### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+
+---
+
+## Update Logs
 
 <details>
 <summary>Click here to expand or collapse the old update logs!</summary>
+
+### Updates (v1.4.0 -> v1.4.1)
+
+* Localization (English and Korean)
+* Change fonts.
+* Add Settings scene.
+* Improve Tutorial mode.
+* Improve UI/UX.
+* Add several Training and Custom maps.
+* Expand the size of the four types of gravity manipulation buttons again.
+* Fix some bugs.
 
 ### Updates (v1.3.1 -> v1.4.0)
 
@@ -244,6 +269,6 @@
 
 * There are a Tutorial mode, four Adventure modes, Custom modes and Training mode.
 
-![Screenshot1](./Figures/Screenshot1.v1.3.1.png)
+![Screenshot1](./Figures/Screenshot1.v1.4.1.png)
 
-![Screenshot2](./Figures/Screenshot2.v1.3.1.png)
+![Screenshot2](./Figures/Screenshot2.v1.4.1.png)

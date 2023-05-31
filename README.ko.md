@@ -1,24 +1,49 @@
-# GravitaMaze (중력 미로)
+# 중력 미로
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/salt26/gravita-maze/blob/main/README.md)
-[![ko](https://img.shields.io/badge/lang-ko-blue.svg)](https://github.com/salt26/gravita-maze/blob/main/README.ko.md)
+[![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
+[![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
+
 [![Version badge](https://img.shields.io/badge/Version-1.4.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
+<img src="./Figures/Banner.png" height=300>
+
 ## 게임 소개
 
+### "중력을 조작하여 짧은 시간 안에 미로를 빠져나가자!"
+
 * 퍼즐 게임
-  * 중력을 조작해서 공을 미로에서 탈출시켜 보세요!
+* 맵 편집기로 나만의 퍼즐을 만들어볼 수 있습니다!
 * 영어 및 한국어 지원!
+* 이 버전은 출시 전 데모 버전입니다.
+  * 2023년 하반기 출시 예정!
+* 중력 미로의 최신 소식은 아래에서 확인하세요!
+  * 유튜브: https://youtube.com/@Ravita_Studio/
+  * 팬트리: https://fantrie.com/ravitastudio/
 
-### 다운로드
+## 다운로드
 
-#### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+
+---
+
+## 업데이트 로그
 
 <details>
 <summary>여기를 클릭하면 과거 업데이트 내용을 표시하거나 숨길 수 있습니다.</summary>
+
+### 업데이트 (v1.4.0 -> v1.4.1)
+
+* 현지화 (영어 및 한국어)
+* 글꼴 변경
+* 설정 scene 추가
+* Tutorial 모드 개선
+* 사용자 인터페이스 및 경험 개선
+* Training 및 Custom 맵 추가
+* 중력 조작 버튼 4개의 판정 크기를 한 번 더 확대
+* 여러 버그 수정
 
 ### 업데이트 (v1.3.1 -> v1.4.0)
 
@@ -61,13 +86,13 @@
 
 #### 편의 기능 및 사용자 경험 개선
 
-* 중력 조작 버튼 4개의 크기 확대.
+* 중력 조작 버튼 4개의 판정 크기 확대.
 * 쇳덩이 안의 폰트를 밝은 색으로 변경.
 * 모드 선택 및 Adventure 레벨 선택 scene에서, 맵의 위치를 재배치해서 재시도 버튼을 누를 필요가 없도록 변경함.
 * Tutorial, Adventure, Custom, Traning 모드에서 게임을 일시정지할 때 표시되는 메뉴 UI를 재배치함.
   * 일시정지 메뉴에서 배경음 및 효과음 음량을 조절 가능.
   * 일시정지 메뉴에서 맵을 스킵(남은 시간을 0으로 변경)할 수 있음.
-* Custom 모드에서 난이도별로 폴더가 오름차순으로 정렬되도록 폴더명 변경.
+* Custom 모드에서 난이도 별로 폴더가 오름차순으로 정렬되도록 폴더명 변경.
 * 포털 애니메이션 추가 및 이미지 변경.
 
 ### 업데이트 (v1.3.0 -> v1.3.1)
@@ -236,14 +261,14 @@
 * 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
   * 시간이 초과되면 목숨이 1개 깎여요.
 
-## 맵 에디터
+## 맵 편집기
 
-* 맵 에디터로 나만의 맵을 만들 수 있어요!
+* 맵 편집기로 나만의 맵을 만들 수 있어요!
 
 ## 플레이 모드
 
 * Tutorial 모드, 4개의 Adventure 모드, Custom 모드, Training 모드가 있어요!
 
-![Screenshot1](./Figures/Screenshot1.v1.3.1.png)
+![Screenshot1](./Figures/Screenshot1.v1.4.1.ko.png)
 
-![Screenshot2](./Figures/Screenshot2.v1.3.1.png)
+![Screenshot2](./Figures/Screenshot2.v1.4.1.png)
