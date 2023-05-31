@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingUI : MonoBehaviour
@@ -22,11 +23,15 @@ public class SettingUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bgmVolume = GameManager.gm.bgmVolume;
-        sfxVolume = GameManager.gm.sfxVolume;
+        if (SceneManager.GetActiveScene().name.Equals("Setting"))
+        {
+            bgmVolume = GameManager.gm.bgmVolume;
+            sfxVolume = GameManager.gm.sfxVolume;
 
-        settingBgmVolume.GetComponent<Slider>().value = bgmVolume;
-        settingSfxVolume.GetComponent<Slider>().value = sfxVolume;
+            settingBgmVolume.GetComponent<Slider>().value = bgmVolume;
+            settingSfxVolume.GetComponent<Slider>().value = sfxVolume;
+        }
+
         changed = false;
 
         if (dropdown.options.Count > 2)

@@ -20,8 +20,11 @@ public class SettingManager : MonoBehaviour
 
     void Start()
     {
-        PanelAnimation = CreditPanel.GetComponent<Animator>();
-        CreditPanel.SetActive(false);
+        if (SceneManager.GetActiveScene().name.Equals("Setting"))
+        {
+            PanelAnimation = CreditPanel.GetComponent<Animator>();
+            CreditPanel.SetActive(false);
+        }
         string localeRaw = LocalizationSettings.SelectedLocale.ToString();
         string locale = localeRaw.Substring(0, localeRaw.IndexOf('(')).TrimEnd(' ');
         languageSetting.value = (int)(GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), locale);
@@ -29,6 +32,8 @@ public class SettingManager : MonoBehaviour
 
     void Update()
     {
+        if (SceneManager.GetActiveScene().name.Equals("First")) return;
+
         if (isCredit)
         {
             if (!isOnce)
