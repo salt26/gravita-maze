@@ -140,28 +140,6 @@ public class GameManager : MonoBehaviour
                     pm.tutorialGuide.RetryButtonDown();
                 }
             }
-            else if(Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-                    && (mm.gravityRetryTimeButton.gameObject.activeInHierarchy && mm.gravityRetryTimeButton.interactable)
-                    || (mm.gravityRetryTimeHighlightedButton != null && mm.gravityRetryTimeHighlightedButton.gameObject.activeInHierarchy
-                    && mm.gravityRetryTimeHighlightedButton.interactable))
-            {
-                mm.RetryWithTime();
-                if (SceneManager.GetActiveScene().name.Equals("Tutorial") && pm != null && pm.tutorialGuide != null)
-                {
-                    pm.tutorialGuide.RetryButtonDown();
-                }
-            }
-            else if(Input.GetKey(KeyCode.Space) && (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.RightControl))
-                    && (mm.gravityRetryTimeButton.gameObject.activeInHierarchy && mm.gravityRetryTimeButton.interactable)
-                    || (mm.gravityRetryTimeHighlightedButton != null && mm.gravityRetryTimeHighlightedButton.gameObject.activeInHierarchy
-                    && mm.gravityRetryTimeHighlightedButton.interactable))
-            {
-                mm.RetryWithTime();
-                if (SceneManager.GetActiveScene().name.Equals("Tutorial") && pm != null && pm.tutorialGuide != null)
-                {
-                    pm.tutorialGuide.RetryButtonDown();
-                }
-            }
             else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
             {
                 if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
