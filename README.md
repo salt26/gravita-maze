@@ -21,7 +21,7 @@
   * 2023 H2 release! Coming soon!
 * Check out our latest news below.
   * Youtube: https://youtube.com/@Ravita_Studio/
-  * Fantrie (Korean): https://fantrie.com/ravitastudio/
+  * Fantrie: https://fantrie.com/ravitastudio/
 
 ## Download
 
