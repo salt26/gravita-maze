@@ -1,32 +1,39 @@
 # GravitaMaze (중력 미로)
+
 [![Version badge](https://img.shields.io/badge/Version-1.4.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
 ## Introduction
+
 * Puzzle game
   * Manipulate gravity to escape the ball!
 * English is fully available!
 
 ### Download
+
 #### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
 
 <details>
 <summary>Click here to expand or collapse the old update logs!</summary>
- 
+
 ### Updates (v1.3.1 -> v1.4.0)
+
 #### Sound
+
 * Add various sound effects
 * Add background music for editor scene
 
 #### Considerations for First-time Users
+
 * Add a first-time user scene that allows users to start the tutorial immediately after installing the app.
   * Skip is also available.
 * Provide a detailed tutorial tooltip.
 * Minor changes in tutorial maps
 
 #### Add New Modes
+
 * Add Custom mode
   * You can play by selecting the map you want.
   * From now, you don't need to enter editor mode to play custom maps.
@@ -37,6 +44,7 @@
 * Add credit scene
 
 #### Giving a Sense of Accomplishment and Motivation
+
 * Reorganize result UI of Tutorial and Adventure mode with some animations and SFXs.
 * Add star system
   * If you clear the Tutorial, you will receive three stars.
@@ -50,6 +58,7 @@
 * Add new maps and adjust map balance
 
 #### Improving convenience and user experience
+
 * Expand the size of the four types of gravity manipulation buttons.
 * All the letters of iron were changed to bright colors overall.
 * In the mode selection scene and the adventure level selection scene, maps are reorganized so that there is no need to press the retry button.
@@ -60,12 +69,14 @@
 * Change the image and add animation of the portal.
 
 ### Updates (v1.3.0 -> v1.3.1)
+
 #### Common
+
 * In any game play mode,
   * Time pauses when the ball dies or the retry button is pressed. Time starts to go by again when you press any gravity manipulation buttons.
   * The timer UI changes color to pink while the time is paused. Its color turns purple while the time goes by.
   * When a ball escapes, it is shown an animation that moves slowly by gravity.
-* Add a new BGM for the game play scenes(Tutorial, Adventure and Test phase in Editor). 
+* Add a new BGM for the game play scenes(Tutorial, Adventure and Test phase in Editor).
 * In Adventure mode,
   * Huge scale of map balance patch is done.
     * Easy: 5 maps are replaced, and the time limit of a map is changed.
@@ -78,15 +89,18 @@
   * If you are using macOS, please  download `GravitaMaze.zip`, unzip it, and move `Maps` folder to the root directory of `GravitaMaze.app`.
 
 #### Android
+
 * The continuous integration(CI) targets Android API level to 28. (Android 9.0 'Pie')
   * This is because there are issues related to storage read/write permission when the target API level is 29 or higher.
 
 ### Updates (v.1.2.1 -> v1.3.0)
+
 #### Common
+
 * The Shutter has added!
   * Until the ball passes, the shutter is the same as no wall.
   * Once a ball passes, the shutter is treated as a wall.
-* Add a BGM for the main scene. 
+* Add a BGM for the main scene.
 * In Tutorial mode,
   * Two maps are added, including shutters.
 * In Editor mode,
@@ -102,11 +116,14 @@
 * The continuous integration(CI) was added to automatically build for Android, Windows and macOS.
 
 #### Android
+
 * The target API level is set to 28. (Android 9.0 'Pie')
   * This is because there are issues related to storage read/write permission when the target API level is 29 or higher.
 
 ### Updates (v.1.1.0 -> v.1.2.1)
+
 #### Common
+
 * In Tutorial mode,
   * The progress is displayed.
   * You can pause and resume the game.
@@ -127,18 +144,23 @@
   * 3:4 is not supported.
 
 #### Android
+
 * You can press the Back key to press the Pause button in Tutorial and Adventure mode.
 
 #### Windows
+
 * You can press the Enter key to press the Next button in Tutorial and Adventure mode.
 * You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
 
 #### macOS
+
 * You can press the Enter key to press the Next button in Tutorial and Adventure mode.
 * You can press the Esc key to press the Pause button in Tutorial and Adventure mode.
 
 ### Updates (v.1.0.2 -> v.1.1.0)
+
 #### Common
+
 * Adventure mode is now playable!
   * There are Easy, Normal, Hard, and Insane levels.
   * In adventure mode, the map is randomly rotated or flipped.
@@ -146,20 +168,26 @@
 * Even if you modify the map file(`.txt`) directly to increase the time limit to more than 30 seconds, the maximum time limit is set to 30 seconds.
 
 ### Updates (v.1.0.1 -> v.1.0.2)
+
 #### Common
+
 * The default value for the time limit has increased from 10 seconds to 30 seconds.
 * Several maps have been added.
 
 #### Android
+
 * Maps can now be saved on internal storage rather than on the app's internal data.
   * You can share your own map or download other's map!
   * The map files are saved in `GravitaMaze/Maps`.
+
 </details>
 
 ---
 
 ## How to Play
-#### Android
+
+### Android
+
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
 * Download `GravitaMaze.v1.4.1.a.zip` on your Android cell phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * You may need to allow "Install unknown apps" (in "Settings" - "Apps" - "..." - "Special access" - "Install unknown apps")
@@ -175,7 +203,8 @@
 * Escape the ball before the time limit is over.
   * If you time out, you lose one life.
 
-#### Windows
+### Windows
+
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
 * Download `GravitaMaze.v1.4.1.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
@@ -187,7 +216,8 @@
 * Escape the ball before the time limit is over.
   * If you time out, you lose one life.
 
-#### macOS
+### macOS
+
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
 * Download `GravitaMaze.v1.4.1.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
@@ -199,10 +229,12 @@
 * Escape the ball before the time limit is over.
   * If you time out, you lose one life.
 
-### Map Editor
+## Map Editor
+
 * You can use the map editor to make your own custom maps!
 
-### Play Modes
+## Play Modes
+
 * There are a Tutorial mode, four Adventure modes, Custom modes and Training mode.
 
 ![Screenshot1](./Figures/Screenshot1.v1.3.1.png)
