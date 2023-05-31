@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2353fca5-2522-48e7-aa11-312757856b5f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Localization/StringTable_en.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Localization/StringTable_en.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Localization/StringTable_ko.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Localization/StringTable_ko.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.gravita-maze/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gravita-maze/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Tutorial.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Tutorial.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1685536137056</updated>
       <workItem from="1685536149744" duration="825000" />
-      <workItem from="1685537217757" duration="7685000" />
+      <workItem from="1685537217757" duration="10165000" />
     </task>
     <servers />
   </component>
