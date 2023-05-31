@@ -136,7 +136,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
-    m_Localized: Touch the map to remove\nwalls, shutters, or exits.
+    m_Localized: Touch the map to remove\nwalls or shutters or exits.
     m_Metadata:
       m_Items:
       - id: 0
@@ -542,7 +542,7 @@ MonoBehaviour:
       m_Items:
       - id: 0
   - m_Id: 486500458528
-    m_Localized: Exit blocking iron has been just removed. Let's escape!
+    m_Localized: Exit-blocking iron has been just removed. Let's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 164806647603200
