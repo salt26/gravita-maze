@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)  
+[![Version badge](https://img.shields.io/badge/Version-1.4.2-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## Download
 
-### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+### [v1.4.2 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
 
 ---
 
@@ -35,6 +35,8 @@
 <summary>Click here to expand or collapse the old update logs!</summary>
 
 ### Updates (v1.4.0 -> v1.4.1)
+
+> Important: v1.4.1 has a critical bug! Please download v1.4.2.
 
 * Localization (English and Korean)
 * Change fonts.
@@ -215,8 +217,8 @@
 
 ### Android
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
-* Download `GravitaMaze.v1.4.1.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
+* Download `GravitaMaze.v1.4.2.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * When the `Install unknown app` message appears, choose `Ignore and install`
   * If Google Play Protect shows `Blocked by Play Protect` message, ***DO NOT CLICK OK MESSAGE***. Instead, click `Details -> Install anyway (unsafe)`.
   * `Send app for scanning?` message might appear. You can choose whatever option you want.
@@ -226,40 +228,22 @@
     * If you checked the `Do not ask me again` option, you must go into the application permission settings and manually turn on the permission for `GravitaMaze`.
 * You can download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app to enjoy the custom maps.
   * These maps are playable in Custom mode, not in Adventure mode.
-* The gravity can be manipulated by touching the four "arrow" buttons.
-* Whenever the ball dies, you can touch "retry" button to retry the map.
-  * Time stops while the ball is dead.
-  * Time passes after you manipulate gravity.
-* Escape the ball before the time limit is over.
-  * If you time out, you lose one life.
 
 ### Windows
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
-* Download `GravitaMaze.v1.4.1.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
+* Download `GravitaMaze.v1.4.2.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
 * You can download `GravitaMaze.zip` and unzip, and move the `Maps` folder to the root directory of `GravitaMaze.exe` to enjoy the custom maps.
   * These maps are playable in Custom mode, not in Adventure mode.
-* The gravity can be manipulated by pressing the four "arrow" buttons.
-* Whenever the ball dies, you can press "retry" button (or Space key) to retry the map.
-  * Time stops while the ball is dead.
-  * Time passes after you manipulate gravity.
-* Escape the ball before the time limit is over.
-  * If you time out, you lose one life.
 
 ### macOS
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)!
-* Download `GravitaMaze.v1.4.1.m.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
+* Download `GravitaMaze.v1.4.2.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
 * You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of `GravitaMaze.app` to enjoy the custom maps.
   * These maps are playable in Custom mode, not in Adventure mode.
-* The gravity can be manipulated by pressing the four "arrow" buttons.
-* Whenever the ball dies, you can press "retry" button (or Space key) to retry the map.
-  * Time stops while the ball is dead.
-  * Time passes after you manipulate gravity.
-* Escape the ball before the time limit is over.
-  * If you time out, you lose one life.
 
 ## Map Editor
 
@@ -268,6 +252,12 @@
 ## Play Modes
 
 * There are a Tutorial mode, four Adventure modes, Custom modes and Training mode.
+* The gravity can be manipulated by touching the four "arrow" buttons or pressing arrow keys.
+* Whenever the ball dies, you can touch "retry" button or press space key to retry the map.
+  * Time stops while the ball is dead.
+  * Time passes after you manipulate gravity.
+* Escape the ball before the time limit is over.
+  * If you time out, you lose one life.
 
 ![Screenshot1](./Figures/Screenshot1.v1.4.1.png)
 

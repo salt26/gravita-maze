@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.1-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)  
+[![Version badge](https://img.shields.io/badge/Version-1.4.2-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## 다운로드
 
-### [v1.4.1 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
+### [v1.4.2 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
 
 ---
 
@@ -35,6 +35,8 @@
 <summary>여기를 클릭하면 과거 업데이트 내용을 표시하거나 숨길 수 있습니다.</summary>
 
 ### 업데이트 (v1.4.0 -> v1.4.1)
+
+> 중요: v1.4.1에는 게임이 진행되지 않는 치명적인 버그가 있습니다. v1.4.2를 다운로드하시기 바랍니다.
 
 * 현지화 (영어 및 한국어)
 * 글꼴 변경
@@ -100,7 +102,7 @@
 #### 공통
 
 * Game Play 모드
-  * 공이 죽거나 재도전 버튼을 누르면 시간이 멈춤. 중력 조작 버튼을 누르면 다시 시간이 흐름.
+  * 공이 죽거나 되돌리기 버튼을 누르면 시간이 멈춤. 중력 조작 버튼을 누르면 다시 시간이 흐름.
   * 시간이 멈추면 타이머 UI가 분홍색으로 변함. 시간이 다시 흐르면 보라색으로 변함.
   * 공이 미로를 탈출하면, 중력에 의해 천천히 움직이는 애니메이션을 표시.
 * 게임 플레이 scene (Tutorial, Adventure, Editor 내 테스트 단계)에 신규 BGM 추가
@@ -215,8 +217,8 @@
 
 ### Android
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
-* `GravitaMaze.v1.4.1.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
+* `GravitaMaze.v1.4.2.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
   * `출처를 알 수 없는 앱 설치` 창이 나오면, `무시하고 설치`를 선택하세요.
   * Google Play Protect에서 `안전하지 않은 앱 차단됨` 창이 나오는 경우 ***확인 버튼을 누르지 말고*** `세부정보 더 보기 -> 무시하고 설치하기`를 선택하세요.
   * `Google에 알 수 없는 앱 전송`과 관련한 메시지가 뜨는 경우가 있을 수도 있어요. 이 경우 무슨 옵션을 선택해도 상관 없어요.
@@ -226,40 +228,22 @@
     * `다시 묻지 않음` 옵션을 선택한 경우, 애플리케이션 권한 설정에 들어가서 `GravitaMaze`에 해당 권한을 직접 허용해주셔야 해요.
 * `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱에서 루트 경로(`Internal storage`)에 압축 해제하시면 커스텀 맵을 즐길 수 있어요.
   * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
-* 4개의 "화살표" 버튼을 클릭해서 중력을 조작할 수 있어요.
-* 공이 죽는 경우, "재도전" 버튼을 터치해서 해당 맵에 재도전할 수 있어요.
-  * 공이 죽으면 시간이 멈춰요.
-  * 중력을 조작하면 시간이 다시 흘러요.
-* 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
-  * 시간이 초과되면 목숨이 1개 깎여요.
 
 ### Windows
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
-* `GravitaMaze.v1.4.1.w.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
+* `GravitaMaze.v1.4.2.w.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.exe`를 실행하세요.
 * `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.exe`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
   * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
-* 4개의 "화살표" 버튼을 클릭해서 중력을 조작할 수 있어요.
-* 공이 죽는 경우, "재도전" 버튼(또는 Space 키)을 눌러서 해당 맵에 재도전할 수 있어요.
-  * 공이 죽으면 시간이 멈춰요.
-  * 중력을 조작하면 시간이 다시 흘러요.
-* 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
-  * 시간이 초과되면 목숨이 1개 깎여요.
 
 ### macOS
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.1)
-* `GravitaMaze.v1.4.1.m.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
+* `GravitaMaze.v1.4.2.m.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.app`을 실행하세요.
 * `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
   * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
-* 4개의 "화살표" 버튼을 클릭해서 중력을 조작할 수 있어요.
-* 공이 죽는 경우, "재도전" 버튼(또는 Space 키)을 눌러서 해당 맵에 재도전할 수 있어요.
-  * 공이 죽으면 시간이 멈춰요.
-  * 중력을 조작하면 시간이 다시 흘러요.
-* 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
-  * 시간이 초과되면 목숨이 1개 깎여요.
 
 ## 맵 편집기
 
@@ -268,6 +252,12 @@
 ## 플레이 모드
 
 * Tutorial 모드, 4개의 Adventure 모드, Custom 모드, Training 모드가 있어요!
+* 4개의 "화살표" 버튼을 클릭하거나 화살표 키를 눌러서 중력을 조작할 수 있어요.
+* 공이 죽는 경우, "되돌리기" 버튼 또는 Space 키를 눌러서 해당 맵에 재도전할 수 있어요.
+  * 공이 죽으면 시간이 멈춰요.
+  * 중력을 조작하면 시간이 다시 흘러요.
+* 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
+  * 시간이 초과되면 목숨이 1개 깎여요.
 
 ![Screenshot1](./Figures/Screenshot1.v1.4.1.ko.png)
 
