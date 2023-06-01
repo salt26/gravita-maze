@@ -33,9 +33,11 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         lastEnterTime = -1f;
     }
 
-#if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
     public void OnPointerEnter(PointerEventData eventData)
     {
+
+#if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
+
         if (GetComponent<Button>() != null && !GetComponent<Button>().interactable) return;
 
         if (tooltipUIParent.transform.childCount >= 1)
@@ -78,11 +80,17 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                     break;
             }
         }
+#endif
     }
     
     public void OnPointerExit(PointerEventData eventData)
     {
+
+#if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
+
         StartCoroutine(HideTooltip());
+
+#endif
     }
 
     IEnumerator HideTooltip()
@@ -97,5 +105,4 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             myTooltipUI = null;
         }
     }
-#endif
 }
