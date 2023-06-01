@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.Localization.Settings;
 
 public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -19,7 +20,7 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     RectTransform myTransform;
     TooltipBox myTooltipUI;
     Button button;
-    PlayManager pm;
+    GameObject tooltipUIParent;
     float lastEnterTime;
     
     void Awake()
@@ -27,10 +28,7 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         myTooltipUI = null;
         button = GetComponent<Button>();
         myTransform = GetComponent<RectTransform>();
-        if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
-        {
-            pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
-        }
+        tooltipUIParent = GameObject.FindGameObjectWithTag("TooltipUI");
 
         lastEnterTime = -1f;
     }
@@ -38,41 +36,45 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 #if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
+        if (GetComponent<Button>() != null && !GetComponent<Button>().interactable) return;
+
+        if (tooltipUIParent.transform.childCount >= 1)
         {
-            if (pm.tooltipUI.transform.childCount >= 1)
+            for (int i = 0; i < tooltipUIParent.transform.childCount; i++)
             {
-                for (int i = 0; i < pm.tooltipUI.transform.childCount; i++)
-                {
-                    Destroy(pm.tooltipUI.transform.GetChild(i).gameObject);
-                }
+                Destroy(tooltipUIParent.transform.GetChild(i).gameObject);
             }
         }
         lastEnterTime = Time.time;
         if (myTooltipUI == null)
         {
-            if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
-            {
-                myTooltipUI = Instantiate(tooltipPrefab, pm.tooltipUI.transform).GetComponent<TooltipBox>();
-            }
+            myTooltipUI = Instantiate(tooltipPrefab, tooltipUIParent.transform).GetComponent<TooltipBox>();
 
             switch (pivot)
             {
                 case Pivot.TopRight:
-                    myTooltipUI.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
-                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
+                    if (tooltipMessage.Equals("NextButton") && SceneManager.GetActiveScene().name.Equals("Adventure") &&
+                        GameManager.mm != null && GameManager.mm.IsReady && !GameManager.mm.HasCleared)
+                    {
+                        myTooltipUI.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
+                            tooltipWidth + 120f, tooltipHeight, (TooltipBox.Pivot)pivot, LocalizationSettings.StringDatabase.GetLocalizedString("StringTable", "Non-clearedNextButton"));
+                    }
+                    else {
+                        myTooltipUI.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
+                            tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, LocalizationSettings.StringDatabase.GetLocalizedString("StringTable", tooltipMessage));
+                    }
                     break;
                 case Pivot.BottomRight:
                     myTooltipUI.Initialize(myTransform.localPosition + new Vector3(myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12),
-                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
+                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, LocalizationSettings.StringDatabase.GetLocalizedString("StringTable", tooltipMessage));
                     break;
                 case Pivot.TopLeft:
                     myTooltipUI.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, myTransform.rect.height / 2f - 24),
-                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
+                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, LocalizationSettings.StringDatabase.GetLocalizedString("StringTable", tooltipMessage));
                     break;
                 case Pivot.BottomLeft:
                     myTooltipUI.Initialize(myTransform.localPosition + new Vector3(-myTransform.rect.width / 2f, -myTransform.rect.height / 2f + 12),
-                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, tooltipMessage);
+                        tooltipWidth, tooltipHeight, (TooltipBox.Pivot)pivot, LocalizationSettings.StringDatabase.GetLocalizedString("StringTable", tooltipMessage));
                     break;
             }
         }

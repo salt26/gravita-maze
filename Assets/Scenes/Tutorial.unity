@@ -691,6 +691,7 @@ GameObject:
   - component: {fileID: 382429610}
   - component: {fileID: 382429609}
   - component: {fileID: 382429608}
+  - component: {fileID: 382429611}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -811,6 +812,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 382429606}
   m_CullTransparentMesh: 0
+--- !u!114 &382429611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382429606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonRight
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1 &453556305
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,6 +905,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453556305}
   m_CullTransparentMesh: 0
+--- !u!1 &457227423 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 772091377553154925, guid: 572232613a4c4f2419c8447db52259db,
+    type: 3}
+  m_PrefabInstance: {fileID: 1877085891}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &457227424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457227423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &488576792
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +986,7 @@ GameObject:
   - component: {fileID: 520449378}
   - component: {fileID: 520449377}
   - component: {fileID: 520449380}
+  - component: {fileID: 520449381}
   m_Layer: 5
   m_Name: GravityButtonQuitHighlighted
   m_TagString: Untagged
@@ -1094,6 +1138,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &520449381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520449375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: NextButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1001 &544216134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1302,6 +1364,7 @@ GameObject:
   - component: {fileID: 591191600}
   - component: {fileID: 591191599}
   - component: {fileID: 591191598}
+  - component: {fileID: 591191601}
   m_Layer: 5
   m_Name: GravityButtonPause
   m_TagString: Untagged
@@ -1434,6 +1497,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591191596}
   m_CullTransparentMesh: 0
+--- !u!114 &591191601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591191596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: PauseButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 2
 --- !u!1 &634394759
 GameObject:
   m_ObjectHideFlags: 0
@@ -2049,7 +2130,7 @@ GameObject:
   - component: {fileID: 947665020}
   m_Layer: 5
   m_Name: TooltipUI
-  m_TagString: Untagged
+  m_TagString: TooltipUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2093,6 +2174,7 @@ GameObject:
   - component: {fileID: 1061809503}
   - component: {fileID: 1061809502}
   - component: {fileID: 1061809501}
+  - component: {fileID: 1061809504}
   m_Layer: 5
   m_Name: GravityButtonRetryTime
   m_TagString: Untagged
@@ -2249,6 +2331,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061809499}
   m_CullTransparentMesh: 0
+--- !u!114 &1061809504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061809499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryTimeButton
+  tooltipWidth: 444
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &1068675376
 GameObject:
   m_ObjectHideFlags: 0
@@ -2488,6 +2588,7 @@ GameObject:
   - component: {fileID: 1209234944}
   - component: {fileID: 1209234943}
   - component: {fileID: 1209234942}
+  - component: {fileID: 1209234945}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2608,6 +2709,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209234940}
   m_CullTransparentMesh: 0
+--- !u!114 &1209234945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209234940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonLeft
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 2
 --- !u!1 &1264283924
 GameObject:
   m_ObjectHideFlags: 0
@@ -2621,6 +2740,7 @@ GameObject:
   - component: {fileID: 1264283928}
   - component: {fileID: 1264283927}
   - component: {fileID: 1264283926}
+  - component: {fileID: 1264283930}
   m_Layer: 5
   m_Name: GravityButtonNext
   m_TagString: Untagged
@@ -2772,6 +2892,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264283924}
   m_CullTransparentMesh: 0
+--- !u!114 &1264283930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264283924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: NextButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1 &1287567345
 GameObject:
   m_ObjectHideFlags: 0
@@ -2784,6 +2922,7 @@ GameObject:
   - component: {fileID: 1287567349}
   - component: {fileID: 1287567348}
   - component: {fileID: 1287567347}
+  - component: {fileID: 1287567350}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2904,6 +3043,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287567345}
   m_CullTransparentMesh: 0
+--- !u!114 &1287567350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287567345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonDown
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1 &1304023981
 GameObject:
   m_ObjectHideFlags: 0
@@ -3070,6 +3227,7 @@ GameObject:
   - component: {fileID: 1404637734}
   - component: {fileID: 1404637733}
   - component: {fileID: 1404637736}
+  - component: {fileID: 1404637737}
   m_Layer: 5
   m_Name: GravityButtonRetryHighlighted
   m_TagString: Untagged
@@ -3221,6 +3379,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1404637737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404637731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &1430318114
 GameObject:
   m_ObjectHideFlags: 0
@@ -4052,6 +4228,7 @@ GameObject:
   - component: {fileID: 1783891384}
   - component: {fileID: 1783891383}
   - component: {fileID: 1783891386}
+  - component: {fileID: 1783891387}
   m_Layer: 5
   m_Name: GravityButtonRetryTimeHighlighted
   m_TagString: Untagged
@@ -4215,6 +4392,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1783891387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783891381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryTimeButton
+  tooltipWidth: 444
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1001 &1811126591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4862,7 +5057,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1877085891}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 457227423}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -5677,9 +5872,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
     type: 3}
-  tooltipMessage: test
-  tooltipWidth: 600
-  tooltipHeight: 324
+  tooltipMessage: TutorialButtonUp
+  tooltipWidth: 324
+  tooltipHeight: 168
   pivot: 1
 --- !u!1001 &68448728184568796
 PrefabInstance:

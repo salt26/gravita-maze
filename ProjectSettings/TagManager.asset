@@ -9,6 +9,7 @@ TagManager:
   - EditorManager
   - PlayManager
   - Tip
+  - TooltipUI
   layers:
   - Default
   - TransparentFX

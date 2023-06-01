@@ -747,6 +747,42 @@ MonoBehaviour:
     m_Key: 'Editor/Canvas/EditorPanel/Phase 6: Save/EditorButtonSave6'
     m_Metadata:
       m_Items: []
+  - m_Id: 952412309245952
+    m_Key: TutorialButtonUp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952515296186368
+    m_Key: TutorialButtonDown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952692740411392
+    m_Key: TutorialButtonLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952804183068672
+    m_Key: TutorialButtonRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962298430574592
+    m_Key: RetryButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962494929522688
+    m_Key: RetryTimeButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962811704332288
+    m_Key: NextButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962904780132352
+    m_Key: Non-clearedNextButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 963619405647872
+    m_Key: PauseButton
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

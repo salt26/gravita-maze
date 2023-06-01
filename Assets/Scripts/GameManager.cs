@@ -130,30 +130,38 @@ public class GameManager : MonoBehaviour
             {
                 mm.ManipulateGravityRight();
             }
-            else if (Input.GetKeyUp(KeyCode.Space) && ((mm.gravityRetryButton.gameObject.activeInHierarchy
-                && mm.gravityRetryButton.interactable) || (mm.gravityRetryHighlightedButton != null &&
-                mm.gravityRetryHighlightedButton.gameObject.activeInHierarchy && mm.gravityRetryHighlightedButton.interactable)))
+            else if (Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
             {
-                mm.Retry();
-                if (SceneManager.GetActiveScene().name.Equals("Tutorial") && pm != null && pm.tutorialGuide != null)
+                if (mm.gravityRetryTimeButton != null &&
+                    mm.gravityRetryTimeButton.gameObject.activeInHierarchy && mm.gravityRetryTimeButton.interactable)
                 {
-                    pm.tutorialGuide.RetryButtonDown();
+                    mm.gravityRetryTimeButton.onClick.Invoke();
+                }
+                else if (mm.gravityRetryTimeHighlightedButton != null &&
+                    mm.gravityRetryTimeHighlightedButton.gameObject.activeInHierarchy && mm.gravityRetryTimeHighlightedButton.interactable)
+                {
+                    mm.gravityRetryTimeHighlightedButton.onClick.Invoke();
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                if (mm.gravityRetryButton != null && 
+                    mm.gravityRetryButton.gameObject.activeInHierarchy && mm.gravityRetryButton.interactable)
+                {
+                    mm.gravityRetryButton.onClick.Invoke();
+                }
+                else if (mm.gravityRetryHighlightedButton != null &&
+                    mm.gravityRetryHighlightedButton.gameObject.activeInHierarchy && mm.gravityRetryHighlightedButton.interactable)
+                {
+                    mm.gravityRetryHighlightedButton.onClick.Invoke();
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+                 && pm != null && pm.IsReady && SceneManager.GetActiveScene().name.Equals("Adventure"))
             {
                 if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
                 {
-                    if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
-                    {
-                        pm.TutorialNext();
-                        PlayButtonSFX();
-                    }
-                    else
-                    {
-                        pm.PlayNext();
-                        PlayButtonSFX();
-                    }
+                    pm.nextButton.onClick.Invoke();
                 }
                 else if (pm.resultUI.gameObject.activeInHierarchy)
                 {
@@ -162,20 +170,36 @@ public class GameManager : MonoBehaviour
                 }
                 else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
                 {
-                    pm.Ending();
+                    pm.quitHighlightedButton.onClick.Invoke();
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
+            {
+                if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable && mm.HasCleared)
+                {
+                    pm.nextButton.onClick.Invoke();
+                }
+                else if (pm.resultUI.gameObject.activeInHierarchy)
+                {
+                    pm.Quit();
                     PlayButtonSFX();
                 }
+                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                {
+                    pm.quitHighlightedButton.onClick.Invoke();
+                }
+                /*
                 else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseExitButton.interactable)
                 {
                     pm.pauseUI.pauseExitButton.onClick.Invoke();
                 }
+                */
             }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
             {
                 if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
                 {
-                    pm.Pause();
-                    PlayButtonSFX();
+                    pm.pauseButton.onClick.Invoke();
                 }
                 else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {

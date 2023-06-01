@@ -883,6 +883,42 @@ MonoBehaviour:
     m_Localized: Set your map\name to save.
     m_Metadata:
       m_Items: []
+  - m_Id: 952412309245952
+    m_Localized: "\u2191 or W key"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952515296186368
+    m_Localized: "\u2193 or S key"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952692740411392
+    m_Localized: "\u2190 or A key"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952804183068672
+    m_Localized: "\u2192 or D key"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962298430574592
+    m_Localized: Space key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962494929522688
+    m_Localized: Ctrl + Space key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962811704332288
+    m_Localized: Enter key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 962904780132352
+    m_Localized: Ctrl + Enter key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 963619405647872
+    m_Localized: Esc key
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
     00000000:
