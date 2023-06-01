@@ -112,7 +112,10 @@ public class GameManager : MonoBehaviour
         // 입력 담당
         if (canPlay)
         {
-            if (mm is null || !mm.IsReady) return; // mm : 맵의 미리보기가 떴을 때 또는 플레이 도중에만 값이 할당되어 있는 듯??
+            if (mm is null || !mm.IsReady)
+            {
+                return; // mm : 맵의 미리보기가 떴을 때 또는 플레이 도중에만 값이 할당되어 있는 듯??
+            }
 
             if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)) && mm.gravityDownButton.interactable)
             {
@@ -159,32 +162,32 @@ public class GameManager : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                  && pm != null && pm.IsReady && SceneManager.GetActiveScene().name.Equals("Adventure"))
             {
-                if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
+                if (pm.nextButton != null && pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
                 {
                     pm.nextButton.onClick.Invoke();
                 }
-                else if (pm.resultUI.gameObject.activeInHierarchy)
+                else if (pm.resultUI != null && pm.resultUI.gameObject.activeInHierarchy)
                 {
                     pm.Quit();
                     PlayButtonSFX();
                 }
-                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                else if (pm.quitHighlightedButton != null && pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
                 {
                     pm.quitHighlightedButton.onClick.Invoke();
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Return) && pm != null && pm.IsReady)
+            else if (Input.GetKeyUp(KeyCode.Return) && pm != null)
             {
-                if (pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable && mm.HasCleared)
+                if (pm.nextButton != null && pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable && mm.HasCleared)
                 {
                     pm.nextButton.onClick.Invoke();
                 }
-                else if (pm.resultUI.gameObject.activeInHierarchy)
+                else if (pm.resultUI != null && pm.resultUI.gameObject.activeInHierarchy)
                 {
                     pm.Quit();
                     PlayButtonSFX();
                 }
-                else if (pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
+                else if (pm.quitHighlightedButton != null && pm.quitHighlightedButton.gameObject.activeInHierarchy && pm.quitHighlightedButton.interactable)
                 {
                     pm.quitHighlightedButton.onClick.Invoke();
                 }
@@ -195,13 +198,13 @@ public class GameManager : MonoBehaviour
                 }
                 */
             }
-            else if (Input.GetKeyUp(KeyCode.Escape) && pm != null && pm.IsReady)
+            else if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
             {
-                if (pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
+                if (pm.pauseButton != null && pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
                 {
                     pm.pauseButton.onClick.Invoke();
                 }
-                else if (pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
+                else if (pm.pauseUI != null && pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
                 {
                     pm.pauseUI.pauseReturnButton.onClick.Invoke();
                 }
@@ -211,7 +214,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyUp(KeyCode.Return)) 
             {
-                if (pm != null && !pm.IsReady) //Custom, Training: pm의 객체에 속한 버튼을 누름
+                if (pm != null) //Custom, Training: pm의 객체에 속한 버튼을 누름
                 {
                     if (SceneManager.GetActiveScene().name.Equals("Custom"))
                     {

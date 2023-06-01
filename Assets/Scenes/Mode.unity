@@ -3668,7 +3668,7 @@ MonoBehaviour:
   tooltipMessage: TutorialButtonLeft
   tooltipWidth: 324
   tooltipHeight: 168
-  pivot: 0
+  pivot: 2
 --- !u!1 &1220256231
 GameObject:
   m_ObjectHideFlags: 0
@@ -6744,4 +6744,4 @@ MonoBehaviour:
   tooltipMessage: TutorialButtonUp
   tooltipWidth: 324
   tooltipHeight: 168
-  pivot: 0
+  pivot: 1

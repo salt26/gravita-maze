@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 21229930}
   - component: {fileID: 21229929}
   - component: {fileID: 21229931}
+  - component: {fileID: 21229934}
   m_Layer: 5
   m_Name: GravityButtonRetryTimeHighlighted
   m_TagString: Untagged
@@ -299,6 +300,24 @@ RectTransform:
   m_AnchoredPosition: {x: -354, y: 336}
   m_SizeDelta: {x: 204, y: 144}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &21229934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21229928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryTimeButton
+  tooltipWidth: 444
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &21237445
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1247,7 @@ GameObject:
   - component: {fileID: 353772682}
   - component: {fileID: 353772681}
   - component: {fileID: 353772683}
+  - component: {fileID: 353772684}
   m_Layer: 5
   m_Name: GravityButtonRetryTime
   m_TagString: Untagged
@@ -1372,6 +1392,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &353772684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353772679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryTimeButton
+  tooltipWidth: 444
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &363787297
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,12 +1442,12 @@ RectTransform:
   - {fileID: 211645960}
   - {fileID: 773354118}
   - {fileID: 2122479026}
-  - {fileID: 278094949}
   - {fileID: 759340946}
   - {fileID: 642344058}
   - {fileID: 1492445046}
   - {fileID: 1060893183}
   - {fileID: 826573659}
+  - {fileID: 278094949}
   - {fileID: 353772680}
   - {fileID: 21229933}
   - {fileID: 863177613}
@@ -1923,6 +1961,7 @@ GameObject:
   - component: {fileID: 642344061}
   - component: {fileID: 642344060}
   - component: {fileID: 642344059}
+  - component: {fileID: 642344062}
   m_Layer: 5
   m_Name: GravityButtonPause
   m_TagString: Untagged
@@ -1942,7 +1981,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 363787298}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2055,6 +2094,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642344057}
   m_CullTransparentMesh: 0
+--- !u!114 &642344062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642344057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: PauseButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 2
 --- !u!1 &665243130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,7 +2648,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 363787298}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2801,6 +2858,7 @@ GameObject:
   - component: {fileID: 826573661}
   - component: {fileID: 826573663}
   - component: {fileID: 826573660}
+  - component: {fileID: 826573664}
   m_Layer: 5
   m_Name: GravityButtonRetryHighlighted
   m_TagString: Untagged
@@ -2820,7 +2878,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 363787298}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2940,6 +2998,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &826573664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826573658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 3
 --- !u!224 &863177613 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2672423829272442780, guid: d838f6f282b36a043ab18477971ef80d,
@@ -2981,7 +3057,7 @@ PrefabInstance:
     - target: {fileID: 772091377553154924, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 772091377553154924, guid: 572232613a4c4f2419c8447db52259db,
         type: 3}
@@ -3086,12 +3162,36 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 905412895}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 905412897}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &905412897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 772091377553154925, guid: 572232613a4c4f2419c8447db52259db,
+    type: 3}
+  m_PrefabInstance: {fileID: 905412895}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &905412898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905412897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &1060893182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3105,6 +3205,7 @@ GameObject:
   - component: {fileID: 1060893185}
   - component: {fileID: 1060893187}
   - component: {fileID: 1060893184}
+  - component: {fileID: 1060893188}
   m_Layer: 5
   m_Name: GravityButtonNext
   m_TagString: Untagged
@@ -3124,7 +3225,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 363787298}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3256,6 +3357,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1060893188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060893182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: NextButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1 &1078296941
 GameObject:
   m_ObjectHideFlags: 0
@@ -4013,6 +4132,7 @@ GameObject:
   - component: {fileID: 1492445043}
   - component: {fileID: 1492445042}
   - component: {fileID: 1492445044}
+  - component: {fileID: 1492445047}
   m_Layer: 5
   m_Name: GravityButtonQuitHighlighted
   m_TagString: Untagged
@@ -4157,13 +4277,31 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 363787298}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 354, y: -336}
   m_SizeDelta: {x: 204, y: 144}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1492445047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492445041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: NextButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1 &1503042061
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,7 +4500,7 @@ GameObject:
   - component: {fileID: 1547743684}
   m_Layer: 5
   m_Name: TooltipUI
-  m_TagString: Untagged
+  m_TagString: TooltipUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -998,6 +998,7 @@ GameObject:
   - component: {fileID: 382429610}
   - component: {fileID: 382429609}
   - component: {fileID: 382429608}
+  - component: {fileID: 382429611}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1118,6 +1119,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 382429606}
   m_CullTransparentMesh: 0
+--- !u!114 &382429611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382429606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonRight
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!1001 &395601541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3080,12 +3099,36 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1202573078}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1202573081}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1202573081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 772091377553154925, guid: 572232613a4c4f2419c8447db52259db,
+    type: 3}
+  m_PrefabInstance: {fileID: 1202573078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1202573082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202573081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: RetryButton
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 3
 --- !u!1 &1209234940
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,6 +3141,7 @@ GameObject:
   - component: {fileID: 1209234944}
   - component: {fileID: 1209234943}
   - component: {fileID: 1209234942}
+  - component: {fileID: 1209234945}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -3218,6 +3262,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209234940}
   m_CullTransparentMesh: 0
+--- !u!114 &1209234945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209234940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonLeft
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 2
 --- !u!1 &1220256231
 GameObject:
   m_ObjectHideFlags: 0
@@ -3422,6 +3484,7 @@ GameObject:
   - component: {fileID: 1287567349}
   - component: {fileID: 1287567348}
   - component: {fileID: 1287567347}
+  - component: {fileID: 1287567350}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -3542,6 +3605,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287567345}
   m_CullTransparentMesh: 0
+--- !u!114 &1287567350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287567345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonDown
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 0
 --- !u!4 &1331366194 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8737249287634265237, guid: ea8f4c589373e52458ba3cedc4b69b0b,
@@ -5344,6 +5425,7 @@ GameObject:
   - component: {fileID: 2068695181}
   - component: {fileID: 2068695180}
   - component: {fileID: 2068695179}
+  - component: {fileID: 2068695182}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -5464,3 +5546,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068695177}
   m_CullTransparentMesh: 0
+--- !u!114 &2068695182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068695177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ed9ff6a910e9d498dff19568a3838c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
+    type: 3}
+  tooltipMessage: TutorialButtonUp
+  tooltipWidth: 324
+  tooltipHeight: 168
+  pivot: 1

@@ -271,6 +271,7 @@ public class PlayManager : MonoBehaviour
             case Mode.Custom:
                 CustomOpenPhase(MapManager.MAP_ROOT_PATH);
                 Life = int.MaxValue;
+                print("custom");
                 break;
             case Mode.Training:
                 TrainingOpenPhase(TrainingMapSelect.Root);
