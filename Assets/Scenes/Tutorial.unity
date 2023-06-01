@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2037,6 +2037,50 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 857531044}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &947665018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947665019}
+  - component: {fileID: 947665020}
+  m_Layer: 5
+  m_Name: TooltipUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &947665019
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947665018}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1851242258}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &947665020
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947665018}
+  m_CullTransparentMesh: 0
 --- !u!1 &1061809499
 GameObject:
   m_ObjectHideFlags: 0
@@ -3232,7 +3276,7 @@ MonoBehaviour:
   pauseUI: {fileID: 1782627619}
   pausePanel: {fileID: 4462461048705734384}
   resultUI: {fileID: 5}
-  tooltipUI: {fileID: 0}
+  tooltipUI: {fileID: 947665018}
   timerUI: {fileID: 0}
   openScrollContent: {fileID: 0}
   openButton: {fileID: 0}
@@ -4622,6 +4666,7 @@ RectTransform:
   - {fileID: 1304023982}
   - {fileID: 857531045}
   - {fileID: 1921234854}
+  - {fileID: 947665019}
   - {fileID: 6823232689646159600}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -5676,7 +5721,7 @@ PrefabInstance:
     - target: {fileID: 6792501617493409068, guid: 148489a5a8f82564ba520981cd5363c1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6792501617493409068, guid: 148489a5a8f82564ba520981cd5363c1,
         type: 3}

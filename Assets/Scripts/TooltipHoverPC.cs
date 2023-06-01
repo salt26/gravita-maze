@@ -35,10 +35,9 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         lastEnterTime = -1f;
     }
 
+#if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
     public void OnPointerEnter(PointerEventData eventData)
     {
-        #if (UNITY_IOS || UNITY_ANDROID)
-        #else
         if (SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
             if (pm.tooltipUI.transform.childCount >= 1)
@@ -96,5 +95,5 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             myTooltipUI = null;
         }
     }
-    #endif
+#endif
 }

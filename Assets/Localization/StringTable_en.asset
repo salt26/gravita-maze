@@ -407,8 +407,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458497
-    m_Localized: You're off to a great start!\nStart your adventure in adventure
-      mode!
+    m_Localized: You're off to a great start!\nI would recommend you play Adventure
+      mode.
     m_Metadata:
       m_Items:
       - id: 0
@@ -464,8 +464,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458510
-    m_Localized: "Even a heavy  iron is affected by gravity...\r\\nBe careful not
-      to get squashed by the iron!"
+    m_Localized: The iron are also influenced by gravity... Be careful not to get
+      squashed by the iron!
     m_Metadata:
       m_Items:
       - id: 0
@@ -508,8 +508,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458520
-    m_Localized: A shutter turned into a wall can also block the iron. Don't let
-      the iron squash the ball!
+    m_Localized: A shutter turned into a wall can also block the iron. It means it's
+      safe when the ball passes through the shutter!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458521
@@ -546,7 +546,7 @@ MonoBehaviour:
       m_Items:
       - id: 0
   - m_Id: 486500458528
-    m_Localized: Exit-blocking iron has been just removed. Let's escape!
+    m_Localized: The iron blocking the exit are gone. Let's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 164806647603200
