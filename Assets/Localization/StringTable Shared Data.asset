@@ -207,8 +207,12 @@ MonoBehaviour:
     m_Key: editor_create_map_duplicate_name_ask_part2
     m_Metadata:
       m_Items: []
-  - m_Id: 486496264216
-    m_Key: editor_create_map_success
+  - m_Id: 1793875553243136
+    m_Key: editor_create_map_success_part1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1793875561631744
+    m_Key: editor_create_map_success_part2
     m_Metadata:
       m_Items: []
   - m_Id: 486496264217

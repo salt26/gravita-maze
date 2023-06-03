@@ -2256,8 +2256,9 @@ public class EditorManager : MonoBehaviour
         {
             truncated = truncated.Substring(0, editorMapNameInputs[0].characterLimit - 3) + "...";
         }
-        //Debug.Log("Saved as " + truncated + "!");
-        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_success") + truncated + "!");
+        //Debug.Log("Saved as " + truncated);
+        statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_success_part1") +
+            truncated + LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_success_part2"));
 
         dirtyBit = false;
         hasSavedOnce = true;
