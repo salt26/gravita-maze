@@ -163,10 +163,18 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Escaped:
-                emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_25");
-                if (GameManager.gm.PlayingMapIndex + 1 == 8)
+
+                if (GameManager.gm.PlayingMapIndex + 1 == 1)
+                {
+                    emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_28");
+                }
+                else if (GameManager.gm.PlayingMapIndex + 1 == 8)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_26");
+                }
+                else
+                {
+                    emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_25");
                 }
                 if (currentTip != null)
                 {
