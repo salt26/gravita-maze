@@ -499,6 +499,42 @@ MonoBehaviour:
     m_Key: tutorial_message_28
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106138173440
+    m_Key: tutorial_message_29
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391168
+    m_Key: tutorial_message_30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391169
+    m_Key: tutorial_message_31
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391170
+    m_Key: tutorial_message_32
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391171
+    m_Key: tutorial_message_33
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391172
+    m_Key: tutorial_message_34
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391173
+    m_Key: tutorial_message_35
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391174
+    m_Key: tutorial_message_36
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391175
+    m_Key: tutorial_message_37
+    m_Metadata:
+      m_Items: []
   - m_Id: 164806647603200
     m_Key: Adventure/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:

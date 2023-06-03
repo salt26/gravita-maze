@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     private int playingMapIndex = 0;
 
     public int PlayingMapIndex{
-        get{return playingMapIndex;}
+        get { return playingMapIndex; }
     }
 
     public GameObject floorStarPrefab;

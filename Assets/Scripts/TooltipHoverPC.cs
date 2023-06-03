@@ -95,7 +95,7 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     IEnumerator HideTooltip()
     {
-        while (Time.time < lastEnterTime + 0.8f)
+        while (Time.time < lastEnterTime + 0.4f)
         {
             yield return null;
         }

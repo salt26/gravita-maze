@@ -427,7 +427,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458503
-    m_Localized: Great job!\nNow, let's press the up arrow to make the ball roll
+    m_Localized: Great job!\nNow, let's press the up arrow to\nmake the ball roll
       upward.
     m_Metadata:
       m_Items:
@@ -468,7 +468,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458512
-    m_Localized: The iron block can be removed from the maze just like the ball.
+    m_Localized: The iron block can be removed from\nthe maze just like the ball.
     m_Metadata:
       m_Items: []
   - m_Id: 486500458513
@@ -493,7 +493,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458518
-    m_Localized: Once the shutter becomes a wall, it remains the same until you retry.
+    m_Localized: Once the shutter becomes a wall,\nit remains the same until you
+      retry.
     m_Metadata:
       m_Items: []
   - m_Id: 486500458519
@@ -512,7 +513,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458522
-    m_Localized: Great, you've found the exit! Let's escape!
+    m_Localized: Great, you've found the exit!\nLet's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 486500458523
@@ -535,12 +536,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458527
-    m_Localized: Congratulations!\nYou just passed all tutorials!
+    m_Localized: Whew... That was seriously cool just now!\nYou just passed all tutorials!
     m_Metadata:
       m_Items:
       - id: 0
   - m_Id: 486500458528
-    m_Localized: The iron blocking the exit are gone. Let's escape!
+    m_Localized: The iron blocking the exit are gone.\nLet's escape!
     m_Metadata:
       m_Items: []
   - m_Id: 164806647603200
@@ -928,9 +929,53 @@ MonoBehaviour:
     m_Localized: '"'
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106138173440
+    m_Localized: This maze is really challenging...\nThe time limit is short, you
+      know!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391168
+    m_Localized: Oops, you got trapped...\nBut time keeps ticking.\nQuickly, press
+      the retry button!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391169
+    m_Localized: Oh, great!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391170
+    m_Localized: The iron is blocking the way...\nWhat should you do?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391171
+    m_Localized: Hurry up! The exit has opened!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391172
+    m_Localized: Apply gravity to the left and\nremove an iron!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391173
+    m_Localized: Time freezes when the ball burned down!\nTake a deep breath and\npress
+      the retry button!
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 1829106272391174
+    m_Localized: Time freezes when the ball got squashed!\nTake a deep breath and\npress
+      the retry button!
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 1829106272391175
+    m_Localized: You usually get a panelty when time's up,\nbut here it's okay! Let's
+      try again!
+    m_Metadata:
+      m_Items:
+      - id: 0
   references:
     version: 1
     00000000:
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f0600
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f0600
