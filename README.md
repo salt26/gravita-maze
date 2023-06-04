@@ -43,7 +43,7 @@
 * Add Settings scene.
 * Improve Tutorial mode.
 * Improve UI/UX.
-* Add several Training and Custom maps.
+* Add several Training maps.
 * Expand the size of the four types of gravity manipulation buttons again.
 * Fix some bugs.
 
@@ -113,9 +113,6 @@
     * Hard: 5 maps are replaced.
     * Insane: 7 maps are replaced.
   * Maps with shutters can also appear in adventure mode.
-* You can enjoy some new maps (including shutters) in the editor that are not in adventure mode.
-  * If you are using Android, please download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app.
-  * If you are using macOS, please download `GravitaMaze.zip`, unzip it, and move `Maps` folder to the root directory of `GravitaMaze.app`.
 
 #### Android
 
@@ -137,9 +134,6 @@
   * If the folder is empty, show the text "Empty!"
   * Fixed a bug related to the long file name.
   * Fixed a bug related to the scroll bar in the Open or Save UI.
-* You can enjoy some maps (including shutters) in the editor that are not in adventure mode.
-  * If you are using Android, please download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app.
-  * If you are using macOS, please  download `GravitaMaze.zip`, unzip it, and move `Maps` folder to the root directory of `GravitaMaze.app`.
 * More type of screen resolution is supported.
   * 9:22 is now supported. (Portrait)
 * The continuous integration(CI) was added to automatically build for Android, Windows and macOS.
@@ -166,8 +160,6 @@
   * The remaining life and progress are displayed.
   * You can pause and resume the game.
   * When you leave or complete the game, the results window is displayed.
-* You can enjoy some maps in the editor that are not in adventure mode.
-  * If you are using Android, please download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app.
 * Many types of screen resolution are supported.
   * 9:16, 9:18, 9:18.5, 9:19, 9:19.5, 9:20, 9:20.5, 9:21 are supported. (Portrait)
   * 3:4 is not supported.
@@ -226,24 +218,18 @@
   * When you run the app for the first time, you need to allow permission to write to external/internal storage.
     * If you deny permission, the app will not be able to create or load maps.
     * If you checked the `Do not ask me again` option, you must go into the application permission settings and manually turn on the permission for `GravitaMaze`.
-* You can download `GravitaMaze.zip` and unzip it in root directory(`Internal storage`) using "My Files" app to enjoy the custom maps.
-  * These maps are playable in Custom mode, not in Adventure mode.
 
 ### Windows
 
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
 * Download `GravitaMaze.v1.4.2.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
-* You can download `GravitaMaze.zip` and unzip, and move the `Maps` folder to the root directory of `GravitaMaze.exe` to enjoy the custom maps.
-  * These maps are playable in Custom mode, not in Adventure mode.
 
 ### macOS
 
 * Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
 * Download `GravitaMaze.v1.4.2.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
-* You can download `GravitaMaze.zip`, unzip it, and move the `Maps` folder to the root directory of `GravitaMaze.app` to enjoy the custom maps.
-  * These maps are playable in Custom mode, not in Adventure mode.
 
 ## Map Editor
 

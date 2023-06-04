@@ -43,7 +43,7 @@
 * 설정 scene 추가
 * Tutorial 모드 개선
 * 사용자 인터페이스 및 경험 개선
-* Training 및 Custom 맵 추가
+* Training 맵 추가
 * 중력 조작 버튼 4개의 판정 크기를 한 번 더 확대
 * 여러 버그 수정
 
@@ -113,9 +113,6 @@
     * Hard: 맵 5개 업데이트.
     * Insane: 맵 7개 업데이트.
   * Adventure 모드에서 셔터가 포함된 맵도 등장합니다.
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵(셔터를 포함하는 맵)을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
-  * macOS 유저 분들은, `GravitaMaze.zip`을 다운로드한 후, 압축 해제해서 `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮겨주세요.
 
 #### Android
 
@@ -137,9 +134,6 @@
   * 폴더가 비어있을 경우, "Empty!" 텍스트 표시
   * 긴 파일명과 관련한 버그 수정
   * Open 및 Save UI에서 스크롤바와 관련한 버그 수정
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵(셔터를 포함하는 맵)을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
-  * macOS 유저 분들은, `GravitaMaze.zip`을 다운로드한 후, 압축 해제해서 `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮겨주세요.
 * 지원 해상도 추가.
   * 9:22 화면비 지원. (세로 화면)
 * Android, Windows, macOS에 대해 자동으로 빌드를 진행하도록 CI 추가.
@@ -166,8 +160,6 @@
   * 남은 목숨과 진행 사항이 표시됩니다.
   * 일시 정지 및 계속 플레이 기능이 지원됩니다.
   * 게임을 나가거나 클리어하면 결과창이 표시됩니다.
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
 * 다양한 해상도 지원.
   * 9:16, 9:18, 9:18.5, 9:19, 9:19.5, 9:20, 9:20.5, 9:21 화면비 지원. (세로 화면)
   * 3:4 화면비 미지원.
@@ -226,24 +218,18 @@
   * 앱을 처음으로 실행하는 경우, 외부/내부 저장소 쓰기 권한을 허용해주셔야 해요.
     * 해당 권한을 거부하는 경우, 앱에서 맵을 저장하거나 불러올 수 없어요.
     * `다시 묻지 않음` 옵션을 선택한 경우, 애플리케이션 권한 설정에 들어가서 `GravitaMaze`에 해당 권한을 직접 허용해주셔야 해요.
-* `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱에서 루트 경로(`Internal storage`)에 압축 해제하시면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ### Windows
 
 * [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
 * `GravitaMaze.v1.4.2.w.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.exe`를 실행하세요.
-* `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.exe`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ### macOS
 
 * [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
 * `GravitaMaze.v1.4.2.m.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.app`을 실행하세요.
-* `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ## 맵 편집기
 
