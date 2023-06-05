@@ -271,7 +271,7 @@ public class PlayManager : MonoBehaviour
             case Mode.Custom:
                 CustomOpenPhase(MapManager.MAP_ROOT_PATH);
                 Life = int.MaxValue;
-                print("custom");
+                customSelection = MapManager.MAP_ROOT_PATH;
                 break;
             case Mode.Training:
                 TrainingOpenPhase(TrainingMapSelect.Root);
@@ -314,7 +314,7 @@ public class PlayManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")) 
         {
             if (GameManager.mm.tryCountUpTrigger) {
-                Debug.Log("TryCountUp in PM ");
+                //Debug.Log("TryCountUp in PM ");
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
@@ -977,7 +977,7 @@ public class PlayManager : MonoBehaviour
         {
             string[] metafiles;
             SHA256 sha256Hash = SHA256.Create();
-            Debug.Log(openPath);
+            //Debug.Log(openPath);
             string metaPath = Application.persistentDataPath + "/Meta/" + openPath;
             string path = Application.persistentDataPath;
 
@@ -1140,7 +1140,7 @@ public class PlayManager : MonoBehaviour
     
         string[] metafiles;
         SHA256 sha256Hash = SHA256.Create();
-        Debug.Log(openPathText.text);
+        //Debug.Log(openPathText.text);
 
         string metaPath = Application.persistentDataPath + "/Meta";
         if(openPathText.text.TrimEnd('/').LastIndexOf('/') >= 1)
