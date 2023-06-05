@@ -40,7 +40,7 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         if (GetComponent<Button>() != null && !GetComponent<Button>().interactable) return;
 
-        if (tooltipUIParent.transform.childCount >= 1)
+        if (tooltipUIParent != null && tooltipUIParent.transform.childCount >= 1)
         {
             for (int i = 0; i < tooltipUIParent.transform.childCount; i++)
             {
