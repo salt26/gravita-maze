@@ -40,6 +40,9 @@ public class PlayManager : MonoBehaviour
     public GameObject tooltipUI;
     public GameObject timerUI;
 
+    public List<GameObject> tryCountUis = new List<GameObject>();
+    public GameObject moveLimitUI;
+
     private OpenScrollItemWithMark selectedOpenScrollItem;
     public GameObject openScrollContent;
     public Button openButton;

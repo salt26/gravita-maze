@@ -15,14 +15,14 @@ public class LimitModeUI : MonoBehaviour, IPointerClickHandler
     public UnityEvent onClick;
     private Slider slider;
     private float oldValue;
-    //private bool isDragging;
+    private bool isDragging;
 
     // Start is called before the first frame update
     void Start()
     {
         slider = GetComponent<Slider>();
         oldValue = slider.value;
-        //isDragging = false;
+        isDragging = false;
         if (GameManager.mm != null)
         {
             if (oldValue < (slider.minValue + slider.maxValue) * 0.5f)
@@ -43,10 +43,18 @@ public class LimitModeUI : MonoBehaviour, IPointerClickHandler
         if (slider.value < (slider.minValue + slider.maxValue) * 0.5f)
         {
             handleImage.sprite = timeSprite;
+            if (oldValue > (slider.minValue + slider.maxValue) * 0.5f)
+            {
+                isDragging = true;
+            }
         }
         else if (slider.value > (slider.minValue + slider.maxValue) * 0.5f)
         {
             handleImage.sprite = moveSprite;
+            if (oldValue < (slider.minValue + slider.maxValue) * 0.5f)
+            {
+                isDragging = true;
+            }
         }
         else // slider.value == (slider.minValue + slider.maxValue) * 0.5f
         {
@@ -93,17 +101,25 @@ public class LimitModeUI : MonoBehaviour, IPointerClickHandler
     {
         if (slider == null) return;
 
-        if (oldValue < (slider.minValue + slider.maxValue) * 0.5f)
+        if (oldValue < (slider.minValue + slider.maxValue) * 0.5f &&
+            (!isDragging || slider.value > (slider.minValue + slider.maxValue) * 0.5f))
         {
             slider.value = slider.maxValue;
             handleImage.sprite = moveSprite;
+            oldValue = slider.value;
         }
-        else if (oldValue > (slider.minValue + slider.maxValue) * 0.5f)
+        else if (oldValue > (slider.minValue + slider.maxValue) * 0.5f &&
+            (!isDragging || slider.value < (slider.minValue + slider.maxValue) * 0.5f))
         {
             slider.value = slider.minValue;
             handleImage.sprite = timeSprite;
+            oldValue = slider.value;
         }
-        oldValue = slider.value;
+        else
+        {
+            slider.value = oldValue;
+        }
+        isDragging = false;
 
         if (GameManager.mm != null)
         {

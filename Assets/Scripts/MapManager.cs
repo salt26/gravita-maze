@@ -85,7 +85,6 @@ public class MapManager : MonoBehaviour
 
     public GameObject loadingPanel;
     public GameObject timeoutPanel;
-    public List<GameObject> tryCountUis = new List<GameObject>();
 
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
@@ -96,9 +95,13 @@ public class MapManager : MonoBehaviour
     private bool _isReady = false;
     private LimitModeEnum _limitMode = LimitModeEnum.Time;
 
+    [HideInInspector]
     public int tryCount = 0;
+    [HideInInspector]
     public bool beforeFirstAction = false;
+    [HideInInspector]
     public bool tryCountUpTrigger = false;
+    [HideInInspector]
     public bool hasClearedOnce = false; 
 
     public int SizeX
@@ -144,18 +147,21 @@ public class MapManager : MonoBehaviour
         {
             _limitMode = value;
 
-            if (_limitMode == LimitModeEnum.Time)
+            if (GameManager.pm != null)
             {
-                foreach (GameObject g in tryCountUis)
+                if (_limitMode == LimitModeEnum.Time)
                 {
-                    g.SetActive(true);
+                    foreach (GameObject g in GameManager.pm.tryCountUis)
+                    {
+                        g.SetActive(true);
+                    }
                 }
-            }
-            else
-            {
-                foreach (GameObject g in tryCountUis)
+                else
                 {
-                    g.SetActive(false);
+                    foreach (GameObject g in GameManager.pm.tryCountUis)
+                    {
+                        g.SetActive(false);
+                    }
                 }
             }
         }

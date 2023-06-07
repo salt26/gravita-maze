@@ -601,9 +601,6 @@ MonoBehaviour:
   - {fileID: 0}
   loadingPanel: {fileID: 38331145807211207}
   timeoutPanel: {fileID: 551491372}
-  tryCountUis:
-  - {fileID: 906170567}
-  - {fileID: 558355873}
   tryCount: 0
   beforeFirstAction: 0
   tryCountUpTrigger: 0
@@ -739,6 +736,10 @@ MonoBehaviour:
   resultUI: {fileID: 0}
   tooltipUI: {fileID: 1561156650}
   timerUI: {fileID: 583662298}
+  tryCountUis:
+  - {fileID: 906170567}
+  - {fileID: 558355873}
+  moveLimitUI: {fileID: 0}
   openScrollContent: {fileID: 21237445}
   openButton: {fileID: 1150334311}
   openHighlightedButton: {fileID: 1707545011}
