@@ -183,6 +183,11 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     } = false;
+    public int MoveLimit
+    {
+        get;
+        private set;
+    } = int.MaxValue;
 
     public bool IsReady
     {
@@ -280,6 +285,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
+        MoveLimit = 0;
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
     }
@@ -849,6 +855,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
+        MoveLimit = solution.Length; // TODO 메타 파일에서 최소 이동 횟수를 가져와야 함
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
@@ -1144,6 +1151,7 @@ public class MapManager : MonoBehaviour
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
     {
+        print(solution);
         Movable[,] mutableMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
         foreach (char direction in solution.ToCharArray())
@@ -1258,7 +1266,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityUp()
     {
-        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1281,7 +1291,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityDown()
     {
-        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1304,7 +1316,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityLeft()
     {
-        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1327,7 +1341,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityRight()
     {
-        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1350,7 +1366,7 @@ public class MapManager : MonoBehaviour
 
     public void TryCountUp(PlayManager pm, string metaPath, string mapHash)
     {
-        if (pm == null) return;
+        if (pm == null || LimitMode == LimitModeEnum.Move) return;
         tryCountUpTrigger = false;
         tryCount++;
         Debug.Log(tryCount);
@@ -1381,7 +1397,9 @@ public class MapManager : MonoBehaviour
     public void Gravity(GameManager.GravityDirection gravityDirection, out Flag flag)
     {
         flag = Flag.Continued;
-        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
 
         // First, simulate to check if the ball can escape.
         Gravity(map.Clone(), (Movable[,])currentMovableCoord.Clone(), gravityDirection, true, out flag, out _, out _, out List<Move> moves);
@@ -1399,7 +1417,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            ActionHistory.Substring(0, ActionHistory.Length - 1);
+            ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
             currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
             switch (flag)

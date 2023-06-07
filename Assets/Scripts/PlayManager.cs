@@ -685,23 +685,31 @@ public class PlayManager : MonoBehaviour
                 if (!GameManager.mm.hasClearedOnce)
                 {
                     GameManager.mm.hasClearedOnce = true;
-                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                    fileStream.Position = 0;
-                    if (GameManager.mm.ActionHistory.Length == 1)
+                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
                     {
-                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                        fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                        streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
+                        fileStream.Position = 0;
+                        if (GameManager.mm.ActionHistory.Length == 1)
+                        {
+                            streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                        }
+                        else
+                        {
+                            streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                        }
+                        streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
+                        streamWriter.WriteLine(mapHash);
+                        streamWriter?.Close();
+                        fileStream?.Close();
+                        streamWriter = null;
+                        fileStream = null;
                     }
                     else
                     {
-                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                        // TODO 최소 이동 횟수 도전 설정으로 클리어하는 경우, 이동 횟수 기록하기
+                        // 시간제한 모드의 메타 파일 기록과 병기할 수 있도록 양식을 재정립할 필요도 있음
                     }
-                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                    streamWriter.WriteLine(mapHash);
-                    streamWriter?.Close();
-                    fileStream?.Close();
-                    streamWriter = null;
-                    fileStream = null;
                 }
                 break;
             case MapManager.Flag.Burned:
