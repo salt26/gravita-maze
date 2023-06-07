@@ -48,7 +48,7 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             }
         }
         lastEnterTime = Time.time;
-        if (myTooltipUI == null)
+        if (tooltipUIParent != null && myTooltipUI == null)
         {
             myTooltipUI = Instantiate(tooltipPrefab, tooltipUIParent.transform).GetComponent<TooltipBox>();
 

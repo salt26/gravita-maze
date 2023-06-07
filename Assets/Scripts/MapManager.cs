@@ -99,7 +99,7 @@ public class MapManager : MonoBehaviour
     public bool tryCountUpTrigger = false;
     public bool hasClearedOnce = false;
 
-    public LimitMode playMode;
+    public LimitMode limitMode = LimitMode.Time;
 
     public int SizeX
     {
@@ -206,7 +206,7 @@ public class MapManager : MonoBehaviour
     {
         get
         {
-            return IsReady && playMode == LimitMode.Time && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
+            return IsReady && limitMode == LimitMode.Time && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
         }
     }
 
@@ -261,7 +261,6 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
-        playMode = LimitMode.Time;
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
     }
@@ -831,7 +830,6 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
-        playMode = LimitMode.Time;
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
@@ -1086,7 +1084,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void TimeActivate()
     {
-        if (!IsReady || playMode != LimitMode.Time) return;
+        if (!IsReady || limitMode != LimitMode.Time) return;
 
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -1103,19 +1101,19 @@ public class MapManager : MonoBehaviour
 
     public void TimePause()
     {
-        if (!IsReady || playMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
         HasTimePaused = true;
     }
 
     public void TimeResume()
     {
-        if (!IsReady || playMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
         HasTimePaused = false;
     }
 
     public void TimeSkip()
     {
-        if (!IsReady || playMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
         HasTimePaused = false;
         RemainingTime = 0f;
         timeoutPanel.SetActive(true);
@@ -1169,7 +1167,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void RetryWithTime()
     {
-        if (!IsReady || playMode != LimitMode.Time || (RemainingTime > 0f && !HasCleared)) return;
+        if (!IsReady || limitMode != LimitMode.Time || (RemainingTime > 0f && !HasCleared)) return;
         GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
@@ -1241,7 +1239,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityUp()
     {
-        if (!IsReady || HasCleared || HasDied || (playMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1264,7 +1262,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityDown()
     {
-        if (!IsReady || HasCleared || HasDied || (playMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1287,7 +1285,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityLeft()
     {
-        if (!IsReady || HasCleared || HasDied || (playMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1310,7 +1308,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityRight()
     {
-        if (!IsReady || HasCleared || HasDied || (playMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1365,7 +1363,7 @@ public class MapManager : MonoBehaviour
     public void Gravity(GameManager.GravityDirection gravityDirection, out Flag flag)
     {
         flag = Flag.Continued;
-        if (!IsReady || HasCleared || HasDied || (playMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
 
         // First, simulate to check if the ball can escape.
         Gravity(map.Clone(), (Movable[,])currentMovableCoord.Clone(), gravityDirection, true, out flag, out _, out _, out List<Move> moves);
