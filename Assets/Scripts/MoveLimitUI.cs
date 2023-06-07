@@ -29,7 +29,6 @@ public class MoveLimitUI : MonoBehaviour
             return;
         }
 
-        print(mm.MoveLimit + " " + mm.ActionHistory + " " + mm.ActionHistory.Length);
         int remainingMove = mm.MoveLimit - mm.ActionHistory.Length;
         if (remainingMove < 0)
         {
