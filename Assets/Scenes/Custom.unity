@@ -601,11 +601,13 @@ MonoBehaviour:
   - {fileID: 0}
   loadingPanel: {fileID: 38331145807211207}
   timeoutPanel: {fileID: 551491372}
+  tryCountUis:
+  - {fileID: 906170567}
+  - {fileID: 558355873}
   tryCount: 0
   beforeFirstAction: 0
   tryCountUpTrigger: 0
   hasClearedOnce: 0
-  playMode: 0
 --- !u!4 &57608225
 Transform:
   m_ObjectHideFlags: 0
@@ -1915,6 +1917,12 @@ MonoBehaviour:
           m_WaitForCompletion: 0
           m_LocalVariables: []
         m_PropertyPath: m_Text
+--- !u!1 &558355873 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2672423829272442781, guid: d838f6f282b36a043ab18477971ef80d,
+    type: 3}
+  m_PrefabInstance: {fileID: 165664660}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &583662298
 GameObject:
   m_ObjectHideFlags: 0
@@ -3326,6 +3334,12 @@ MonoBehaviour:
   tooltipWidth: 324
   tooltipHeight: 168
   pivot: 3
+--- !u!1 &906170567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2672423829272442781, guid: d838f6f282b36a043ab18477971ef80d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2672423830099704849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1060893182
 GameObject:
   m_ObjectHideFlags: 0

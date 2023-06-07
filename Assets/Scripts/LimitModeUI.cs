@@ -27,11 +27,11 @@ public class LimitModeUI : MonoBehaviour, IPointerClickHandler
         {
             if (oldValue < (slider.minValue + slider.maxValue) * 0.5f)
             {
-                GameManager.mm.limitMode = MapManager.LimitMode.Time;
+                GameManager.mm.LimitMode = MapManager.LimitModeEnum.Time;
             }
             else
             {
-                GameManager.mm.limitMode = MapManager.LimitMode.Move;
+                GameManager.mm.LimitMode = MapManager.LimitModeEnum.Move;
             }
         }
     }
@@ -109,11 +109,11 @@ public class LimitModeUI : MonoBehaviour, IPointerClickHandler
         {
             if (oldValue < (slider.minValue + slider.maxValue) * 0.5f)
             {
-                GameManager.mm.limitMode = MapManager.LimitMode.Time;
+                GameManager.mm.LimitMode = MapManager.LimitModeEnum.Time;
             }
             else
             {
-                GameManager.mm.limitMode = MapManager.LimitMode.Move;
+                GameManager.mm.LimitMode = MapManager.LimitModeEnum.Move;
             }
         }
     }

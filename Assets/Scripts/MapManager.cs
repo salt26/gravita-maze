@@ -25,7 +25,7 @@ public class MapManager : MonoBehaviour
     public enum RotationStatus { Original = 0, Clockwise90 = 1, Clockwise180 = 2, Clockwise270 = 3,
         UpsideDown = 4, UpsideDown90 = 5, UpsideDown180 = 6, UpsideDown270 = 7 }
 
-    public enum LimitMode { Time = 0, Move = 1 }
+    public enum LimitModeEnum { Time = 0, Move = 1 }
 
     public const int MIN_SIZE_X = 2;
     public const int MIN_SIZE_Y = 2;
@@ -85,6 +85,7 @@ public class MapManager : MonoBehaviour
 
     public GameObject loadingPanel;
     public GameObject timeoutPanel;
+    public List<GameObject> tryCountUis = new List<GameObject>();
 
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
@@ -93,13 +94,12 @@ public class MapManager : MonoBehaviour
     private int _originalSizeY = 0;
     private float _timeLimit;
     private bool _isReady = false;
+    private LimitModeEnum _limitMode = LimitModeEnum.Time;
 
     public int tryCount = 0;
     public bool beforeFirstAction = false;
     public bool tryCountUpTrigger = false;
-    public bool hasClearedOnce = false;
-
-    public LimitMode limitMode = LimitMode.Time;
+    public bool hasClearedOnce = false; 
 
     public int SizeX
     {
@@ -132,6 +132,33 @@ public class MapManager : MonoBehaviour
     {
         get;
         private set;
+    }
+
+    public LimitModeEnum LimitMode
+    {
+        get
+        {
+            return _limitMode;
+        }
+        set
+        {
+            _limitMode = value;
+
+            if (_limitMode == LimitModeEnum.Time)
+            {
+                foreach (GameObject g in tryCountUis)
+                {
+                    g.SetActive(true);
+                }
+            }
+            else
+            {
+                foreach (GameObject g in tryCountUis)
+                {
+                    g.SetActive(false);
+                }
+            }
+        }
     }
     public float TimeLimit
     {
@@ -206,7 +233,7 @@ public class MapManager : MonoBehaviour
     {
         get
         {
-            return IsReady && limitMode == LimitMode.Time && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
+            return IsReady && LimitMode == LimitModeEnum.Time && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
         }
     }
 
@@ -1084,7 +1111,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void TimeActivate()
     {
-        if (!IsReady || limitMode != LimitMode.Time) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time) return;
 
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
@@ -1101,19 +1128,19 @@ public class MapManager : MonoBehaviour
 
     public void TimePause()
     {
-        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = true;
     }
 
     public void TimeResume()
     {
-        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
     }
 
     public void TimeSkip()
     {
-        if (!IsReady || limitMode != LimitMode.Time || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
         RemainingTime = 0f;
         timeoutPanel.SetActive(true);
@@ -1167,7 +1194,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void RetryWithTime()
     {
-        if (!IsReady || limitMode != LimitMode.Time || (RemainingTime > 0f && !HasCleared)) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || (RemainingTime > 0f && !HasCleared)) return;
         GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
@@ -1179,7 +1206,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void Retry()
     {
-        if (!IsReady || RemainingTime <= 0f || HasCleared) return;
+        if (!IsReady || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) || HasCleared) return;
         GameManager.gm.PlayRetrySFX();
         RetryHelper();
     }
@@ -1239,7 +1266,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityUp()
     {
-        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1262,7 +1289,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityDown()
     {
-        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1285,7 +1312,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityLeft()
     {
-        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1308,7 +1335,7 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityRight()
     {
-        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1363,7 +1390,7 @@ public class MapManager : MonoBehaviour
     public void Gravity(GameManager.GravityDirection gravityDirection, out Flag flag)
     {
         flag = Flag.Continued;
-        if (!IsReady || HasCleared || HasDied || (limitMode == LimitMode.Time && RemainingTime <= 0f)) return;
+        if (!IsReady || HasCleared || HasDied || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f)) return;
 
         // First, simulate to check if the ball can escape.
         Gravity(map.Clone(), (Movable[,])currentMovableCoord.Clone(), gravityDirection, true, out flag, out _, out _, out List<Move> moves);
