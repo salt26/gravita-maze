@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
@@ -8,7 +7,6 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
@@ -39,9 +37,9 @@ public class PlayManager : MonoBehaviour
     public ResultUI resultUI;
     public GameObject tooltipUI;
     public GameObject timerUI;
+    public GameObject moveLimitUI;
 
     public List<GameObject> tryCountUis = new List<GameObject>();
-    public GameObject moveLimitUI;
 
     private OpenScrollItemWithMark selectedOpenScrollItem;
     public GameObject openScrollContent;
@@ -1466,7 +1464,18 @@ public class PlayManager : MonoBehaviour
                         Destroy(t.gameObject);
                     }
                     statusUI.gameObject.SetActive(false);
-                    timerUI.SetActive(true);
+
+                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
+                    {
+                        timerUI.SetActive(true);
+                        moveLimitUI.SetActive(false);
+                    }
+                    else
+                    {
+                        timerUI.SetActive(false);
+                        moveLimitUI.SetActive(true);
+                    }
+
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
@@ -1565,7 +1574,18 @@ public class PlayManager : MonoBehaviour
                         Destroy(t.gameObject);
                     }
                     statusUI.gameObject.SetActive(false);
-                    timerUI.SetActive(true);
+
+                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
+                    {
+                        timerUI.SetActive(true);
+                        moveLimitUI.SetActive(false);
+                    }
+                    else
+                    {
+                        timerUI.SetActive(false);
+                        moveLimitUI.SetActive(true);
+                    }
+
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
@@ -1595,6 +1615,7 @@ public class PlayManager : MonoBehaviour
         GameManager.mm.Initialize();
         statusUI.gameObject.SetActive(true);
         timerUI.SetActive(false);
+        moveLimitUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
         pausePanel.SetActive(false);
@@ -1620,6 +1641,7 @@ public class PlayManager : MonoBehaviour
         GameManager.mm.Initialize();
         statusUI.gameObject.SetActive(true);
         timerUI.SetActive(false);
+        moveLimitUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
         // TODO
@@ -1809,5 +1831,23 @@ public class PlayManager : MonoBehaviour
         StringComparer comparer = StringComparer.OrdinalIgnoreCase;
 
         return comparer.Compare(hashOfInput, hash) == 0;
+    }
+
+    public void ChangeLimitMode(MapManager.LimitModeEnum limitMode)
+    {
+        if (limitMode == MapManager.LimitModeEnum.Time)
+        {
+            foreach (GameObject g in GameManager.pm.tryCountUis)
+            {
+                g.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject g in GameManager.pm.tryCountUis)
+            {
+                g.SetActive(false);
+            }
+        }
     }
 }

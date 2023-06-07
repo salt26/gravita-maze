@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 public class MapManager : MonoBehaviour
@@ -149,20 +148,7 @@ public class MapManager : MonoBehaviour
 
             if (GameManager.pm != null)
             {
-                if (_limitMode == LimitModeEnum.Time)
-                {
-                    foreach (GameObject g in GameManager.pm.tryCountUis)
-                    {
-                        g.SetActive(true);
-                    }
-                }
-                else
-                {
-                    foreach (GameObject g in GameManager.pm.tryCountUis)
-                    {
-                        g.SetActive(false);
-                    }
-                }
+                GameManager.pm.ChangeLimitMode(_limitMode);
             }
         }
     }
@@ -1366,7 +1352,6 @@ public class MapManager : MonoBehaviour
     {
         if (pm == null) return;
         tryCountUpTrigger = false;
-        Debug.Log("TryCount");
         tryCount++;
         Debug.Log(tryCount);
         if (hasClearedOnce) return;
