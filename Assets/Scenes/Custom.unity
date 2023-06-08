@@ -8141,6 +8141,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveLimitUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5464360231694924913, guid: 3e1882bc7f6d98c49814aa8f92076daa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8218423448589352914, guid: 3e1882bc7f6d98c49814aa8f92076daa,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 8218423448589352914, guid: 3e1882bc7f6d98c49814aa8f92076daa,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -444
+      objectReference: {fileID: 0}
     - target: {fileID: 9100421025181478557, guid: 3e1882bc7f6d98c49814aa8f92076daa,
         type: 3}
       propertyPath: m_Pivot.x
