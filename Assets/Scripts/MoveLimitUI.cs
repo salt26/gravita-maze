@@ -98,7 +98,9 @@ public class MoveLimitUI : MonoBehaviour
         else
         {
             int d = SegmentNum(mm.MoveLimit);                                               // 칸의 총 개수
-            int p = Mathf.CeilToInt(remainingMove / (float)(mm.MoveLimit - 1) * (d - 1));   // 불이 들어와야 하는 칸 수
+            int p;                                                                          // 불이 들어와야 하는 칸 수
+            if (mm.ActionHistory.Length == 0) p = d;
+            else p = Mathf.CeilToInt(remainingMove / (float)(mm.MoveLimit - 1) * (d - 1));
             int dw;                                                                         // 구분자의 가로 길이(px)
             if (d % 2 == 0) dw = 2;     // 2의 배수
             else dw = 1;                // 3, 7, 9의 배수 혹은 5

@@ -1012,7 +1012,8 @@ public class PlayManager : MonoBehaviour
 
             foreach (string s in files)
             {
-                bool isCleared = false;
+                bool isClearedInTime = false;
+                bool isClearedInMove = false;
                 string s2 = Application.persistentDataPath.TrimEnd('/') + "/Meta/" + MetaUtil.ExtentionTxtToJson(s);
                 print(s2);
 
@@ -1037,15 +1038,20 @@ public class PlayManager : MonoBehaviour
                         string mapHash = GetHash(sha256Hash, streamReader.ReadToEnd().Trim());
                         if (!metaHash.Equals(mapHash))
                         {
-                            isCleared = false;
+                            isClearedInTime = false;
+                            isClearedInMove = false;
                         }
                         streamReader.Close();
                         fileStream.Close();
 
                         JToken cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
-                        if (cleared == null) isCleared = false;
-                        else isCleared = (bool)cleared;
-                        
+                        if (cleared == null) isClearedInTime = false;
+                        else isClearedInTime = (bool)cleared;
+
+                        cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        if (cleared == null) isClearedInMove = false;
+                        else isClearedInMove = (bool)cleared;
+
                         /*
                         sr.Close();
                         fs.Close();
@@ -1063,7 +1069,7 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, false, isCleared, this);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, false, isClearedInTime, isClearedInMove, this);
                 index++;
             }
 
@@ -1232,7 +1238,9 @@ public class PlayManager : MonoBehaviour
         {
             foreach (TextAsset s in files)
             {
-                bool isCleared = false;
+                bool isClearedInTime = false;
+                bool isClearedInMove = false;
+
                 string s2 = Application.persistentDataPath.TrimEnd('/') + "/Meta/Training\\" + s.name + ".json";
                 print(s2);
                 if (metafiles2.Contains(s2.Replace('\\', '/')) || metafiles2.Contains(s2))
@@ -1244,12 +1252,17 @@ public class PlayManager : MonoBehaviour
                         string mapHash = GetHash(sha256Hash, s.text.Trim());
                         if (!metaHash.Equals(mapHash))
                         {
-                            isCleared = false;
+                            isClearedInTime = false;
+                            isClearedInMove = false;
                         }
 
                         JToken cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
-                        if (cleared == null) isCleared = false;
-                        else isCleared = (bool)cleared;
+                        if (cleared == null) isClearedInTime = false;
+                        else isClearedInTime = (bool)cleared;
+
+                        cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        if (cleared == null) isClearedInMove = false;
+                        else isClearedInMove = (bool)cleared;
                     }
                     catch (Exception e)
                     {
@@ -1262,7 +1275,7 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenScrollItemWithMark>().Initialize(s.name, false, isCleared, this, s, false);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(s.name, false, isClearedInTime, isClearedInMove, this, s, false);
                 index++;
             }
         }
@@ -1337,7 +1350,7 @@ public class PlayManager : MonoBehaviour
             {
                 string s = selectedOpenScrollItem.path;
                 Debug.Log(s);
-                s = "/Meta/Training/" + MetaUtil.ExtentionTxtToJson(s);
+                s = "/Meta/Training/" + MetaUtil.ExtentionTxtToJson(s + ".json");
                 print(s);
                 CreateMeta(s);
                 bool b = TrainingOpenFile(selectedOpenScrollItem.textAsset, true);
