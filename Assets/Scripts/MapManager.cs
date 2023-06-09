@@ -8,6 +8,8 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MapManager : MonoBehaviour
 {
@@ -186,7 +188,7 @@ public class MapManager : MonoBehaviour
     public int MoveLimit
     {
         get;
-        private set;
+        set;
     } = int.MaxValue;
 
     public bool IsReady
@@ -1151,7 +1153,7 @@ public class MapManager : MonoBehaviour
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
     {
-        print(solution);
+        //print(solution);
         Movable[,] mutableMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
         foreach (char direction in solution.ToCharArray())
@@ -1371,22 +1373,12 @@ public class MapManager : MonoBehaviour
         tryCount++;
         Debug.Log(tryCount);
         if (hasClearedOnce) return;
-        FileStream fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
-        sw.WriteLine(tryCount.ToString());
-        sw.WriteLine("False");
-        sw.WriteLine(mapHash);
-        try
+
+        Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
         {
-            sw?.Close();
-            fs?.Close();
-            sw = null;
-            fs = null;
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            { "tryCount", tryCount }
+        };
+        MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
     }
 
     /// <summary>
