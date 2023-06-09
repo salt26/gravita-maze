@@ -430,7 +430,7 @@ public class PlayManager : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError(e);
             }
             finally
             {
@@ -440,7 +440,7 @@ public class PlayManager : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e.Message);
+                    Debug.LogError(e);
                 }
             }
         }
@@ -684,47 +684,32 @@ public class PlayManager : MonoBehaviour
 
                 pauseButton.interactable = false;
 
-                if (!GameManager.mm.hasClearedOnce)
+                if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {
-                    GameManager.mm.hasClearedOnce = true;
-                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
+                    GameManager.mm.hasClearedOnceInTime = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+                    if (GameManager.mm.ActionHistory.Length == 1)
                     {
-                        Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-                        if (GameManager.mm.ActionHistory.Length == 1)
-                        {
-                            keyValuePairs.Add("tryCount", GameManager.mm.tryCount + 1);
-                        }
-                        else
-                        {
-                            keyValuePairs.Add("tryCount", GameManager.mm.tryCount);
-                        }
-                        keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnce);
-                        MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
-                        /*
-                        fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                        streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                        fileStream.Position = 0;
-                        if (GameManager.mm.ActionHistory.Length == 1)
-                        {
-                            streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
-                        }
-                        else
-                        {
-                            streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
-                        }
-                        streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                        streamWriter.WriteLine(mapHash);
-                        streamWriter?.Close();
-                        fileStream?.Close();
-                        streamWriter = null;
-                        fileStream = null;
-                        */
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount + 1);
                     }
                     else
                     {
-                        // TODO 최소 이동 횟수 도전 설정으로 클리어하는 경우, 이동 횟수 기록하기
-                        // 시간제한 모드의 메타 파일 기록과 병기할 수 있도록 양식을 재정립할 필요도 있음
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount);
                     }
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInTime);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
+                }
+                else if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Move)
+                {
+                    GameManager.mm.hasClearedOnceInMove = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+                    if (GameManager.mm.ActionHistory.Length < GameManager.mm.MoveLimit)
+                    {
+                        // TODO 특별한 애니메이션으로 최소 이동 횟수 갱신 축하하기!
+                        keyValuePairs.Add("minMoveCount", GameManager.mm.ActionHistory.Length);
+                    }
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInMove);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move, keyValuePairs);
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -779,10 +764,11 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
-                
-                if (!GameManager.mm.hasClearedOnce)
+
+
+                if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {
-                    GameManager.mm.hasClearedOnce = true;
+                    GameManager.mm.hasClearedOnceInTime = true;
                     Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
                     if (GameManager.mm.ActionHistory.Length == 1)
                     {
@@ -792,27 +778,20 @@ public class PlayManager : MonoBehaviour
                     {
                         keyValuePairs.Add("tryCount", GameManager.mm.tryCount);
                     }
-                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnce);
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInTime);
                     MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
-                    /*
-                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                    fileStream.Position = 0;
-                    if (GameManager.mm.ActionHistory.Length == 1)
+                }
+                else if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Move)
+                {
+                    GameManager.mm.hasClearedOnceInMove = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+                    if (GameManager.mm.ActionHistory.Length < GameManager.mm.MoveLimit)
                     {
-                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                        // TODO 특별한 애니메이션으로 최소 이동 횟수 갱신 축하하기!
+                        keyValuePairs.Add("minMoveCount", GameManager.mm.ActionHistory.Length);
                     }
-                    else
-                    {
-                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
-                    }
-                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                    streamWriter.WriteLine(mapHash);
-                    streamWriter?.Close();
-                    fileStream?.Close();
-                    streamWriter = null;
-                    fileStream = null;
-                    */
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInMove);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move, keyValuePairs);
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -876,7 +855,7 @@ public class PlayManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -891,8 +870,8 @@ public class PlayManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
-            Debug.LogError(e.Message);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
+            Debug.LogError(e);
             return;
         }
 
@@ -920,7 +899,7 @@ public class PlayManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -1074,7 +1053,7 @@ public class PlayManager : MonoBehaviour
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.Message);
+                        Debug.LogError(e);
                     }
                     metafiles2.Remove(s2);
                 }
@@ -1260,23 +1239,6 @@ public class PlayManager : MonoBehaviour
                 {
                     try
                     {
-                        /*
-                        FileStream fs = new FileStream(s2.Replace('\\', '/'), FileMode.Open);
-                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                        sr.ReadLine();
-                        bool b = bool.TryParse(sr.ReadLine(), out isCleared);
-                        if (!b) isCleared = false;
-                        string metaHash = sr.ReadToEnd().Trim();
-                        string mapHash = GetHash(sha256Hash, s.text.Trim());
-                        if (!metaHash.Equals(mapHash))
-                        {
-                            isCleared = false;
-                        }
-                        
-                        sr.Close();
-                        fs.Close();
-                        */
-
                         JObject json = MetaUtil.ReadMetaFile(s2.Replace('\\', '/'));
                         string metaHash = MetaUtil.GetMapHashFromMetaObject(json);
                         string mapHash = GetHash(sha256Hash, s.text.Trim());
@@ -1291,7 +1253,7 @@ public class PlayManager : MonoBehaviour
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.Message);
+                        Debug.LogError(e);
                     }
                     metafiles2.Remove(s2);
                 }
@@ -1577,6 +1539,7 @@ public class PlayManager : MonoBehaviour
                         }
                         else
                         {
+                            GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnce;
                             GameManager.mm.MoveLimit = (int)minMoveCount;
                         }
                         timerUI.SetActive(false);
@@ -1682,6 +1645,7 @@ public class PlayManager : MonoBehaviour
                         }
                         else
                         {
+                            GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnce;
                             GameManager.mm.MoveLimit = (int)minMoveCount;
                         }
                         timerUI.SetActive(false);
@@ -1802,8 +1766,9 @@ public class PlayManager : MonoBehaviour
             }
             finally
             {
-                GameManager.mm.hasClearedOnce = false;
+                GameManager.mm.hasClearedOnceInTime = false;
                 GameManager.mm.tryCount = 0;
+                GameManager.mm.hasClearedOnceInMove = false;
                 GameManager.mm.MoveLimit = int.MaxValue;
                 sr.Close();
                 fs.Close();
@@ -1864,11 +1829,12 @@ public class PlayManager : MonoBehaviour
                     
                     if (b1)
                     {
-                        GameManager.mm.hasClearedOnce = (bool)hasClearedOnceInTime;
+                        GameManager.mm.hasClearedOnceInTime = (bool)hasClearedOnceInTime;
                         GameManager.mm.tryCount = (int)tryCount;
                     }
                     if (b2)
                     {
+                        GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnceInMove;
                         GameManager.mm.MoveLimit = (int)minMoveCount;
                     }
                 }

@@ -98,21 +98,22 @@ public class MetaUtil
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
+            Debug.LogError(e);
         }
         finally
         {
             try
             {
-                GameManager.mm.hasClearedOnce = false;
+                GameManager.mm.hasClearedOnceInTime = false;
                 GameManager.mm.tryCount = 0;
+                GameManager.mm.hasClearedOnceInMove = false;
                 GameManager.mm.MoveLimit = int.MaxValue;
                 sw?.Close();
                 fs?.Close();
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError(e);
             }
         }
     }
@@ -141,7 +142,7 @@ public class MetaUtil
             {
                 try
                 {
-                    fs = new FileStream(metaPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+                    fs = new FileStream(metaPath, FileMode.Create, FileAccess.Write, FileShare.None);
                     sb = new StringBuilder();
                     sw = new StringWriter(sb);
 
@@ -193,20 +194,20 @@ public class MetaUtil
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e.Message);
+                    Debug.LogError(e);
                 }
                 finally
                 {
                     try
                     {
-                        GameManager.mm.hasClearedOnce = false;
+                        GameManager.mm.hasClearedOnceInTime = false;
                         GameManager.mm.tryCount = 0;
                         sw?.Close();
                         fs?.Close();
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError(e.Message);
+                        Debug.LogError(e);
                     }
                 }
             }
@@ -223,7 +224,7 @@ public class MetaUtil
             {
                 try
                 {
-                    fs = new FileStream(metaPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+                    fs = new FileStream(metaPath, FileMode.Create, FileAccess.Write, FileShare.None);
                     sb = new StringBuilder();
                     sw = new StringWriter(sb);
 
@@ -275,19 +276,20 @@ public class MetaUtil
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e.Message);
+                    Debug.LogError(e);
                 }
                 finally
                 {
                     try
                     {
+                        GameManager.mm.hasClearedOnceInMove = false;
                         GameManager.mm.MoveLimit = int.MaxValue;
                         sw?.Close();
                         fs?.Close();
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError(e.Message);
+                        Debug.LogError(e);
                     }
                 }
             }
@@ -349,19 +351,19 @@ public class MetaUtil
         }
         string output = JsonConvert.SerializeObject(jsonObj, Formatting.None);
 
-        FileStream fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-        {
-            sw.WriteLine(output);
-        }
         try
         {
+            FileStream fs = new FileStream(metaPath, FileMode.Truncate, FileAccess.ReadWrite, FileShare.None);
+            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+            {
+                sw.WriteLine(output);
+            }
             fs?.Close();
             fs = null;
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
+            Debug.LogError(e);
         }
     }
 

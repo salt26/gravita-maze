@@ -103,7 +103,9 @@ public class MapManager : MonoBehaviour
     [HideInInspector]
     public bool tryCountUpTrigger = false;
     [HideInInspector]
-    public bool hasClearedOnce = false; 
+    public bool hasClearedOnceInTime = false;
+    [HideInInspector]
+    public bool hasClearedOnceInMove = false;
 
     public int SizeX
     {
@@ -857,7 +859,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
-        MoveLimit = solution.Length; // TODO 메타 파일에서 최소 이동 횟수를 가져와야 함
+        //MoveLimit = solution.Length; // TODO 메타 파일에서 최소 이동 횟수를 가져와야 함
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
@@ -1112,15 +1114,18 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void TimeActivate()
     {
-        if (!IsReady || LimitMode != LimitModeEnum.Time) return;
+        if (!IsReady) return;
 
         gravityUpButton.interactable = true;
         gravityDownButton.interactable = true;
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
 
-        RemainingTime = TimeLimit;
-        IsTimeActivated = true;
+        if (LimitMode == LimitModeEnum.Time)
+        {
+            RemainingTime = TimeLimit;
+            IsTimeActivated = true;
+        }
         IsTimePassing = false;
         HasTimePaused = false;
         timeoutPanel.SetActive(false);
@@ -1372,7 +1377,7 @@ public class MapManager : MonoBehaviour
         tryCountUpTrigger = false;
         tryCount++;
         Debug.Log(tryCount);
-        if (hasClearedOnce) return;
+        if (hasClearedOnceInTime) return;
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
         {

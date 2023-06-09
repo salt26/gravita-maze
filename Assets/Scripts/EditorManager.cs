@@ -1545,7 +1545,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -1560,7 +1560,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 
@@ -1834,7 +1834,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
