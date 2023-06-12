@@ -42,6 +42,7 @@ public class PlayManager : MonoBehaviour
     public GameObject moveLimitUI;
 
     public List<GameObject> tryCountUis = new List<GameObject>();
+    public List<GameObject> minMoveCountUis = new List<GameObject>();
 
     private OpenScrollItemWithMark selectedOpenScrollItem;
     public GameObject openScrollContent;
@@ -1898,6 +1899,10 @@ public class PlayManager : MonoBehaviour
     {
         if (limitMode == MapManager.LimitModeEnum.Time)
         {
+            foreach (GameObject g in GameManager.pm.minMoveCountUis)
+            {
+                g.SetActive(false);
+            }
             foreach (GameObject g in GameManager.pm.tryCountUis)
             {
                 g.SetActive(true);
@@ -1908,6 +1913,10 @@ public class PlayManager : MonoBehaviour
             foreach (GameObject g in GameManager.pm.tryCountUis)
             {
                 g.SetActive(false);
+            }
+            foreach (GameObject g in GameManager.pm.minMoveCountUis)
+            {
+                g.SetActive(true);
             }
         }
     }
