@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -149,7 +150,7 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
-                if (mm.gravityRetryButton != null && 
+                if (mm.gravityRetryButton != null &&
                     mm.gravityRetryButton.gameObject.activeInHierarchy && mm.gravityRetryButton.interactable)
                 {
                     mm.gravityRetryButton.onClick.Invoke();
@@ -198,6 +199,11 @@ public class GameManager : MonoBehaviour
                     pm.pauseUI.pauseExitButton.onClick.Invoke();
                 }
                 */
+            }
+            else if (Input.GetKeyUp(KeyCode.Return) && SceneManager.GetActiveScene().name.Equals("Editor") &&
+                em != null && em.editorNextButton4.gameObject.activeInHierarchy && em.editorNextButton4.interactable)
+            {
+                em.editorNextButton4.onClick.Invoke();
             }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
             {
@@ -277,10 +283,16 @@ public class GameManager : MonoBehaviour
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
-                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable)
+                            /*
+                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable && !em.isMapNameInputSelected)
                             {
                                 em.editorSaveButton6.onClick.Invoke();
                             }
+                            if (em.isMapNameInputSelected)
+                            {
+                                Debug.Log("editorMapNameInputs selected");
+                            }
+                            */
                             break;
                     }
                 }
