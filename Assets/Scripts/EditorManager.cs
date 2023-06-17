@@ -1545,7 +1545,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -1555,12 +1555,12 @@ public class EditorManager : MonoBehaviour
             if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
             {
                 Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
-                Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+                MetaUtil.CreateDirectory(MapManager.MAP_ROOT_PATH);
             }
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 
@@ -1834,7 +1834,7 @@ public class EditorManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -1842,7 +1842,7 @@ public class EditorManager : MonoBehaviour
         if (!Directory.Exists(MapManager.MAP_ROOT_PATH))
         {
             Debug.LogWarning("File warning: there is no directory \"" + MapManager.MAP_ROOT_PATH + "\"");
-            Directory.CreateDirectory(MapManager.MAP_ROOT_PATH);
+            MetaUtil.CreateDirectory(MapManager.MAP_ROOT_PATH);
         }
 
         RenderSaveScrollView(MapManager.MAP_ROOT_PATH);
@@ -2092,7 +2092,7 @@ public class EditorManager : MonoBehaviour
 
         if (!Directory.Exists(currentSavePath.TrimEnd('/') + "/" + folderName))
         {
-            Directory.CreateDirectory(currentSavePath.TrimEnd('/') + "/" + folderName);
+            MetaUtil.CreateDirectory(currentSavePath.TrimEnd('/') + "/" + folderName);
             statusUI.SetStatusMessageWithFlashing(
                 LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_folder_success_part1")
                 + folderName
@@ -2148,7 +2148,7 @@ public class EditorManager : MonoBehaviour
         {
             if (!Directory.Exists(currentSavePath.TrimEnd('/')))
             {
-                Directory.CreateDirectory(currentSavePath.TrimEnd('/'));
+                MetaUtil.CreateDirectory(currentSavePath.TrimEnd('/'));
             }
         }
         catch (Exception e)

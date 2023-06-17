@@ -7,8 +7,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MapManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class MapManager : MonoBehaviour
     public enum OpenFileFlag { Failed = 0, Success = 1, Restore = 2 }
     public enum RotationStatus { Original = 0, Clockwise90 = 1, Clockwise180 = 2, Clockwise270 = 3,
         UpsideDown = 4, UpsideDown90 = 5, UpsideDown180 = 6, UpsideDown270 = 7 }
+
+    public enum LimitModeEnum { Time = 0, Move = 1 }
 
     public const int MIN_SIZE_X = 2;
     public const int MIN_SIZE_Y = 2;
@@ -91,11 +94,18 @@ public class MapManager : MonoBehaviour
     private int _originalSizeY = 0;
     private float _timeLimit;
     private bool _isReady = false;
+    private LimitModeEnum _limitMode = LimitModeEnum.Time;
 
+    [HideInInspector]
     public int tryCount = 0;
+    [HideInInspector]
     public bool beforeFirstAction = false;
+    [HideInInspector]
     public bool tryCountUpTrigger = false;
-    public bool hasClearedOnce = false;
+    [HideInInspector]
+    public bool hasClearedOnceInTime = false;
+    [HideInInspector]
+    public bool hasClearedOnceInMove = false;
 
     public int SizeX
     {
@@ -129,6 +139,23 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     }
+
+    public LimitModeEnum LimitMode
+    {
+        get
+        {
+            return _limitMode;
+        }
+        set
+        {
+            _limitMode = value;
+
+            if (GameManager.pm != null)
+            {
+                GameManager.pm.ChangeLimitMode(_limitMode);
+            }
+        }
+    }
     public float TimeLimit
     {
         get
@@ -160,6 +187,11 @@ public class MapManager : MonoBehaviour
         get;
         private set;
     } = false;
+    public int MoveLimit
+    {
+        get;
+        set;
+    } = int.MaxValue;
 
     public bool IsReady
     {
@@ -202,7 +234,7 @@ public class MapManager : MonoBehaviour
     {
         get
         {
-            return IsReady && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
+            return IsReady && LimitMode == LimitModeEnum.Time && IsTimeActivated && IsTimePassing && !HasTimePaused && RemainingTime > 0f && !HasCleared;
         }
     }
 
@@ -257,6 +289,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
+        MoveLimit = 0;
         tilemap.ClearAllTiles();
         timeoutPanel.SetActive(false);
     }
@@ -826,6 +859,7 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         RemainingTime = 0f;
+        //MoveLimit = solution.Length; // TODO 메타 파일에서 최소 이동 횟수를 가져와야 함
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
@@ -1087,8 +1121,11 @@ public class MapManager : MonoBehaviour
         gravityLeftButton.interactable = true;
         gravityRightButton.interactable = true;
 
-        RemainingTime = TimeLimit;
-        IsTimeActivated = true;
+        if (LimitMode == LimitModeEnum.Time)
+        {
+            RemainingTime = TimeLimit;
+            IsTimeActivated = true;
+        }
         IsTimePassing = false;
         HasTimePaused = false;
         timeoutPanel.SetActive(false);
@@ -1097,19 +1134,19 @@ public class MapManager : MonoBehaviour
 
     public void TimePause()
     {
-        if (!IsReady || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = true;
     }
 
     public void TimeResume()
     {
-        if (!IsReady || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
     }
 
     public void TimeSkip()
     {
-        if (!IsReady || !IsTimeActivated) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
         RemainingTime = 0f;
         timeoutPanel.SetActive(true);
@@ -1121,6 +1158,7 @@ public class MapManager : MonoBehaviour
 
     private bool Simulate(Map map, Movable[,] initialMovableCoord, string solution)
     {
+        //print(solution);
         Movable[,] mutableMovableCoord = (Movable[,])initialMovableCoord.Clone();
 
         foreach (char direction in solution.ToCharArray())
@@ -1163,7 +1201,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void RetryWithTime()
     {
-        if (!IsReady || (RemainingTime > 0f && !HasCleared)) return;
+        if (!IsReady || LimitMode != LimitModeEnum.Time || (RemainingTime > 0f && !HasCleared)) return;
         GameManager.gm.PlayRetrySFX();
         TimeActivate();
         RetryHelper();
@@ -1175,7 +1213,7 @@ public class MapManager : MonoBehaviour
     /// </summary>
     public void Retry()
     {
-        if (!IsReady || RemainingTime <= 0f || HasCleared) return;
+        if (!IsReady || (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) || HasCleared) return;
         GameManager.gm.PlayRetrySFX();
         RetryHelper();
     }
@@ -1235,7 +1273,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityUp()
     {
-        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1258,7 +1298,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityDown()
     {
-        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1281,7 +1323,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityLeft()
     {
-        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1304,7 +1348,9 @@ public class MapManager : MonoBehaviour
 
     public void ManipulateGravityRight()
     {
-        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
         IsTimePassing = true;
         if (beforeFirstAction)
         {
@@ -1327,28 +1373,17 @@ public class MapManager : MonoBehaviour
 
     public void TryCountUp(PlayManager pm, string metaPath, string mapHash)
     {
-        if (pm == null) return;
+        if (pm == null || LimitMode == LimitModeEnum.Move) return;
         tryCountUpTrigger = false;
-        Debug.Log("TryCount");
         tryCount++;
         Debug.Log(tryCount);
-        if (hasClearedOnce) return;
-        FileStream fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
-        sw.WriteLine(tryCount.ToString());
-        sw.WriteLine("False");
-        sw.WriteLine(mapHash);
-        try
+        if (hasClearedOnceInTime) return;
+
+        Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
         {
-            sw?.Close();
-            fs?.Close();
-            sw = null;
-            fs = null;
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+            { "tryCount", tryCount }
+        };
+        MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
     }
 
     /// <summary>
@@ -1359,7 +1394,9 @@ public class MapManager : MonoBehaviour
     public void Gravity(GameManager.GravityDirection gravityDirection, out Flag flag)
     {
         flag = Flag.Continued;
-        if (!IsReady || HasCleared || HasDied || RemainingTime <= 0f) return;
+        if (!IsReady || HasCleared || HasDied ||
+            (LimitMode == LimitModeEnum.Time && RemainingTime <= 0f) ||
+            (LimitMode == LimitModeEnum.Move && ActionHistory.Length >= MoveLimit)) return;
 
         // First, simulate to check if the ball can escape.
         Gravity(map.Clone(), (Movable[,])currentMovableCoord.Clone(), gravityDirection, true, out flag, out _, out _, out List<Move> moves);
@@ -1377,7 +1414,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            ActionHistory.Substring(0, ActionHistory.Length - 1);
+            ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
             currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
             switch (flag)

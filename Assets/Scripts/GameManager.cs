@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -149,7 +150,7 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
-                if (mm.gravityRetryButton != null && 
+                if (mm.gravityRetryButton != null &&
                     mm.gravityRetryButton.gameObject.activeInHierarchy && mm.gravityRetryButton.interactable)
                 {
                     mm.gravityRetryButton.onClick.Invoke();
@@ -198,6 +199,11 @@ public class GameManager : MonoBehaviour
                     pm.pauseUI.pauseExitButton.onClick.Invoke();
                 }
                 */
+            }
+            else if (Input.GetKeyUp(KeyCode.Return) && SceneManager.GetActiveScene().name.Equals("Editor") &&
+                em != null && em.editorNextButton4.gameObject.activeInHierarchy && em.editorNextButton4.interactable)
+            {
+                em.editorNextButton4.onClick.Invoke();
             }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
             {
@@ -277,10 +283,16 @@ public class GameManager : MonoBehaviour
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
-                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable)
+                            /*
+                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable && !em.isMapNameInputSelected)
                             {
                                 em.editorSaveButton6.onClick.Invoke();
                             }
+                            if (em.isMapNameInputSelected)
+                            {
+                                Debug.Log("editorMapNameInputs selected");
+                            }
+                            */
                             break;
                     }
                 }
@@ -298,7 +310,7 @@ public class GameManager : MonoBehaviour
             bool isTutorialDone = true;
             try
             {
-                if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+                if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt"))
                 {
                     LoadFirst();
                     isTutorialDone = false;
@@ -862,9 +874,9 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        if (File.Exists(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt"))
         {
-            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
+            FileStream fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
             try
@@ -990,13 +1002,13 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt"))
         {
             FileStream fs = null;
             StreamWriter sw = null;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                 sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
                 sw.WriteLine("0");
@@ -1028,7 +1040,7 @@ public class GameManager : MonoBehaviour
             bool hasReadSuccess = true;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Open);
                 using (sr = new StreamReader(fs, Encoding.UTF8))
                 {
                     string line;
@@ -1075,7 +1087,7 @@ public class GameManager : MonoBehaviour
                 StreamWriter sw = null;
                 try
                 {
-                    fs2 = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                    fs2 = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                     sw = new StreamWriter(fs2, Encoding.UTF8);
                     sw.WriteLine("0");
                     sw.WriteLine("0");
@@ -1309,11 +1321,11 @@ public class GameManager : MonoBehaviour
 
         if (star < 0 || star > 3) return;
 
-        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt"))
         {
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                 sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
                 sw.WriteLine("0");
@@ -1330,7 +1342,7 @@ public class GameManager : MonoBehaviour
 
         try
         {
-            fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
+            fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
             using (sr = new StreamReader(fs, Encoding.UTF8))
             using (sw = new StreamWriter(fs, Encoding.UTF8))
             {

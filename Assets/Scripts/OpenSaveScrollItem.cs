@@ -126,7 +126,6 @@ public class OpenSaveScrollItem : MonoBehaviour
 
     public void Select()
     {
-        Debug.Log("select");
         if (em != null)
         {
             switch (type)
