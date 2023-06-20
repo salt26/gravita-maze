@@ -63,6 +63,14 @@ public class GameManager : MonoBehaviour
 
     public enum Language { English = 0, Korean = 1 }
 
+    #if UNITY_STANDALONE_OSX
+        public KeyCode timeOutKey1 = KeyCode.LeftAlt;
+        public KeyCode timeOutKey2 = KeyCode.RightAlt;
+    #else
+        timeOutKey1 = KeyCode.LeftControl;
+        timeOutKey2 = KeyCode.RightControl;
+    #endif
+    
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -135,7 +143,7 @@ public class GameManager : MonoBehaviour
             {
                 mm.ManipulateGravityRight();
             }
-            else if (Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
+            else if (Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(timeOutKey1) || Input.GetKey(timeOutKey2)))
             {
                 if (mm.gravityRetryTimeButton != null &&
                     mm.gravityRetryTimeButton.gameObject.activeInHierarchy && mm.gravityRetryTimeButton.interactable)
@@ -161,7 +169,7 @@ public class GameManager : MonoBehaviour
                     mm.gravityRetryHighlightedButton.onClick.Invoke();
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(timeOutKey1) || Input.GetKey(timeOutKey2))
                  && pm != null && pm.IsReady && SceneManager.GetActiveScene().name.Equals("Adventure"))
             {
                 if (pm.nextButton != null && pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
