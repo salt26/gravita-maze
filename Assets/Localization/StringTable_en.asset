@@ -17,7 +17,7 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: e140a6e03d69147b0bf89b55f6cb603e, type: 2}
   m_Metadata:
     m_Items:
-    - id: 0
+    - rid: 0
   m_TableData:
   - m_Id: 486441738240
     m_Localized: Welcome to the map editor!
@@ -27,22 +27,22 @@ MonoBehaviour:
     m_Localized: All right!\nLet's move on to the next step.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486479486976
     m_Localized: Confirm the map\\is playable.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486479486977
     m_Localized: No changes\\since the\\last save.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069888
     m_Localized: Save the map\\before you quit.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069889
     m_Localized: Now you can save your map.
     m_Metadata:
@@ -51,7 +51,7 @@ MonoBehaviour:
     m_Localized: Set the time limit and\nrun the map test.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069891
     m_Localized: Set your map name.
     m_Metadata:
@@ -100,7 +100,7 @@ MonoBehaviour:
     m_Localized: Cannot remove walls,\nshutters, or exits there.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069903
     m_Localized: Cannot remove exits there.
     m_Metadata:
@@ -113,12 +113,12 @@ MonoBehaviour:
     m_Localized: Touch the map to add a ball.\nThere must be one ball.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069906
     m_Localized: Touch the map to add an exit.\nThere must be one exit.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486492069907
     m_Localized: Touch the map to add fires.
     m_Metadata:
@@ -139,7 +139,7 @@ MonoBehaviour:
     m_Localized: Touch the map to remove\nwalls or shutters or exits.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264196
     m_Localized: Touch the map to remove objects.
     m_Metadata:
@@ -152,25 +152,25 @@ MonoBehaviour:
     m_Localized: The map has been reset.\nYou can undo this action.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264199
     m_Localized: <b>Unsaved Changes</b>\n\nThe map has changed.\nDo you want to quit
       anyway?
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264200
     m_Localized: <b>Unsaved Changes</b>\n\nThe map has not been saved yet.\nDo you
       want to quit anyway?
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264201
     m_Localized: <b>Unsaved Changes</b>\n\nThe map has not been tested or saved yet.\nDo
       you want to quit anyway?
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264202
     m_Localized: Illegal file name.
     m_Metadata:
@@ -183,12 +183,12 @@ MonoBehaviour:
     m_Localized: The map has been reinitialized.\nYou can undo this action.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264205
     m_Localized: <b>Create folder</b>\n\nEnter new\nfolder name.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264206
     m_Localized: Illegal folder name.
     m_Metadata:
@@ -197,7 +197,7 @@ MonoBehaviour:
     m_Localized: Cannot create the folder:\nillegal folder name.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264208
     m_Localized: New folder "
     m_Metadata:
@@ -218,7 +218,7 @@ MonoBehaviour:
     m_Localized: Cannot save your map:\nimpossible to clear
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264213
     m_Localized: 'Cannot save your map: '
     m_Metadata:
@@ -227,12 +227,12 @@ MonoBehaviour:
     m_Localized: <b>Confirm overwirte</b>\n\nMap "
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264215
     m_Localized: '" already exists.\nDo you want to overwrite it?'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264217
     m_Localized: You can reinitialize your map.
     m_Metadata:
@@ -249,7 +249,7 @@ MonoBehaviour:
     m_Localized: 'Undo: a wall, a shutter,\nor an exit'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264221
     m_Localized: 'Undo: an object'
     m_Metadata:
@@ -274,7 +274,7 @@ MonoBehaviour:
     m_Localized: 'Redo: a wall, a shutter,\nor an exit'
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264227
     m_Localized: 'Redo: an object'
     m_Metadata:
@@ -315,72 +315,72 @@ MonoBehaviour:
     m_Localized: Cannot open the map:\ninvalid map file
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264237
     m_Localized: Cannot open the map:\nsize error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264238
     m_Localized: Cannot open the map:\nball error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264239
     m_Localized: Cannot open the map:\niron error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264240
     m_Localized: Cannot open the map:\nfire error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264241
     m_Localized: Cannot open the map:\nexit error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264242
     m_Localized: Cannot open the map:\nwall error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264243
     m_Localized: Cannot open the map:\nshutter error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264244
     m_Localized: Cannot open the map:\ntime limit error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264245
     m_Localized: Cannot open the map:\nsolution error
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264246
     m_Localized: Cannot open the map:\nmultiple solutions
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264247
     m_Localized: Cannot open the map:\ninvalid solution
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264248
     m_Localized: Cannot open the map:\nunknown_symbols
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264249
     m_Localized: Cannot open the map:\ninvalid map or impossible to clear
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486496264251
     m_Localized: Congratulations!
     m_Metadata:
@@ -405,7 +405,7 @@ MonoBehaviour:
     m_Localized: You're off to a great start!\nLet's play Adventure mode!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458498
     m_Localized: Our journey has just begun!
     m_Metadata:
@@ -431,7 +431,7 @@ MonoBehaviour:
       upward.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458504
     m_Localized: Okay! Then let's get the ball out!
     m_Metadata:
@@ -440,7 +440,7 @@ MonoBehaviour:
     m_Localized: Next maze is a bit more complicated...\nGood luck!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458506
     m_Localized: Oh, that's a great move!
     m_Metadata:
@@ -462,7 +462,7 @@ MonoBehaviour:
       squashed by the iron!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458511
     m_Localized: Now it won't get in our way!
     m_Metadata:
@@ -471,7 +471,7 @@ MonoBehaviour:
     m_Localized: The iron block can be removed from\nthe maze just like the ball.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458513
     m_Localized: The iron can temporarily cover a fire!
     m_Metadata:
@@ -498,7 +498,7 @@ MonoBehaviour:
       retry.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458519
     m_Localized: Of course, sometimes you can get trapped by the shutter. Press the
       retry button!
@@ -518,22 +518,22 @@ MonoBehaviour:
     m_Localized: Great, you've found the exit!\nLet's escape!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458523
     m_Localized: The ball burned down!\nPress the shiny retry button to try again.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458524
     m_Localized: The ball got squashed!\nPress the shiny retry button to try again.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458525
     m_Localized: Oh no, time's up!\nPress the shiny retry button to try again.
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458526
     m_Localized: The ball escaped the maze! Congratulations!
     m_Metadata:
@@ -542,12 +542,12 @@ MonoBehaviour:
     m_Localized: Whew... That was seriously cool just now!\nYou just passed all tutorials!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 486500458528
     m_Localized: The iron blocking the exit are gone.\nLet's escape!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 164806647603200
     m_Localized: 'BGM
 
@@ -905,7 +905,8 @@ MonoBehaviour:
   - m_Id: 962494929522688
     m_Localized: Ctrl + Space key
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 1375113474824208400
   - m_Id: 962811704332288
     m_Localized: Enter key
     m_Metadata:
@@ -913,7 +914,8 @@ MonoBehaviour:
   - m_Id: 962904780132352
     m_Localized: Ctrl + Enter key
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 1375113474824208397
   - m_Id: 963619405647872
     m_Localized: Esc key
     m_Metadata:
@@ -923,12 +925,12 @@ MonoBehaviour:
       button!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1793875553243136
     m_Localized: You're done!\nSaved as "
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1793875561631744
     m_Localized: '"'
     m_Metadata:
@@ -938,13 +940,13 @@ MonoBehaviour:
       know!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391168
     m_Localized: Oops, you got trapped...\nBut time keeps ticking.\nQuickly, press
       the retry button!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391169
     m_Localized: Oh, great!
     m_Metadata:
@@ -953,7 +955,7 @@ MonoBehaviour:
     m_Localized: The iron is blocking the way...\nWhat should you do?
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391171
     m_Localized: Hurry up! The exit has opened!
     m_Metadata:
@@ -962,28 +964,73 @@ MonoBehaviour:
     m_Localized: Apply gravity to the left and\nremove an iron!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391173
     m_Localized: Time freezes when the ball burned down!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391174
     m_Localized: Time freezes when the ball got squashed!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 1829106272391175
     m_Localized: You usually get a panelty when time's up,\nbut here it's okay! Let's
       try again!
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
+  - m_Id: 8020914447835136
+    m_Localized: Option + Enter key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8021235509223424
+    m_Localized: Option + Space key
+    m_Metadata:
+      m_Items: []
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
         m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f060010e0af457100000016e0af45710000001ae0af457100000020e0af457100000000509ff58f7f060000509ffd8f7f060002509ffd8f7f060004509ffd8f7f0600
+    - rid: 1375113474824208397
+      type: {class: PlatformOverride, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_PlatformOverrides:
+        - platform: 1
+          entryOverrideType: 2
+          tableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          tableEntryReference:
+            m_KeyId: 8020914447835136
+            m_Key: 
+        - platform: 0
+          entryOverrideType: 2
+          tableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          tableEntryReference:
+            m_KeyId: 8020914447835136
+            m_Key: 
+    - rid: 1375113474824208400
+      type: {class: PlatformOverride, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_PlatformOverrides:
+        - platform: 1
+          entryOverrideType: 2
+          tableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          tableEntryReference:
+            m_KeyId: 8021235509223424
+            m_Key: 
+        - platform: 0
+          entryOverrideType: 2
+          tableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          tableEntryReference:
+            m_KeyId: 8021235509223424
+            m_Key: 

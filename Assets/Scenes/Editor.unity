@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311924, g: 0.38073963, b: 0.3587269, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1157,7 +1157,7 @@ MonoBehaviour:
   tooltipPrefab: {fileID: 6095790650455668987, guid: 3617bb7300a723d468a84e27f5543876,
     type: 3}
   tooltipMessage: RetryTimeButton
-  tooltipWidth: 444
+  tooltipWidth: 480
   tooltipHeight: 168
   pivot: 3
 --- !u!1 &55681740
@@ -13207,7 +13207,6 @@ MonoBehaviour:
   - {fileID: 1126013224}
   editPhase: 0
   editMode: 0
-  isMapNameInputSelected: 0
   dirtyBit: 0
 --- !u!4 &1073929002
 Transform:
