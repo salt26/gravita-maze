@@ -63,13 +63,13 @@ public class GameManager : MonoBehaviour
 
     public enum Language { English = 0, Korean = 1 }
 
-    #if UNITY_STANDALONE_OSX
-        public KeyCode timeOutKey1 = KeyCode.LeftAlt;
-        public KeyCode timeOutKey2 = KeyCode.RightAlt;
-    #else
-        timeOutKey1 = KeyCode.LeftControl;
-        timeOutKey2 = KeyCode.RightControl;
-    #endif
+#if UNITY_STANDALONE_OSX
+    public KeyCode timeOutKey1 = KeyCode.LeftAlt;
+    public KeyCode timeOutKey2 = KeyCode.RightAlt;
+#else
+    public KeyCode timeOutKey1 = KeyCode.LeftControl;
+    public KeyCode timeOutKey2 = KeyCode.RightControl;
+#endif
     
     private void Awake()
     {
