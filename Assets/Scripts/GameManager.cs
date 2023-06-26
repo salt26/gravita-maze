@@ -219,14 +219,17 @@ public class GameManager : MonoBehaviour
                 {
                     pm.pauseButton.onClick.Invoke();
                 }
-                else if (pm.pauseUI != null && pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
-                {
-                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
-                }
             }
         }
         else 
         {
+            if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
+            {
+                if (pm.pauseUI != null && pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
+                {
+                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
+                }
+            }
             if (Input.GetKeyUp(KeyCode.Return)) 
             {
                 if (pm != null) //Custom, Training: pm의 객체에 속한 버튼을 누름

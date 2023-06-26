@@ -325,8 +325,13 @@ public class PlayManager : MonoBehaviour
 
     }
 
+    public void Resume()
+    {
+        GameManager.gm.canPlay = true;
+    }
     public void Pause()
     {
+        GameManager.gm.canPlay = false;
         pauseButton.interactable = false;
         pausePanel.SetActive(true);
         pauseUI.gameObject.SetActive(true);
