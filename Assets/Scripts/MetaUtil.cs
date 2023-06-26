@@ -29,7 +29,7 @@ public class MetaUtil
         List<string> invalidDirs = new List<string>();
         foreach (string dir in dirs)
         {
-            if (dir.Replace(".", "").Length == 0)
+            if (dir.Length != 0 && dir.Replace(".", "").Length == 0)
             {
                 Debug.LogWarning("File warning: invalid directory name");
                 invalidDirs.Add(dir);
