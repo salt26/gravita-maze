@@ -817,11 +817,11 @@ public class PlayManager : MonoBehaviour
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(true);
-                nextButton.gameObject.SetActive(true);
+                //nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
                 pauseButton.interactable = true;
-                nextButton.interactable = true;
+                //nextButton.interactable = true;
 
                 break;
         }
