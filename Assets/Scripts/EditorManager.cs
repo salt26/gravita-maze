@@ -2874,8 +2874,8 @@ public class EditorManager : MonoBehaviour
         /// <summary>
         /// Type: MassRemoval (Reset, New)
         /// </summary>
-        /// <param name="oldRemovedWalls">������ null</param>
-        /// <param name="oldRemovedObjects">������ null</param>
+        /// <param name="oldRemovedWalls">없으면 null</param>
+        /// <param name="oldRemovedObjects">없으면 null</param>
         public EditActionInfo(List<WallInfo> oldRemovedWalls, List<ObjectInfo> oldRemovedObjects)
         {
             type = Type.MassRemoval;
