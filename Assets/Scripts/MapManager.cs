@@ -1420,7 +1420,6 @@ public class MapManager : MonoBehaviour
         else
         {
             ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
-            currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
             switch (flag)
             {
@@ -1435,6 +1434,7 @@ public class MapManager : MonoBehaviour
                     StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag));
                     break;
                 case Flag.Continued:
+                    currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
                     Move ballMove = moves.Find(e => e.movable is Ball);
                     if (Mathf.Max(Mathf.Abs(ballMove.newX - ballMove.oldX), Mathf.Abs(ballMove.newY - ballMove.oldY)) > 0)
                     {
