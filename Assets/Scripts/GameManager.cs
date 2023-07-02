@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
 
-    public enum Language { English = 0, Korean = 1 }
+    public enum Language { English = 0, 한국어 = 1 }
 
 #if UNITY_STANDALONE_OSX
     public KeyCode timeOutKey1 = KeyCode.LeftAlt;
