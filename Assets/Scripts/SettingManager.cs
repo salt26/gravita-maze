@@ -26,7 +26,19 @@ public class SettingManager : MonoBehaviour
             CreditPanel.SetActive(false);
         }
         string localeRaw = LocalizationSettings.SelectedLocale.ToString();
-        string locale = localeRaw.Substring(0, localeRaw.IndexOf('(')).TrimEnd(' ');
+        string locale;
+        switch (localeRaw)
+        {
+            case "English (en)":
+                locale = "English";
+                break;
+            case "Korean (ko)":
+                locale = "한국어";
+                break;
+            default:
+                locale = "Engilsh";
+                break;
+        }
         languageSetting.value = (int)(GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), locale);
     }
 
@@ -113,7 +125,7 @@ public class SettingManager : MonoBehaviour
             case "English":
                 LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
                 break;
-            case "Korean":
+            case "한국어":
                 LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("ko");
                 break;
         }
