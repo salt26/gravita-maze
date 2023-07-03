@@ -43,6 +43,7 @@ public class MapManager : MonoBehaviour
     public const float DEFAULT_TIME_LIMIT = 30f;
     public const float MIN_TIME_LIMIT = 3f;
     public const float MAX_TIME_LIMIT = 30f;
+    public const float DEATH_ANIMATION_SPEED = 5f;
     public const int MAX_ENOUGH_DISTANCE = 100;
 
     [HideInInspector]
@@ -1410,24 +1411,26 @@ public class MapManager : MonoBehaviour
             {
                 GameManager.gm.PlayEscapedSFX();
             }
-            StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves));
+            StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, 1f));
         }
         else
         {
             ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
-            currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
 
             switch (flag)
             {
                 case Flag.Squashed:
                     HasDied = true;
-                    GameManager.gm.PlaySquashedSFX();
+                    // GameManager.gm.PlaySquashedSFX();
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, DEATH_ANIMATION_SPEED));
                     break;
                 case Flag.Burned:
                     HasDied = true;
-                    GameManager.gm.PlayBurnedSFX();
+                    // GameManager.gm.PlayBurnedSFX();
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, DEATH_ANIMATION_SPEED));
                     break;
                 case Flag.Continued:
+                    currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
                     Move ballMove = moves.Find(e => e.movable is Ball);
                     if (Mathf.Max(Mathf.Abs(ballMove.newX - ballMove.oldX), Mathf.Abs(ballMove.newY - ballMove.oldY)) > 0)
                     {
@@ -1533,9 +1536,10 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
+                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1545,8 +1549,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[i, k] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
@@ -1587,9 +1592,10 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
+                                    Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1599,8 +1605,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[i, k] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, k].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, k].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, k] = null;
                                 }
                                 if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.UpWall) ||
@@ -1729,9 +1736,10 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
+                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1741,8 +1749,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[i, k] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
@@ -1783,9 +1792,10 @@ public class MapManager : MonoBehaviour
                                     ballY = k + 1;
                                     move.newX = i + 1;
                                     move.newY = k + 1;
+                                    Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The iron at (" + ballX + ", " + (j + 1) + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(i + 1, k + 1, 0f);
                                         if (traceCoord[i, k] != null)
@@ -1795,8 +1805,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[i, k] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, k].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, k].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, k] = null;
                                 }
                                 if (CheckTileFlag(mutableMap.mapCoord[i, k], TileFlag.DownWall) ||
@@ -1925,9 +1936,10 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
+                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1937,8 +1949,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[k, j] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
@@ -1979,9 +1992,10 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
+                                    Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -1991,8 +2005,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[k, j] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[k, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[k, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[k, j] = null;
                                 }
                                 if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.LeftWall) ||
@@ -2121,9 +2136,10 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
+                                    Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
+                                    /*
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The ball is burned at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -2133,8 +2149,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[k, j] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[i, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[i, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[i, j] = null;
                                     break;
                                 }
@@ -2301,9 +2318,10 @@ public class MapManager : MonoBehaviour
                                     ballY = j + 1;
                                     move.newX = k + 1;
                                     move.newY = j + 1;
+                                    Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
+                                    /* Unused
                                     if (!isSimulation)
                                     {
-                                        Debug.Log("The iron at (" + (i + 1) + ", " + ballY + ") squashes the ball at (" + ballX + ", " + ballY + ")");
                                         GameObject g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(k + 1, j + 1, 0f);
                                         if (traceCoord[k, j] != null)
@@ -2313,8 +2331,9 @@ public class MapManager : MonoBehaviour
                                         }
                                         traceCoord[k, j] = g;
                                         traces.Add(g);
-                                        mutableMovableCoord[k, j].gameObject.SetActive(false);
+                                        // mutableMovableCoord[k, j].gameObject.SetActive(false);
                                     }
+                                    */
                                     mutableMovableCoord[k, j] = null;
                                 }
                                 if (CheckTileFlag(mutableMap.mapCoord[k, j], TileFlag.RightWall) ||
@@ -2394,7 +2413,7 @@ public class MapManager : MonoBehaviour
         return mutableMovableCoord;
     }
 
-    IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves)
+    IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves, Flag flag, float animationSpeed)
     {
         float time = Time.time;
         if (traces != null)
@@ -2408,11 +2427,11 @@ public class MapManager : MonoBehaviour
 
         GameObject[,] traceCoord = new GameObject[mutableMap.sizeX, mutableMap.sizeY];
 
-        while (Time.time <= time + 1.5f && IsReady && HasCleared)
+        while (Time.time <= time + 1.5f && IsReady && (HasCleared || HasDied))
         {
             foreach (Move m in moves)
             {
-                bool hasPrevChanged = m.MoveAlongDirection(gravityDirection, Time.time - time, mutableMap);
+                bool hasPrevChanged = m.MoveAlongDirection(gravityDirection, Time.time - time, mutableMap, animationSpeed);
                 if (hasPrevChanged)
                 {
                     int x, y;
@@ -2423,7 +2442,7 @@ public class MapManager : MonoBehaviour
                             y = m.prevY - 1;
                             if (m.movable is Ball)
                             {
-                                // Create a trace
+                                // Create a trace of ball
                                 GameObject g = Instantiate(ballTracePrefabs[0], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
                                 if (traceCoord[x - 1, y - 1] != null)
@@ -2434,22 +2453,42 @@ public class MapManager : MonoBehaviour
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
 
-                                // Activate a shutter
-                                if (m.prevY - 1 < mutableMap.sizeY && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
+                                // Check if the ball is in the map
+                                if (m.prevY - 1 < mutableMap.sizeY)
                                 {
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.DownShutter / 2;
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
-                                    GameManager.gm.PlayShutterSFX();
+                                    // Activate a shutter
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
+                                    {
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.DownShutter / 2;
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
+                                        GameManager.gm.PlayShutterSFX();
+                                    }
+
+                                    // Ball burned
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.Fire))
+                                    {
+                                        g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlayBurnedSFX();
+                                        m.movable.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                             else if (m.movable is Iron)
                             {
-                                // Create a trace
+                                // Create a trace of iron
                                 GameObject g = Instantiate(ironTracePrefabs[0], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
-                                if (traceCoord[x - 1, y - 1] != null)
+                                if (traceCoord[x - 1, y - 1] != null && traceCoord[x - 1, y - 1].name.Contains("FlagBurned") == false)
                                 {
                                     traces.Remove(traceCoord[x - 1, y - 1]);
                                     Destroy(traceCoord[x - 1, y - 1]);
@@ -2457,7 +2496,27 @@ public class MapManager : MonoBehaviour
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
 
-                                if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
+                                // Check if the iron is in the map
+                                if (m.prevY - 1 < mutableMap.sizeY)
+                                {
+                                    // Ball squashed
+                                    Move ballMove = moves.Find(e => e.movable is Ball);
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
+                                    {
+                                        g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlaySquashedSFX();
+                                    }
+                                }
+
+                                    if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
                                 {
                                     GameManager.gm.PlayIronSFX(Mathf.Abs(m.newY - m.oldY));
                                 }
@@ -2468,7 +2527,7 @@ public class MapManager : MonoBehaviour
                             y = m.prevY + 1;
                             if (m.movable is Ball)
                             {
-                                // Create a trace
+                                // Create a trace of ball
                                 GameObject g = Instantiate(ballTracePrefabs[1], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
                                 if (traceCoord[x - 1, y - 1] != null)
@@ -2479,28 +2538,68 @@ public class MapManager : MonoBehaviour
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
 
-                                // Activate a shutter
-                                if (m.prevY - 1 >= 0 && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.UpShutter))
+                                // Check if the ball is in the map
+                                if (m.prevY - 1 >= 0)
                                 {
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.UpShutter / 2;
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY] -= (int)TileFlag.DownShutter / 2;
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
-                                    GameManager.gm.PlayShutterSFX();
+                                    // Activate a shutter
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.UpShutter))
+                                    {
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.UpShutter / 2;
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY] -= (int)TileFlag.DownShutter / 2;
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
+                                        GameManager.gm.PlayShutterSFX();
+                                    }
+
+                                    // Ball burned
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.Fire))
+                                    {
+                                        g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlayBurnedSFX();
+                                        m.movable.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                             else if (m.movable is Iron)
                             {
-                                // Create a trace
+                                // Create a trace of iron
                                 GameObject g = Instantiate(ironTracePrefabs[1], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
-                                if (traceCoord[x - 1, y - 1] != null)
+                                if (traceCoord[x - 1, y - 1] != null && traceCoord[x - 1, y - 1].name.Contains("FlagBurned") == false)
                                 {
                                     traces.Remove(traceCoord[x - 1, y - 1]);
                                     Destroy(traceCoord[x - 1, y - 1]);
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                // Check if the iron is in the map
+                                if (m.prevY - 1 < mutableMap.sizeY)
+                                {
+                                    // Ball squashed
+                                    Move ballMove = moves.Find(e => e.movable is Ball);
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
+                                    {
+                                        g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlaySquashedSFX();
+                                    }
+                                }
 
                                 if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
                                 {
@@ -2513,7 +2612,7 @@ public class MapManager : MonoBehaviour
                             y = m.prevY;
                             if (m.movable is Ball)
                             {
-                                // Create a trace
+                                // Create a trace of ball
                                 GameObject g = Instantiate(ballTracePrefabs[2], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
                                 if (traceCoord[x - 1, y - 1] != null)
@@ -2524,28 +2623,68 @@ public class MapManager : MonoBehaviour
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
 
-                                // Activate a shutter
-                                if (m.prevX - 1 >= 0 && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.RightShutter))
+                                // Check if the ball is in the map
+                                if (m.prevX - 1 >= 0)
                                 {
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
-                                    mutableMap.mapCoord[m.prevX, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
-                                    tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
-                                    GameManager.gm.PlayShutterSFX();
+                                    // Activate a shutter
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.RightShutter))
+                                    {
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
+                                        mutableMap.mapCoord[m.prevX, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                        tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
+                                        GameManager.gm.PlayShutterSFX();
+                                    }
+
+                                    // Ball burned
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.Fire))
+                                    {
+                                        g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlayBurnedSFX();
+                                        m.movable.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                             else if (m.movable is Iron)
                             {
-                                // Create a trace
+                                // Create a trace of iron
                                 GameObject g = Instantiate(ironTracePrefabs[2], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
-                                if (traceCoord[x - 1, y - 1] != null)
+                                if (traceCoord[x - 1, y - 1] != null && traceCoord[x - 1, y - 1].name.Contains("FlagBurned") == false)
                                 {
                                     traces.Remove(traceCoord[x - 1, y - 1]);
                                     Destroy(traceCoord[x - 1, y - 1]);
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                // Check if the iron is in the map
+                                if (m.prevY - 1 < mutableMap.sizeY)
+                                {
+                                    // Ball squashed
+                                    Move ballMove = moves.Find(e => e.movable is Ball);
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
+                                    {
+                                        g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlaySquashedSFX();
+                                    }
+                                }
 
                                 if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
                                 {
@@ -2558,7 +2697,7 @@ public class MapManager : MonoBehaviour
                             y = m.prevY;
                             if (m.movable is Ball)
                             {
-                                // Create a trace
+                                // Create a trace of ball
                                 GameObject g = Instantiate(ballTracePrefabs[3], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
                                 if (traceCoord[x - 1, y - 1] != null)
@@ -2569,28 +2708,68 @@ public class MapManager : MonoBehaviour
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
 
-                                // Activate a shutter
-                                if (m.prevX - 1 < mutableMap.sizeX && CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.LeftShutter))
+                                // Check if the ball is in the map
+                                if (m.prevX - 1 < mutableMap.sizeX)
                                 {
-                                    mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
-                                    mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
-                                    tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
-                                    GameManager.gm.PlayShutterSFX();
+                                    // Activate a shutter
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.LeftShutter))
+                                    {
+                                        mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.LeftShutter / 2;
+                                        mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] -= (int)TileFlag.RightShutter / 2;
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
+                                        tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
+                                        GameManager.gm.PlayShutterSFX();
+                                    }
+
+                                    // Ball burned
+                                    if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.Fire))
+                                    {
+                                        g = Instantiate(flagBurnedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlayBurnedSFX();
+                                        m.movable.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                             else if (m.movable is Iron)
                             {
-                                // Create a trace
+                                // Create a trace of iron
                                 GameObject g = Instantiate(ironTracePrefabs[3], new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                 g.transform.localPosition = new Vector3(x, y, 0f);
-                                if (traceCoord[x - 1, y - 1] != null)
+                                if (traceCoord[x - 1, y - 1] != null && traceCoord[x - 1, y - 1].name.Contains("FlagBurned") == false)
                                 {
                                     traces.Remove(traceCoord[x - 1, y - 1]);
                                     Destroy(traceCoord[x - 1, y - 1]);
                                 }
                                 traceCoord[x - 1, y - 1] = g;
                                 traces.Add(g);
+
+                                // Check if the iron is in the map
+                                if (m.prevY - 1 < mutableMap.sizeY)
+                                {
+                                    // Ball squashed
+                                    Move ballMove = moves.Find(e => e.movable is Ball);
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
+                                    {
+                                        g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                                        g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
+                                        if (traceCoord[m.prevX - 1, m.prevY - 1] != null)
+                                        {
+                                            traces.Remove(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                            Destroy(traceCoord[m.prevX - 1, m.prevY - 1]);
+                                        }
+                                        traceCoord[m.prevX - 1, m.prevY - 1] = g;
+                                        traces.Add(g);
+                                        GameManager.gm.PlaySquashedSFX();
+                                    }
+                                }
 
                                 if (Mathf.Approximately(m.movable.transform.localPosition.x, m.newX) && Mathf.Approximately(m.movable.transform.localPosition.y, m.newY))
                                 {
@@ -3009,7 +3188,7 @@ public class MapManager : MonoBehaviour
             this.prevY = oldY;
         }
 
-        public bool MoveAlongDirection(GameManager.GravityDirection gravityDirection, float t, Map map)
+        public bool MoveAlongDirection(GameManager.GravityDirection gravityDirection, float t, Map map, float animationSpeed)
         {
             bool hasPrevChanged = false;
             if (movable == null) return false;
@@ -3018,7 +3197,7 @@ public class MapManager : MonoBehaviour
             switch (gravityDirection)
             {
                 case GameManager.GravityDirection.Up:
-                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY + 16 * t * t / 3) * 9) / 9f, oldY, newY), 0f);
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY + 16 * t * t / 3 * animationSpeed) * 9) / 9f, oldY, newY), 0f);
                     if (transform.localPosition.y >= prevY + 1 && prevY <= map.sizeY)
                     {
                         prevY += 1;
@@ -3026,7 +3205,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Down:
-                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY - 16 * t * t / 3) * 9) / 9f, newY, oldY), 0f);
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY - 16 * t * t / 3 * animationSpeed) * 9) / 9f, newY, oldY), 0f);
                     if (transform.localPosition.y <= prevY - 1 && prevY >= 1)
                     {
                         prevY -= 1;
@@ -3034,7 +3213,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Left:
-                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX - 16 * t * t / 3) * 9) / 9f, newX, oldX), transform.localPosition.y, 0f);
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX - 16 * t * t / 3 * animationSpeed) * 9) / 9f, newX, oldX), transform.localPosition.y, 0f);
                     if (transform.localPosition.x <= prevX - 1 && prevX >= 1)
                     {
                         prevX -= 1;
@@ -3042,7 +3221,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Right:
-                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX + 16 * t * t / 3) * 9) / 9f, oldX, newX), transform.localPosition.y, 0f);
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX + 16 * t * t / 3 * animationSpeed) * 9) / 9f, oldX, newX), transform.localPosition.y, 0f);
                     if (transform.localPosition.x >= prevX + 1 && prevX <= map.sizeX)
                     {
                         prevX += 1;
