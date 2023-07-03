@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEditor;
-using System.Linq;
 
 public class MapManager : MonoBehaviour
 {
@@ -3190,7 +3188,7 @@ public class MapManager : MonoBehaviour
             this.prevY = oldY;
         }
 
-        public bool MoveAlongDirection(GameManager.GravityDirection gravityDirection, float t, Map map, float animationMultiplier)
+        public bool MoveAlongDirection(GameManager.GravityDirection gravityDirection, float t, Map map, float animationSpeed)
         {
             bool hasPrevChanged = false;
             if (movable == null) return false;
@@ -3199,7 +3197,7 @@ public class MapManager : MonoBehaviour
             switch (gravityDirection)
             {
                 case GameManager.GravityDirection.Up:
-                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY + 16 * t * t / 3 * animationMultiplier) * 9) / 9f, oldY, newY), 0f);
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY + 16 * t * t / 3 * animationSpeed) * 9) / 9f, oldY, newY), 0f);
                     if (transform.localPosition.y >= prevY + 1 && prevY <= map.sizeY)
                     {
                         prevY += 1;
@@ -3207,7 +3205,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Down:
-                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY - 16 * t * t / 3 * animationMultiplier) * 9) / 9f, newY, oldY), 0f);
+                    transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(Mathf.RoundToInt((oldY - 16 * t * t / 3 * animationSpeed) * 9) / 9f, newY, oldY), 0f);
                     if (transform.localPosition.y <= prevY - 1 && prevY >= 1)
                     {
                         prevY -= 1;
@@ -3215,7 +3213,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Left:
-                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX - 16 * t * t / 3 * animationMultiplier) * 9) / 9f, newX, oldX), transform.localPosition.y, 0f);
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX - 16 * t * t / 3 * animationSpeed) * 9) / 9f, newX, oldX), transform.localPosition.y, 0f);
                     if (transform.localPosition.x <= prevX - 1 && prevX >= 1)
                     {
                         prevX -= 1;
@@ -3223,7 +3221,7 @@ public class MapManager : MonoBehaviour
                     }
                     break;
                 case GameManager.GravityDirection.Right:
-                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX + 16 * t * t / 3 * animationMultiplier) * 9) / 9f, oldX, newX), transform.localPosition.y, 0f);
+                    transform.localPosition = new Vector3(Mathf.Clamp(Mathf.RoundToInt((oldX + 16 * t * t / 3 * animationSpeed) * 9) / 9f, oldX, newX), transform.localPosition.y, 0f);
                     if (transform.localPosition.x >= prevX + 1 && prevX <= map.sizeX)
                     {
                         prevX += 1;
