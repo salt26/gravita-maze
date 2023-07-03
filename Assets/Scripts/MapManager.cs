@@ -1415,7 +1415,7 @@ public class MapManager : MonoBehaviour
             {
                 GameManager.gm.PlayEscapedSFX();
             }
-            StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag));
+            StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, 1f));
         }
         else
         {
@@ -1426,12 +1426,12 @@ public class MapManager : MonoBehaviour
                 case Flag.Squashed:
                     HasDied = true;
                     // GameManager.gm.PlaySquashedSFX();
-                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag));
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, animationMultiplier));
                     break;
                 case Flag.Burned:
                     HasDied = true;
                     // GameManager.gm.PlayBurnedSFX();
-                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag));
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, animationMultiplier));
                     break;
                 case Flag.Continued:
                     currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
@@ -2401,7 +2401,7 @@ public class MapManager : MonoBehaviour
         return mutableMovableCoord;
     }
 
-    IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves, Flag flag)
+    IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves, Flag flag, float animationMultiplier)
     {
         float time = Time.time;
         if (traces != null)
