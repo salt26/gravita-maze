@@ -16,7 +16,7 @@ using System.Linq;
 public class MapManager : MonoBehaviour
 {
     [SerializeField]
-    private float animationMultiplier = 1f; // Temporary variable for testing
+    private float deathAnimationSpeed = 5f; // Temporary variable for testing
 
     public string tableName = "StringTable";
 
@@ -1426,12 +1426,12 @@ public class MapManager : MonoBehaviour
                 case Flag.Squashed:
                     HasDied = true;
                     // GameManager.gm.PlaySquashedSFX();
-                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, animationMultiplier));
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, deathAnimationSpeed));
                     break;
                 case Flag.Burned:
                     HasDied = true;
                     // GameManager.gm.PlayBurnedSFX();
-                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, animationMultiplier));
+                    StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, deathAnimationSpeed));
                     break;
                 case Flag.Continued:
                     currentMovableCoord = Gravity(map, currentMovableCoord, gravityDirection, false, out flag, out _, out _, out _);
@@ -2489,7 +2489,7 @@ public class MapManager : MonoBehaviour
                                 {
                                     // Ball squashed
                                     Move ballMove = moves.Find(e => e.movable is Ball);
-                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && flag == Flag.Squashed)
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
                                     {
                                         g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
@@ -2574,7 +2574,7 @@ public class MapManager : MonoBehaviour
                                 {
                                     // Ball squashed
                                     Move ballMove = moves.Find(e => e.movable is Ball);
-                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && flag == Flag.Squashed)
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
                                     {
                                         g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
@@ -2659,7 +2659,7 @@ public class MapManager : MonoBehaviour
                                 {
                                     // Ball squashed
                                     Move ballMove = moves.Find(e => e.movable is Ball);
-                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && flag == Flag.Squashed)
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
                                     {
                                         g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
@@ -2744,7 +2744,7 @@ public class MapManager : MonoBehaviour
                                 {
                                     // Ball squashed
                                     Move ballMove = moves.Find(e => e.movable is Ball);
-                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && flag == Flag.Squashed)
+                                    if (m.prevX == ballMove.newX && m.prevY == ballMove.newY && m.prevX == m.newX && m.prevY == m.newY && flag == Flag.Squashed)
                                     {
                                         g = Instantiate(flagSquashedPrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                                         g.transform.localPosition = new Vector3(m.prevX, m.prevY, 0f);
