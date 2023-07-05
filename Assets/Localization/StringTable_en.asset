@@ -203,7 +203,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264209
-    m_Localized: '" has created!'
+    m_Localized: '" has been created!'
     m_Metadata:
       m_Items: []
   - m_Id: 486496264210
@@ -458,7 +458,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458510
-    m_Localized: The iron are also influenced by gravity... Be careful not to get
+    m_Localized: The iron is also influenced by gravity... Be careful not to get
       squashed by the iron!
     m_Metadata:
       m_Items:
@@ -539,12 +539,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458527
-    m_Localized: Whew... That was seriously cool just now!\nYou just passed all tutorials!
+    m_Localized: Phew... That was spectacular!\nYou have now completed the tutorial!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 486500458528
-    m_Localized: The iron blocking the exit are gone.\nLet's escape!
+    m_Localized: The iron blocking the exit is gone now.\nLet's escape!
     m_Metadata:
       m_Items:
       - rid: 0
@@ -711,23 +711,27 @@ MonoBehaviour:
 
       <size=45><i>DanTae An</i></size>
 
+      
 
       Sub
       Programmer
 
       <size=45><i>JunWoo Eom</i></size>
 
+      
 
       Map Maker
 
       <size=45><i>DongHwan
       Yang</i></size>
 
+      
 
       Marketor
 
       <size=45><i>SuIn Lee</i></size>
 
+      
 
       Assistant
 
@@ -936,14 +940,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1829106138173440
-    m_Localized: This maze is really challenging...\nThe time limit is short, you
+    m_Localized: This maze is really challenging...\nThe time limit is tight, you
       know!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391168
-    m_Localized: Oops, you got trapped...\nBut time keeps ticking.\nQuickly, press
-      the retry button!
+    m_Localized: Oops, you got trapped...\nBut the clock is still ticking.\nQuick,
+      press the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
@@ -966,20 +970,20 @@ MonoBehaviour:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391173
-    m_Localized: Time freezes when the ball burned down!\nTake a deep breath and\npress
+    m_Localized: Time freezes when the ball is burned down!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391174
-    m_Localized: Time freezes when the ball got squashed!\nTake a deep breath and\npress
+    m_Localized: Time freezes when the ball gets squashed!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391175
-    m_Localized: You usually get a panelty when time's up,\nbut here it's okay! Let's
-      try again!
+    m_Localized: You get a penalty when the time's up,\nbut in Tutorial mode you
+      won't get one! Let's try again!
     m_Metadata:
       m_Items:
       - rid: 0
