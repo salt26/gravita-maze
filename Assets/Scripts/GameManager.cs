@@ -1514,6 +1514,7 @@ public class GameManager : MonoBehaviour
             sw.WriteLine(localeString);
             sw.WriteLine(bgmVolume.ToString());
             sw.WriteLine(sfxVolume.ToString());
+            Debug.Log("Setting value saved");
         }
         catch (Exception e)
         {
