@@ -1,4 +1,4 @@
-# 중력 미로
+# 중력미로
 
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
@@ -19,7 +19,7 @@
 * 영어 및 한국어 지원!
 * 이 버전은 출시 전 데모 버전입니다.
   * 2023년 하반기 출시 예정!
-* 중력 미로의 최신 소식은 아래에서 확인하세요!
+* 중력미로의 최신 소식은 아래에서 확인하세요!
   * 유튜브: https://youtube.com/@Ravita_Studio/
   * 팬트리: https://fantrie.com/ravitastudio/
 
