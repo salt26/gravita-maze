@@ -327,6 +327,7 @@ public class PlayManager : MonoBehaviour
 
     public void Resume()
     {
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.canPlay = true;
     }
     public void Pause()
