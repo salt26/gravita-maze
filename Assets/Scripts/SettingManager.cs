@@ -98,6 +98,7 @@ public class SettingManager : MonoBehaviour
 
     public void BackMainButtonDown()
     {
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadMain();
     }
 
