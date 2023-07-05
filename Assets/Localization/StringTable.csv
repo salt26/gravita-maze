@@ -128,7 +128,7 @@
 "tutorial_message_34",1829106272391172,"Apply gravity to the left and\nremove an iron!","왼쪽으로 중력을 가해 쇳덩이를 제거하세요!"
 "tutorial_message_35",1829106272391173,"Time freezes when the ball is burned down!\nTake a deep breath and\npress the retry button!","공이 불에 타면 시간이 멈춰요!\n심호흡하고 되돌리기 버튼을 누르세요!"
 "tutorial_message_36",1829106272391174,"Time freezes when the ball gets squashed!\nTake a deep breath and\npress the retry button!","공이 뭉개지면 시간이 멈춰요!\n심호흡하고 되돌리기 버튼을 누르세요!"
-"tutorial_message_37",1829106272391175,"You usually lose a life when the time's up,\nbut in this map it's okay! Let's try again!","시간이 끝나면 원래는 라이프가 깎이지만,\n여기서는 괜찮아요! 다시 도전해봐요!"
+"tutorial_message_37",1829106272391175,"You get a penalty when the time's up,\nbut in Tutorial mode you won't get one! Let's try again!","시간이 끝나면 원래는 페널티가 있지만,\n튜토리얼에서는 괜찮아요! 다시 도전해봐요!"
 "Adventure/Canvas/PauseUI/PauseBox/BgmVolume",164806647603200,"BGM
 Volume","배경음
 음량"

@@ -982,8 +982,8 @@ MonoBehaviour:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391175
-    m_Localized: You usually lose a life when the time's up,\nbut in this map it's
-      okay! Let's try again!
+    m_Localized: You get a penalty when the time's up,\nbut in Tutorial mode you
+      won't get one! Let's try again!
     m_Metadata:
       m_Items:
       - rid: 0
