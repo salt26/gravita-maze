@@ -94,7 +94,6 @@ public class TimerUI : MonoBehaviour
                     timerLabel10.color = flowingColor2;
                     timerLabel1.color = flowingColor2;
                     timerBar.color = flowingColor1;
-                    break;
                 }
                 else
                 {
