@@ -17,15 +17,9 @@ public class TimerUI : MonoBehaviour
 
     private Color warningColor1_phase1 = new Color(223/255f, 55/255f, 102/255f);
     private Color warningColor1_phase2 = new Color(213/255f, 35/255f, 74/255f);
-    private Color warningColor1_phase3 = new Color(175/255f, 29/255f, 61/255f);
-    private Color warningColor1_phase4 = new Color(138/255f, 20/255f, 37/255f);
-    private Color warningColor1_phase5 = new Color(106/255f, 0, 6/255f);
 
     private Color warningColor2_phase1 = new Color(1, 63/255f, 117/255f);
     private Color warningColor2_phase2 = new Color(244/255f, 41/255f, 85/255f);
-    private Color warningColor2_phase3 = new Color(201/255f, 34/255f, 70/255f);
-    private Color warningColor2_phase4 = new Color(158/255f, 23/255f, 43/255f);
-    private Color warningColor2_phase5 = new Color(122/255f, 0, 8/255f);
 
     // Update is called once per frame
     void Update()
@@ -75,49 +69,39 @@ public class TimerUI : MonoBehaviour
                 -168 - (pixels - t) * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
 
-            if (mm.DoesTimeGoBy)
-            {
-                int remainingTimeInt = Mathf.CeilToInt(mm.RemainingTime);
+            int remainingTimeInt = Mathf.CeilToInt(mm.RemainingTime);
 
+            if (remainingTimeInt <= 10)
+            {
                 switch (remainingTimeInt)
                 {
-                    case 10 or 9:
+                    case > 5:
                         timerLabel10.color = warningColor2_phase1;
                         timerLabel1.color = warningColor2_phase1;
                         timerBar.color = warningColor1_phase1;
                         break;
-                    case 8 or 7:
+                    case <= 5:
                         timerLabel10.color = warningColor2_phase2;
                         timerLabel1.color = warningColor2_phase2;
                         timerBar.color = warningColor1_phase2;
-                        break;
-                    case 6 or 5:
-                        timerLabel10.color = warningColor2_phase3;
-                        timerLabel1.color = warningColor2_phase3;
-                        timerBar.color = warningColor1_phase3;
-                        break;
-                    case 4 or 3:
-                        timerLabel10.color = warningColor2_phase4;
-                        timerLabel1.color = warningColor2_phase4;
-                        timerBar.color = warningColor1_phase4;
-                        break;
-                    case 2 or 1 or 0:
-                        timerLabel10.color = warningColor2_phase5;
-                        timerLabel1.color = warningColor2_phase5;
-                        timerBar.color = warningColor1_phase5;
-                        break;
-                    default:
-                        timerLabel10.color = flowingColor2;
-                        timerLabel1.color = flowingColor2;
-                        timerBar.color = flowingColor1;
                         break;
                 }
             }
             else
             {
-                timerLabel10.color = stoppedColor;
-                timerLabel1.color = stoppedColor;
-                timerBar.color = stoppedColor;
+                if (mm.DoesTimeGoBy)
+                {
+                    timerLabel10.color = flowingColor2;
+                    timerLabel1.color = flowingColor2;
+                    timerBar.color = flowingColor1;
+                    break;
+                }
+                else
+                {
+                    timerLabel10.color = stoppedColor;
+                    timerLabel1.color = stoppedColor;
+                    timerBar.color = stoppedColor;
+                }
             }
         }
     }
