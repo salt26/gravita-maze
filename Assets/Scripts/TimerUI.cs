@@ -15,11 +15,15 @@ public class TimerUI : MonoBehaviour
     private Color flowingColor1 = new Color(178/255f, 0, 1);
     private Color flowingColor2 = new Color(211/255f, 110/255f, 1);
 
-    private Color warningColor1_phase1 = new Color(223/255f, 55/255f, 102/255f);
-    private Color warningColor1_phase2 = new Color(213/255f, 35/255f, 74/255f);
+    private Color warningColor1_flow_phase1 = new Color(223/255f, 119/255f, 10/255f);
+    private Color warningColor1_flow_phase2 = new Color(213/255f, 35/255f, 74/255f);
 
-    private Color warningColor2_phase1 = new Color(1, 63/255f, 117/255f);
-    private Color warningColor2_phase2 = new Color(244/255f, 41/255f, 85/255f);
+    private Color warningColor2_flow_phase1 = new Color(1, 137/255f, 12/255f);
+    private Color warningColor2_flow_phase2 = new Color(244/255f, 41/255f, 85/255f);
+
+    private Color warningColor_stop_phase1 = new Color(223/255f, 205/255f, 53/255f);
+
+    private Color warningColor_stop_phase2 = new Color(223/255f, 82/255f, 119/255f);
 
     // Update is called once per frame
     void Update()
@@ -71,35 +75,46 @@ public class TimerUI : MonoBehaviour
 
             int remainingTimeInt = Mathf.CeilToInt(mm.RemainingTime);
 
-            if (remainingTimeInt <= 10)
+            if (mm.DoesTimeGoBy)
             {
                 switch (remainingTimeInt)
                 {
-                    case > 5:
-                        timerLabel10.color = warningColor2_phase1;
-                        timerLabel1.color = warningColor2_phase1;
-                        timerBar.color = warningColor1_phase1;
+                    case <= 10 and > 5:
+                        timerLabel10.color = warningColor2_flow_phase1;
+                        timerLabel1.color = warningColor2_flow_phase1;
+                        timerBar.color = warningColor1_flow_phase1;
                         break;
                     case <= 5:
-                        timerLabel10.color = warningColor2_phase2;
-                        timerLabel1.color = warningColor2_phase2;
-                        timerBar.color = warningColor1_phase2;
+                        timerLabel10.color = warningColor2_flow_phase2;
+                        timerLabel1.color = warningColor2_flow_phase2;
+                        timerBar.color = warningColor1_flow_phase2;
+                        break;
+                    default:
+                        timerLabel10.color = flowingColor2;
+                        timerLabel1.color = flowingColor2;
+                        timerBar.color = flowingColor1;
                         break;
                 }
             }
             else
             {
-                if (mm.DoesTimeGoBy)
+                switch (remainingTimeInt)
                 {
-                    timerLabel10.color = flowingColor2;
-                    timerLabel1.color = flowingColor2;
-                    timerBar.color = flowingColor1;
-                }
-                else
-                {
-                    timerLabel10.color = stoppedColor;
-                    timerLabel1.color = stoppedColor;
-                    timerBar.color = stoppedColor;
+                    case <= 10 and > 5:
+                        timerLabel10.color = warningColor_stop_phase1;
+                        timerLabel1.color = warningColor_stop_phase1;
+                        timerBar.color = warningColor_stop_phase1;
+                        break;
+                    case <= 5:
+                        timerLabel10.color = warningColor_stop_phase2;
+                        timerLabel1.color = warningColor_stop_phase2;
+                        timerBar.color = warningColor_stop_phase2;
+                        break;
+                    default:
+                        timerLabel10.color = stoppedColor;
+                        timerLabel1.color = stoppedColor;
+                        timerBar.color = stoppedColor;
+                        break;
                 }
             }
         }
