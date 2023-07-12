@@ -27,7 +27,7 @@ public class MetaUtil
         List<string> validDirs = new List<string>();
         foreach (string dir in dirs)
         {
-            Debug.Log(dir);
+            //Debug.Log(dir);
             if (dir.Length == 0 || dir.Replace(".", "").Length != 0)
             {
                 validDirs.Add(dir);
@@ -38,7 +38,7 @@ public class MetaUtil
             }
         }
         path = string.Join("/", validDirs);
-        Debug.Log(path);
+        //Debug.Log(path);
         return Directory.CreateDirectory(path);
     }
 
