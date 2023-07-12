@@ -11,19 +11,16 @@ public class TimerUI : MonoBehaviour
     public Image timerLabel1;
     public List<Sprite> numberLabels = new List<Sprite>();
 
-    private Color stoppedColor = new Color(1, 137/255f, 1);
-    private Color flowingColor1 = new Color(178/255f, 0, 1);
-    private Color flowingColor2 = new Color(211/255f, 110/255f, 1);
+    private Color normalColor_flow = new Color(195/255f, 90/255f, 244/255f);
+    private Color normalColor_stop = new Color(225/255f, 158/255f, 1);
 
-    private Color warningColor1_flow_phase1 = new Color(195/255f, 0, 182/255f);
-    private Color warningColor1_flow_phase2 = new Color(213/255f, 35/255f, 74/255f);
+    private Color warningColor_phase1_flow_bright = new Color(224/255f, 0, 209/255f);
+    private Color warningColor_phase1_flow_dark = new Color(195/255f, 0, 182/255f);
+    private Color warningColor_phase1_stop = new Color(1, 81/255f, 249/255f);
 
-    private Color warningColor2_flow_phase1 = new Color(224/255f, 0, 209/255f);
-    private Color warningColor2_flow_phase2 = new Color(244/255f, 41/255f, 85/255f);
-
-    private Color warningColor_stop_phase1 = new Color(1, 0, 233/255f);
-
-    private Color warningColor_stop_phase2 = new Color(1, 94/255f, 137/255f);
+    private Color warningColor_phase2_flow_bright = new Color(244/255f, 41/255f, 85/255f);
+    private Color warningColor_phase2_flow_dark = new Color(213/255f, 35/255f, 74/255f);
+    private Color warningColor_phase2_stop = new Color(1, 94/255f, 137/255f);
 
     private int blink_frequency = 2;
 
@@ -40,9 +37,9 @@ public class TimerUI : MonoBehaviour
                 -168 - pixels * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
 
-            timerLabel10.color = stoppedColor;
-            timerLabel1.color = stoppedColor;
-            timerBar.color = stoppedColor;
+            timerLabel10.color = normalColor_stop;
+            timerLabel1.color = normalColor_stop;
+            timerBar.color = normalColor_stop;
             return;
         }
 
@@ -63,9 +60,9 @@ public class TimerUI : MonoBehaviour
                 -168 - pixels * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
 
-            timerLabel10.color = stoppedColor;
-            timerLabel1.color = stoppedColor;
-            timerBar.color = stoppedColor;
+            timerLabel10.color = normalColor_stop;
+            timerLabel1.color = normalColor_stop;
+            timerBar.color = normalColor_stop;
         }
         else
         {
@@ -83,35 +80,35 @@ public class TimerUI : MonoBehaviour
                 switch (remainingTimeInt)
                 {
                     case < 10 and >= 5:
-                        if (remainingTimeFloatQuotient % 2 == 0) {
-                            timerLabel10.color = warningColor2_flow_phase1;
-                            timerLabel1.color = warningColor2_flow_phase1;
-                            timerBar.color = warningColor1_flow_phase1;
+                        if (remainingTimeFloatQuotient % 2 == 1) {
+                            timerLabel10.color = warningColor_phase1_flow_bright;
+                            timerLabel1.color = warningColor_phase1_flow_bright;
+                            timerBar.color = warningColor_phase1_flow_bright;
                             break;
                         }
                         else {
-                            timerLabel10.color = warningColor_stop_phase1;
-                            timerLabel1.color = warningColor_stop_phase1;
-                            timerBar.color = warningColor_stop_phase1;
+                            timerLabel10.color = warningColor_phase1_flow_dark;
+                            timerLabel1.color = warningColor_phase1_flow_dark;
+                            timerBar.color = warningColor_phase1_flow_dark;
                             break;
                         }
                     case < 5:
-                        if (remainingTimeFloatQuotient % 2 == 0) {
-                            timerLabel10.color = warningColor2_flow_phase2;
-                            timerLabel1.color = warningColor2_flow_phase2;
-                            timerBar.color = warningColor1_flow_phase2;
+                        if (remainingTimeFloatQuotient % 2 == 1) {
+                            timerLabel10.color = warningColor_phase2_flow_bright;
+                            timerLabel1.color = warningColor_phase2_flow_bright;
+                            timerBar.color = warningColor_phase2_flow_bright;
                             break;
                         }
                         else {
-                            timerLabel10.color = warningColor_stop_phase2;
-                            timerLabel1.color = warningColor_stop_phase2;
-                            timerBar.color = warningColor_stop_phase2;
+                            timerLabel10.color = warningColor_phase2_flow_dark;
+                            timerLabel1.color = warningColor_phase2_flow_dark;
+                            timerBar.color = warningColor_phase2_flow_dark;
                             break;
                         }
                     default:
-                        timerLabel10.color = flowingColor2;
-                        timerLabel1.color = flowingColor2;
-                        timerBar.color = flowingColor1;
+                        timerLabel10.color = normalColor_flow;
+                        timerLabel1.color = normalColor_flow;
+                        timerBar.color = normalColor_flow;
                         break;
                 }
             }
@@ -120,19 +117,19 @@ public class TimerUI : MonoBehaviour
                 switch (remainingTimeInt)
                 {
                     case < 10 and >= 5:
-                        timerLabel10.color = warningColor_stop_phase1;
-                        timerLabel1.color = warningColor_stop_phase1;
-                        timerBar.color = warningColor_stop_phase1;
+                        timerLabel10.color = warningColor_phase1_stop;
+                        timerLabel1.color = warningColor_phase1_stop;
+                        timerBar.color = warningColor_phase1_stop;
                         break;
                     case < 5:
-                        timerLabel10.color = warningColor_stop_phase2;
-                        timerLabel1.color = warningColor_stop_phase2;
-                        timerBar.color = warningColor_stop_phase2;
+                        timerLabel10.color = warningColor_phase2_stop;
+                        timerLabel1.color = warningColor_phase2_stop;
+                        timerBar.color = warningColor_phase2_stop;
                         break;
                     default:
-                        timerLabel10.color = stoppedColor;
-                        timerLabel1.color = stoppedColor;
-                        timerBar.color = stoppedColor;
+                        timerLabel10.color = normalColor_stop;
+                        timerLabel1.color = normalColor_stop;
+                        timerBar.color = normalColor_stop;
                         break;
                 }
             }
