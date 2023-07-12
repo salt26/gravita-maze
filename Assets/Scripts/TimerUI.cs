@@ -15,15 +15,17 @@ public class TimerUI : MonoBehaviour
     private Color flowingColor1 = new Color(178/255f, 0, 1);
     private Color flowingColor2 = new Color(211/255f, 110/255f, 1);
 
-    private Color warningColor1_flow_phase1 = new Color(223/255f, 119/255f, 10/255f);
+    private Color warningColor1_flow_phase1 = new Color(195/255f, 0, 182/255f);
     private Color warningColor1_flow_phase2 = new Color(213/255f, 35/255f, 74/255f);
 
-    private Color warningColor2_flow_phase1 = new Color(1, 137/255f, 12/255f);
+    private Color warningColor2_flow_phase1 = new Color(224/255f, 0, 209/255f);
     private Color warningColor2_flow_phase2 = new Color(244/255f, 41/255f, 85/255f);
 
-    private Color warningColor_stop_phase1 = new Color(1, 180/255f, 43/255f);
+    private Color warningColor_stop_phase1 = new Color(1, 0, 233/255f);
 
-    private Color warningColor_stop_phase2 = new Color(223/255f, 82/255f, 119/255f);
+    private Color warningColor_stop_phase2 = new Color(1, 94/255f, 137/255f);
+
+    private int blink_frequency = 2;
 
     // Update is called once per frame
     void Update()
@@ -73,22 +75,39 @@ public class TimerUI : MonoBehaviour
                 -168 - (pixels - t) * 12,
                 timerBar.GetComponent<RectTransform>().offsetMax.y);
 
-            int remainingTimeInt = Mathf.CeilToInt(mm.RemainingTime);
+            int remainingTimeInt = Mathf.FloorToInt(mm.RemainingTime);
+            int remainingTimeFloatQuotient = Mathf.FloorToInt((mm.RemainingTime - remainingTimeInt) * blink_frequency);
 
             if (mm.DoesTimeGoBy)
             {
                 switch (remainingTimeInt)
                 {
-                    case <= 10 and > 5:
-                        timerLabel10.color = warningColor2_flow_phase1;
-                        timerLabel1.color = warningColor2_flow_phase1;
-                        timerBar.color = warningColor1_flow_phase1;
-                        break;
-                    case <= 5:
-                        timerLabel10.color = warningColor2_flow_phase2;
-                        timerLabel1.color = warningColor2_flow_phase2;
-                        timerBar.color = warningColor1_flow_phase2;
-                        break;
+                    case < 10 and >= 5:
+                        if (remainingTimeFloatQuotient % 2 == 0) {
+                            timerLabel10.color = warningColor2_flow_phase1;
+                            timerLabel1.color = warningColor2_flow_phase1;
+                            timerBar.color = warningColor1_flow_phase1;
+                            break;
+                        }
+                        else {
+                            timerLabel10.color = warningColor_stop_phase1;
+                            timerLabel1.color = warningColor_stop_phase1;
+                            timerBar.color = warningColor_stop_phase1;
+                            break;
+                        }
+                    case < 5:
+                        if (remainingTimeFloatQuotient % 2 == 0) {
+                            timerLabel10.color = warningColor2_flow_phase2;
+                            timerLabel1.color = warningColor2_flow_phase2;
+                            timerBar.color = warningColor1_flow_phase2;
+                            break;
+                        }
+                        else {
+                            timerLabel10.color = warningColor_stop_phase2;
+                            timerLabel1.color = warningColor_stop_phase2;
+                            timerBar.color = warningColor_stop_phase2;
+                            break;
+                        }
                     default:
                         timerLabel10.color = flowingColor2;
                         timerLabel1.color = flowingColor2;
@@ -100,12 +119,12 @@ public class TimerUI : MonoBehaviour
             {
                 switch (remainingTimeInt)
                 {
-                    case <= 10 and > 5:
+                    case < 10 and >= 5:
                         timerLabel10.color = warningColor_stop_phase1;
                         timerLabel1.color = warningColor_stop_phase1;
                         timerBar.color = warningColor_stop_phase1;
                         break;
-                    case <= 5:
+                    case < 5:
                         timerLabel10.color = warningColor_stop_phase2;
                         timerLabel1.color = warningColor_stop_phase2;
                         timerBar.color = warningColor_stop_phase2;
