@@ -600,7 +600,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -681,7 +681,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -762,7 +762,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -771,7 +771,6 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
-
 
                 if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {

@@ -241,7 +241,7 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        gravityRetryButton.interactable = IsReady && ActionHistory != "";
+        gravityRetryButton.interactable = IsReady && ActionHistory != "" && !HasCleared;
         if (DoesTimeGoBy)
         {
             RemainingTime -= Time.deltaTime;
