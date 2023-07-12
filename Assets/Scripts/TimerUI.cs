@@ -21,7 +21,7 @@ public class TimerUI : MonoBehaviour
     private Color warningColor2_flow_phase1 = new Color(1, 137/255f, 12/255f);
     private Color warningColor2_flow_phase2 = new Color(244/255f, 41/255f, 85/255f);
 
-    private Color warningColor_stop_phase1 = new Color(223/255f, 205/255f, 53/255f);
+    private Color warningColor_stop_phase1 = new Color(1, 180/255f, 43/255f);
 
     private Color warningColor_stop_phase2 = new Color(223/255f, 82/255f, 119/255f);
 
