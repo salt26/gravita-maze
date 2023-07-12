@@ -28,7 +28,7 @@ public class MetaUtil
         foreach (string dir in dirs)
         {
             Debug.Log(dir);
-            if (dir.Length != 0 && dir.Replace(".", "").Length != 0)
+            if (dir.Length == 0 || dir.Replace(".", "").Length != 0)
             {
                 validDirs.Add(dir);
             }
