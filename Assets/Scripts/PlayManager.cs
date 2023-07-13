@@ -515,7 +515,12 @@ public class PlayManager : MonoBehaviour
     
     public void TutorialRetryWithTime()
     {
-        if (EscapedCount > 0) EscapedCount--;
+        EscapedCount = GameManager.gm.PlayingMapIndex;
+        if (GameManager.gm.PlayingMapIndex + 1 == 9 && GameManager.mm.tryCount >= 2)
+        {
+            GameManager.mm.TimeLimit = 24f;
+            GameManager.mm.TimeActivate();
+        }
     }
 
     public void TutorialAfterGravity(MapManager.Flag flag)
