@@ -1377,6 +1377,7 @@ public class MapManager : MonoBehaviour
         if (pm == null || LimitMode == LimitModeEnum.Move) return;
         tryCountUpTrigger = false;
         tryCount++;
+        Debug.Log("tryCount: " + tryCount);
         if (hasClearedOnceInTime) return;
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
