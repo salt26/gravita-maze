@@ -1377,7 +1377,6 @@ public class MapManager : MonoBehaviour
         if (pm == null || LimitMode == LimitModeEnum.Move) return;
         tryCountUpTrigger = false;
         tryCount++;
-        Debug.Log("tryCount: " + tryCount);
         if (hasClearedOnceInTime) return;
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
@@ -1385,8 +1384,7 @@ public class MapManager : MonoBehaviour
             { "tryCount", tryCount }
         };
 
-        if (!SceneManager.GetActiveScene().name.Equals("Tutorial"))
-            MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
+        MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
     }
 
     /// <summary>

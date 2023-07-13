@@ -18,7 +18,7 @@ public class TutorialGuide : MonoBehaviour
     RectTransform myTransform;
     TutorialGuideUI currentTip;
     MapManager mm;
-    // PlayManager pm;
+    PlayManager pm;
 
     int storedI;
     int nowI;
@@ -38,7 +38,7 @@ public class TutorialGuide : MonoBehaviour
         
         currentTip = null; // 가장 처음 나와야 할 것을 나오게 하는 방법 찾기
 
-        // pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+        pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
 
         mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
         
@@ -178,7 +178,7 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.TimeOver:
                 if (GameManager.gm.PlayingMapIndex + 1 == 9)
                 {
-                    if (mm.tryCount < 2)
+                    if (pm.TimeoutCount < 1)
                     {
                         emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_37");
                     }
@@ -449,15 +449,13 @@ public class TutorialGuide : MonoBehaviour
 
                         if (tips.Length == 0)
                         {
-                            if (mm.tryCount >= 2)
+                            if (pm.TimeoutCount < 2)
                             {
-                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
-                                mm.TimeLimit = 24f;
-                                mm.TimeActivate();
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
                             }
                             else
                             {
-                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
                             }
                             hasShowedInitialTextInTutorial9 = true;
                         }
