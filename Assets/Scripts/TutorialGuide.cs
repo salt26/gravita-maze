@@ -178,7 +178,14 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.TimeOver:
                 if (GameManager.gm.PlayingMapIndex + 1 == 9)
                 {
-                    emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_37");
+                    if (mm.tryCount < 2)
+                    {
+                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_37");
+                    }
+                    else
+                    {
+                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_38");
+                    }
                 }
                 else
                 {
@@ -444,7 +451,7 @@ public class TutorialGuide : MonoBehaviour
                         {
                             if (mm.tryCount >= 2)
                             {
-                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_38"));
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
                                 mm.TimeLimit = 24f;
                                 mm.TimeActivate();
                             }
