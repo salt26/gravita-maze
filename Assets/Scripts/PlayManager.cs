@@ -464,6 +464,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
+        TimeoutCount = 0;
         if (HasClearedAll)
         {
             Ending();
