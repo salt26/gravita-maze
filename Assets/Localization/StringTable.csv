@@ -1,4 +1,4 @@
-﻿Key,Id,English(en),Korean(ko)
+Key,Id,English(en),Korean(ko)
 "editor_start_welcome",486441738240,"Welcome to the map editor!","맵 에디터에 오신 걸 환영합니다!"
 "editor_update_begin",486475292672,"All right!\nLet's move on to the next step.","좋아요!\n다음 단계로 가볼까요?"
 "editor_update_test_prompt",486479486976,"Confirm the map\\is playable.","맵이 플레이 가능한지\\테스트해주세요."
@@ -129,7 +129,7 @@
 "tutorial_message_35",1829106272391173,"Time freezes when the ball is burned down!\nTake a deep breath and\npress the retry button!","공이 불에 타면 시간이 멈춰요!\n심호흡하고 되돌리기 버튼을 누르세요!"
 "tutorial_message_36",1829106272391174,"Time freezes when the ball gets squashed!\nTake a deep breath and\npress the retry button!","공이 뭉개지면 시간이 멈춰요!\n심호흡하고 되돌리기 버튼을 누르세요!"
 "tutorial_message_37",1829106272391175,"You get a penalty when the time's up,\nbut in Tutorial mode you won't get one! Let's try again!","시간이 끝나면 원래는 페널티가 있지만,\n튜토리얼에서는 괜찮아요! 다시 도전해봐요!"
-"tutorial_message_38",1829106272391176,"The time is really short...\nWhat if the time limit gets extended?\nGive it another try!","시간이 참 짧죠...\n시간 제한을 늘려드릴게요,\n다시 도전해보세요!"
+"tutorial_message_38",1829106272391176,"The time is really short...\nWhat if the time limit gets extended?\nGive it another try!","시간이 참 짧죠...\n제한시간을 늘려드릴게요.\n다시 도전해보세요!"
 "tutorial_message_39",1829106272391177,"Now you have more time.\nTake your time and try it!","시간이 더 늘어났어요.\n여유를 갖고 시도해 보세요!"
 "Adventure/Canvas/PauseUI/PauseBox/BgmVolume",164806647603200,"BGM
 Volume","배경음

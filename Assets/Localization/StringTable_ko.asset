@@ -994,8 +994,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1829106272391176
-    m_Localized: "\uC2DC\uAC04\uC774 \uCC38 \uC9E7\uC8E0...\\n\uC2DC\uAC04 \uC81C\uD55C\uC744
-      \uB298\uB824\uB4DC\uB9B4\uAC8C\uC694,\\n\uB2E4\uC2DC \uB3C4\uC804\uD574\uBCF4\uC138\uC694!"
+    m_Localized: "\uC2DC\uAC04\uC774 \uCC38 \uC9E7\uC8E0...\\n\uC81C\uD55C\uC2DC\uAC04\uC744
+      \uB298\uB824\uB4DC\uB9B4\uAC8C\uC694.\\n\uB2E4\uC2DC \uB3C4\uC804\uD574\uBCF4\uC138\uC694!"
     m_Metadata:
       m_Items:
       - rid: 0
