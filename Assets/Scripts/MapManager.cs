@@ -1377,14 +1377,16 @@ public class MapManager : MonoBehaviour
         if (pm == null || LimitMode == LimitModeEnum.Move) return;
         tryCountUpTrigger = false;
         tryCount++;
-        Debug.Log(tryCount);
+        Debug.Log("tryCount: " + tryCount);
         if (hasClearedOnceInTime) return;
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>
         {
             { "tryCount", tryCount }
         };
-        MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
+
+        if (!SceneManager.GetActiveScene().name.Equals("Tutorial"))
+            MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
     }
 
     /// <summary>

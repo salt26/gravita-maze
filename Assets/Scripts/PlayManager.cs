@@ -315,10 +315,11 @@ public class PlayManager : MonoBehaviour
 
     private void Update() {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")) 
+        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training") ||
+            SceneManager.GetActiveScene().name.Equals("Tutorial"))
         {
             if (GameManager.mm.tryCountUpTrigger) {
-                //Debug.Log("TryCountUp in PM ");
+                Debug.Log("TryCountUp in PM ");
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
@@ -457,6 +458,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
+        GameManager.mm.tryCount = 0;
         if (HasClearedAll)
         {
             Ending();

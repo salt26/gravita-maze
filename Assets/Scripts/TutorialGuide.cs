@@ -18,7 +18,7 @@ public class TutorialGuide : MonoBehaviour
     RectTransform myTransform;
     TutorialGuideUI currentTip;
     MapManager mm;
-    //PlayManager pm;
+    PlayManager pm;
 
     int storedI;
     int nowI;
@@ -26,6 +26,7 @@ public class TutorialGuide : MonoBehaviour
     bool hasIronRemovedInTutorial5;
     bool isBallIn12AndIronIn02InTutorial9;
     bool hasShowed10TextInTutorial9;
+    bool hasShowedInitialTextInTutorial9;
 
     public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
     public List<TutorialTuple> tipKeys;
@@ -37,7 +38,7 @@ public class TutorialGuide : MonoBehaviour
         
         currentTip = null; // 가장 처음 나와야 할 것을 나오게 하는 방법 찾기
 
-        //pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+        pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
 
         mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
         
@@ -68,7 +69,7 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(8, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
         tipDict.Add(new TutorialTuple(8, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
         tipDict.Add(new TutorialTuple(8, 0, 3), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
-        tipDict.Add(new TutorialTuple(9, 2, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
+        // tipDict.Add(new TutorialTuple(9, 2, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
         tipDict.Add(new TutorialTuple(9, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_30"));
         tipDict.Add(new TutorialTuple(9, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
 
@@ -77,6 +78,7 @@ public class TutorialGuide : MonoBehaviour
         hasIronRemovedInTutorial5 = false;
         isBallIn12AndIronIn02InTutorial9 = true;
         hasShowed10TextInTutorial9 = false;
+        hasShowedInitialTextInTutorial9 = false;
     }
 
     public bool IsBallThere(TutorialTuple tutorialTuple)
@@ -229,6 +231,7 @@ public class TutorialGuide : MonoBehaviour
         hasIronRemovedInTutorial5 = false;
         isBallIn12AndIronIn02InTutorial9 = true;
         hasShowed10TextInTutorial9 = false;
+        hasShowedInitialTextInTutorial9 = false;
     }
 
 
@@ -426,6 +429,30 @@ public class TutorialGuide : MonoBehaviour
                             ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
                             isBallIn12AndIronIn02InTutorial9 = false;
                             hasShowed10TextInTutorial9 = false;
+                        }
+                        hasShowed = true;
+                    }
+                    else if (mm.currentMovableCoord[2, 1] is Ball && !hasShowedInitialTextInTutorial9)
+                    {
+                        tips = GameObject.FindGameObjectsWithTag("Tip");
+                        if (currentTip != null)
+                        {
+                            Destroy(tips[0]);
+                        }
+
+                        if (tips.Length == 0)
+                        {
+                            if (mm.tryCount >= 2)
+                            {
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_38"));
+                                mm.TimeLimit = 24f;
+                                mm.TimeActivate();
+                            }
+                            else
+                            {
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
+                            }
+                            hasShowedInitialTextInTutorial9 = true;
                         }
                         hasShowed = true;
                     }
