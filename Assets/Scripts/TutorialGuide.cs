@@ -178,13 +178,13 @@ public class TutorialGuide : MonoBehaviour
             case MapManager.Flag.TimeOver:
                 if (GameManager.gm.PlayingMapIndex + 1 == 9)
                 {
-                    if (pm.TimeoutCount < 1)
+                    if (pm.TimeoutCount == 1)
                     {
-                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_37");
+                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_38");
                     }
                     else
                     {
-                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_38");
+                        emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_37");
                     }
                 }
                 else
