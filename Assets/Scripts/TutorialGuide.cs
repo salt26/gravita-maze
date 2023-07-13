@@ -18,7 +18,7 @@ public class TutorialGuide : MonoBehaviour
     RectTransform myTransform;
     TutorialGuideUI currentTip;
     MapManager mm;
-    PlayManager pm;
+    // PlayManager pm;
 
     int storedI;
     int nowI;
@@ -38,7 +38,7 @@ public class TutorialGuide : MonoBehaviour
         
         currentTip = null; // 가장 처음 나와야 할 것을 나오게 하는 방법 찾기
 
-        pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
+        // pm = GameObject.FindGameObjectWithTag("PlayManager").GetComponent<PlayManager>();
 
         mm = GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>();
         
