@@ -449,13 +449,15 @@ public class TutorialGuide : MonoBehaviour
 
                         if (tips.Length == 0)
                         {
-                            if (mm.tryCount < 2)
+                            if (mm.tryCount >= 2)
                             {
-                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
+                                mm.TimeLimit = 24f;
+                                mm.TimeActivate();
                             }
                             else
                             {
-                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
+                                ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
                             }
                             hasShowedInitialTextInTutorial9 = true;
                         }
