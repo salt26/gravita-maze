@@ -325,6 +325,7 @@ public class PlayManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training"))
         {
             if (GameManager.mm.tryCountUpTrigger) {
+                //Debug.Log("TryCountUp in PM ");
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
@@ -463,7 +464,6 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
-        GameManager.mm.tryCount = 0;
         if (HasClearedAll)
         {
             Ending();
