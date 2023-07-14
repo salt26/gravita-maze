@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
@@ -8,8 +7,9 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
 #endif
@@ -39,6 +39,10 @@ public class PlayManager : MonoBehaviour
     public ResultUI resultUI;
     public GameObject tooltipUI;
     public GameObject timerUI;
+    public GameObject moveLimitUI;
+
+    public List<GameObject> tryCountUis = new List<GameObject>();
+    public List<GameObject> minMoveCountUis = new List<GameObject>();
 
     private OpenScrollItemWithMark selectedOpenScrollItem;
     public GameObject openScrollContent;
@@ -203,6 +207,12 @@ public class PlayManager : MonoBehaviour
         private set;
     } = 0;
 
+    public int TimeoutCount
+    {
+        get;
+        private set;
+    } = 0;
+
     public bool HasClearedAll
     {
         get
@@ -228,6 +238,7 @@ public class PlayManager : MonoBehaviour
         IsReady = false;
         EscapedCount = 0;
         SkippedCount = 0;
+        TimeoutCount = 0;
         playMode = mode;
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
@@ -271,7 +282,7 @@ public class PlayManager : MonoBehaviour
             case Mode.Custom:
                 CustomOpenPhase(MapManager.MAP_ROOT_PATH);
                 Life = int.MaxValue;
-                print("custom");
+                customSelection = MapManager.MAP_ROOT_PATH;
                 break;
             case Mode.Training:
                 TrainingOpenPhase(TrainingMapSelect.Root);
@@ -311,18 +322,24 @@ public class PlayManager : MonoBehaviour
 
     private void Update() {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")) 
+        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training"))
         {
             if (GameManager.mm.tryCountUpTrigger) {
-                Debug.Log("TryCountUp in PM ");
+                //Debug.Log("TryCountUp in PM ");
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
 
     }
 
+    public void Resume()
+    {
+        GameManager.gm.SaveSettingsValue();
+        GameManager.gm.canPlay = true;
+    }
     public void Pause()
     {
+        GameManager.gm.canPlay = false;
         pauseButton.interactable = false;
         pausePanel.SetActive(true);
         pauseUI.gameObject.SetActive(true);
@@ -422,12 +439,12 @@ public class PlayManager : MonoBehaviour
 
             try
             {
-                sw = new StreamWriter(Application.persistentDataPath + "/TutorialDone.txt");
+                sw = new StreamWriter(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt");
                 sw.WriteLine("3");
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError(e);
             }
             finally
             {
@@ -437,7 +454,7 @@ public class PlayManager : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e.Message);
+                    Debug.LogError(e);
                 }
             }
         }
@@ -447,6 +464,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
+        TimeoutCount = 0;
         if (HasClearedAll)
         {
             Ending();
@@ -504,6 +522,16 @@ public class PlayManager : MonoBehaviour
     public void TutorialRetryWithTime()
     {
         if (EscapedCount > 0) EscapedCount--;
+    }
+
+    public void TutorialTimeoutCountUp()
+    {
+        TimeoutCount++;
+        if (GameManager.gm.PlayingMapIndex + 1 == 9 && TimeoutCount >= 2)
+        {
+            GameManager.mm.TimeLimit = 24f;
+            GameManager.mm.TimeActivate();
+        }
     }
 
     public void TutorialAfterGravity(MapManager.Flag flag)
@@ -590,7 +618,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -671,7 +699,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -681,26 +709,32 @@ public class PlayManager : MonoBehaviour
 
                 pauseButton.interactable = false;
 
-                if (!GameManager.mm.hasClearedOnce)
+                if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {
-                    GameManager.mm.hasClearedOnce = true;
-                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                    fileStream.Position = 0;
+                    GameManager.mm.hasClearedOnceInTime = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
                     if (GameManager.mm.ActionHistory.Length == 1)
                     {
-                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount + 1);
                     }
                     else
                     {
-                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount);
                     }
-                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                    streamWriter.WriteLine(mapHash);
-                    streamWriter?.Close();
-                    fileStream?.Close();
-                    streamWriter = null;
-                    fileStream = null;
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInTime);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
+                }
+                else if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Move)
+                {
+                    GameManager.mm.hasClearedOnceInMove = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+                    if (GameManager.mm.ActionHistory.Length < GameManager.mm.MoveLimit)
+                    {
+                        // TODO 특별한 애니메이션으로 최소 이동 횟수 갱신 축하하기!
+                        keyValuePairs.Add("minMoveCount", GameManager.mm.ActionHistory.Length);
+                    }
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInMove);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move, keyValuePairs);
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -746,7 +780,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -755,27 +789,33 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
-                
-                if (!GameManager.mm.hasClearedOnce)
+
+                if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {
-                    GameManager.mm.hasClearedOnce = true;
-                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                    streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                    fileStream.Position = 0;
+                    GameManager.mm.hasClearedOnceInTime = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
                     if (GameManager.mm.ActionHistory.Length == 1)
                     {
-                        streamWriter.WriteLine((GameManager.mm.tryCount + 1).ToString());
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount + 1);
                     }
                     else
                     {
-                        streamWriter.WriteLine(GameManager.mm.tryCount.ToString());
+                        keyValuePairs.Add("tryCount", GameManager.mm.tryCount);
                     }
-                    streamWriter.WriteLine(GameManager.mm.hasClearedOnce);
-                    streamWriter.WriteLine(mapHash);
-                    streamWriter?.Close();
-                    fileStream?.Close();
-                    streamWriter = null;
-                    fileStream = null;
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInTime);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time, keyValuePairs);
+                }
+                else if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Move)
+                {
+                    GameManager.mm.hasClearedOnceInMove = true;
+                    Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+                    if (GameManager.mm.ActionHistory.Length < GameManager.mm.MoveLimit)
+                    {
+                        // TODO 특별한 애니메이션으로 최소 이동 횟수 갱신 축하하기!
+                        keyValuePairs.Add("minMoveCount", GameManager.mm.ActionHistory.Length);
+                    }
+                    keyValuePairs.Add("hasClearedOnce", GameManager.mm.hasClearedOnceInMove);
+                    MetaUtil.ModifyMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move, keyValuePairs);
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -795,11 +835,11 @@ public class PlayManager : MonoBehaviour
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(true);
-                nextButton.gameObject.SetActive(true);
+                //nextButton.gameObject.SetActive(true);
                 quitHighlightedButton.gameObject.SetActive(false);
 
                 pauseButton.interactable = true;
-                nextButton.interactable = true;
+                //nextButton.interactable = true;
 
                 break;
         }
@@ -839,7 +879,7 @@ public class PlayManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -849,13 +889,13 @@ public class PlayManager : MonoBehaviour
             if (!Directory.Exists(path))
             {
                 Debug.LogWarning("File warning: there is no directory \"" + path + "\"");
-                Directory.CreateDirectory(path);
+                MetaUtil.CreateDirectory(path);
             }
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
-            Debug.LogError(e.Message);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
+            Debug.LogError(e);
             return;
         }
 
@@ -883,7 +923,7 @@ public class PlayManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            statusUI.SetStatusMessageWithFlashing(e.Message, 2f);
+            statusUI.SetStatusMessageWithFlashing(e.ToString(), 2f);
             return;
         }
 #endif
@@ -977,8 +1017,8 @@ public class PlayManager : MonoBehaviour
         {
             string[] metafiles;
             SHA256 sha256Hash = SHA256.Create();
-            Debug.Log(openPath);
-            string metaPath = Application.persistentDataPath + "/Meta/" + openPath;
+            //Debug.Log(openPath);
+            string metaPath = Application.persistentDataPath.TrimEnd('/') + "/Meta/" + openPath.TrimStart('/');
             string path = Application.persistentDataPath;
 
             string[] dirs2 = ("Meta/" + openPath.Replace('\\', '/')).Split('/');
@@ -987,46 +1027,63 @@ public class PlayManager : MonoBehaviour
                 string dir = dirs2[i];
                 path += '/' + dir;
                 if (!Directory.Exists(path)) {
-                    Directory.CreateDirectory(path);
+                    MetaUtil.CreateDirectory(path);
                 }
             }
 
-            metafiles = Directory.GetFiles(metaPath, "*.txt");
+            metafiles = Directory.GetFiles(metaPath, "*.json");
             List<string> metafiles2 = metafiles.ToList<string>();
 
             foreach (string s in files)
             {
-                bool isCleared = false;
-                string s2 = Application.persistentDataPath + "/Meta/" + s;
-                
+                bool isClearedInTime = false;
+                bool isClearedInMove = false;
+                string s2 = Application.persistentDataPath.TrimEnd('/') + "/Meta/" + MetaUtil.ExtentionTxtToJson(s);
+                print(s2);
 
                 if (metafiles2.Contains(s2))
                 {
                     try
                     {
+                        /*
                         FileStream fs = new FileStream(s2.Replace('\\', '/'), FileMode.Open);
                         StreamReader sr = new StreamReader(fs, Encoding.UTF8);
                         sr.ReadLine();
                         bool b = bool.TryParse(sr.ReadLine(), out isCleared);
                         if (!b) isCleared = false;
                         string metaHash = sr.ReadToEnd().Trim();
-                        
+                        */
+
+                        JObject json = MetaUtil.ReadMetaFile(s2.Replace('\\', '/'));
+                        string metaHash = MetaUtil.GetMapHashFromMetaObject(json);
+
                         FileStream fileStream = new FileStream(s.Replace('\\', '/'), FileMode.Open);
                         StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8);
                         string mapHash = GetHash(sha256Hash, streamReader.ReadToEnd().Trim());
                         if (!metaHash.Equals(mapHash))
                         {
-                            isCleared = false;
+                            isClearedInTime = false;
+                            isClearedInMove = false;
                         }
                         streamReader.Close();
                         fileStream.Close();
-                        
+
+                        JToken cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
+                        if (cleared == null) isClearedInTime = false;
+                        else isClearedInTime = (bool)cleared;
+
+                        cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        if (cleared == null) isClearedInMove = false;
+                        else isClearedInMove = (bool)cleared;
+
+                        /*
                         sr.Close();
                         fs.Close();
+                        */
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.Message);
+                        Debug.LogError(e);
                     }
                     metafiles2.Remove(s2);
                 }
@@ -1036,7 +1093,7 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, false, isCleared, this);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(OpenScrollItemWithMark.Type.Open, s, false, isClearedInTime, isClearedInMove, this);
                 index++;
             }
 
@@ -1140,9 +1197,9 @@ public class PlayManager : MonoBehaviour
     
         string[] metafiles;
         SHA256 sha256Hash = SHA256.Create();
-        Debug.Log(openPathText.text);
+        //Debug.Log(openPathText.text);
 
-        string metaPath = Application.persistentDataPath + "/Meta";
+        string metaPath = Application.persistentDataPath.TrimEnd('/') + "/Meta";
         if(openPathText.text.TrimEnd('/').LastIndexOf('/') >= 1)
         {
             metaPath += "/" + openPathText.text.Substring(0, openPathText.text.TrimEnd('/').LastIndexOf('/'));
@@ -1167,11 +1224,11 @@ public class PlayManager : MonoBehaviour
             string dir = dirs2[i];
             path += '/' + dir;
             if (!Directory.Exists(path)) {
-                Directory.CreateDirectory(path);
+                MetaUtil.CreateDirectory(path);
             }
         }
 
-        metafiles = Directory.GetFiles(metaPath.Replace("...", "Training"), "*.txt");
+        metafiles = Directory.GetFiles(metaPath.Replace("...", "Training"), "*.json");
         List<string> metafiles2 = metafiles.ToList<string>();
 
         if (!isRoot)
@@ -1205,30 +1262,35 @@ public class PlayManager : MonoBehaviour
         {
             foreach (TextAsset s in files)
             {
-                bool isCleared = false;
-                string s2 = Application.persistentDataPath + "/Meta/Training\\" + s.name + ".txt";
+                bool isClearedInTime = false;
+                bool isClearedInMove = false;
+
+                string s2 = Application.persistentDataPath.TrimEnd('/') + "/Meta/Training\\" + s.name + ".json";
+                print(s2);
                 if (metafiles2.Contains(s2.Replace('\\', '/')) || metafiles2.Contains(s2))
                 {
                     try
                     {
-                        FileStream fs = new FileStream(s2.Replace('\\', '/'), FileMode.Open);
-                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                        sr.ReadLine();
-                        bool b = bool.TryParse(sr.ReadLine(), out isCleared);
-                        if (!b) isCleared = false;
-                        string metaHash = sr.ReadToEnd().Trim();
+                        JObject json = MetaUtil.ReadMetaFile(s2.Replace('\\', '/'));
+                        string metaHash = MetaUtil.GetMapHashFromMetaObject(json);
                         string mapHash = GetHash(sha256Hash, s.text.Trim());
                         if (!metaHash.Equals(mapHash))
                         {
-                            isCleared = false;
+                            isClearedInTime = false;
+                            isClearedInMove = false;
                         }
-                        
-                        sr.Close();
-                        fs.Close();
+
+                        JToken cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
+                        if (cleared == null) isClearedInTime = false;
+                        else isClearedInTime = (bool)cleared;
+
+                        cleared = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        if (cleared == null) isClearedInMove = false;
+                        else isClearedInMove = (bool)cleared;
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.Message);
+                        Debug.LogError(e);
                     }
                     metafiles2.Remove(s2);
                 }
@@ -1237,7 +1299,7 @@ public class PlayManager : MonoBehaviour
                 g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
-                g.GetComponent<OpenScrollItemWithMark>().Initialize(s.name, false, isCleared, this, s, false);
+                g.GetComponent<OpenScrollItemWithMark>().Initialize(s.name, false, isClearedInTime, isClearedInMove, this, s, false);
                 index++;
             }
         }
@@ -1298,7 +1360,8 @@ public class PlayManager : MonoBehaviour
             if (caller.type == OpenScrollItemWithMark.Type.Open)
             {
                 string s = selectedOpenScrollItem.path;
-                s = "/Meta/" + s;
+                s = "/Meta/" + MetaUtil.ExtentionTxtToJson(s);
+                print(s);
                 CreateMeta(s);
                 Debug.Log(metaPath);
                 bool b = CustomOpenFile(selectedOpenScrollItem.path, true);
@@ -1311,7 +1374,8 @@ public class PlayManager : MonoBehaviour
             {
                 string s = selectedOpenScrollItem.path;
                 Debug.Log(s);
-                s = "/Meta/Training/" + s + ".txt";
+                s = "/Meta/Training/" + MetaUtil.ExtentionTxtToJson(s + ".json");
+                print(s);
                 CreateMeta(s);
                 bool b = TrainingOpenFile(selectedOpenScrollItem.textAsset, true);
                 openHighlightedButton.gameObject.SetActive(b);
@@ -1409,7 +1473,11 @@ public class PlayManager : MonoBehaviour
                     customPhase = CustomPhase.Ingame;
                     GameManager.gm.CustomChangeBGM(customPhase);
 
-                    metaPath = Application.persistentDataPath + "/Meta/" + mapPath;
+                    metaPath = Application.persistentDataPath.TrimEnd('/') + "/Meta/" + MetaUtil.ExtentionTxtToJson(mapPath);
+                    print(metaPath);
+                    JObject metaObject = MetaUtil.ReadMetaFile(metaPath);
+
+                    /*
                     fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
                     streamReader = new StreamReader(fileStream, Encoding.UTF8);
 
@@ -1455,6 +1523,7 @@ public class PlayManager : MonoBehaviour
                     {
                         Debug.LogError(e);
                     }
+                    */
 
                     ClearOpenScrollItems();
 
@@ -1463,7 +1532,57 @@ public class PlayManager : MonoBehaviour
                         Destroy(t.gameObject);
                     }
                     statusUI.gameObject.SetActive(false);
-                    timerUI.SetActive(true);
+
+                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
+                    {
+                        JToken hasClearedOnce = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
+                        JToken tryCount = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Time, "tryCount");
+
+                        if (hasClearedOnce == null)
+                        {
+                            Debug.LogError("Meta invalid: hasClearedOnce");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time);
+                        }
+                        else if (tryCount == null)
+                        {
+                            Debug.LogError("Meta invalid: try count");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time);
+                        }
+                        else if ((bool)hasClearedOnce)
+                        {
+                            GameManager.mm.tryCount = 0;
+                        }
+                        else
+                        {
+                            GameManager.mm.tryCount = (int)tryCount;
+                        }
+                        timerUI.SetActive(true);
+                        moveLimitUI.SetActive(false);
+                    }
+                    else
+                    {
+                        JToken hasClearedOnce = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        JToken minMoveCount = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Move, "minMoveCount");
+
+                        if (hasClearedOnce == null)
+                        {
+                            Debug.LogError("Meta invalid: hasClearedOnce");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move);
+                        }
+                        else if (minMoveCount == null)
+                        {
+                            Debug.LogError("Meta invalid: try count");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move);
+                        }
+                        else
+                        {
+                            GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnce;
+                            GameManager.mm.MoveLimit = (int)minMoveCount;
+                        }
+                        timerUI.SetActive(false);
+                        moveLimitUI.SetActive(true);
+                    }
+
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
@@ -1508,52 +1627,9 @@ public class PlayManager : MonoBehaviour
                     trainingPhase = TrainingPhase.Ingame;
                     GameManager.gm.TrainingChangeBGM(trainingPhase);
 
-                    metaPath = Application.persistentDataPath + "/Meta/" + mapPath;
-                    fileStream = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                    streamReader = new StreamReader(fileStream, Encoding.UTF8);
-
-                    int tryCount;
-                    try
-                    {
-                        bool b = int.TryParse(streamReader.ReadLine().Trim(), out tryCount);
-                        bool hasClearedOnce = bool.Parse(streamReader.ReadLine().Trim());
-
-                        if (!hasClearedOnce)
-                        {
-                            GameManager.mm.tryCount = tryCount;
-                        }
-                        else
-                        {
-                            GameManager.mm.tryCount = 0;
-                        }
-
-                        streamReader.Close();
-                        if (!b)
-                        {
-                            Debug.LogError("Meta invalid");
-                            streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                            streamWriter.WriteLine("0");
-                            streamWriter.WriteLine("False");
-                            streamWriter.WriteLine(mapHash);
-                            GameManager.mm.tryCount = 0;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError("Meta invalid: " + e.Message);
-                    }
-
-                    try
-                    {
-                        streamWriter?.Close();
-                        fileStream?.Close();
-                        streamWriter = null;
-                        fileStream = null;
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(e);
-                    }
+                    metaPath = Application.persistentDataPath.TrimEnd('/') + "/Meta/" + MetaUtil.ExtentionTxtToJson(mapPath);
+                    print(metaPath);
+                    JObject metaObject = MetaUtil.ReadMetaFile(metaPath);
 
                     ClearOpenScrollItems();
 
@@ -1562,7 +1638,57 @@ public class PlayManager : MonoBehaviour
                         Destroy(t.gameObject);
                     }
                     statusUI.gameObject.SetActive(false);
-                    timerUI.SetActive(true);
+
+                    if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time)
+                    {
+                        JToken hasClearedOnce = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
+                        JToken tryCount = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Time, "tryCount");
+
+                        if (hasClearedOnce == null)
+                        {
+                            Debug.LogError("Meta invalid: hasClearedOnce");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time);
+                        }
+                        else if (tryCount == null)
+                        {
+                            Debug.LogError("Meta invalid: try count");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time);
+                        }
+                        else if ((bool)hasClearedOnce)
+                        {
+                            GameManager.mm.tryCount = 0;
+                        }
+                        else
+                        {
+                            GameManager.mm.tryCount = (int)tryCount;
+                        }
+                        timerUI.SetActive(true);
+                        moveLimitUI.SetActive(false);
+                    }
+                    else
+                    {
+                        JToken hasClearedOnce = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
+                        JToken minMoveCount = MetaUtil.GetValueFromMetaObject(metaObject, mapHash, MapManager.LimitModeEnum.Move, "minMoveCount");
+
+                        if (hasClearedOnce == null)
+                        {
+                            Debug.LogError("Meta invalid: hasClearedOnce");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move);
+                        }
+                        else if (minMoveCount == null)
+                        {
+                            Debug.LogError("Meta invalid: try count");
+                            MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move);
+                        }
+                        else
+                        {
+                            GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnce;
+                            GameManager.mm.MoveLimit = (int)minMoveCount;
+                        }
+                        timerUI.SetActive(false);
+                        moveLimitUI.SetActive(true);
+                    }
+
                     GameManager.gm.canPlay = true;
                     GameManager.mm.TimeActivate();
 
@@ -1592,6 +1718,7 @@ public class PlayManager : MonoBehaviour
         GameManager.mm.Initialize();
         statusUI.gameObject.SetActive(true);
         timerUI.SetActive(false);
+        moveLimitUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
         pausePanel.SetActive(false);
@@ -1617,6 +1744,7 @@ public class PlayManager : MonoBehaviour
         GameManager.mm.Initialize();
         statusUI.gameObject.SetActive(true);
         timerUI.SetActive(false);
+        moveLimitUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
         // TODO
@@ -1635,7 +1763,6 @@ public class PlayManager : MonoBehaviour
         string mapinfo = "";
 
         if (SceneManager.GetActiveScene().name.Equals("Custom"))
-
         {
             mapPath = selectedOpenScrollItem.path;
             try
@@ -1676,24 +1803,29 @@ public class PlayManager : MonoBehaviour
             }
             finally
             {
-                GameManager.mm.hasClearedOnce = false;
+                GameManager.mm.hasClearedOnceInTime = false;
                 GameManager.mm.tryCount = 0;
+                GameManager.mm.hasClearedOnceInMove = false;
+                GameManager.mm.MoveLimit = int.MaxValue;
                 sr.Close();
                 fs.Close();
+                sr = null;
+                fs = null;
             }
         }
         else if (SceneManager.GetActiveScene().name.Equals("Training"))
         {
-            mapPath = "Training/" + selectedOpenScrollItem.path + ".txt";
+            mapPath = "Training/" + selectedOpenScrollItem.path.TrimStart('/') + ".txt";
             mapinfo = selectedOpenScrollItem.textAsset.text.Trim();
             mapHash = GetHash(sha256Hash, mapinfo);
         }
 
-        metaPath = Application.persistentDataPath + '/' + s;
+        metaPath = Application.persistentDataPath.TrimEnd('/') + '/' + MetaUtil.ExtentionTxtToJson(s);
+        print(metaPath);
 
         if (!File.Exists(metaPath))
         {
-            StreamWriter sw = null;
+            //StreamWriter sw = null;
             string path = Application.persistentDataPath;
             string[] dirs = s.Split('/');
             int len = dirs.Length - 1;
@@ -1701,86 +1833,64 @@ public class PlayManager : MonoBehaviour
                 string dir = dirs[i];
                 path += '/' + dir;
                 if (!Directory.Exists(path)) {
-                    Directory.CreateDirectory(path);
+                    MetaUtil.CreateDirectory(path);
                 }
             }
-            try
-            {
-                fs = new FileStream(metaPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                sw = new StreamWriter(fs, Encoding.UTF8);
-                sw.WriteLine("0");
-                sw.WriteLine("False");
-                sw.WriteLine(mapHash); //Hash code
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-            finally
-            {
-                try
-                {
-                    GameManager.mm.hasClearedOnce = false;
-                    GameManager.mm.tryCount = 0;
-                    sw.Close();
-                    fs.Close();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e.Message);
-                }
-            }
+            MetaUtil.CreateNewMetaFile(metaPath, mapHash, FileMode.OpenOrCreate);
         }
         else
         {
             try
             {
-                fs = new FileStream(metaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-                sr = new StreamReader(fs, Encoding.UTF8);
-                int tryCount = int.Parse(sr.ReadLine().Trim());
-                bool hasClearedOnce = bool.Parse(sr.ReadLine().Trim());
-                string metaHash = sr.ReadToEnd().Trim();
-                sr.Close();
+                JObject json = MetaUtil.ReadMetaFile(metaPath);
+                string metaHash = MetaUtil.GetMapHashFromMetaObject(json);
+                JToken tryCount = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "tryCount");
+                JToken hasClearedOnceInTime = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Time, "hasClearedOnce");
+                JToken minMoveCount = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "minMoveCount");
+                JToken hasClearedOnceInMove = MetaUtil.GetValueFromMetaObject(json, mapHash, MapManager.LimitModeEnum.Move, "hasClearedOnce");
                 if (VerifyHash(sha256Hash, mapinfo.Trim(), metaHash))
                 {
-                    //tryNum 표시하기
-                    GameManager.mm.hasClearedOnce = hasClearedOnce;
-                    GameManager.mm.tryCount = tryCount;
+                    bool b1 = true;
+                    bool b2 = true;
+                    if (tryCount == null || hasClearedOnceInTime == null)
+                    {
+                        MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Time);
+                        b1 = false;
+                    }
+
+                    if (minMoveCount == null || hasClearedOnceInMove == null)
+                    {
+                        MetaUtil.ReinitializeMetaFile(metaPath, mapHash, MapManager.LimitModeEnum.Move);
+                        b2 = false;
+                    }
+                    
+                    if (b1)
+                    {
+                        GameManager.mm.hasClearedOnceInTime = (bool)hasClearedOnceInTime;
+                        GameManager.mm.tryCount = (int)tryCount;
+                    }
+                    if (b2)
+                    {
+                        GameManager.mm.hasClearedOnceInMove = (bool)hasClearedOnceInMove;
+                        GameManager.mm.MoveLimit = (int)minMoveCount;
+                    }
                 }
                 else
                 {
-                    //다를 경우
-                    fs.Close();
-                    fs = new FileStream(metaPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
-                    fs.Position = 0;
-                    sw.WriteLine("0");
-                    sw.WriteLine("False");
-                    sw.WriteLine(mapHash);
-                    sw.Close();
-                    GameManager.mm.tryCount = 0;
-                    GameManager.mm.hasClearedOnce = false;
+                    // 다를 경우
+                    MetaUtil.CreateNewMetaFile(metaPath, mapHash, FileMode.Create);
                 }
-                fs.Close();
             }
             catch (Exception)
             {
                 sr?.Close();
                 fs?.Close();
-                fileStream = new FileStream(metaPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-                streamWriter = new StreamWriter(fileStream, Encoding.UTF8);
-                streamWriter.WriteLine("0");
-                streamWriter.WriteLine("False");
-                streamWriter.WriteLine(mapHash); //Hash code
-                streamWriter.Close();
-                fileStream.Close();
-                GameManager.mm.tryCount = 0;
-                GameManager.mm.hasClearedOnce = false;
+                MetaUtil.CreateNewMetaFile(metaPath, mapHash, FileMode.Create);
                 //Debug.LogError(e.Message);
             }
             
         }
-        
+
     }
 
     public string GetHash(HashAlgorithm hashAlgorithm, string text)
@@ -1806,5 +1916,31 @@ public class PlayManager : MonoBehaviour
         StringComparer comparer = StringComparer.OrdinalIgnoreCase;
 
         return comparer.Compare(hashOfInput, hash) == 0;
+    }
+
+    public void ChangeLimitMode(MapManager.LimitModeEnum limitMode)
+    {
+        if (limitMode == MapManager.LimitModeEnum.Time)
+        {
+            foreach (GameObject g in GameManager.pm.minMoveCountUis)
+            {
+                g.SetActive(false);
+            }
+            foreach (GameObject g in GameManager.pm.tryCountUis)
+            {
+                g.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject g in GameManager.pm.tryCountUis)
+            {
+                g.SetActive(false);
+            }
+            foreach (GameObject g in GameManager.pm.minMoveCountUis)
+            {
+                g.SetActive(true);
+            }
+        }
     }
 }

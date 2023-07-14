@@ -11,11 +11,13 @@ public class TutorialManager : MonoBehaviour
     public void SkipTutorial()
     {
         DoTutorialSave();
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadMain();
     }
     public void PlayTutorial()
     {
         DoTutorialSave();
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadTutorial();
     }
     public void PlayButtonSFX()
@@ -24,11 +26,11 @@ public class TutorialManager : MonoBehaviour
     }
     public void DoTutorialSave()
     {
-        if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt"))
         {
             try
             {
-                FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Create);
+                FileStream fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt", FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
                 sw.Close();
@@ -36,7 +38,7 @@ public class TutorialManager : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogError(e);
             }
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static MapManager;
 
 public class PauseUI : MonoBehaviour
 {
@@ -27,11 +28,11 @@ public class PauseUI : MonoBehaviour
     void Update()
     {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
+        if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
         {
             pauseSkipButton.interactable = true;
         }
-        else if (GameManager.mm.IsTimeActivated && (GameManager.mm.RemainingTime <= 0f || GameManager.mm.HasCleared))
+        else if (GameManager.mm.LimitMode != MapManager.LimitModeEnum.Time || (GameManager.mm.IsTimeActivated && (GameManager.mm.RemainingTime <= 0f || GameManager.mm.HasCleared)))
         {
             pauseSkipButton.interactable = false;
         }

@@ -7,27 +7,50 @@ using UnityEngine.Localization.Settings;
 
 public class SettingManager : MonoBehaviour
 {
-    public GameObject CreditPanel;
-    public Button QuitButton;
-    public Button CreditButton;
-    public Button BackSettingButton;
+    public enum Language { English = 0, 한국어 = 1 }
 
-    public bool isCredit=false;
+    public GameObject creditPanel;
+    public Button quitButton;
+    public Button creditButton;
+    public Button backSettingButton;
+    public RectTransform creditScrollContent;
+    public RectTransform creditDescription;
+    public RectTransform creditTeamLogo;
+    public Image creditTitleImage;
+    public Sprite creditTitleEnglish;
+    public Sprite creditTitleKorean;
+
+    public bool isCredit = false;
     public bool isOnce = false;
 
     public Dropdown languageSetting;
-    Animator PanelAnimation;
+    Animator panelAnimation;
 
     void Start()
     {
         if (SceneManager.GetActiveScene().name.Equals("Setting"))
         {
-            PanelAnimation = CreditPanel.GetComponent<Animator>();
-            CreditPanel.SetActive(false);
+            panelAnimation = creditPanel.GetComponent<Animator>();
+            creditPanel.SetActive(false);
         }
         string localeRaw = LocalizationSettings.SelectedLocale.ToString();
-        string locale = localeRaw.Substring(0, localeRaw.IndexOf('(')).TrimEnd(' ');
-        languageSetting.value = (int)(GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), locale);
+        string locale;
+        switch (localeRaw)
+        {
+            case "English (en)":
+                locale = "English";
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
+                break;
+            case "Korean (ko)":
+                locale = "한국어";
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("ko");
+                break;
+            default:
+                locale = "Engilsh";
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
+                break;
+        }
+        languageSetting.value = (int)(Language)System.Enum.Parse(typeof(Language), locale);
     }
 
     void Update()
@@ -39,9 +62,9 @@ public class SettingManager : MonoBehaviour
             if (!isOnce)
             {
                 isOnce = true;
-                QuitButton.interactable = false;
-                CreditButton.interactable = false;
-                CreditPanel.SetActive(true);
+                quitButton.interactable = false;
+                creditButton.interactable = false;
+                creditPanel.SetActive(true);
                 StartCoroutine(SoundEffect());
             }
 
@@ -52,10 +75,25 @@ public class SettingManager : MonoBehaviour
                 StartCoroutine(OffCreditAnimation());
                 GameManager.gm.PlayButtonSFX();
             }
+
+            if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+            {
+                creditTitleImage.sprite = creditTitleEnglish;
+                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 5760);
+                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 4800);
+                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -5040);
+            }
+            else if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("ko"))
+            {
+                creditTitleImage.sprite = creditTitleKorean;
+                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 4920);
+                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 3960);
+                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -4200);
+            }
         }
         else
         {
-            if (QuitButton.interactable && (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Return)))
+            if (quitButton.interactable && (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Return)))
             {
                 GameManager.gm.PlayButtonSFX();
                 GameManager.gm.LoadMain();
@@ -76,16 +114,17 @@ public class SettingManager : MonoBehaviour
 
     IEnumerator OffCreditAnimation()
     {
-        PanelAnimation.SetTrigger("BackSettingDown");
+        panelAnimation.SetTrigger("BackSettingDown");
         yield return new WaitForSeconds(1.5f);
 
-        QuitButton.interactable = true;
-        CreditButton.interactable = true;
-        CreditPanel.SetActive(false);
+        quitButton.interactable = true;
+        creditButton.interactable = true;
+        creditPanel.SetActive(false);
     }
 
     public void BackMainButtonDown()
     {
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadMain();
     }
 
@@ -99,13 +138,13 @@ public class SettingManager : MonoBehaviour
     public void CreditButtonDown()
     {
         isCredit = true;
-        CreditPanel.SetActive(true);
+        creditPanel.SetActive(true);
         StartCoroutine(SoundEffect());
     }
 
     public void ChangeLanguage()
     {
-        GameManager.Language selected = (GameManager.Language)System.Enum.Parse(typeof(GameManager.Language), languageSetting.options[languageSetting.value].text);
+        //Language selected = (Language)System.Enum.Parse(typeof(Language), languageSetting.options[languageSetting.value].text);
         //Debug.Log(selected);
 
         switch (languageSetting.options[languageSetting.value].text)
@@ -113,7 +152,7 @@ public class SettingManager : MonoBehaviour
             case "English":
                 LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
                 break;
-            case "Korean":
+            case "한국어":
                 LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("ko");
                 break;
         }
