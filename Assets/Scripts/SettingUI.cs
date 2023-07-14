@@ -48,16 +48,16 @@ public class SettingUI : MonoBehaviour
     {
         if (m_IsButtonDowning && !changed)
         {
-            Vector3 temp = option.transform.position;
+            Vector3 temp = option.transform.localPosition;
             temp.y -= 24;
-            option.transform.position = temp;
+            option.transform.localPosition = temp;
             changed = true;
         }
-        if (!m_IsButtonDowning && changed) {
-
-            Vector3 temp = option.transform.position;
+        if (!m_IsButtonDowning && changed)
+        {
+            Vector3 temp = option.transform.localPosition;
             temp.y += 24;
-            option.transform.position = temp;
+            option.transform.localPosition = temp;
             changed = false;
         }
     }
