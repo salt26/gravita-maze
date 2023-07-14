@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEditor;
 
 public class InputFieldInset : InputField
 {
@@ -74,5 +75,19 @@ public class InputFieldInset : InputField
             textComponent.rectTransform.localPosition = initialTextPos;
             placeholder.rectTransform.localPosition = initialTextPos;
         }
+    }
+
+    public void MapNameInputDeselected()
+    {
+        StartCoroutine(DeselectAfterOneFrame());
+    }
+
+    IEnumerator DeselectAfterOneFrame()
+    {
+        onSubmit.Invoke(text);
+        yield return null;
+        if (EventSystem.current.currentSelectedGameObject != null &&
+            EventSystem.current.currentSelectedGameObject.Equals(gameObject))
+            EventSystem.current.SetSelectedGameObject(null);
     }
 }

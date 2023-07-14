@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -60,8 +61,14 @@ public class GameManager : MonoBehaviour
     public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
 
-    public enum Language { English = 0, Korean = 1 }
-
+#if UNITY_STANDALONE_OSX
+    public KeyCode timeOutKey1 = KeyCode.LeftAlt;
+    public KeyCode timeOutKey2 = KeyCode.RightAlt;
+#else
+    public KeyCode timeOutKey1 = KeyCode.LeftControl;
+    public KeyCode timeOutKey2 = KeyCode.RightControl;
+#endif
+    
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -78,7 +85,8 @@ public class GameManager : MonoBehaviour
     {
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
         sfxAudioSource.volume = 1f;
-        Initialize();   
+        LoadSettingsValue();
+        Initialize();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
@@ -134,7 +142,7 @@ public class GameManager : MonoBehaviour
             {
                 mm.ManipulateGravityRight();
             }
-            else if (Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
+            else if (Input.GetKeyUp(KeyCode.Space) && (Input.GetKey(timeOutKey1) || Input.GetKey(timeOutKey2)))
             {
                 if (mm.gravityRetryTimeButton != null &&
                     mm.gravityRetryTimeButton.gameObject.activeInHierarchy && mm.gravityRetryTimeButton.interactable)
@@ -149,7 +157,7 @@ public class GameManager : MonoBehaviour
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
-                if (mm.gravityRetryButton != null && 
+                if (mm.gravityRetryButton != null &&
                     mm.gravityRetryButton.gameObject.activeInHierarchy && mm.gravityRetryButton.interactable)
                 {
                     mm.gravityRetryButton.onClick.Invoke();
@@ -160,7 +168,7 @@ public class GameManager : MonoBehaviour
                     mm.gravityRetryHighlightedButton.onClick.Invoke();
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            else if (Input.GetKeyUp(KeyCode.Return) && (Input.GetKey(timeOutKey1) || Input.GetKey(timeOutKey2))
                  && pm != null && pm.IsReady && SceneManager.GetActiveScene().name.Equals("Adventure"))
             {
                 if (pm.nextButton != null && pm.nextButton.gameObject.activeInHierarchy && pm.nextButton.interactable)
@@ -199,20 +207,28 @@ public class GameManager : MonoBehaviour
                 }
                 */
             }
+            else if (Input.GetKeyUp(KeyCode.Return) && SceneManager.GetActiveScene().name.Equals("Editor") &&
+                em != null && em.editorNextButton4.gameObject.activeInHierarchy && em.editorNextButton4.interactable)
+            {
+                em.editorNextButton4.onClick.Invoke();
+            }
             else if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
             {
                 if (pm.pauseButton != null && pm.pauseButton.gameObject.activeInHierarchy && pm.pauseButton.interactable)
                 {
                     pm.pauseButton.onClick.Invoke();
                 }
-                else if (pm.pauseUI != null && pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
-                {
-                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
-                }
             }
         }
         else 
         {
+            if (Input.GetKeyUp(KeyCode.Escape) && pm != null)
+            {
+                if (pm.pauseUI != null && pm.pauseUI.gameObject.activeInHierarchy && pm.pauseUI.pauseReturnButton.interactable)
+                {
+                    pm.pauseUI.pauseReturnButton.onClick.Invoke();
+                }
+            }
             if (Input.GetKeyUp(KeyCode.Return)) 
             {
                 if (pm != null) //Custom, Training: pm의 객체에 속한 버튼을 누름
@@ -277,10 +293,16 @@ public class GameManager : MonoBehaviour
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
-                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable)
+                            /*
+                            else if (em.editorSaveButton6.gameObject.activeInHierarchy && em.editorSaveButton6.interactable && !em.isMapNameInputSelected)
                             {
                                 em.editorSaveButton6.onClick.Invoke();
                             }
+                            if (em.isMapNameInputSelected)
+                            {
+                                Debug.Log("editorMapNameInputs selected");
+                            }
+                            */
                             break;
                     }
                 }
@@ -298,7 +320,7 @@ public class GameManager : MonoBehaviour
             bool isTutorialDone = true;
             try
             {
-                if (!File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+                if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt"))
                 {
                     LoadFirst();
                     isTutorialDone = false;
@@ -862,9 +884,9 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 10, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        if (File.Exists(Application.persistentDataPath + "/TutorialDone.txt"))
+        if (File.Exists(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt"))
         {
-            FileStream fs = new FileStream(Application.persistentDataPath + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
+            FileStream fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/TutorialDone.txt", FileMode.Open, FileAccess.ReadWrite);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
             try
@@ -990,13 +1012,13 @@ public class GameManager : MonoBehaviour
         walls.Add(new WallInfo(WallInfo.Type.Horizontal, 8, 1));
         walls.Add(new WallInfo(WallInfo.Type.ExitVertical, 0, 3));
 
-        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt"))
         {
             FileStream fs = null;
             StreamWriter sw = null;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                 sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
                 sw.WriteLine("0");
@@ -1028,7 +1050,7 @@ public class GameManager : MonoBehaviour
             bool hasReadSuccess = true;
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Open);
                 using (sr = new StreamReader(fs, Encoding.UTF8))
                 {
                     string line;
@@ -1075,7 +1097,7 @@ public class GameManager : MonoBehaviour
                 StreamWriter sw = null;
                 try
                 {
-                    fs2 = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                    fs2 = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                     sw = new StreamWriter(fs2, Encoding.UTF8);
                     sw.WriteLine("0");
                     sw.WriteLine("0");
@@ -1309,11 +1331,11 @@ public class GameManager : MonoBehaviour
 
         if (star < 0 || star > 3) return;
 
-        if (!File.Exists(Application.persistentDataPath + "/AdventureLevel.txt"))
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt"))
         {
             try
             {
-                fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Create);
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Create);
                 sw = new StreamWriter(fs, Encoding.UTF8);
                 sw.WriteLine("0");
                 sw.WriteLine("0");
@@ -1330,7 +1352,7 @@ public class GameManager : MonoBehaviour
 
         try
         {
-            fs = new FileStream(Application.persistentDataPath + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
+            fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/AdventureLevel.txt", FileMode.Open, FileAccess.ReadWrite);
             using (sr = new StreamReader(fs, Encoding.UTF8))
             using (sw = new StreamWriter(fs, Encoding.UTF8))
             {
@@ -1397,6 +1419,116 @@ public class GameManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError(e.Message);
+        }
+    }
+
+    public void LoadSettingsValue()
+    {
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))
+        {
+            SaveSettingsValue();
+        }
+        else
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            bool hasReadSuccess = true;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt", FileMode.Open);
+                using (sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+
+                    // 1st line: locale setting
+                    line = sr.ReadLine().Trim();
+                    switch (line)
+                    {
+                        case "en":
+                        case "ko":
+                            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(line);
+                            break;
+                        default:
+                            hasReadSuccess = false;
+                            break;
+                    }
+
+                    // 2nd line: BGM volume setting
+                    line = sr.ReadLine().Trim();
+                    if (float.TryParse(line, out float bgmValue) && bgmValue >= 0f && bgmValue <= 1f)
+                    {
+                        bgmVolume = bgmValue;
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                    }
+
+                    // 3rd line: SFX volume setting
+                    line = sr.ReadLine().Trim();
+                    if (float.TryParse(line, out float sfxValue) && sfxValue >= 0f && sfxValue <= 1f)
+                    {
+                        sfxVolume = sfxValue;
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                hasReadSuccess = false;
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+
+            if (!hasReadSuccess)
+            {
+                Debug.LogWarning("File warning: Settings.txt seems to be corrupted");
+                SaveSettingsValue();
+            }
+        }
+    }
+
+    public void SaveSettingsValue()
+    {
+        FileStream fs = null;
+        StreamWriter sw = null;
+        try
+        {
+            fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt", FileMode.Create);
+            sw = new StreamWriter(fs, Encoding.UTF8);
+            string localeString = LocalizationSettings.SelectedLocale.ToString() switch
+            {
+                "English (en)" => "en",
+                "Korean (ko)" => "ko",
+                _ => "en",
+            };
+            sw.WriteLine(localeString);
+            sw.WriteLine(bgmVolume.ToString());
+            sw.WriteLine(sfxVolume.ToString());
+            Debug.Log("Setting value saved");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+        finally
+        {
+            try
+            {
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
         }
     }
 }

@@ -535,6 +535,14 @@ MonoBehaviour:
     m_Key: tutorial_message_37
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391176
+    m_Key: tutorial_message_38
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391177
+    m_Key: tutorial_message_39
+    m_Metadata:
+      m_Items: []
   - m_Id: 164806647603200
     m_Key: Adventure/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:
@@ -827,13 +835,22 @@ MonoBehaviour:
     m_Key: PauseButton
     m_Metadata:
       m_Items: []
+  - m_Id: 8020914447835136
+    m_Key: Non-clearedNextButtonOSX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8021235509223424
+    m_Key: RetryTimeButtonOSX
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    id: 0
+    rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
         asm: Unity.Localization}
       data:

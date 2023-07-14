@@ -38,17 +38,24 @@ public class TooltipHoverPC : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
 #if !(UNITY_IOS || UNITY_ANDROID) || UNITY_EDITOR
 
-        if (GetComponent<Button>() != null && !GetComponent<Button>().interactable) return;
-
-        if (tooltipUIParent.transform.childCount >= 1)
+        if (GetComponent<Button>() != null && !GetComponent<Button>().interactable)
+        {
+            if (tooltipUIParent == null || tooltipUIParent.transform.childCount == 0) return;
+            else
+            {
+                myTooltipUI = tooltipUIParent.transform.GetComponentInChildren<TooltipBox>();
+            }
+        }
+        else if (tooltipUIParent != null && tooltipUIParent.transform.childCount >= 1)
         {
             for (int i = 0; i < tooltipUIParent.transform.childCount; i++)
             {
                 Destroy(tooltipUIParent.transform.GetChild(i).gameObject);
             }
         }
+
         lastEnterTime = Time.time;
-        if (myTooltipUI == null)
+        if (tooltipUIParent != null && myTooltipUI == null)
         {
             myTooltipUI = Instantiate(tooltipPrefab, tooltipUIParent.transform).GetComponent<TooltipBox>();
 
