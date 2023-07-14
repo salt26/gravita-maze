@@ -183,45 +183,113 @@ Your goal is to escape the ball to the exit.","당신은 중력 조작자입니�
 "Setting/Canvas/FirstPanel/Audio/BgmVolume",169656898805760,"BGM
 Volume","배경음
 음량"
-"Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"Project Manager,
-Main Programmer,
-Sound Designer,
-UI/UX Designer
-and Map Maker
-<size=45><i>DanTae An</i></size>
+"Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
+<size=48>v1.4.3</size>
 
-Sub Programmer
-<size=45><i>JunWoo Eom</i></size>
+Project Managing
+<size=48><i>Dantae An</i></size>
 
-Map Maker
-<size=45><i>DongHwan Yang</i></size>
+Programming
+<size=48><i>Dantae An</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>Donghwan Yang</i></size>
+<size=48><i>Suin Lee</i></size>
+<size=48><i>Sehyun Kim</i></size>
+<size=48><i>Jaehee Hong</i></size>
+<size=48><i>Yongchan Jo</i></size>
+<size=48><i>Diane Kim</i></size>
 
-Marketor
-<size=45><i>SuIn Lee</i></size>
+Game Design
+<size=48><i>Dantae An</i></size>
 
-Assistant
-<size=45><i>Diane Kim</i></size>
-<size=45><i>YongChan Jo</i></size>
-<size=45><i>Jaehee Hong</i></size>","프로젝트 관리,
-메인 프로그래밍,
-사운드 디자인,
-UI/UX 디자인,
-그리고 맵 제작
-<size=45><i>안단태</i></size>
+Level Design
+<size=48><i>Donghwan Yang</i></size>
+<size=48><i>Dantae An</i></size>
 
-서브 프로그래밍
-<size=45><i>엄준우</i></size>
+UI/UX Design
+<size=48><i>Dantae An</i></size>
+<size=48><i>Suin Lee</i></size>
 
-맵 제작
-<size=45><i>양동환</i></size>
+Graphic Design
+<size=48><i>Dantae An</i></size>
+<size=48><i>Suin Lee</i></size>
+<size=48><i>Donghwan Yang</i></size>
+
+Sound Design
+<size=48><i>Dantae An</i></size>
+
+Localization
+<size=48><i>Jaehee Hong</i></size>
+<size=48><i>Diane Kim</i></size>
+<size=48><i>Dantae An</i></size>
+
+Marketing
+<size=48><i>Suin Lee</i></size>
+
+Infrastructure
+<size=36><i>cseteram</i></size>
+
+Map Making
+<size=48><i>Dantae An</i></size>
+<size=48><i>Donghwan Yang</i></size>
+<size=36><i>ahnjunseo</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>Suin Lee</i></size>
+<size=36><i>MINSEOKIM1</i></size>
+<size=36><i>ektnzpt1080</i></size>","<b>중력미로</b>
+<size=48>v1.4.3</size>
+
+프로젝트 관리
+<size=48><i>안단태</i></size>
+
+프로그래밍
+<size=48><i>안단태</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>양동환</i></size>
+<size=48><i>이수인</i></size>
+<size=48><i>김세현</i></size>
+<size=48><i>홍재희</i></size>
+<size=48><i>조용찬</i></size>
+<size=48><i>김다인</i></size>
+
+게임 디자인
+<size=48><i>안단태</i></size>
+
+레벨 디자인
+<size=48><i>양동환</i></size>
+<size=48><i>안단태</i></size>
+
+UI/UX 디자인
+<size=48><i>안단태</i></size>
+<size=48><i>이수인</i></size>
+
+그래픽 디자인
+<size=48><i>안단태</i></size>
+<size=48><i>이수인</i></size>
+<size=48><i>양동환</i></size>
+
+사운드 디자인
+<size=48><i>안단태</i></size>
+
+번역
+<size=48><i>홍재희</i></size>
+<size=48><i>김다인</i></size>
+<size=48><i>안단태</i></size>
 
 마케팅
-<size=45><i>이수인</i></size>
+<size=48><i>이수인</i></size>
 
-개발 보조
-<size=45><i>김다인</i></size>
-<size=45><i>조용찬</i></size>
-<size=45><i>홍재희</i></size>"
+인프라
+<size=36><i>cseteram</i></size>
+
+맵 제작
+<size=48><i>안단태</i></size>
+<size=48><i>양동환</i></size>
+<size=36><i>ahnjunseo</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>이수인</i></size>
+<size=36><i>MINSEOKIM1</i></size>
+<size=36><i>ektnzpt1080</i></size>"
 "Setting/Canvas/FirstPanel/HeaderText",170078573158400,"Settings","설정"
 "Setting/Canvas/CreditPanel/HeaderText",170098437382144,"Credit","크레딧"
 "Setting/Canvas/FirstPanel/LanguageSetting/LanguageText",170175784542208,"Language","언어"

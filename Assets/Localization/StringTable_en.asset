@@ -698,50 +698,128 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 169839971786752
-    m_Localized: 'Project Manager,
+    m_Localized: '<b>GravitaMaze</b>
 
-      Main Programmer,
+      <size=48>v1.4.3</size>
 
-      Sound Designer,
+      
+
+      Project
+      Managing
+
+      <size=48><i>Dantae An</i></size>
+
+      
+
+      Programming
+
+      <size=48><i>Dantae
+      An</i></size>
+
+      <size=36><i>junu192857</i></size>
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      <size=48><i>Suin Lee</i></size>
+
+      <size=48><i>Sehyun
+      Kim</i></size>
+
+      <size=48><i>Jaehee Hong</i></size>
+
+      <size=48><i>Yongchan
+      Jo</i></size>
+
+      <size=48><i>Diane Kim</i></size>
+
+      
+
+      Game
+      Design
+
+      <size=48><i>Dantae An</i></size>
+
+      
+
+      Level Design
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      <size=48><i>Dantae An</i></size>
+
+      
 
       UI/UX
-      Designer
+      Design
 
-      and Map Maker
+      <size=48><i>Dantae An</i></size>
 
-      <size=45><i>DanTae An</i></size>
-
-      
-
-      Sub
-      Programmer
-
-      <size=45><i>JunWoo Eom</i></size>
+      <size=48><i>Suin Lee</i></size>
 
       
 
-      Map Maker
+      Graphic
+      Design
 
-      <size=45><i>DongHwan
+      <size=48><i>Dantae An</i></size>
+
+      <size=48><i>Suin Lee</i></size>
+
+      <size=48><i>Donghwan
       Yang</i></size>
 
       
 
-      Marketor
+      Sound Design
 
-      <size=45><i>SuIn Lee</i></size>
+      <size=48><i>Dantae An</i></size>
 
       
 
-      Assistant
+      Localization
 
-      <size=45><i>Diane
-      Kim</i></size>
+      <size=48><i>Jaehee
+      Hong</i></size>
 
-      <size=45><i>YongChan Jo</i></size>
+      <size=48><i>Diane Kim</i></size>
 
-      <size=45><i>Jaehee
-      Hong</i></size>'
+      <size=48><i>Dantae
+      An</i></size>
+
+      
+
+      Marketing
+
+      <size=48><i>Suin Lee</i></size>
+
+      
+
+      Infrastructure
+
+      <size=36><i>cseteram</i></size>
+
+      
+
+      Map
+      Making
+
+      <size=48><i>Dantae An</i></size>
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      <size=36><i>ahnjunseo</i></size>
+
+      <size=36><i>junu192857</i></size>
+
+      <size=48><i>Suin
+      Lee</i></size>
+
+      <size=36><i>MINSEOKIM1</i></size>
+
+      <size=36><i>ektnzpt1080</i></size>'
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400
