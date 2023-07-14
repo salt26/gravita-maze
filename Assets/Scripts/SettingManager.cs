@@ -79,12 +79,9 @@ public class SettingManager : MonoBehaviour
             if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
             {
                 creditTitleImage.sprite = creditTitleEnglish;
-                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 4920);
-                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 3960);
-                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -4200);
-                //creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 5760);
-                //creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 4800);
-                //creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -5040);
+                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 5760);
+                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 4800);
+                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -5040);
             }
             else if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("ko"))
             {
