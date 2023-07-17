@@ -4,9 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using Interhaptics.Internal;
 
 public class ResultUI : MonoBehaviour
 {
+
+    [SerializeField]
+    private EventHapticSource[] eventHapticSource;
+    [SerializeField]
+    private float delayPlayTime = 0.0f;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    private void OntriggerHaptic(int hapticNum)
+    {
+        eventHapticSource[hapticNum].delayPlay = delayPlayTime;
+        eventHapticSource[hapticNum].PlayEventVibration();
+    }
+#endif
+
+
     public string tableName = "StringTable";
 
     public Text modeText;
@@ -265,11 +281,28 @@ public class ResultUI : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         GameManager.gm.PlayFallSFX(volume);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        switch (volume)
+        {
+            case 0.5f:
+                OntriggerHaptic(4);
+                break;
+            case 0.75f:
+                OntriggerHaptic(5);
+                break;
+            case 1.0f:
+                OntriggerHaptic(6);
+                break;
+        }
+#endif
     }
 
     public void PlayStarSFX(int num)
     {
         GameManager.gm.PlayStarSFX(num);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        OntriggerHaptic(num);
+#endif
     }
 
 }

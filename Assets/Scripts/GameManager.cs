@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using Interhaptics.Internal;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -33,6 +34,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
+
+    [SerializeField]
+    private EventHapticSource[] eventHapticSource;
+    [SerializeField]
+    private float delayPlayTime = 0.0f;
 
     public int PlayingMapIndex{
         get { return playingMapIndex; }
@@ -545,6 +551,22 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+        Debug.Log(volume);
+        switch (volume)
+        {
+            case 1.0f:
+                Debug.Log("1");
+                OntriggerHaptic(0);
+                break;
+            case 0.75f:
+                Debug.Log("2");
+                OntriggerHaptic(1);
+                break;
+            case 0.5f:
+                Debug.Log("3");
+                OntriggerHaptic(2);
+                break;
+        }
     }
 
     public void PlayStarSFX(int num)
@@ -1421,5 +1443,12 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError(e.Message);
         }
+    }
+
+    public void OntriggerHaptic(int hapticNum)
+    {
+        Debug.Log("On triggered");
+        eventHapticSource[hapticNum].delayPlay = delayPlayTime;
+        eventHapticSource[hapticNum].PlayEventVibration();
     }
 }
