@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.2-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)  
+[![Version badge](https://img.shields.io/badge/Version-1.4.3-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## Download
 
-### [v1.4.2 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
+### [v1.4.3 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
 
 ---
 
@@ -34,9 +34,37 @@
 <details>
 <summary>Click here to expand or collapse the old update logs!</summary>
 
+### Updates (v1.4.2 -> v1.4.3)
+
+* Add a ninth map with a short time limit to the tutorial: extend the time limit after two timeouts.
+* Add animation of objects moving due to gravity when the player dies.
+* Change the color of the timer bar according to the remaining time.
+* Preserve the volume and language settings of the game even after restarting.
+* Change macOS shortcuts to use `Option+Space` and `Option+Enter` (on Windows, use `Ctrl+Space` and `Ctrl+Enter`, respectively).
+* Fix the bug where the map file is not displayed correctly when entering the Custom mode.
+* Fix the bug where gravity manipulation and retry were possible via keyboard while the pause window is open.
+* Fix tooltip and button-related bugs.
+* Change the game title in Korean from "중력 미로" to "중력미로". The English title remains the same as "GravitaMaze".
+* Change the display of "Korean" to "한국어" in the language settings.
+* Change the dropdown UI in the language settings.
+* Make some modifications to the localized text.
+* Modify the credit text.
+* Upgrade the Unity version.
+* Update the license.
+
+### Updates (v1.4.1 -> v1.4.2)
+
+* Show tooltips on various buttons when hovering on the PC platform.
+* On the PC platform, use Ctrl + Space for "retry with time refill" and Ctrl + Enter to proceed when time runs out
+  * Show PC-specific tooltips when hovering over these buttons.
+* Modify some guiding texts in the tutorial.
+* Resolve critical issue in v1.4.1 where the program occasionally freezes.
+* Provide a Korean version of the release document.
+* Add links to Fantrie, YouTube, and other latest news on the GitHub release document.
+
 ### Updates (v1.4.0 -> v1.4.1)
 
-> Important: v1.4.1 has a critical bug! Please download v1.4.2.
+> Important: v1.4.1 has a critical bug! Please download v1.4.2 or later.
 
 * Localization (English and Korean)
 * Change fonts.
@@ -209,8 +237,8 @@
 
 ### Android
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
-* Download `GravitaMaze.v1.4.2.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
+* Download `GravitaMaze.v1.4.3.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * When the `Install unknown app` message appears, choose `Ignore and install`
   * If Google Play Protect shows `Blocked by Play Protect` message, ***DO NOT CLICK OK MESSAGE***. Instead, click `Details -> Install anyway (unsafe)`.
   * `Send app for scanning?` message might appear. You can choose whatever option you want.
@@ -221,14 +249,14 @@
 
 ### Windows
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
-* Download `GravitaMaze.v1.4.2.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
+* Download `GravitaMaze.v1.4.3.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
 
 ### macOS
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)!
-* Download `GravitaMaze.v1.4.2.m.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
+* Download `GravitaMaze.v1.4.3.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
 
 ## Map Editor
