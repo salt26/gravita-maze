@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.2-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)  
+[![Version badge](https://img.shields.io/badge/Version-1.4.3-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## 다운로드
 
-### [v1.4.2 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
+### [v1.4.3 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
 
 ---
 
@@ -34,16 +34,44 @@
 <details>
 <summary>여기를 클릭하면 과거 업데이트 내용을 표시하거나 숨길 수 있습니다.</summary>
 
+### 업데이트 (v1.4.2 -> v1.4.3)
+
+* 한국어 게임 타이틀을 "중력 미로"에서 "중력미로"로 변경. 영어 게임 타이틀은 그대로 "GravitaMaze".
+* 튜토리얼에 제한시간이 짧은 9번째 맵 추가: 두 번 시간 초과된 후에는 제한시간 연장
+* 사망 시 중력이 작용하여 물체가 움직이는 애니메이션 추가
+* 남은 제한시간에 따라 타이머 바의 색상 변화
+* 게임의 음량 및 언어 설정이 게임을 재시작해도 유지됨
+* macOS 단축키 변경: `Option+Space`, `Option+Enter` 사용 (Windows에서는 각각 `Ctrl+Space`, `Ctrl+Enter`)
+* Custom에 들어갈 때 맵 파일이 제대로 표시되지 않는 버그 해결
+* 일시정지 창이 떠 있는 상태에서도 키보드를 통한 중력 조작 및 되돌리기가 가능했던 버그 해결
+* 툴팁 및 버튼 관련 버그 해결
+* 언어 설정 시 "Korean" 대신 "한국어"로 표시되도록 변경
+* 언어 설정 드롭다운 UI 수정
+* 번역 문구 일부 수정
+* 크레딧 문구 수정
+* 유니티 버전 업그레이드
+* 라이선스 업데이트
+
+### 업데이트 (v1.4.1 -> v1.4.2)
+
+* PC 플랫폼에서 각종 버튼에 호버 시 툴팁 표시
+* PC 플랫폼에서 시간 되돌리기를 Ctrl + Space, 시간 초과 시 다음으로 버튼을 Ctrl + Enter로 누를 수 있음
+  * 이 역시도 버튼 호버 시 PC 한정 툴팁 표시
+* 튜토리얼에서 몇 가지 안내 문구 수정
+* v1.4.1에서 종종 프로그램이 멈추는 치명적인 문제 해결
+* 릴리즈 문서 한글 버전 제공
+* GitHub 릴리즈 문서에 팬트리, 유튜브 등 최신 소식을 받아볼 수 있는 링크 추가
+
 ### 업데이트 (v1.4.0 -> v1.4.1)
 
-> 중요: v1.4.1에는 게임이 진행되지 않는 치명적인 버그가 있습니다. v1.4.2를 다운로드하시기 바랍니다.
+> 중요: v1.4.1에는 게임이 진행되지 않는 치명적인 버그가 있습니다. v1.4.2 이후 버전을 다운로드하시기 바랍니다.
 
 * 현지화 (영어 및 한국어)
 * 글꼴 변경
 * 설정 scene 추가
 * Tutorial 모드 개선
 * 사용자 인터페이스 및 경험 개선
-* Training 및 Custom 맵 추가
+* Training 맵 추가
 * 중력 조작 버튼 4개의 판정 크기를 한 번 더 확대
 * 여러 버그 수정
 
@@ -113,9 +141,6 @@
     * Hard: 맵 5개 업데이트.
     * Insane: 맵 7개 업데이트.
   * Adventure 모드에서 셔터가 포함된 맵도 등장합니다.
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵(셔터를 포함하는 맵)을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
-  * macOS 유저 분들은, `GravitaMaze.zip`을 다운로드한 후, 압축 해제해서 `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮겨주세요.
 
 #### Android
 
@@ -137,9 +162,6 @@
   * 폴더가 비어있을 경우, "Empty!" 텍스트 표시
   * 긴 파일명과 관련한 버그 수정
   * Open 및 Save UI에서 스크롤바와 관련한 버그 수정
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵(셔터를 포함하는 맵)을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
-  * macOS 유저 분들은, `GravitaMaze.zip`을 다운로드한 후, 압축 해제해서 `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮겨주세요.
 * 지원 해상도 추가.
   * 9:22 화면비 지원. (세로 화면)
 * Android, Windows, macOS에 대해 자동으로 빌드를 진행하도록 CI 추가.
@@ -166,8 +188,6 @@
   * 남은 목숨과 진행 사항이 표시됩니다.
   * 일시 정지 및 계속 플레이 기능이 지원됩니다.
   * 게임을 나가거나 클리어하면 결과창이 표시됩니다.
-* Editor 내에서, Adventure 모드에서는 등장하지 않는 신규 맵을 플레이 가능함
-  * Android 유저 분들은, `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱을 사용해서 루트 경로(`Internal storage`)에 압축 해제해주세요.
 * 다양한 해상도 지원.
   * 9:16, 9:18, 9:18.5, 9:19, 9:19.5, 9:20, 9:20.5, 9:21 화면비 지원. (세로 화면)
   * 3:4 화면비 미지원.
@@ -217,8 +237,8 @@
 
 ### Android
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
-* `GravitaMaze.v1.4.2.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
+* `GravitaMaze.v1.4.3.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
   * `출처를 알 수 없는 앱 설치` 창이 나오면, `무시하고 설치`를 선택하세요.
   * Google Play Protect에서 `안전하지 않은 앱 차단됨` 창이 나오는 경우 ***확인 버튼을 누르지 말고*** `세부정보 더 보기 -> 무시하고 설치하기`를 선택하세요.
   * `Google에 알 수 없는 앱 전송`과 관련한 메시지가 뜨는 경우가 있을 수도 있어요. 이 경우 무슨 옵션을 선택해도 상관 없어요.
@@ -226,24 +246,18 @@
   * 앱을 처음으로 실행하는 경우, 외부/내부 저장소 쓰기 권한을 허용해주셔야 해요.
     * 해당 권한을 거부하는 경우, 앱에서 맵을 저장하거나 불러올 수 없어요.
     * `다시 묻지 않음` 옵션을 선택한 경우, 애플리케이션 권한 설정에 들어가서 `GravitaMaze`에 해당 권한을 직접 허용해주셔야 해요.
-* `GravitaMaze.zip`을 다운로드한 후 "내 파일" 앱에서 루트 경로(`Internal storage`)에 압축 해제하시면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ### Windows
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
-* `GravitaMaze.v1.4.2.w.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
+* `GravitaMaze.v1.4.3.w.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.exe`를 실행하세요.
-* `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.exe`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ### macOS
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.2)
-* `GravitaMaze.v1.4.2.m.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
+* `GravitaMaze.v1.4.3.m.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.app`을 실행하세요.
-* `GravitaMaze.zip`을 다운로드한 후 압축 해제하고, `Maps` 폴더를 `GravitaMaze.app`의 루트 경로로 옮기면 커스텀 맵을 즐길 수 있어요.
-  * 해당 맵은 Custom 모드에서 플레이 가능하며, Adventure 모드에서는 플레이할 수 없어요.
 
 ## 맵 편집기
 
