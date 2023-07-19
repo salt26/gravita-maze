@@ -1143,6 +1143,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
+                    GameManager.gm.OntriggerHaptic(7);
                     GameManager.gm.PlayIronSFX(UnityEngine.Random.Range(1, 9));
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));

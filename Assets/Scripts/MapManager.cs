@@ -297,6 +297,7 @@ public class MapManager : MonoBehaviour
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
         float timeLimit = 0f, bool isValidation = false, bool canRotate = false)
     {
+
         IsReady = false;
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨

@@ -35,10 +35,10 @@ public class GameManager : MonoBehaviour
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
 
+
     [SerializeField]
-    private EventHapticSource[] eventHapticSource;
-    [SerializeField]
-    private float delayPlayTime = 0.0f;
+    public EventHapticSource[] eventHapticSource;
+    public float delayPlayTime = 0.0f;
 
     public int PlayingMapIndex{
         get { return playingMapIndex; }
@@ -331,7 +331,6 @@ public class GameManager : MonoBehaviour
                 {
                     LoadFirst();
                     isTutorialDone = false;
-
                 }
             }
             catch (Exception e)
@@ -505,21 +504,25 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
+        OntriggerHaptic(8);
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
+        OntriggerHaptic(8);
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
+        OntriggerHaptic(7);
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
+        OntriggerHaptic(6);
     }
 
     public void PlayEscapedSFX()
@@ -530,6 +533,7 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
+        OntriggerHaptic(2);
     }
 
     public void PlayRetrySFX()
@@ -551,19 +555,18 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
-        Debug.Log(volume);
         switch (volume)
         {
             case 1.0f:
-                Debug.Log("1");
+                Debug.Log("Fall1");
                 OntriggerHaptic(0);
                 break;
             case 0.75f:
-                Debug.Log("2");
+                Debug.Log("Fall2");
                 OntriggerHaptic(1);
                 break;
             case 0.5f:
-                Debug.Log("3");
+                Debug.Log("Fall3");
                 OntriggerHaptic(2);
                 break;
         }
@@ -572,6 +575,21 @@ public class GameManager : MonoBehaviour
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
+        switch (num)
+        {
+            case 0:
+                Debug.Log("Star1");
+                OntriggerHaptic(0);
+                break;
+            case 1:
+                Debug.Log("Star2");
+                OntriggerHaptic(1);
+                break;
+            case 2:
+                Debug.Log("Star3");
+                OntriggerHaptic(2);
+                break;
+        }
     }
 
     public void QuitGame()
