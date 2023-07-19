@@ -11,11 +11,13 @@ public class TutorialManager : MonoBehaviour
     public void SkipTutorial()
     {
         DoTutorialSave();
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadMain();
     }
     public void PlayTutorial()
     {
         DoTutorialSave();
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.LoadTutorial();
     }
     public void PlayButtonSFX()

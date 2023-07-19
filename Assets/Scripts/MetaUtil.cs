@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Text;
@@ -26,17 +24,21 @@ public class MetaUtil
             path = path.Replace("//", "/");
         }
         string[] dirs = path.Split('/');
-        List<string> invalidDirs = new List<string>();
+        List<string> validDirs = new List<string>();
         foreach (string dir in dirs)
         {
-            if (dir.Length != 0 && dir.Replace(".", "").Length == 0)
+            //Debug.Log(dir);
+            if (dir.Length == 0 || dir.Replace(".", "").Length != 0)
+            {
+                validDirs.Add(dir);
+            }
+            else
             {
                 Debug.LogWarning("File warning: invalid directory name");
-                invalidDirs.Add(dir);
             }
         }
-        dirs = dirs.Except(invalidDirs).ToArray();
-        path = string.Join("/", dirs);
+        path = string.Join("/", validDirs);
+        //Debug.Log(path);
         return Directory.CreateDirectory(path);
     }
 

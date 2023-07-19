@@ -203,7 +203,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486496264209
-    m_Localized: '" has created!'
+    m_Localized: '" has been created!'
     m_Metadata:
       m_Items: []
   - m_Id: 486496264210
@@ -458,7 +458,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458510
-    m_Localized: The iron are also influenced by gravity... Be careful not to get
+    m_Localized: The iron is also influenced by gravity... Be careful not to get
       squashed by the iron!
     m_Metadata:
       m_Items:
@@ -539,12 +539,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486500458527
-    m_Localized: Whew... That was seriously cool just now!\nYou just passed all tutorials!
+    m_Localized: Phew... That was spectacular!\nYou have now completed the tutorial!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 486500458528
-    m_Localized: The iron blocking the exit are gone.\nLet's escape!
+    m_Localized: The iron blocking the exit is gone now.\nLet's escape!
     m_Metadata:
       m_Items:
       - rid: 0
@@ -698,46 +698,128 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 169839971786752
-    m_Localized: 'Project Manager,
+    m_Localized: '<b>GravitaMaze</b>
 
-      Main Programmer,
+      <size=48>v1.4.3</size>
 
-      Sound Designer,
+      
 
-      UI/UX
-      Designer
+      Project
+      Managing
 
-      and Map Maker
+      <size=48><i>Dantae An</i></size>
 
-      <size=45><i>DanTae An</i></size>
+      
 
+      Programming
 
-      Sub
-      Programmer
+      <size=48><i>Dantae
+      An</i></size>
 
-      <size=45><i>JunWoo Eom</i></size>
+      <size=36><i>junu192857</i></size>
 
-
-      Map Maker
-
-      <size=45><i>DongHwan
+      <size=48><i>Donghwan
       Yang</i></size>
 
+      <size=48><i>Suin Lee</i></size>
 
-      Marketor
-
-      <size=45><i>SuIn Lee</i></size>
-
-
-      Assistant
-
-      <size=45><i>Diane
+      <size=48><i>Sehyun
       Kim</i></size>
 
-      <size=45><i>YongChan Jo</i></size>
+      <size=48><i>Jaehee Hong</i></size>
 
-      <size=45><i>Jaehee
-      Hong</i></size>'
+      <size=48><i>Yongchan
+      Jo</i></size>
+
+      <size=48><i>Diane Kim</i></size>
+
+      
+
+      Game
+      Design
+
+      <size=48><i>Dantae An</i></size>
+
+      
+
+      Level Design
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      <size=48><i>Dantae An</i></size>
+
+      
+
+      UI/UX
+      Design
+
+      <size=48><i>Dantae An</i></size>
+
+      <size=48><i>Suin Lee</i></size>
+
+      
+
+      Graphic
+      Design
+
+      <size=48><i>Dantae An</i></size>
+
+      <size=48><i>Suin Lee</i></size>
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      
+
+      Sound Design
+
+      <size=48><i>Dantae An</i></size>
+
+      
+
+      Localization
+
+      <size=48><i>Jaehee
+      Hong</i></size>
+
+      <size=48><i>Diane Kim</i></size>
+
+      <size=48><i>Dantae
+      An</i></size>
+
+      
+
+      Marketing
+
+      <size=48><i>Suin Lee</i></size>
+
+      
+
+      Infrastructure
+
+      <size=36><i>cseteram</i></size>
+
+      
+
+      Map
+      Making
+
+      <size=48><i>Dantae An</i></size>
+
+      <size=48><i>Donghwan
+      Yang</i></size>
+
+      <size=36><i>ahnjunseo</i></size>
+
+      <size=36><i>junu192857</i></size>
+
+      <size=48><i>Suin
+      Lee</i></size>
+
+      <size=36><i>MINSEOKIM1</i></size>
+
+      <size=36><i>ektnzpt1080</i></size>'
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400
@@ -936,14 +1018,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1829106138173440
-    m_Localized: This maze is really challenging...\nThe time limit is short, you
+    m_Localized: This maze is really challenging...\nThe time limit is tight, you
       know!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391168
-    m_Localized: Oops, you got trapped...\nBut time keeps ticking.\nQuickly, press
-      the retry button!
+    m_Localized: Oops, you got trapped...\nBut the clock is still ticking.\nQuick,
+      press the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
@@ -966,20 +1048,20 @@ MonoBehaviour:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391173
-    m_Localized: Time freezes when the ball burned down!\nTake a deep breath and\npress
+    m_Localized: Time freezes when the ball is burned down!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391174
-    m_Localized: Time freezes when the ball got squashed!\nTake a deep breath and\npress
+    m_Localized: Time freezes when the ball gets squashed!\nTake a deep breath and\npress
       the retry button!
     m_Metadata:
       m_Items:
       - rid: 0
   - m_Id: 1829106272391175
-    m_Localized: You usually get a panelty when time's up,\nbut here it's okay! Let's
-      try again!
+    m_Localized: You get a penalty when the time's up,\nbut in Tutorial mode you
+      won't get one! Let's try again!
     m_Metadata:
       m_Items:
       - rid: 0
@@ -991,13 +1073,24 @@ MonoBehaviour:
     m_Localized: Option + Space key
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391176
+    m_Localized: The time is really short...\nWhat if the time limit gets extended?\nGive
+      it another try!
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 1829106272391177
+    m_Localized: Now you have more time.\nTake your time and try it!
+    m_Metadata:
+      m_Items:
+      - rid: 0
   references:
     version: 2
     RefIds:
     - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f060010e0af457100000016e0af45710000001ae0af457100000020e0af457100000000509ff58f7f060000509ffd8f7f060002509ffd8f7f060004509ffd8f7f0600
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f060010e0af457100000016e0af45710000001ae0af457100000020e0af457100000000509ff58f7f060000509ffd8f7f060002509ffd8f7f060004509ffd8f7f060008509ffd8f7f060009509ffd8f7f0600
     - rid: 1375113474824208397
       type: {class: PlatformOverride, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:

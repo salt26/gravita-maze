@@ -13,6 +13,7 @@ using Interhaptics.Internal;
 using UnityEditor;
 #endif
 #if UNITY_ANDROID && !UNITY_EDITOR
+
 using UnityEngine.Android;
 #endif
 
@@ -67,8 +68,6 @@ public class GameManager : MonoBehaviour
     public List<AudioClip> starSfxs;
     public float sfxVolume = 0.8f;
 
-    public enum Language { English = 0, Korean = 1 }
-
 #if UNITY_STANDALONE_OSX
     public KeyCode timeOutKey1 = KeyCode.LeftAlt;
     public KeyCode timeOutKey2 = KeyCode.RightAlt;
@@ -93,7 +92,8 @@ public class GameManager : MonoBehaviour
     {
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
         sfxAudioSource.volume = 1f;
-        Initialize();   
+        LoadSettingsValue();
+        Initialize();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
@@ -1478,5 +1478,114 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("StopPlay");
         eventHapticSource[hapticNum].Stop();
+    }
+    public void LoadSettingsValue()
+    {
+        if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))
+        {
+            SaveSettingsValue();
+        }
+        else
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            bool hasReadSuccess = true;
+            try
+            {
+                fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt", FileMode.Open);
+                using (sr = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string line;
+
+                    // 1st line: locale setting
+                    line = sr.ReadLine().Trim();
+                    switch (line)
+                    {
+                        case "en":
+                        case "ko":
+                            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(line);
+                            break;
+                        default:
+                            hasReadSuccess = false;
+                            break;
+                    }
+
+                    // 2nd line: BGM volume setting
+                    line = sr.ReadLine().Trim();
+                    if (float.TryParse(line, out float bgmValue) && bgmValue >= 0f && bgmValue <= 1f)
+                    {
+                        bgmVolume = bgmValue;
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                    }
+
+                    // 3rd line: SFX volume setting
+                    line = sr.ReadLine().Trim();
+                    if (float.TryParse(line, out float sfxValue) && sfxValue >= 0f && sfxValue <= 1f)
+                    {
+                        sfxVolume = sfxValue;
+                    }
+                    else
+                    {
+                        hasReadSuccess = false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                hasReadSuccess = false;
+                Debug.LogError(e.Message);
+            }
+            finally
+            {
+                sr.Close();
+                fs.Close();
+            }
+
+            if (!hasReadSuccess)
+            {
+                Debug.LogWarning("File warning: Settings.txt seems to be corrupted");
+                SaveSettingsValue();
+            }
+        }
+    }
+
+    public void SaveSettingsValue()
+    {
+        FileStream fs = null;
+        StreamWriter sw = null;
+        try
+        {
+            fs = new FileStream(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt", FileMode.Create);
+            sw = new StreamWriter(fs, Encoding.UTF8);
+            string localeString = LocalizationSettings.SelectedLocale.ToString() switch
+            {
+                "English (en)" => "en",
+                "Korean (ko)" => "ko",
+                _ => "en",
+            };
+            sw.WriteLine(localeString);
+            sw.WriteLine(bgmVolume.ToString());
+            sw.WriteLine(sfxVolume.ToString());
+            Debug.Log("Setting value saved");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+        finally
+        {
+            try
+            {
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
     }
 }

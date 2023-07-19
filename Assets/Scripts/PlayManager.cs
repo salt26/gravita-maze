@@ -207,6 +207,12 @@ public class PlayManager : MonoBehaviour
         private set;
     } = 0;
 
+    public int TimeoutCount
+    {
+        get;
+        private set;
+    } = 0;
+
     public bool HasClearedAll
     {
         get
@@ -232,6 +238,7 @@ public class PlayManager : MonoBehaviour
         IsReady = false;
         EscapedCount = 0;
         SkippedCount = 0;
+        TimeoutCount = 0;
         playMode = mode;
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
@@ -315,7 +322,7 @@ public class PlayManager : MonoBehaviour
 
     private void Update() {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training")) 
+        if (SceneManager.GetActiveScene().name.Equals("Custom") || SceneManager.GetActiveScene().name.Equals("Training"))
         {
             if (GameManager.mm.tryCountUpTrigger) {
                 //Debug.Log("TryCountUp in PM ");
@@ -327,6 +334,7 @@ public class PlayManager : MonoBehaviour
 
     public void Resume()
     {
+        GameManager.gm.SaveSettingsValue();
         GameManager.gm.canPlay = true;
     }
     public void Pause()
@@ -456,6 +464,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialNext()
     {
         GameManager.gm.TutorialNext();
+        TimeoutCount = 0;
         if (HasClearedAll)
         {
             Ending();
@@ -513,6 +522,16 @@ public class PlayManager : MonoBehaviour
     public void TutorialRetryWithTime()
     {
         if (EscapedCount > 0) EscapedCount--;
+    }
+
+    public void TutorialTimeoutCountUp()
+    {
+        TimeoutCount++;
+        if (GameManager.gm.PlayingMapIndex + 1 == 9 && TimeoutCount >= 2)
+        {
+            GameManager.mm.TimeLimit = 24f;
+            GameManager.mm.TimeActivate();
+        }
     }
 
     public void TutorialAfterGravity(MapManager.Flag flag)
@@ -599,7 +618,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -680,7 +699,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -761,7 +780,7 @@ public class PlayManager : MonoBehaviour
                 nextButton.interactable = false;
                 break;
             case MapManager.Flag.Escaped:
-                retryButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(true);
                 retryHighlightedButton.gameObject.SetActive(false);
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
@@ -770,7 +789,6 @@ public class PlayManager : MonoBehaviour
                 quitHighlightedButton.gameObject.SetActive(true);
 
                 pauseButton.interactable = false;
-
 
                 if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && !GameManager.mm.hasClearedOnceInTime)
                 {
