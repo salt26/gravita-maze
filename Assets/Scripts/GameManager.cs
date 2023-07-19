@@ -1469,4 +1469,14 @@ public class GameManager : MonoBehaviour
         eventHapticSource[hapticNum].delayPlay = delayPlayTime;
         eventHapticSource[hapticNum].PlayEventVibration();
     }
+    public void PlayHaptic(int hapticNum)
+    {
+        Debug.Log("StartPlay");
+        eventHapticSource[hapticNum].Play();
+    }
+    public void StopHaptic(int hapticNum)
+    {
+        Debug.Log("StopPlay");
+        eventHapticSource[hapticNum].Stop();
+    }
 }

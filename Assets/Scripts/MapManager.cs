@@ -1410,6 +1410,7 @@ public class MapManager : MonoBehaviour
                 SceneManager.GetActiveScene().name.Equals("Training"))
             {
                 GameManager.gm.PlayEscapedSFX();
+                GameManager.gm.PlayHaptic(10);
             }
             StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves));
         }
@@ -2408,7 +2409,7 @@ public class MapManager : MonoBehaviour
         traces = new List<GameObject>();
 
         GameObject[,] traceCoord = new GameObject[mutableMap.sizeX, mutableMap.sizeY];
-
+        bool isHapticTriggered = false;
         while (Time.time <= time + 1.5f && IsReady && HasCleared)
         {
             foreach (Move m in moves)
@@ -2443,6 +2444,14 @@ public class MapManager : MonoBehaviour
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 2, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] % 81]);
                                     GameManager.gm.PlayShutterSFX();
+                                }
+
+                                if(m.prevX>mutableMap.sizeX && m.prevY >mutableMap.sizeY && !isHapticTriggered)
+                                {
+                                    Debug.Log("Ball Out");
+                                    GameManager.gm.StopHaptic(10);
+                                    GameManager.gm.OntriggerHaptic(11);
+                                    isHapticTriggered = true;
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2489,6 +2498,13 @@ public class MapManager : MonoBehaviour
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY] % 81]);
                                     GameManager.gm.PlayShutterSFX();
                                 }
+                                if (m.prevX >= mutableMap.sizeX && m.prevY >= mutableMap.sizeY && !isHapticTriggered)
+                                {
+                                    Debug.Log("Ball Out");
+                                    GameManager.gm.StopHaptic(10);
+                                    GameManager.gm.OntriggerHaptic(11);
+                                    isHapticTriggered = true;
+                                }
                             }
                             else if (m.movable is Iron)
                             {
@@ -2534,6 +2550,14 @@ public class MapManager : MonoBehaviour
                                     tilemap.SetTile(new Vector3Int(m.prevX, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX, m.prevY - 1] % 81]);
                                     GameManager.gm.PlayShutterSFX();
                                 }
+
+                                if (m.prevX >= mutableMap.sizeX && m.prevY >= mutableMap.sizeY && !isHapticTriggered)
+                                {
+                                    Debug.Log("Ball Out");
+                                    GameManager.gm.StopHaptic(10);
+                                    GameManager.gm.OntriggerHaptic(11);
+                                    isHapticTriggered = true;
+                                }
                             }
                             else if (m.movable is Iron)
                             {
@@ -2578,6 +2602,14 @@ public class MapManager : MonoBehaviour
                                     tilemap.SetTile(new Vector3Int(m.prevX - 1, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] % 81]);
                                     tilemap.SetTile(new Vector3Int(m.prevX - 2, m.prevY - 1, 0), tiles[mutableMap.mapCoord[m.prevX - 2, m.prevY - 1] % 81]);
                                     GameManager.gm.PlayShutterSFX();
+                                }
+
+                                if (m.prevX >= mutableMap.sizeX && m.prevY >= mutableMap.sizeY && !isHapticTriggered)
+                                {
+                                    Debug.Log("Ball Out");
+                                    GameManager.gm.StopHaptic(10);
+                                    GameManager.gm.OntriggerHaptic(11);
+                                    isHapticTriggered = true;
                                 }
                             }
                             else if (m.movable is Iron)
