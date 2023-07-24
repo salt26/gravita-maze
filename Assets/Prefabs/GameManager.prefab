@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -97,6 +98,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9e45771741afe5e4bb10e627001b6b88, type: 3}
   - {fileID: 8300000, guid: e39bb02166b999548be6ee2da061aea7, type: 3}
   sfxVolume: 0.8
+  timeOutKey1: 308
+  timeOutKey2: 307
 --- !u!82 &7063427215363646473
 AudioSource:
   m_ObjectHideFlags: 0
@@ -115,7 +118,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
