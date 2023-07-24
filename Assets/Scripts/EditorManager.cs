@@ -1633,8 +1633,8 @@ public class EditorManager : MonoBehaviour
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1647,8 +1647,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in dirs)
             {
                 GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1662,8 +1662,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in files)
             {
                 GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
                 g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
@@ -1914,8 +1914,8 @@ public class EditorManager : MonoBehaviour
         if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1928,8 +1928,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in dirs)
             {
                 GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1943,8 +1943,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in files)
             {
                 GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
                 g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, false, this);
