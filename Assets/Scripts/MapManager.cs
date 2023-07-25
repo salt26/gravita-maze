@@ -84,6 +84,9 @@ public class MapManager : MonoBehaviour
 
     public Tilemap tilemap;
     public List<Tile> tiles = new List<Tile>();
+    public GameObject mapTilePrefab;    // TODO 사용하기
+    public Transform mapTileParent;     // 생성할 맵 타일들의 부모가 되는 게임오브젝트
+    public List<MapTile> mapTiles = new List<MapTile>();
 
     public GameObject loadingPanel;
     public GameObject timeoutPanel;
