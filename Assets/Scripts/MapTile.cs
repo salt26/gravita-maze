@@ -27,17 +27,97 @@ public class MapTile : MonoBehaviour
         AdvEasy = 10, AdvNormal = 11, AdvHard = 12, AdvInsane = 13
     }
 
-    public int x;
-    public int y;
-    public RenderingWallFlag topWall;
-    public RenderingWallFlag bottomWall;
-    public RenderingWallFlag leftWall;
-    public RenderingWallFlag rightWall;
-    public FixedObjectFlag fixedObject;
+    private int _x, _y;
+    private RenderingWallFlag _topWall, _bottomWall, _leftWall, _rightWall;
+    private FixedObjectFlag _fixedObject;
+    public int X
+    {
+        get
+        {
+            return _x;
+        }
+        private set
+        {
+            _x = value;
+            dirtyBit = true;
+        }
+    }
+    public int Y
+    {
+        get
+        {
+            return _y;
+        }
+        private set
+        {
+            _y = value;
+            dirtyBit = true;
+        }
+    }
+    public RenderingWallFlag TopWall
+    {
+        get
+        {
+            return _topWall;
+        }
+        private set
+        {
+            _topWall = value;
+            dirtyBit = true;
+        }
+    }
+    public RenderingWallFlag BottomWall
+    {
+        get
+        {
+            return _bottomWall;
+        }
+        private set
+        {
+            _bottomWall = value;
+            dirtyBit = true;
+        }
+    }
+    public RenderingWallFlag LeftWall
+    {
+        get
+        {
+            return _leftWall;
+        }
+        private set
+        {
+            _leftWall = value;
+            dirtyBit = true;
+        }
+    }
+    public RenderingWallFlag RightWall
+    {
+        get
+        {
+            return _rightWall;
+        }
+        private set
+        {
+            _rightWall = value;
+            dirtyBit = true;
+        }
+    }
+    public FixedObjectFlag FixedObject
+    {
+        get
+        {
+            return _fixedObject;
+        }
+        private set
+        {
+            _fixedObject = value;
+            dirtyBit = true;
+        }
+    }
     private bool dirtyBit = false;
 
     public SpriteRenderer topWallSpriteRenderer;
-    public SpriteRenderer bottomWallSpriteRenderer;
+    public SpriteRenderer BottomWallSpriteRenderer;
     public SpriteRenderer leftWallSpriteRenderer;
     public SpriteRenderer rightWallSpriteRenderer;
 
@@ -57,13 +137,13 @@ public class MapTile : MonoBehaviour
             Debug.LogWarning("Tile warining: invalid x or y position");
             return;
         }
-        this.x = x;
-        this.y = y;
-        topWall = top;
-        bottomWall = bottom;
-        leftWall = left;
-        rightWall = right;
-        this.fixedObject = fixedObject;
+        this.X = x;
+        this.Y = y;
+        TopWall = top;
+        BottomWall = bottom;
+        LeftWall = left;
+        RightWall = right;
+        this.FixedObject = fixedObject;
         dirtyBit = true;
     }
 
@@ -72,10 +152,10 @@ public class MapTile : MonoBehaviour
         if (dirtyBit)
         {
             dirtyBit = false;
-            ChangeWallSprite(topWall, topWallSpriteRenderer);
-            ChangeWallSprite(bottomWall, bottomWallSpriteRenderer);
-            ChangeWallSprite(leftWall, leftWallSpriteRenderer);
-            ChangeWallSprite(rightWall, rightWallSpriteRenderer);
+            ChangeWallSprite(TopWall, topWallSpriteRenderer);
+            ChangeWallSprite(BottomWall, BottomWallSpriteRenderer);
+            ChangeWallSprite(LeftWall, leftWallSpriteRenderer);
+            ChangeWallSprite(RightWall, rightWallSpriteRenderer);
         }
     }
 
@@ -99,7 +179,7 @@ public class MapTile : MonoBehaviour
 
     public PlayingWallFlag GetTopPlayingWallFlag()
     {
-        switch (topWall)
+        switch (TopWall)
         {
             case RenderingWallFlag.None: return PlayingWallFlag.None;
             case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
@@ -117,7 +197,7 @@ public class MapTile : MonoBehaviour
 
     public PlayingWallFlag GetBottomPlayingWallFlag()
     {
-        switch (bottomWall)
+        switch (BottomWall)
         {
             case RenderingWallFlag.None: return PlayingWallFlag.None;
             case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
@@ -135,7 +215,7 @@ public class MapTile : MonoBehaviour
 
     public PlayingWallFlag GetLeftPlayingWallFlag()
     {
-        switch (leftWall)
+        switch (LeftWall)
         {
             case RenderingWallFlag.None: return PlayingWallFlag.None;
             case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
@@ -153,7 +233,7 @@ public class MapTile : MonoBehaviour
 
     public PlayingWallFlag GetRightPlayingWallFlag()
     {
-        switch (rightWall)
+        switch (RightWall)
         {
             case RenderingWallFlag.None: return PlayingWallFlag.None;
             case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
@@ -178,6 +258,6 @@ public class MapTile : MonoBehaviour
     {
         long kinds = Enum.GetNames(typeof(PlayingWallFlag)).Count();
         Debug.Log(kinds);
-        return (long)topWall * kinds * kinds * kinds + (long)bottomWall * kinds * kinds + (long)leftWall * kinds + (long)rightWall;
+        return (long)TopWall * kinds * kinds * kinds + (long)BottomWall * kinds * kinds + (long)LeftWall * kinds + (long)RightWall;
     }
 }
