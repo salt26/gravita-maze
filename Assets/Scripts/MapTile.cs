@@ -12,24 +12,39 @@ public class MapTile : MonoBehaviour
     /// <summary>
     /// 그래픽으로 그릴 때 필요한 벽 정보
     /// </summary>
-    public enum RenderingWallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5, ClosedShutter = 6, BrokenGlass = 7 }
+    public enum WallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5, Exit = 6, ClosedShutter = 7, BrokenGlass = 8 }
+
+    /// <summary>
+    /// 그래픽으로 그릴 때 필요한 코너 벽 정보
+    /// </summary>
+    public enum CornerWallFlag { None = 0, Normal = 1, Glitter = 2 }
+
+    /// <summary>
+    /// 그래픽으로 그릴 때 필요한 바닥 정보
+    /// </summary>
+    public enum FloorFlag { Hole = 0, Floor = 1 }
 
     /// <summary>
     /// 게임플레이 메커니즘을 구현할 때 필요한 벽 정보
     /// </summary>
     public enum PlayingWallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5 }
 
+    /*
     // 나중에 FixedObject 종류를 추가할 때 여기 FixedObjectFlag에 물체 종류를 추가하면 됩니다.
     // 추가할 때에는 맨 뒤에 번호가 1씩 증가하도록 추가하면 좋습니다.
     public enum FixedObjectFlag {
         None = 0, Fire = 1, Hole = 2, QuitGame = 3, MapEditor = 4,
         Adventure = 5, Tutorial = 6, Custom = 7, Training = 8, Setting = 9,
-        AdvEasy = 10, AdvNormal = 11, AdvHard = 12, AdvInsane = 13
+        AdvEasy = 10, AdvNormal = 11, AdvHard = 12, AdvInsane = 13,
+        TopArrow = 14, BottomArrow = 15, LeftArrow = 16, RightArrow = 17
     }
+    */
 
     private int _x, _y;
-    private RenderingWallFlag _topWall, _bottomWall, _leftWall, _rightWall;
-    private FixedObjectFlag _fixedObject;
+    private WallFlag _topWall, _bottomWall, _leftWall, _rightWall;
+    private CornerWallFlag _topLeftCorner, _topRightCorner, _bottomRightCorner, _bottomLeftCorner;
+    private FloorFlag _floorFlag;
+    //private FixedObjectFlag _fixedObject;
     public int X
     {
         get
@@ -39,7 +54,6 @@ public class MapTile : MonoBehaviour
         private set
         {
             _x = value;
-            dirtyBit = true;
         }
     }
     public int Y
@@ -51,10 +65,9 @@ public class MapTile : MonoBehaviour
         private set
         {
             _y = value;
-            dirtyBit = true;
         }
     }
-    public RenderingWallFlag TopWall
+    public WallFlag TopWall
     {
         get
         {
@@ -63,10 +76,10 @@ public class MapTile : MonoBehaviour
         private set
         {
             _topWall = value;
-            dirtyBit = true;
+            ChangeWallSprite(TopWall, topWallSpriteRenderer);
         }
     }
-    public RenderingWallFlag BottomWall
+    public WallFlag BottomWall
     {
         get
         {
@@ -75,10 +88,10 @@ public class MapTile : MonoBehaviour
         private set
         {
             _bottomWall = value;
-            dirtyBit = true;
+            ChangeWallSprite(BottomWall, bottomWallSpriteRenderer);
         }
     }
-    public RenderingWallFlag LeftWall
+    public WallFlag LeftWall
     {
         get
         {
@@ -87,10 +100,10 @@ public class MapTile : MonoBehaviour
         private set
         {
             _leftWall = value;
-            dirtyBit = true;
+            ChangeWallSprite(LeftWall, leftWallSpriteRenderer);
         }
     }
-    public RenderingWallFlag RightWall
+    public WallFlag RightWall
     {
         get
         {
@@ -99,9 +112,74 @@ public class MapTile : MonoBehaviour
         private set
         {
             _rightWall = value;
-            dirtyBit = true;
+            ChangeWallSprite(RightWall, rightWallSpriteRenderer);
         }
     }
+
+    public CornerWallFlag TopLeftCorner
+    {
+        get
+        {
+            return _topLeftCorner;
+        }
+        private set
+        {
+            _topLeftCorner = value;
+            ChangeCornerSprite(TopLeftCorner, topLeftCornerSpriteRenderer);
+        }
+    }
+
+    public CornerWallFlag TopRightCorner
+    {
+        get
+        {
+            return _topRightCorner;
+        }
+        private set
+        {
+            _topRightCorner = value;
+            ChangeCornerSprite(TopRightCorner, topRightCornerSpriteRenderer);
+        }
+    }
+
+    public CornerWallFlag BottomRightCorner
+    {
+        get
+        {
+            return _bottomRightCorner;
+        }
+        private set
+        {
+            _bottomRightCorner = value;
+            ChangeCornerSprite(BottomRightCorner, bottomRightCornerSpriteRenderer);
+        }
+    }
+
+    public CornerWallFlag BottomLeftCorner
+    {
+        get
+        {
+            return _bottomLeftCorner;
+        }
+        private set
+        {
+            _bottomLeftCorner = value;
+            ChangeCornerSprite(BottomLeftCorner, bottomLeftCornerSpriteRenderer);
+        }
+    }
+    public FloorFlag Floor
+    {
+        get
+        {
+            return _floorFlag;
+        }
+        private set
+        {
+            _floorFlag = value;
+            ChangeFloorSprite();
+        }
+    }
+    /*
     public FixedObjectFlag FixedObject
     {
         get
@@ -111,68 +189,108 @@ public class MapTile : MonoBehaviour
         private set
         {
             _fixedObject = value;
-            dirtyBit = true;
+            // ChangeFloorSprite(); TODO
         }
     }
-    private bool dirtyBit = false;
-
+    */
     public SpriteRenderer topWallSpriteRenderer;
-    public SpriteRenderer BottomWallSpriteRenderer;
+    public SpriteRenderer bottomWallSpriteRenderer;
     public SpriteRenderer leftWallSpriteRenderer;
     public SpriteRenderer rightWallSpriteRenderer;
+    public SpriteRenderer topLeftCornerSpriteRenderer;
+    public SpriteRenderer topRightCornerSpriteRenderer;
+    public SpriteRenderer bottomRightCornerSpriteRenderer;
+    public SpriteRenderer bottomLeftCornerSpriteRenderer;
 
     public Sprite wallSprite;
     public Sprite shutterSprite;
     public Sprite glassSprite;
     public Sprite oneWayInSprite;
     public Sprite oneWayOutSprite;
+    public Sprite exitSprite;
     public Sprite closedShutterSprite;
     public Sprite brokenGlassSprite;
+    public Sprite floorSprite;
+    public Sprite normalCornerSprite;
+    public Sprite glitterCornerSprite;
 
-    public void Initialize(int x, int y, RenderingWallFlag top, RenderingWallFlag bottom,
-        RenderingWallFlag left, RenderingWallFlag right, FixedObjectFlag fixedObject)
+    public void Initialize(int x, int y, FloorFlag floor, WallFlag top, WallFlag bottom, WallFlag left, WallFlag right,
+        CornerWallFlag topLeft = CornerWallFlag.Normal, CornerWallFlag topRight = CornerWallFlag.Normal,
+        CornerWallFlag bottomRight = CornerWallFlag.Normal, CornerWallFlag bottomLeft = CornerWallFlag.Normal)
     {
         if (x < 0 || y < 0)
         {
             Debug.LogWarning("Tile warining: invalid x or y position");
             return;
         }
-        this.X = x;
-        this.Y = y;
+        X = x;
+        Y = y;
+        Floor = floor;
         TopWall = top;
         BottomWall = bottom;
         LeftWall = left;
         RightWall = right;
-        this.FixedObject = fixedObject;
-        dirtyBit = true;
+        TopLeftCorner = topLeft;
+        TopRightCorner = topRight;
+        BottomRightCorner = bottomRight;
+        BottomLeftCorner = bottomLeft;
+        //this.FixedObject = fixedObject;
+        ChangeFloorSprite();
+        ChangeWallSprite(TopWall, topWallSpriteRenderer);
+        ChangeWallSprite(BottomWall, bottomWallSpriteRenderer);
+        ChangeWallSprite(LeftWall, leftWallSpriteRenderer);
+        ChangeWallSprite(RightWall, rightWallSpriteRenderer);
+        ChangeCornerSprite(TopLeftCorner, topLeftCornerSpriteRenderer);
+        ChangeCornerSprite(TopRightCorner, topRightCornerSpriteRenderer);
+        ChangeCornerSprite(BottomRightCorner, bottomRightCornerSpriteRenderer);
+        ChangeCornerSprite(BottomLeftCorner, bottomLeftCornerSpriteRenderer);
     }
 
-    void Update()
-    {
-        if (dirtyBit)
-        {
-            dirtyBit = false;
-            ChangeWallSprite(TopWall, topWallSpriteRenderer);
-            ChangeWallSprite(BottomWall, BottomWallSpriteRenderer);
-            ChangeWallSprite(LeftWall, leftWallSpriteRenderer);
-            ChangeWallSprite(RightWall, rightWallSpriteRenderer);
-        }
-    }
-
-    private void ChangeWallSprite(RenderingWallFlag rwf, SpriteRenderer sr)
+    private void ChangeWallSprite(WallFlag rwf, SpriteRenderer sr)
     {
         switch (rwf)
         {
-            case RenderingWallFlag.None: sr.sprite = null; break;
-            case RenderingWallFlag.Wall: sr.sprite = wallSprite; break;
-            case RenderingWallFlag.Shutter: sr.sprite = shutterSprite; break;
-            case RenderingWallFlag.Glass: sr.sprite = glassSprite; break;
-            case RenderingWallFlag.OneWayIn: sr.sprite = oneWayInSprite; break;
-            case RenderingWallFlag.OneWayOut: sr.sprite = oneWayOutSprite; break;
-            case RenderingWallFlag.ClosedShutter: sr.sprite = closedShutterSprite; break;
-            case RenderingWallFlag.BrokenGlass: sr.sprite = brokenGlassSprite; break;
+            case WallFlag.None: sr.sprite = null; break;
+            case WallFlag.Wall: sr.sprite = wallSprite; break;
+            case WallFlag.Exit: sr.sprite = exitSprite; break;
+            case WallFlag.Shutter: sr.sprite = shutterSprite; break;
+            case WallFlag.Glass: sr.sprite = glassSprite; break;
+            case WallFlag.OneWayIn: sr.sprite = oneWayInSprite; break;
+            case WallFlag.OneWayOut: sr.sprite = oneWayOutSprite; break;
+            case WallFlag.ClosedShutter: sr.sprite = closedShutterSprite; break;
+            case WallFlag.BrokenGlass: sr.sprite = brokenGlassSprite; break;
             default:
                 Debug.LogWarning("Tile warning: invalid wall flag");
+                break;
+        }
+    }
+
+    private void ChangeFloorSprite()
+    {
+        switch (Floor)
+        {
+            case FloorFlag.Hole:
+                GetComponent<SpriteRenderer>().sprite = null;
+                break;
+            case FloorFlag.Floor:
+                GetComponent<SpriteRenderer>().sprite = floorSprite;
+                break;
+            default:
+                GetComponent<SpriteRenderer>().sprite = floorSprite;
+                break;
+        }
+    }
+
+    private void ChangeCornerSprite(CornerWallFlag cwf, SpriteRenderer sr)
+    {
+
+        switch (cwf)
+        {
+            case CornerWallFlag.None: sr.sprite = null; break;
+            case CornerWallFlag.Normal: sr.sprite = normalCornerSprite; break;
+            case CornerWallFlag.Glitter: sr.sprite = glitterCornerSprite; break;
+            default:
+                Debug.LogWarning("Tile warning: invalid corner flag");
                 break;
         }
     }
@@ -181,14 +299,15 @@ public class MapTile : MonoBehaviour
     {
         switch (TopWall)
         {
-            case RenderingWallFlag.None: return PlayingWallFlag.None;
-            case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.Shutter: return PlayingWallFlag.Shutter;
-            case RenderingWallFlag.Glass: return PlayingWallFlag.Glass;
-            case RenderingWallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
-            case RenderingWallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
-            case RenderingWallFlag.ClosedShutter: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.BrokenGlass: return PlayingWallFlag.None;
+            case WallFlag.None: return PlayingWallFlag.None;
+            case WallFlag.Wall: return PlayingWallFlag.Wall;
+            case WallFlag.Exit: return PlayingWallFlag.None;
+            case WallFlag.Shutter: return PlayingWallFlag.Shutter;
+            case WallFlag.Glass: return PlayingWallFlag.Glass;
+            case WallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
+            case WallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
+            case WallFlag.ClosedShutter: return PlayingWallFlag.Wall;
+            case WallFlag.BrokenGlass: return PlayingWallFlag.None;
             default:
                 Debug.LogWarning("Tile warning: invalid wall flag");
                 return PlayingWallFlag.None;
@@ -199,14 +318,15 @@ public class MapTile : MonoBehaviour
     {
         switch (BottomWall)
         {
-            case RenderingWallFlag.None: return PlayingWallFlag.None;
-            case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.Shutter: return PlayingWallFlag.Shutter;
-            case RenderingWallFlag.Glass: return PlayingWallFlag.Glass;
-            case RenderingWallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
-            case RenderingWallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
-            case RenderingWallFlag.ClosedShutter: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.BrokenGlass: return PlayingWallFlag.None;
+            case WallFlag.None: return PlayingWallFlag.None;
+            case WallFlag.Wall: return PlayingWallFlag.Wall;
+            case WallFlag.Exit: return PlayingWallFlag.None;
+            case WallFlag.Shutter: return PlayingWallFlag.Shutter;
+            case WallFlag.Glass: return PlayingWallFlag.Glass;
+            case WallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
+            case WallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
+            case WallFlag.ClosedShutter: return PlayingWallFlag.Wall;
+            case WallFlag.BrokenGlass: return PlayingWallFlag.None;
             default:
                 Debug.LogWarning("Tile warning: invalid wall flag");
                 return PlayingWallFlag.None;
@@ -217,14 +337,15 @@ public class MapTile : MonoBehaviour
     {
         switch (LeftWall)
         {
-            case RenderingWallFlag.None: return PlayingWallFlag.None;
-            case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.Shutter: return PlayingWallFlag.Shutter;
-            case RenderingWallFlag.Glass: return PlayingWallFlag.Glass;
-            case RenderingWallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
-            case RenderingWallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
-            case RenderingWallFlag.ClosedShutter: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.BrokenGlass: return PlayingWallFlag.None;
+            case WallFlag.None: return PlayingWallFlag.None;
+            case WallFlag.Wall: return PlayingWallFlag.Wall;
+            case WallFlag.Exit: return PlayingWallFlag.None;
+            case WallFlag.Shutter: return PlayingWallFlag.Shutter;
+            case WallFlag.Glass: return PlayingWallFlag.Glass;
+            case WallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
+            case WallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
+            case WallFlag.ClosedShutter: return PlayingWallFlag.Wall;
+            case WallFlag.BrokenGlass: return PlayingWallFlag.None;
             default:
                 Debug.LogWarning("Tile warning: invalid wall flag");
                 return PlayingWallFlag.None;
@@ -235,14 +356,15 @@ public class MapTile : MonoBehaviour
     {
         switch (RightWall)
         {
-            case RenderingWallFlag.None: return PlayingWallFlag.None;
-            case RenderingWallFlag.Wall: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.Shutter: return PlayingWallFlag.Shutter;
-            case RenderingWallFlag.Glass: return PlayingWallFlag.Glass;
-            case RenderingWallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
-            case RenderingWallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
-            case RenderingWallFlag.ClosedShutter: return PlayingWallFlag.Wall;
-            case RenderingWallFlag.BrokenGlass: return PlayingWallFlag.None;
+            case WallFlag.None: return PlayingWallFlag.None;
+            case WallFlag.Wall: return PlayingWallFlag.Wall;
+            case WallFlag.Exit: return PlayingWallFlag.None;
+            case WallFlag.Shutter: return PlayingWallFlag.Shutter;
+            case WallFlag.Glass: return PlayingWallFlag.Glass;
+            case WallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
+            case WallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
+            case WallFlag.ClosedShutter: return PlayingWallFlag.Wall;
+            case WallFlag.BrokenGlass: return PlayingWallFlag.None;
             default:
                 Debug.LogWarning("Tile warning: invalid wall flag");
                 return PlayingWallFlag.None;

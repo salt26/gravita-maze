@@ -2873,6 +2873,15 @@ public class MapManager : MonoBehaviour
         Debug.Log(s);
     }
 
+    private void ClearAllTiles()
+    {
+        foreach (MapTile mapTile in mapTiles)
+        {
+            Destroy(mapTile);
+        }
+        mapTiles.Clear();
+    }
+
     private Vector3Int RotatedVector3Int(Vector3Int originalVector, bool isWall = false, bool isOriginalHorizontal = false)
     {
         if (SizeX <= 0 || SizeY <= 0) return new Vector3Int(originalVector.x, originalVector.y, 0);
