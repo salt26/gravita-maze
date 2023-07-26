@@ -3,11 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Purchasing;
+using static MapManager;
+using static MapTile;
 
 public class MapTile : MonoBehaviour
 {
     // 나중에 벽 종류를 추가할 때 여기 RenderingWallFlag 및 PlayingWallFlag에 벽 종류를 추가하면 됩니다.
     // 추가할 때에는 맨 뒤에 번호가 1씩 증가하도록 추가하면 좋습니다.
+
+    public enum DirectionFlag { Top = 3, Up = 3, Bottom = 2, Down = 2, Left = 1, Right = 0 };
 
     /// <summary>
     /// 그래픽으로 그릴 때 필요한 벽 정보
@@ -29,7 +34,6 @@ public class MapTile : MonoBehaviour
     /// </summary>
     public enum PlayingWallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5 }
 
-    /*
     // 나중에 FixedObject 종류를 추가할 때 여기 FixedObjectFlag에 물체 종류를 추가하면 됩니다.
     // 추가할 때에는 맨 뒤에 번호가 1씩 증가하도록 추가하면 좋습니다.
     public enum FixedObjectFlag {
@@ -38,7 +42,6 @@ public class MapTile : MonoBehaviour
         AdvEasy = 10, AdvNormal = 11, AdvHard = 12, AdvInsane = 13,
         TopArrow = 14, BottomArrow = 15, LeftArrow = 16, RightArrow = 17
     }
-    */
 
     private int _x, _y;
     private WallFlag _topWall, _bottomWall, _leftWall, _rightWall;
@@ -246,6 +249,32 @@ public class MapTile : MonoBehaviour
         ChangeCornerSprite(BottomLeftCorner, bottomLeftCornerSpriteRenderer);
     }
 
+    public void Initialize(int x, int y, FloorFlag floor, long wallCode)
+    {
+        X = x;
+        Y = y;
+        Floor = floor;
+
+        long kinds = GetRenderingWallKinds();
+        TopWall = (WallFlag)(wallCode / kinds / kinds / kinds);
+        BottomWall = (WallFlag)(wallCode / kinds / kinds % kinds);
+        LeftWall = (WallFlag)(wallCode / kinds % kinds);
+        RightWall = (WallFlag)(wallCode % kinds);
+        TopLeftCorner = CornerWallFlag.Normal;
+        TopRightCorner = CornerWallFlag.Normal;
+        BottomRightCorner = CornerWallFlag.Normal;
+        BottomLeftCorner = CornerWallFlag.Normal;
+        ChangeFloorSprite();
+        ChangeWallSprite(TopWall, topWallSpriteRenderer);
+        ChangeWallSprite(BottomWall, bottomWallSpriteRenderer);
+        ChangeWallSprite(LeftWall, leftWallSpriteRenderer);
+        ChangeWallSprite(RightWall, rightWallSpriteRenderer);
+        ChangeCornerSprite(TopLeftCorner, topLeftCornerSpriteRenderer);
+        ChangeCornerSprite(TopRightCorner, topRightCornerSpriteRenderer);
+        ChangeCornerSprite(BottomRightCorner, bottomRightCornerSpriteRenderer);
+        ChangeCornerSprite(BottomLeftCorner, bottomLeftCornerSpriteRenderer);
+    }
+
     private void ChangeWallSprite(WallFlag rwf, SpriteRenderer sr)
     {
         switch (rwf)
@@ -295,6 +324,7 @@ public class MapTile : MonoBehaviour
         }
     }
 
+    /*
     public PlayingWallFlag GetTopPlayingWallFlag()
     {
         switch (TopWall)
@@ -370,6 +400,48 @@ public class MapTile : MonoBehaviour
                 return PlayingWallFlag.None;
         }
     }
+    */
+
+    public static PlayingWallFlag WallFlagToPlayingWallFlag(WallFlag wallFlag)
+    {
+        switch (wallFlag)
+        {
+            case WallFlag.None: return PlayingWallFlag.None;
+            case WallFlag.Wall: return PlayingWallFlag.Wall;
+            case WallFlag.Exit: return PlayingWallFlag.None;
+            case WallFlag.Shutter: return PlayingWallFlag.Shutter;
+            case WallFlag.Glass: return PlayingWallFlag.Glass;
+            case WallFlag.OneWayIn: return PlayingWallFlag.OneWayIn;
+            case WallFlag.OneWayOut: return PlayingWallFlag.OneWayOut;
+            case WallFlag.ClosedShutter: return PlayingWallFlag.Wall;
+            case WallFlag.BrokenGlass: return PlayingWallFlag.None;
+            default:
+                Debug.LogWarning("Tile warning: invalid wall flag");
+                return PlayingWallFlag.None;
+        }
+    }
+
+    public static long WallFlagToTileCode(WallFlag wallFlag, DirectionFlag directionFlag)
+    {
+        long kinds = GetRenderingWallKinds();
+        long factor = 1;
+        for (int i = 0; i < (int)directionFlag; i++)
+        {
+            factor *= kinds;
+        }
+        return factor * (long)wallFlag;
+    }
+
+    public static long FixedObjectFlagToTileCode(FixedObjectFlag fixedObjectFlag)
+    {
+        long kinds4 = GetKinds4();
+        long factor = 1;
+        for (int i = 0; i < (int)fixedObjectFlag; i++)
+        {
+            factor *= kinds4;
+        }
+        return factor;
+    }
 
     /// <summary>
     /// 게임플레이 메커니즘을 구현할 때 현재 타일이 가진 상하좌우 벽 정보를 하나의 수로 표현합니다.
@@ -381,5 +453,40 @@ public class MapTile : MonoBehaviour
         long kinds = Enum.GetNames(typeof(PlayingWallFlag)).Count();
         Debug.Log(kinds);
         return (long)TopWall * kinds * kinds * kinds + (long)BottomWall * kinds * kinds + (long)LeftWall * kinds + (long)RightWall;
+    }
+
+    public static long GetRenderingWallKinds()
+    {
+        return Enum.GetNames(typeof(WallFlag)).Count();
+    }
+
+    public static long GetKinds4()
+    {
+        long kinds = GetRenderingWallKinds();
+        return kinds * kinds * kinds * kinds;
+    }
+
+    // tileCode는 WallFlag 기준
+    public static bool CheckTileFlag(long tileCode, PlayingWallFlag playingWallFlag, DirectionFlag directionFlag)
+    {
+        long kinds = GetRenderingWallKinds();
+        long kinds4 = GetKinds4();
+        long factor = 1;
+        for (int i = 0; i < (int)directionFlag; i++)
+        {
+            factor *= kinds;
+        }
+        return WallFlagToPlayingWallFlag((WallFlag)(tileCode % kinds4 / factor % kinds)) == playingWallFlag;
+    }
+
+    public static bool CheckTileFlag(long tileCode, FixedObjectFlag fixedObjectFlag)
+    {
+        long kinds4 = GetKinds4();
+        long factor = 1;
+        for (int i = 0; i < (int)fixedObjectFlag; i++)
+        {
+            factor *= kinds4;
+        }
+        return tileCode % (factor * kinds4) / factor == 1;
     }
 }
