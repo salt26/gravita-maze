@@ -504,25 +504,25 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
-        OntriggerHaptic(8);
+        OnTriggerHaptic(8);
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
-        OntriggerHaptic(8);
+        OnTriggerHaptic(8);
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
-        OntriggerHaptic(7);
+        OnTriggerHaptic(7);
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
-        OntriggerHaptic(6);
+        OnTriggerHaptic(6);
     }
 
     public void PlayEscapedSFX()
@@ -533,7 +533,7 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
-        OntriggerHaptic(2);
+        PlayHaptic(9); // HapticError
     }
 
     public void PlayRetrySFX()
@@ -559,15 +559,15 @@ public class GameManager : MonoBehaviour
         {
             case 1.0f:
                 Debug.Log("Fall1");
-                OntriggerHaptic(0);
+                OnTriggerHaptic(0);
                 break;
             case 0.75f:
                 Debug.Log("Fall2");
-                OntriggerHaptic(1);
+                OnTriggerHaptic(1);
                 break;
             case 0.5f:
                 Debug.Log("Fall3");
-                OntriggerHaptic(2);
+                OnTriggerHaptic(2);
                 break;
         }
     }
@@ -579,15 +579,15 @@ public class GameManager : MonoBehaviour
         {
             case 0:
                 Debug.Log("Star1");
-                OntriggerHaptic(0);
+                OnTriggerHaptic(3); //HapticError
                 break;
             case 1:
                 Debug.Log("Star2");
-                OntriggerHaptic(1);
+                OnTriggerHaptic(4); //HapticError
                 break;
             case 2:
                 Debug.Log("Star3");
-                OntriggerHaptic(2);
+                OnTriggerHaptic(5); //HapticError
                 break;
         }
     }
@@ -1463,7 +1463,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OntriggerHaptic(int hapticNum)
+    // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
+    public void OnTriggerHaptic(int hapticNum)
     {
         Debug.Log("On triggered");
         eventHapticSource[hapticNum].delayPlay = delayPlayTime;

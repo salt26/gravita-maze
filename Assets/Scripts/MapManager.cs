@@ -1412,7 +1412,7 @@ public class MapManager : MonoBehaviour
                 SceneManager.GetActiveScene().name.Equals("Training"))
             {
                 GameManager.gm.PlayEscapedSFX();
-                GameManager.gm.PlayHaptic(10);
+                GameManager.gm.PlayHaptic(10);// HapticError
             }
             StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, 1f));
         }
@@ -2418,6 +2418,7 @@ public class MapManager : MonoBehaviour
 
     IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves, Flag flag, float animationSpeed)
     {
+        bool isHapticTriggered = false;
         float time = Time.time;
         if (traces != null)
         {
@@ -2429,7 +2430,6 @@ public class MapManager : MonoBehaviour
         traces = new List<GameObject>();
 
         GameObject[,] traceCoord = new GameObject[mutableMap.sizeX, mutableMap.sizeY];
-        bool isHapticTriggered = false;
 
         while (Time.time <= time + 1.5f && IsReady && (HasCleared || HasDied))
         {
@@ -2460,6 +2460,9 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevY - 1 < mutableMap.sizeY)
                                 {
+                                    if (flag == Flag.Escaped) {
+                                        GameManager.gm.PlayHaptic(10); // HapticError
+                                    }
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
                                     {
@@ -2485,6 +2488,11 @@ public class MapManager : MonoBehaviour
                                         GameManager.gm.PlayBurnedSFX();
                                         m.movable.gameObject.SetActive(false);
                                     }
+                                }
+                                else if(!isHapticTriggered)
+                                {
+                                    GameManager.gm.StopHaptic(10); // HapticError
+                                    GameManager.gm.OnTriggerHaptic(11); //HapticError
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2545,6 +2553,10 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevY - 1 >= 0)
                                 {
+                                    if (flag == Flag.Escaped)
+                                    {
+                                        GameManager.gm.PlayHaptic(10); // HapticError
+                                    }
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.UpShutter))
                                     {
@@ -2570,6 +2582,11 @@ public class MapManager : MonoBehaviour
                                         GameManager.gm.PlayBurnedSFX();
                                         m.movable.gameObject.SetActive(false);
                                     }
+                                }
+                                else if (!isHapticTriggered)
+                                {
+                                    GameManager.gm.StopHaptic(10); //HapticError
+                                    GameManager.gm.OnTriggerHaptic(11); //HapticError
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2630,6 +2647,10 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevX - 1 >= 0)
                                 {
+                                    if (flag == Flag.Escaped)
+                                    {
+                                        GameManager.gm.PlayHaptic(10); // HapticError
+                                    }
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.RightShutter))
                                     {
@@ -2655,6 +2676,11 @@ public class MapManager : MonoBehaviour
                                         GameManager.gm.PlayBurnedSFX();
                                         m.movable.gameObject.SetActive(false);
                                     }
+                                }
+                                else if (!isHapticTriggered)
+                                {
+                                    GameManager.gm.StopHaptic(10); // HapticError
+                                    GameManager.gm.OnTriggerHaptic(11); // HapticError
                                 }
                             }
                             else if (m.movable is Iron)
@@ -2715,6 +2741,10 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevX - 1 < mutableMap.sizeX)
                                 {
+                                    if (flag == Flag.Escaped)
+                                    {
+                                        GameManager.gm.PlayHaptic(10); // HapticError
+                                    }
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.LeftShutter))
                                     {
@@ -2740,6 +2770,11 @@ public class MapManager : MonoBehaviour
                                         GameManager.gm.PlayBurnedSFX();
                                         m.movable.gameObject.SetActive(false);
                                     }
+                                }
+                                else if (!isHapticTriggered)
+                                {
+                                    GameManager.gm.StopHaptic(10); // HapticError
+                                    GameManager.gm.OnTriggerHaptic(11); // HapticError
                                 }
                             }
                             else if (m.movable is Iron)
