@@ -724,6 +724,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 250178042}
   m_CullTransparentMesh: 0
+--- !u!1 &280443434 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6135717019017536280, guid: a97aafa8dc7aae24993ae294c8359b43,
+    type: 3}
+  m_PrefabInstance: {fileID: 1811126591}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &280443435 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5569370830341577837, guid: a97aafa8dc7aae24993ae294c8359b43,
+    type: 3}
+  m_PrefabInstance: {fileID: 1811126591}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280443434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &280443436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280443434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 8317209068121620487
+  references:
+    version: 2
+    RefIds:
+    - rid: 8317209068121620487
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 280443435}
+        m_TrackedProperties:
+          items:
+          - rid: 8317209068121620488
+        m_UpdateType: 0
+    - rid: 8317209068121620488
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:e140a6e03d69147b0bf89b55f6cb603e
+          m_TableEntryReference:
+            m_KeyId: 21709072107999232
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_Text
 --- !u!1 &323041905
 GameObject:
   m_ObjectHideFlags: 0
@@ -5043,7 +5101,6 @@ MonoBehaviour:
   mapTilePrefab: {fileID: 5503739234660689739, guid: a7c21537c012fa5439fdd3601221b969,
     type: 3}
   mapTileParent: {fileID: 323041906}
-  mapTiles: []
   loadingPanel: {fileID: 1642279426}
   timeoutPanel: {fileID: 1811126592}
   tryCount: 0
@@ -5405,6 +5462,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1811126596}
+    - targetCorrespondingSourceObject: {fileID: 6135717019017536280, guid: a97aafa8dc7aae24993ae294c8359b43,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 280443436}
   m_SourcePrefab: {fileID: 100100000, guid: a97aafa8dc7aae24993ae294c8359b43, type: 3}
 --- !u!1 &1811126592 stripped
 GameObject:
@@ -5948,7 +6009,7 @@ Transform:
   - {fileID: 18952799}
   - {fileID: 2082598832}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1919718420
 GameObject:
@@ -7520,8 +7581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dce8bbeb160e4a46b6d95206ed29207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventHapticSource: []
-  delayPlayTime: 0
   tableName: StringTable
   modeText: {fileID: 3825228074445485395}
   difficultyText: {fileID: 996514661}

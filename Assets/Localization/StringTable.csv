@@ -205,8 +205,12 @@ Volume","배경음
 <size=48>v1.4.3</size>
 
 
+
+
 Project Managing
 <size=48><i>Dantae An</i></size>
+
+
 
 
 Programming
@@ -220,8 +224,12 @@ Programming
 <size=48><i>Diane Kim</i></size>
 
 
+
+
 Game Design
 <size=48><i>Dantae An</i></size>
+
+
 
 
 Level Design
@@ -229,9 +237,13 @@ Level Design
 <size=48><i>Dantae An</i></size>
 
 
+
+
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
+
+
 
 
 Graphic Design
@@ -240,8 +252,12 @@ Graphic Design
 <size=48><i>Donghwan Yang</i></size>
 
 
+
+
 Sound Design
 <size=48><i>Dantae An</i></size>
+
+
 
 
 Localization
@@ -250,12 +266,18 @@ Localization
 <size=48><i>Dantae An</i></size>
 
 
+
+
 Marketing
 <size=48><i>Suin Lee</i></size>
 
 
+
+
 Infrastructure
 <size=36><i>cseteram</i></size>
+
+
 
 
 Map Making
@@ -384,4 +406,4 @@ skip","시간
 "Non-clearedNextButton",962904780132352,"Ctrl + Enter key","Ctrl + Enter 키"
 "PauseButton",963619405647872,"Esc key","Esc 키"
 "Non-clearedNextButtonOSX",8020914447835136,"Option + Enter key","Option + Enter 키"
-"RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
+"RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"ButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
