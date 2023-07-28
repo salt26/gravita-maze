@@ -6653,6 +6653,7 @@ MonoBehaviour:
   mapTilePrefab: {fileID: 5503739234660689739, guid: a7c21537c012fa5439fdd3601221b969,
     type: 3}
   mapTileParent: {fileID: 998870483}
+  mapTiles: []
   loadingPanel: {fileID: 789776986}
   timeoutPanel: {fileID: 947976365}
   tryCount: 0

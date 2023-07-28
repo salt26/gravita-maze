@@ -1770,7 +1770,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &581444793
 GameObject:
@@ -5089,6 +5089,7 @@ MonoBehaviour:
   mapTilePrefab: {fileID: 5503739234660689739, guid: a7c21537c012fa5439fdd3601221b969,
     type: 3}
   mapTileParent: {fileID: 1382448516}
+  mapTiles: []
   loadingPanel: {fileID: 370633949}
   timeoutPanel: {fileID: 821921398}
   tryCount: 0
