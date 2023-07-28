@@ -1460,20 +1460,20 @@ public class MapManager : MonoBehaviour
                     {
                         GameManager.gm.PlayBallSFX();
                     }
-                    break;
-            }
 
-            HashSet<int> distances = new HashSet<int>();
-            foreach (Move move in moves)
-            {
-                if (move.movable is Iron)
-                {
-                    distances.Add(Mathf.Max(Mathf.Abs(move.newX - move.oldX), Mathf.Abs(move.newY - move.oldY)));
-                }
-            }
-            foreach (int d in distances)
-            {
-                GameManager.gm.PlayIronSFX(d);
+                    HashSet<int> distances = new HashSet<int>();
+                    foreach (Move move in moves)
+                    {
+                        if (move.movable is Iron)
+                        {
+                            distances.Add(Mathf.Max(Mathf.Abs(move.newX - move.oldX), Mathf.Abs(move.newY - move.oldY)));
+                        }
+                    }
+                    foreach (int d in distances)
+                    {
+                        GameManager.gm.PlayIronSFX(d);
+                    }
+                    break;
             }
         }
     }
