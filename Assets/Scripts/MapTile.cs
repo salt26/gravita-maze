@@ -435,12 +435,14 @@ public class MapTile : MonoBehaviour
     public static long FixedObjectFlagToTileCode(FixedObjectFlag fixedObjectFlag)
     {
         long kinds4 = GetKinds4();
+        /*
         long factor = 1;
         for (int i = 0; i < (int)fixedObjectFlag; i++)
         {
             factor *= kinds4;
         }
-        return factor;
+        */
+        return (long)fixedObjectFlag * kinds4;
     }
 
     /// <summary>
@@ -482,11 +484,13 @@ public class MapTile : MonoBehaviour
     public static bool CheckTileFlag(long tileCode, FixedObjectFlag fixedObjectFlag)
     {
         long kinds4 = GetKinds4();
+        /*
         long factor = 1;
         for (int i = 0; i < (int)fixedObjectFlag; i++)
         {
             factor *= kinds4;
         }
-        return tileCode % (factor * kinds4) / factor == 1;
+        */
+        return tileCode / kinds4 == (long)fixedObjectFlag;
     }
 }

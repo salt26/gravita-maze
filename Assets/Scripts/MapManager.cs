@@ -3012,29 +3012,44 @@ public class MapManager : MonoBehaviour
         CornerWallFlag topLeft = CornerWallFlag.Normal, CornerWallFlag topRight = CornerWallFlag.Normal,
         CornerWallFlag bottomRight = CornerWallFlag.Normal, CornerWallFlag bottomLeft = CornerWallFlag.Normal)
     {
-        GameObject g = Instantiate(mapTilePrefab, mapTileParent);
-        g.transform.localPosition = new Vector3(x, y, 0);
-        MapTile tile = g.GetComponent<MapTile>();
-        tile.Initialize(x, y, floor, top, bottom, left, right, topLeft, topRight, bottomRight, bottomLeft);
         Tuple<int, int> coord = new Tuple<int, int>(x, y);
-        mapTiles.Add(coord, tile);
-        return tile;
+        if (mapTiles.TryGetValue(coord, out MapTile oldTile))
+        {
+            //Destroy(oldTile.gameObject);
+            //mapTiles.Remove(coord);
+            oldTile.Initialize(x, y, floor, top, bottom, left, right, topLeft, topRight, bottomRight, bottomLeft);
+            return oldTile;
+        }
+        else
+        {
+            GameObject g = Instantiate(mapTilePrefab, mapTileParent);
+            g.transform.localPosition = new Vector3(x, y, 0);
+            MapTile tile = g.GetComponent<MapTile>();
+            tile.Initialize(x, y, floor, top, bottom, left, right, topLeft, topRight, bottomRight, bottomLeft);
+            mapTiles.Add(coord, tile);
+            return tile;
+        }
     }
 
     private MapTile SetTile(int x, int y, FloorFlag floor, long wallCode)
     {
-        GameObject g = Instantiate(mapTilePrefab, mapTileParent);
-        g.transform.localPosition = new Vector3(x, y, 0);
-        MapTile tile = g.GetComponent<MapTile>();
-        tile.Initialize(x, y, floor, wallCode);
         Tuple<int, int> coord = new Tuple<int, int>(x, y);
         if (mapTiles.TryGetValue(coord, out MapTile oldTile))
         {
-            Destroy(oldTile.gameObject);
-            mapTiles.Remove(coord);
+            //Destroy(oldTile.gameObject);
+            //mapTiles.Remove(coord);
+            oldTile.Initialize(x, y, floor, wallCode);
+            return oldTile;
         }
-        mapTiles.Add(coord, tile);
-        return tile;
+        else
+        {
+            GameObject g = Instantiate(mapTilePrefab, mapTileParent);
+            g.transform.localPosition = new Vector3(x, y, 0);
+            MapTile tile = g.GetComponent<MapTile>();
+            tile.Initialize(x, y, floor, wallCode);
+            mapTiles.Add(coord, tile);
+            return tile;
+        }
     }
 
     private Vector3Int RotatedVector3Int(Vector3Int originalVector, bool isWall = false, bool isOriginalHorizontal = false)
