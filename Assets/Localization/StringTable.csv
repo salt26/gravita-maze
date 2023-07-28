@@ -1,4 +1,4 @@
-Key,Id,English(en),Korean(ko)
+﻿Key,Id,English(en),Korean(ko)
 "editor_start_welcome",486441738240,"Welcome to the map editor!","맵 에디터에 오신 걸 환영합니다!"
 "editor_update_begin",486475292672,"All right!\nLet's move on to the next step.","좋아요!\n다음 단계로 가볼까요?"
 "editor_update_test_prompt",486479486976,"Confirm the map\\is playable.","맵이 플레이 가능한지\\테스트해주세요."
@@ -149,7 +149,13 @@ to game","게임으로
 돌아가기"
 "Adventure/Canvas/PauseUI/PauseBox/QuitButton/Text",165465119776768,"Quit","나가기"
 "Adventure/Canvas/TimeoutPanel/Text",165502885289984,"Time out!","시간 초과!"
+"Adventure/Canvas/TimeoutPanel/TimeSkipGuide",21709072107999232,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "AdventureLevel/Canvas/TimeoutPanel/Text",165704832638976,"Time out!","시간 초과!"
+"AdventureLevel/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776448,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/BgmVolume",167868644712448,"BGM
 Volume","배경음
 음량"
@@ -159,6 +165,9 @@ Volume","배경음
 Volume","효과음
 음량"
 "Custom/Canvas/TimeoutPanel/Text",168024756707328,"Time out!","시간 초과!"
+"Custom/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776449,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/QuitButton/Text",168044683845632,"Quit","나가기"
 "Custom/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",168062677409792,"Return
 to game","게임으로
@@ -174,20 +183,31 @@ skip","시간
 "Editor/Canvas/EditorPanel/Phase 1: Initialize/EditorMapName1/Placeholder",168774387884032,"Enter the map name...","맵 이름을 입력하세요..."
 "Editor/Canvas/InputMessageUI/MessageBox/MessageInputField/Placeholder",168792230453248,"Folder name...","폴더 이름..."
 "Editor/Canvas/TimeoutPanel/Text",168827580047360,"Time out!","시간 초과!"
+"Editor/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776450,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "First/Canvas/FirstPanel/DesriptionText",169313049763840,"You're a gravity manipulator.
 Your goal is to escape the ball to the exit.","당신은 중력 조작자입니다.
 공을 출구로 탈출시켜보세요!"
 "First/Canvas/FirstPanel/HeaderText",169428787388416,"Welcome!","환영합니다!"
 "Main/Canvas/TimeoutPanel/Text",169542926983168,"Time out!","시간 초과!"
+"Main/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776451,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Mode/Canvas/TimeoutPanel/Text",169606495854592,"Time out!","시간 초과!"
+"Mode/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776452,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Setting/Canvas/FirstPanel/Audio/BgmVolume",169656898805760,"BGM
 Volume","배경음
 음량"
 "Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
 <size=48>v1.4.3</size>
 
+
 Project Managing
 <size=48><i>Dantae An</i></size>
+
 
 Programming
 <size=48><i>Dantae An</i></size>
@@ -199,35 +219,44 @@ Programming
 <size=48><i>Yongchan Jo</i></size>
 <size=48><i>Diane Kim</i></size>
 
+
 Game Design
 <size=48><i>Dantae An</i></size>
+
 
 Level Design
 <size=48><i>Donghwan Yang</i></size>
 <size=48><i>Dantae An</i></size>
 
+
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
+
 
 Graphic Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
 <size=48><i>Donghwan Yang</i></size>
 
+
 Sound Design
 <size=48><i>Dantae An</i></size>
+
 
 Localization
 <size=48><i>Jaehee Hong</i></size>
 <size=48><i>Diane Kim</i></size>
 <size=48><i>Dantae An</i></size>
 
+
 Marketing
 <size=48><i>Suin Lee</i></size>
 
+
 Infrastructure
 <size=36><i>cseteram</i></size>
+
 
 Map Making
 <size=48><i>Dantae An</i></size>
@@ -305,6 +334,9 @@ Volume","배경음
 Volume","효과음
 음량"
 "Training/Canvas/TimeoutPanel/Text",170842775347200,"Time out!","시간 초과!"
+"Training/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970752,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Training/Canvas/PauseUI/PauseBox/QuitButton/Text",170862224334848,"Quit","나가기"
 "Training/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",170877630013440,"Return
 to game","게임으로
@@ -321,6 +353,9 @@ Volume","배경음
 Volume","효과음
 음량"
 "Tutorial/Canvas/TimeoutPanel/Text",171112083218432,"Time out!","시간 초과!"
+"Tutorial/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970753,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+시간을 건너뛸 수 있어요."
 "Tutorial/Canvas/PauseUI/PauseBox/QuitButton/Text",171147529281536,"Quit","나가기"
 "Tutorial/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",171166206517248,"Return
 to game","게임으로
