@@ -225,12 +225,6 @@ public class MapManager : MonoBehaviour
         private set;
     } = false;
 
-    public bool HasTimeSkipGuided
-    {
-        get;
-        private set;
-    } = false;
-
     public string ActionHistory
     {
         get;
@@ -259,10 +253,10 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
-                if (IsTimeSkipped == false && HasTimeSkipGuided == false)
+                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false)
                 {
                     timeoutPanel.transform.GetChild(1).gameObject.SetActive(true);
-                    HasTimeSkipGuided = true;
+                    GameManager.gm.HasTimeSkipGuided = true;
                     Debug.Log("TimeSkipGuide activated");
                 }
                 else
@@ -313,7 +307,6 @@ public class MapManager : MonoBehaviour
         IsTimePassing = false;
         HasTimePaused = false;
         IsTimeSkipped = false;
-        HasTimeSkipGuided = false;
         RemainingTime = 0f;
         MoveLimit = 0;
         tilemap.ClearAllTiles();
@@ -1176,9 +1169,9 @@ public class MapManager : MonoBehaviour
         if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
         IsTimeSkipped = true;
-        HasTimeSkipGuided = true;
         RemainingTime = 0f;
         timeoutPanel.SetActive(true);
+        GameManager.gm.HasTimeSkipGuided = true;
         GameManager.gm.PlayTimeoutSFX();
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
