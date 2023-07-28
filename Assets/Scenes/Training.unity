@@ -191,6 +191,71 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[0]
+      value: 
+      objectReference: {fileID: 1036927103}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[1]
+      value: 
+      objectReference: {fileID: 724013485}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[2]
+      value: 
+      objectReference: {fileID: 138374247}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[3]
+      value: 
+      objectReference: {fileID: 633629795}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[4]
+      value: 
+      objectReference: {fileID: 165929883}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[5]
+      value: 
+      objectReference: {fileID: 512206752}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[6]
+      value: 
+      objectReference: {fileID: 71643776}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[7]
+      value: 
+      objectReference: {fileID: 82120131}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[8]
+      value: 
+      objectReference: {fileID: 370162805}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[9]
+      value: 
+      objectReference: {fileID: 896918951}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[10]
+      value: 
+      objectReference: {fileID: 1264152366}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: eventHapticSource.Array.data[11]
+      value: 
+      objectReference: {fileID: 566653990}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -272,6 +337,168 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52489957}
   m_CullTransparentMesh: 0
+--- !u!1 &71643774
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71643775}
+  - component: {fileID: 71643776}
+  m_Layer: 0
+  m_Name: Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &71643775
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71643774}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &71643776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71643774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 1f89ddcd9ce3fb342b657b4a073d3d92,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
+--- !u!1 &82120129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 82120130}
+  - component: {fileID: 82120131}
+  m_Layer: 0
+  m_Name: Iron
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &82120130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82120129}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &82120131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82120129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: d603fefb0605119438f87cabe8c50594,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
+--- !u!1 &138374245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 138374246}
+  - component: {fileID: 138374247}
+  m_Layer: 0
+  m_Name: Panel (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &138374246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138374245}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &138374247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138374245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: ea3de0f6adbff024eb2c0c1b2ae8f3f1,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1001 &165664660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -411,6 +638,60 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 165664660}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &165929881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 165929882}
+  - component: {fileID: 165929883}
+  m_Layer: 0
+  m_Name: Star (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &165929882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165929881}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &165929883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165929881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 7aa43479308c4414ba467cd7a4ab6f1e,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &166110716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,6 +2440,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351314864}
   m_CullTransparentMesh: 0
+--- !u!1 &370162803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 370162804}
+  - component: {fileID: 370162805}
+  m_Layer: 0
+  m_Name: Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &370162804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370162803}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &370162805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370162803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 7e5fb110c0d7bdc48b87fbd5b25054ee,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &380486042
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,6 +3111,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481322711}
   m_CullTransparentMesh: 0
+--- !u!1 &512206750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512206751}
+  - component: {fileID: 512206752}
+  m_Layer: 0
+  m_Name: Star (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &512206751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512206750}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &512206752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512206750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 815fab5d7877aa64cbd4c537103490b4,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &530667192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3138,6 +3527,60 @@ MonoBehaviour:
   tooltipWidth: 324
   tooltipHeight: 168
   pivot: 0
+--- !u!1 &566653988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 566653989}
+  - component: {fileID: 566653990}
+  m_Layer: 0
+  m_Name: EscapeSecond
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &566653989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566653988}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &566653990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566653988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: a1f334015bf34c9428d9c75067715c33,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &596967299
 GameObject:
   m_ObjectHideFlags: 0
@@ -3378,6 +3821,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 630556338}
   m_CullTransparentMesh: 0
+--- !u!1 &633629793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 633629794}
+  - component: {fileID: 633629795}
+  m_Layer: 0
+  m_Name: Star (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &633629794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633629793}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &633629795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633629793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: d1be94b69b7cfb54d857287bd1e55757,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &685749599 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2672423829272442781, guid: d838f6f282b36a043ab18477971ef80d,
@@ -3517,6 +4014,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703443030}
   m_CullTransparentMesh: 0
+--- !u!1 &724013483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 724013484}
+  - component: {fileID: 724013485}
+  m_Layer: 0
+  m_Name: Panel (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &724013484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724013483}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &724013485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724013483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 797f0ea492a972141a91d79267237551,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &737857022
 GameObject:
   m_ObjectHideFlags: 0
@@ -4156,6 +4707,60 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 874865381}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &896918949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 896918950}
+  - component: {fileID: 896918951}
+  m_Layer: 0
+  m_Name: Timeout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &896918950
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896918949}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &896918951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896918949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 9ce55884559c899459ac9206a52268dd,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &899461476
 GameObject:
   m_ObjectHideFlags: 0
@@ -5261,6 +5866,52 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 994666864}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1005552833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1005552835}
+  - component: {fileID: 1005552834}
+  m_Layer: 0
+  m_Name: HapticBodyPart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1005552834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005552833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebe72f90241cb148ab7b48ca05a7747, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BodyPart: 302
+  Side: 0
+--- !u!4 &1005552835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005552833}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1220578207}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1010265666
 GameObject:
   m_ObjectHideFlags: 0
@@ -5413,6 +6064,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024448015}
   m_CullTransparentMesh: 0
+--- !u!1 &1036927101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1036927102}
+  - component: {fileID: 1036927103}
+  m_Layer: 0
+  m_Name: Panel (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1036927102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036927101}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1036927103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036927101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: 47c7a74989d16694591b048ec7206d61,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &1122090535
 GameObject:
   m_ObjectHideFlags: 0
@@ -5867,6 +6572,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1220578205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1220578207}
+  - component: {fileID: 1220578206}
+  m_Layer: 0
+  m_Name: HapticManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1220578206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220578205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9d7245840628c419a4b3c72a337962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _persistent: 1
+--- !u!4 &1220578207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220578205}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1875481058}
+  - {fileID: 1005552835}
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1222790106
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,6 +6844,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1233494438}
   m_CullTransparentMesh: 0
+--- !u!1 &1264152364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1264152365}
+  - component: {fileID: 1264152366}
+  m_Layer: 0
+  m_Name: EscapeAni
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1264152365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264152364}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -813.45233, y: -1525.5374, z: -1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875481058}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1264152366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264152364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticMaterial: {fileID: -6750239444755058063, guid: fcbfbe4d3515f744a9028b1882447079,
+    type: 3}
+  vibrationOffset: 0
+  textureOffset: 0
+  stiffnessOffset: 0
+  debugMode: 1
+  playOnStart: 0
+  hapticBodyParts:
+  - {fileID: 1005552834}
+  delayPlay: 0
 --- !u!1 &1327791484
 GameObject:
   m_ObjectHideFlags: 0
@@ -7785,6 +8591,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1875481057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1875481058}
+  m_Layer: 0
+  m_Name: HapticEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1875481058
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875481057}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 813.45233, y: 1525.5374, z: 1464.7773}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1036927102}
+  - {fileID: 724013484}
+  - {fileID: 138374246}
+  - {fileID: 633629794}
+  - {fileID: 165929882}
+  - {fileID: 512206751}
+  - {fileID: 71643775}
+  - {fileID: 82120130}
+  - {fileID: 370162804}
+  - {fileID: 896918950}
+  - {fileID: 1264152365}
+  - {fileID: 566653989}
+  m_Father: {fileID: 1220578207}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1898427144
 GameObject:
   m_ObjectHideFlags: 0

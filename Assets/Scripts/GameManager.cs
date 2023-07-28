@@ -8,10 +8,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using Interhaptics.Internal;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 #if UNITY_ANDROID && !UNITY_EDITOR
+
 using UnityEngine.Android;
 #endif
 
@@ -33,6 +35,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
+
+
+    [SerializeField]
+    public EventHapticSource[] eventHapticSource;
+    public float delayPlayTime = 0.0f;
 
     public int PlayingMapIndex{
         get { return playingMapIndex; }
@@ -324,7 +331,6 @@ public class GameManager : MonoBehaviour
                 {
                     LoadFirst();
                     isTutorialDone = false;
-
                 }
             }
             catch (Exception e)
@@ -498,21 +504,25 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(8);
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(8);
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(7);
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(6);
     }
 
     public void PlayEscapedSFX()
@@ -523,6 +533,7 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
+        PlayHaptic(9); // HapticError
     }
 
     public void PlayRetrySFX()
@@ -544,11 +555,41 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+        switch (volume)
+        {
+            case 1.0f:
+                Debug.Log("Fall1");
+                OnTriggerHaptic(0);
+                break;
+            case 0.75f:
+                Debug.Log("Fall2");
+                OnTriggerHaptic(1);
+                break;
+            case 0.5f:
+                Debug.Log("Fall3");
+                OnTriggerHaptic(2);
+                break;
+        }
     }
 
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
+        switch (num)
+        {
+            case 0:
+                Debug.Log("Star1");
+                OnTriggerHaptic(3); //HapticError
+                break;
+            case 1:
+                Debug.Log("Star2");
+                OnTriggerHaptic(4); //HapticError
+                break;
+            case 2:
+                Debug.Log("Star3");
+                OnTriggerHaptic(5); //HapticError
+                break;
+        }
     }
 
     public void QuitGame()
@@ -1422,6 +1463,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
+    public void OnTriggerHaptic(int hapticNum)
+    {
+        Debug.Log("On triggered");
+        eventHapticSource[hapticNum].delayPlay = delayPlayTime;
+        eventHapticSource[hapticNum].PlayEventVibration();
+    }
+    public void PlayHaptic(int hapticNum)
+    {
+        Debug.Log("StartPlay");
+        eventHapticSource[hapticNum].Play();
+    }
+    public void StopHaptic(int hapticNum)
+    {
+        Debug.Log("StopPlay");
+        eventHapticSource[hapticNum].Stop();
+    }
     public void LoadSettingsValue()
     {
         if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))

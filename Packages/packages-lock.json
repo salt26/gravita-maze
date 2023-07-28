@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.interhaptics.core_sdk": {
+      "version": "https://github.com/Interhaptics/Unity_CoreSDK.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "de45ea6f1511eef630b4b572298ab0b3b3b697a7"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
