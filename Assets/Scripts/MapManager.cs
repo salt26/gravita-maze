@@ -257,7 +257,7 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
-                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false)
+                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false && !SceneManager.GetActiveScene().name.Equals("Tutorial"))
                 {
                     timeoutPanel.transform.GetChild(1).gameObject.SetActive(true);
                     GameManager.gm.HasTimeSkipGuided = true;
