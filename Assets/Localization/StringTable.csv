@@ -150,11 +150,15 @@ to game","게임으로
 "Adventure/Canvas/PauseUI/PauseBox/QuitButton/Text",165465119776768,"Quit","나가기"
 "Adventure/Canvas/TimeoutPanel/Text",165502885289984,"Time out!","시간 초과!"
 "Adventure/Canvas/TimeoutPanel/TimeSkipGuide",21709072107999232,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "AdventureLevel/Canvas/TimeoutPanel/Text",165704832638976,"Time out!","시간 초과!"
 "AdventureLevel/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776448,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/BgmVolume",167868644712448,"BGM
 Volume","배경음
@@ -166,7 +170,9 @@ Volume","효과음
 음량"
 "Custom/Canvas/TimeoutPanel/Text",168024756707328,"Time out!","시간 초과!"
 "Custom/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776449,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/QuitButton/Text",168044683845632,"Quit","나가기"
 "Custom/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",168062677409792,"Return
@@ -184,7 +190,9 @@ skip","시간
 "Editor/Canvas/InputMessageUI/MessageBox/MessageInputField/Placeholder",168792230453248,"Folder name...","폴더 이름..."
 "Editor/Canvas/TimeoutPanel/Text",168827580047360,"Time out!","시간 초과!"
 "Editor/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776450,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "First/Canvas/FirstPanel/DesriptionText",169313049763840,"You're a gravity manipulator.
 Your goal is to escape the ball to the exit.","당신은 중력 조작자입니다.
@@ -193,10 +201,12 @@ Your goal is to escape the ball to the exit.","당신은 중력 조작자입니�
 "Main/Canvas/TimeoutPanel/Text",169542926983168,"Time out!","시간 초과!"
 "Main/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776451,"You can skip the time
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Mode/Canvas/TimeoutPanel/Text",169606495854592,"Time out!","시간 초과!"
 "Mode/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776452,"You can skip the time
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Setting/Canvas/FirstPanel/Audio/BgmVolume",169656898805760,"BGM
 Volume","배경음
@@ -357,7 +367,9 @@ Volume","효과음
 음량"
 "Training/Canvas/TimeoutPanel/Text",170842775347200,"Time out!","시간 초과!"
 "Training/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970752,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Training/Canvas/PauseUI/PauseBox/QuitButton/Text",170862224334848,"Quit","나가기"
 "Training/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",170877630013440,"Return
@@ -376,7 +388,9 @@ Volume","효과음
 음량"
 "Tutorial/Canvas/TimeoutPanel/Text",171112083218432,"Time out!","시간 초과!"
 "Tutorial/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970753,"You can skip the time
+by clicking this button
 in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
 시간을 건너뛸 수 있어요."
 "Tutorial/Canvas/PauseUI/PauseBox/QuitButton/Text",171147529281536,"Quit","나가기"
 "Tutorial/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",171166206517248,"Return
@@ -406,4 +420,4 @@ skip","시간
 "Non-clearedNextButton",962904780132352,"Ctrl + Enter key","Ctrl + Enter 키"
 "PauseButton",963619405647872,"Esc key","Esc 키"
 "Non-clearedNextButtonOSX",8020914447835136,"Option + Enter key","Option + Enter 키"
-"RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"ButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
+"RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"

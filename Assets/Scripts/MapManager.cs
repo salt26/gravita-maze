@@ -259,13 +259,15 @@ public class MapManager : MonoBehaviour
             {
                 if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false && !SceneManager.GetActiveScene().name.Equals("Tutorial"))
                 {
-                    timeoutPanel.transform.GetChild(1).gameObject.SetActive(true);
+                    timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(true);
+                    timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(true);
                     GameManager.gm.HasTimeSkipGuided = true;
                     Debug.Log("TimeSkipGuide activated");
                 }
                 else
                 {
-                    timeoutPanel.transform.GetChild(1).gameObject.SetActive(false);
+                    timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(false);
+                    timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(false);
                     Debug.Log("TimeSkipGuide deactivated");
                 }
                 timeoutPanel.SetActive(true);

@@ -1109,25 +1109,37 @@ MonoBehaviour:
   - m_Id: 21709072107999232
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   - m_Id: 21709072124776448
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   - m_Id: 21709072124776449
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   - m_Id: 21709072124776450
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   - m_Id: 21709072124776451
@@ -1145,13 +1157,19 @@ MonoBehaviour:
   - m_Id: 21709072128970752
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   - m_Id: 21709072128970753
     m_Localized: 'You can skip the time
 
-      in the pause menu.'
+      by clicking this button
+
+      in
+      the pause menu.'
     m_Metadata:
       m_Items: []
   references:
