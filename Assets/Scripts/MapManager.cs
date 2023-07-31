@@ -1412,7 +1412,9 @@ public class MapManager : MonoBehaviour
                 SceneManager.GetActiveScene().name.Equals("Training"))
             {
                 GameManager.gm.PlayEscapedSFX();
+#if UNITY_ANDROID && !UNITY_EDITOR
                 GameManager.gm.PlayHaptic(10);// HapticError
+#endif
             }
             StartCoroutine(GravityWithAnimation(map, currentMovableCoord, gravityDirection, moves, flag, 1f));
         }
@@ -1491,7 +1493,7 @@ public class MapManager : MonoBehaviour
                         {
                             // j++
                             move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
-                            #region Up
+#region Up
                             for (int k = j; k <= SizeY; k++)
                             {
                                 if (k == SizeY)
@@ -1675,7 +1677,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                         if (move != null) moves.Add(move);
                     }
@@ -1692,7 +1694,7 @@ public class MapManager : MonoBehaviour
                         {
                             // j--
                             move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
-                            #region Down
+#region Down
                             for (int k = j; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -1875,7 +1877,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                         if (move != null) moves.Add(move);
                     }
@@ -1892,7 +1894,7 @@ public class MapManager : MonoBehaviour
                         {
                             // i--
                             move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
-                            #region Left
+#region Left
                             for (int k = i; k >= -1; k--)
                             {
                                 if (k == -1)
@@ -2075,7 +2077,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                         if (move != null) moves.Add(move);
                     }
@@ -2092,7 +2094,7 @@ public class MapManager : MonoBehaviour
                         {
                             // i++
                             move = new Move(mutableMovableCoord[i, j], i + 1, j + 1);
-                            #region Right
+#region Right
                             for (int k = i; k <= SizeX; k++)
                             {
                                 if (k == SizeX)
@@ -2401,7 +2403,7 @@ public class MapManager : MonoBehaviour
                                     }
                                 }
                             }
-                            #endregion
+#endregion
                         }
                         if (move != null) moves.Add(move);
                     }
@@ -2418,7 +2420,9 @@ public class MapManager : MonoBehaviour
 
     IEnumerator GravityWithAnimation(Map mutableMap, Movable[,] mutableMovableCoord, GameManager.GravityDirection gravityDirection, List<Move> moves, Flag flag, float animationSpeed)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         bool isHapticTriggered = false;
+#endif
         float time = Time.time;
         if (traces != null)
         {
@@ -2460,11 +2464,18 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevY - 1 < mutableMap.sizeY)
                                 {
+#if UNITY_ANDROID && !UNITY_EDITOR
                                     if (flag == Flag.Escaped) {
                                         GameManager.gm.PlayHaptic(10); // HapticError
                                     }
+<<<<<<< Updated upstream
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
+=======
+#endif
+                                // Activate a shutter
+                                if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], PlayingWallFlag.Shutter, DirectionFlag.Down))
+>>>>>>> Stashed changes
                                     {
                                         mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.DownShutter / 2;
                                         mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
@@ -2489,11 +2500,13 @@ public class MapManager : MonoBehaviour
                                         m.movable.gameObject.SetActive(false);
                                     }
                                 }
+#if UNITY_ANDROID && !UNITY_EDITOR
                                 else if(!isHapticTriggered)
                                 {
                                     GameManager.gm.StopHaptic(10); // HapticError
                                     GameManager.gm.OnTriggerHaptic(11); //HapticError
                                 }
+#endif
                             }
                             else if (m.movable is Iron)
                             {
@@ -2553,10 +2566,12 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevY - 1 >= 0)
                                 {
+#if UNITY_ANDROID && !UNITY_EDITOR
                                     if (flag == Flag.Escaped)
                                     {
                                         GameManager.gm.PlayHaptic(10); // HapticError
                                     }
+#endif
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.UpShutter))
                                     {
@@ -2583,11 +2598,13 @@ public class MapManager : MonoBehaviour
                                         m.movable.gameObject.SetActive(false);
                                     }
                                 }
+#if UNITY_ANDROID && !UNITY_EDITOR
                                 else if (!isHapticTriggered)
                                 {
                                     GameManager.gm.StopHaptic(10); //HapticError
                                     GameManager.gm.OnTriggerHaptic(11); //HapticError
                                 }
+#endif
                             }
                             else if (m.movable is Iron)
                             {
@@ -2647,10 +2664,12 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevX - 1 >= 0)
                                 {
+#if UNITY_ANDROID && !UNITY_EDITOR
                                     if (flag == Flag.Escaped)
                                     {
                                         GameManager.gm.PlayHaptic(10); // HapticError
                                     }
+#endif
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.RightShutter))
                                     {
@@ -2677,11 +2696,13 @@ public class MapManager : MonoBehaviour
                                         m.movable.gameObject.SetActive(false);
                                     }
                                 }
+#if UNITY_ANDROID && !UNITY_EDITOR
                                 else if (!isHapticTriggered)
                                 {
                                     GameManager.gm.StopHaptic(10); // HapticError
                                     GameManager.gm.OnTriggerHaptic(11); // HapticError
                                 }
+#endif
                             }
                             else if (m.movable is Iron)
                             {
@@ -2741,10 +2762,12 @@ public class MapManager : MonoBehaviour
                                 // Check if the ball is in the map
                                 if (m.prevX - 1 < mutableMap.sizeX)
                                 {
+#if UNITY_ANDROID && !UNITY_EDITOR
                                     if (flag == Flag.Escaped)
                                     {
                                         GameManager.gm.PlayHaptic(10); // HapticError
                                     }
+#endif
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.LeftShutter))
                                     {
@@ -2771,11 +2794,13 @@ public class MapManager : MonoBehaviour
                                         m.movable.gameObject.SetActive(false);
                                     }
                                 }
+#if UNITY_ANDROID && !UNITY_EDITOR
                                 else if (!isHapticTriggered)
                                 {
                                     GameManager.gm.StopHaptic(10); // HapticError
                                     GameManager.gm.OnTriggerHaptic(11); // HapticError
                                 }
+#endif
                             }
                             else if (m.movable is Iron)
                             {
