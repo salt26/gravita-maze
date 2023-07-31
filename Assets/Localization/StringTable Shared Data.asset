@@ -583,8 +583,16 @@ MonoBehaviour:
     m_Key: Adventure/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072107999232
+    m_Key: Adventure/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 165704832638976
     m_Key: AdventureLevel/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776448
+    m_Key: AdventureLevel/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 167868644712448
@@ -605,6 +613,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 168024756707328
     m_Key: Custom/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776449
+    m_Key: Custom/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 168044683845632
@@ -651,6 +663,10 @@ MonoBehaviour:
     m_Key: Editor/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072124776450
+    m_Key: Editor/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 169313049763840
     m_Key: First/Canvas/FirstPanel/DesriptionText
     m_Metadata:
@@ -663,8 +679,16 @@ MonoBehaviour:
     m_Key: Main/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072124776451
+    m_Key: Main/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 169606495854592
     m_Key: Mode/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776452
+    m_Key: Mode/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 169656898805760
@@ -711,6 +735,10 @@ MonoBehaviour:
     m_Key: Training/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072128970752
+    m_Key: Training/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 170862224334848
     m_Key: Training/Canvas/PauseUI/PauseBox/QuitButton/Text
     m_Metadata:
@@ -741,6 +769,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 171112083218432
     m_Key: Tutorial/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072128970753
+    m_Key: Tutorial/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 171147529281536

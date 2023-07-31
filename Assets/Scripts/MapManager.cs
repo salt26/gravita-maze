@@ -223,6 +223,12 @@ public class MapManager : MonoBehaviour
         private set;
     } = false;
 
+    public bool IsTimeSkipped
+    {
+        get;
+        private set;
+    } = false;
+
     public string ActionHistory
     {
         get;
@@ -251,6 +257,20 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
+                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false &&
+                    !SceneManager.GetActiveScene().name.Equals("Tutorial") && !SceneManager.GetActiveScene().name.Equals("Editor"))
+                {
+                    timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(true);
+                    timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(true);
+                    GameManager.gm.HasTimeSkipGuided = true;
+                    Debug.Log("TimeSkipGuide activated");
+                }
+                else
+                {
+                    timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(false);
+                    timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(false);
+                    Debug.Log("TimeSkipGuide deactivated");
+                }
                 timeoutPanel.SetActive(true);
                 GameManager.gm.PlayTimeoutSFX();
                 if (afterGravity.GetInvocationList().Length > 0)
@@ -293,6 +313,7 @@ public class MapManager : MonoBehaviour
         IsTimeActivated = false;
         IsTimePassing = false;
         HasTimePaused = false;
+        IsTimeSkipped = false;
         RemainingTime = 0f;
         MoveLimit = 0;
         tilemap.ClearAllTiles();
@@ -1219,8 +1240,13 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
+        IsTimeSkipped = true;
         RemainingTime = 0f;
+        timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(false);
+        timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(false);
         timeoutPanel.SetActive(true);
+        Debug.Log("TimeSkipGuide deactivated");
+        GameManager.gm.HasTimeSkipGuided = true;
         GameManager.gm.PlayTimeoutSFX();
         if (afterGravity.GetInvocationList().Length > 0)
             afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
@@ -1341,6 +1367,7 @@ public class MapManager : MonoBehaviour
         HasDied = false;
         IsTimePassing = false;
         IsReady = true;
+        IsTimeSkipped = false;
     }
 
     public void ManipulateGravityUp()
