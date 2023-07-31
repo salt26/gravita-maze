@@ -257,7 +257,8 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
-                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false && !SceneManager.GetActiveScene().name.Equals("Tutorial"))
+                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false &&
+                    !SceneManager.GetActiveScene().name.Equals("Tutorial") && !SceneManager.GetActiveScene().name.Equals("Editor"))
                 {
                     timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(true);
                     timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(true);
@@ -1241,7 +1242,10 @@ public class MapManager : MonoBehaviour
         HasTimePaused = false;
         IsTimeSkipped = true;
         RemainingTime = 0f;
+        timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(false);
+        timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(false);
         timeoutPanel.SetActive(true);
+        Debug.Log("TimeSkipGuide deactivated");
         GameManager.gm.HasTimeSkipGuided = true;
         GameManager.gm.PlayTimeoutSFX();
         if (afterGravity.GetInvocationList().Length > 0)
