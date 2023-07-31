@@ -223,12 +223,6 @@ public class MapManager : MonoBehaviour
         private set;
     } = false;
 
-    public bool IsTimeSkipped
-    {
-        get;
-        private set;
-    } = false;
-
     public string ActionHistory
     {
         get;
@@ -257,7 +251,7 @@ public class MapManager : MonoBehaviour
             RemainingTime -= Time.deltaTime;
             if (RemainingTime <= 0f)
             {
-                if (IsTimeSkipped == false && GameManager.gm.HasTimeSkipGuided == false &&
+                if (GameManager.gm.HasTimeSkipGuided == false &&
                     !SceneManager.GetActiveScene().name.Equals("Tutorial") && !SceneManager.GetActiveScene().name.Equals("Editor"))
                 {
                     timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(true);
@@ -313,7 +307,6 @@ public class MapManager : MonoBehaviour
         IsTimeActivated = false;
         IsTimePassing = false;
         HasTimePaused = false;
-        IsTimeSkipped = false;
         RemainingTime = 0f;
         MoveLimit = 0;
         tilemap.ClearAllTiles();
@@ -1240,7 +1233,6 @@ public class MapManager : MonoBehaviour
     {
         if (!IsReady || LimitMode != LimitModeEnum.Time || !IsTimeActivated) return;
         HasTimePaused = false;
-        IsTimeSkipped = true;
         RemainingTime = 0f;
         timeoutPanel.transform.Find("TimeSkipGuide").gameObject.SetActive(false);
         timeoutPanel.transform.Find("TimeSkipImage").gameObject.SetActive(false);
@@ -1367,7 +1359,6 @@ public class MapManager : MonoBehaviour
         HasDied = false;
         IsTimePassing = false;
         IsReady = true;
-        IsTimeSkipped = false;
     }
 
     public void ManipulateGravityUp()
