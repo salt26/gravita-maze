@@ -565,53 +565,39 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         switch (volume)
         {
             case 1.0f:
-                Debug.Log("Fall1");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(0);
-#endif
                 break;
             case 0.75f:
-                Debug.Log("Fall2");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(1);
-#endif
                 break;
             case 0.5f:
-                Debug.Log("Fall3");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(2);
-#endif
                 break;
         }
+#endif
     }
 
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         switch (num)
         {
             case 0:
-                Debug.Log("Star1");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(3); //HapticError
-#endif
                 break;
             case 1:
-                Debug.Log("Star2");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(4); //HapticError
-#endif
                 break;
             case 2:
-                Debug.Log("Star3");
-#if UNITY_ANDROID && !UNITY_EDITOR
                 OnTriggerHaptic(5); //HapticError
-#endif
                 break;
         }
+#endif
     }
 
     public void QuitGame()
