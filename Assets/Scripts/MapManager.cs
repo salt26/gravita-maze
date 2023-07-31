@@ -2468,14 +2468,9 @@ public class MapManager : MonoBehaviour
                                     if (flag == Flag.Escaped) {
                                         GameManager.gm.PlayHaptic(10); // HapticError
                                     }
-<<<<<<< Updated upstream
+#endif
                                     // Activate a shutter
                                     if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], TileFlag.DownShutter))
-=======
-#endif
-                                // Activate a shutter
-                                if (CheckTileFlag(mutableMap.mapCoord[m.prevX - 1, m.prevY - 1], PlayingWallFlag.Shutter, DirectionFlag.Down))
->>>>>>> Stashed changes
                                     {
                                         mutableMap.mapCoord[m.prevX - 1, m.prevY - 1] -= (int)TileFlag.DownShutter / 2;
                                         mutableMap.mapCoord[m.prevX - 1, m.prevY - 2] -= (int)TileFlag.UpShutter / 2;
