@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
-using Interhaptics.Internal;
 
 public class SettingManager : MonoBehaviour
 {

@@ -504,25 +504,33 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(8);
+#endif
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(8);
+#endif
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(7);
+#endif
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(6);
+#endif
     }
 
     public void PlayEscapedSFX()
@@ -533,7 +541,9 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         PlayHaptic(9); // HapticError
+#endif
     }
 
     public void PlayRetrySFX()
@@ -555,41 +565,39 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         switch (volume)
         {
             case 1.0f:
-                Debug.Log("Fall1");
                 OnTriggerHaptic(0);
                 break;
             case 0.75f:
-                Debug.Log("Fall2");
                 OnTriggerHaptic(1);
                 break;
             case 0.5f:
-                Debug.Log("Fall3");
                 OnTriggerHaptic(2);
                 break;
         }
+#endif
     }
 
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
+#if UNITY_ANDROID && !UNITY_EDITOR
         switch (num)
         {
             case 0:
-                Debug.Log("Star1");
                 OnTriggerHaptic(3); //HapticError
                 break;
             case 1:
-                Debug.Log("Star2");
                 OnTriggerHaptic(4); //HapticError
                 break;
             case 2:
-                Debug.Log("Star3");
                 OnTriggerHaptic(5); //HapticError
                 break;
         }
+#endif
     }
 
     public void QuitGame()
@@ -1463,6 +1471,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+#if UNITY_ANDROID && !UNITY_EDITOR
     // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
     public void OnTriggerHaptic(int hapticNum)
     {
@@ -1480,6 +1489,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("StopPlay");
         eventHapticSource[hapticNum].Stop();
     }
+#endif
     public void LoadSettingsValue()
     {
         if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))
