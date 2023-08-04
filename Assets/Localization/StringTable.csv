@@ -78,7 +78,7 @@
 "warning_exit_error",486496264241,"Cannot open the map:\nexit error","맵을 열 수 없어요:\n출구 오류"
 "warning_wall_error",486496264242,"Cannot open the map:\nwall error","맵을 열 수 없어요:\n벽 오류"
 "warning_shutter_error",486496264243,"Cannot open the map:\nshutter error","맵을 열 수 없어요:\n셔터 오류"
-"warning_hole_error",,"Cannot open the map:\nhole error","맵을 열 수 없어요:\n구멍 오류"
+"warning_hole_error",24254986643214336,"Cannot open the map:\nhole error","맵을 열 수 없어요:\n구멍 오류"
 "warning_time_limit_error",486496264244,"Cannot open the map:\ntime limit error","맵을 열 수 없어요:\n시간 제한 오류"
 "warning_solution_error",486496264245,"Cannot open the map:\nsolution error","맵을 열 수 없어요:\n풀이 오류"
 "warning_multiple_solutions",486496264246,"Cannot open the map:\nmultiple solutions","맵을 열 수 없어요:\n중복된 풀이"
