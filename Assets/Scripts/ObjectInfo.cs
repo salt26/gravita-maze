@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ObjectInfo : IEquatable<ObjectInfo>
 {
-    public enum Type { Ball = 1, Iron = 2, Fire = 3, QuitGame = 11, MapEditor = 12 }
+    public enum Type { Ball = 1, Iron = 2, Fire = 3, Hole = 4, QuitGame = 11, MapEditor = 12 }
     
     public Type type;
     public int x;

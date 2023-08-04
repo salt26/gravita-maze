@@ -10,10 +10,11 @@
 "editor_update_set_save_path",486492069892,"Choose a path to save.","저장할 경로를 설정하세요."
 "editor_warning_add_wall",486492069893,"Cannot add a wall there.","여기에는 벽을 추가할 수 없어요."
 "editor_warning_add_shutter",486492069894,"Cannot add a shutter there.","여기에는 셔터를 추가할 수 없어요."
-"edtior_warning_add_exit",486492069895,"Cannot add an exit there.","여기에는 출구를 추가할 수 없어요."
+"editor_warning_add_exit",486492069895,"Cannot add an exit there.","여기에는 출구를 추가할 수 없어요."
 "editor_warning_add_ball",486492069896,"Cannot add a ball there.","여기에는 공을 추가할 수 없어요."
 "editor_warning_add_iron",486492069897,"Cannot add an iron there.","여기에는 쇳덩이를 추가할 수 없어요."
 "editor_warning_add_fire",486492069898,"Cannot add a fire there.","여기에는 불을 추가할 수 없어요."
+"editor_warning_add_hole",24239937476268032,"Cannot add a hole there.","여기에는 구멍을 추가할 수 없어요."
 "editor_warning_duplicate_exits",486492069899,"Only one exit can be placed.","출구는 하나만 놓을 수 있어요."
 "editor_warning_duplicate_balls",486492069900,"Only one ball can be placed.","공은 하나만 놓을 수 있어요."
 "editor_warning_remove_wall",486492069901,"Cannot remove walls there.","해당 벽은 제거할 수 없어요."
@@ -26,6 +27,7 @@
 "editor_guide_add_iron",486496264192,"Touch the map to add irons.","맵을 터치하면 쇳덩이가 추가돼요."
 "editor_guide_add_wall",486496264193,"Touch the map to add walls.","맵을 터치하면 벽이 추가돼요."
 "editor_guide_add_shutter",486496264194,"Touch the map to add shutters.","맵을 터치하면 셔터가 추가돼요."
+"editor_guide_add_hole",24239937501433856,"Touch the map to add holes.","맵을 터치하면 구멍이 추가돼요."
 "editor_guide_remove_multi",486496264195,"Touch the map to remove\nwalls or shutters or exits.","맵을 터치하면 벽, 셔터 또는 출구를\n제거할 수 있어요."
 "editor_guide_remove_object",486496264196,"Touch the map to remove objects.","맵을 터치하면 물체를 제거할 수 있어요."
 "editor_reset_initial",486496264197,"Build your own map!","나만의 맵을 만들어 보자고요!"
@@ -76,6 +78,7 @@
 "warning_exit_error",486496264241,"Cannot open the map:\nexit error","맵을 열 수 없어요:\n출구 오류"
 "warning_wall_error",486496264242,"Cannot open the map:\nwall error","맵을 열 수 없어요:\n벽 오류"
 "warning_shutter_error",486496264243,"Cannot open the map:\nshutter error","맵을 열 수 없어요:\n셔터 오류"
+"warning_hole_error",,"Cannot open the map:\nhole error","맵을 열 수 없어요:\n구멍 오류"
 "warning_time_limit_error",486496264244,"Cannot open the map:\ntime limit error","맵을 열 수 없어요:\n시간 제한 오류"
 "warning_solution_error",486496264245,"Cannot open the map:\nsolution error","맵을 열 수 없어요:\n풀이 오류"
 "warning_multiple_solutions",486496264246,"Cannot open the map:\nmultiple solutions","맵을 열 수 없어요:\n중복된 풀이"
@@ -215,12 +218,8 @@ Volume","배경음
 <size=48>v1.4.3</size>
 
 
-
-
 Project Managing
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Programming
@@ -234,12 +233,8 @@ Programming
 <size=48><i>Diane Kim</i></size>
 
 
-
-
 Game Design
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Level Design
@@ -247,13 +242,9 @@ Level Design
 <size=48><i>Dantae An</i></size>
 
 
-
-
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
-
-
 
 
 Graphic Design
@@ -262,12 +253,8 @@ Graphic Design
 <size=48><i>Donghwan Yang</i></size>
 
 
-
-
 Sound Design
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Localization
@@ -276,18 +263,12 @@ Localization
 <size=48><i>Dantae An</i></size>
 
 
-
-
 Marketing
 <size=48><i>Suin Lee</i></size>
 
 
-
-
 Infrastructure
 <size=36><i>cseteram</i></size>
-
-
 
 
 Map Making

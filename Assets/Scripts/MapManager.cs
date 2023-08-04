@@ -19,7 +19,7 @@ public class MapManager : MonoBehaviour
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
         Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14, Setting = 15 }
     public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
-        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
+        Fire = 81, Hole = 162, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
         AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969, Setting = 14348907 }
     // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
     // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
@@ -76,6 +76,7 @@ public class MapManager : MonoBehaviour
     public GameObject ballPrefab;
     public GameObject ironPrefab;
     public GameObject firePrefab;
+    public GameObject holePrefab;
 
     public List<GameObject> ballTracePrefabs = new List<GameObject>();
     public List<GameObject> ironTracePrefabs = new List<GameObject>();
@@ -796,6 +797,9 @@ public class MapManager : MonoBehaviour
                         //initialMapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
                         initialMapCoord[x - 1, y - 1] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
                         break;
+                    case FixedObject.Type.Hole:
+                        initialMapCoord[x - 1, y - 1] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
+                        break;
                     case FixedObject.Type.QuitGame:
                         //initialMapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
                         initialMapCoord[x - 1, y - 1] += FixedObjectFlagToTileCode(FixedObjectFlag.QuitGame);
@@ -887,6 +891,12 @@ public class MapManager : MonoBehaviour
                     fixedObjects.Add(g.GetComponent<FixedObject>());
                     //initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
+                    break;
+                case ObjectInfo.Type.Hole:
+                    g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                    g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
+                    fixedObjects.Add(g.GetComponent<FixedObject>());
+                    initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                     break;
                     /*
                     // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
@@ -1069,6 +1079,15 @@ public class MapManager : MonoBehaviour
                         return OpenFileFlag.Failed;
                     }
                     tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
+                    break;
+                case "/":
+                    if (token.Length != 3)
+                    {
+                        Debug.LogError("File invalid: hole (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_hole_error"), 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, int.Parse(token[1]), int.Parse(token[2])));
                     break;
                 case "$":
                     if (token.Length != 4)

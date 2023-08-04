@@ -5856,6 +5856,8 @@ MonoBehaviour:
     type: 3}
   firePrefab: {fileID: 544875194503660133, guid: 6e5bbf3c7041041488f22c5a88df46e7,
     type: 3}
+  holePrefab: {fileID: 820559713555284917, guid: eaeb0072b598e2641a2ed1550b01b8f3,
+    type: 3}
   ballTracePrefabs:
   - {fileID: 741542581486681775, guid: 6bd02218eaf01684dbfdd3f7e63f60d7, type: 3}
   - {fileID: 4170343092474089907, guid: 6fca0bb9aee61fb4cb58c2e075cf9346, type: 3}
@@ -5970,7 +5972,6 @@ MonoBehaviour:
   mapTilePrefab: {fileID: 5503739234660689739, guid: a7c21537c012fa5439fdd3601221b969,
     type: 3}
   mapTileParent: {fileID: 843040991}
-  mapTiles: []
   loadingPanel: {fileID: 625768769}
   timeoutPanel: {fileID: 1924154919}
   tryCount: 0

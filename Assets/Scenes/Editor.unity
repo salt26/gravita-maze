@@ -5275,6 +5275,8 @@ MonoBehaviour:
     type: 3}
   firePrefab: {fileID: 544875194503660133, guid: 6e5bbf3c7041041488f22c5a88df46e7,
     type: 3}
+  holePrefab: {fileID: 820559713555284917, guid: eaeb0072b598e2641a2ed1550b01b8f3,
+    type: 3}
   ballTracePrefabs:
   - {fileID: 741542581486681775, guid: 6bd02218eaf01684dbfdd3f7e63f60d7, type: 3}
   - {fileID: 4170343092474089907, guid: 6fca0bb9aee61fb4cb58c2e075cf9346, type: 3}
@@ -5937,7 +5939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &423043110
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13703,6 +13705,7 @@ MonoBehaviour:
   - {fileID: 534356214}
   - {fileID: 1534047635}
   - {fileID: 710941356}
+  - {fileID: 1678373271}
   editorNewButton: {fileID: 1709075420}
   editorResetButton: {fileID: 1524582587}
   editorUndoButton: {fileID: 813471858}
@@ -14057,7 +14060,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1117662680
 RectTransform:
   m_ObjectHideFlags: 0

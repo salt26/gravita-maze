@@ -17,7 +17,7 @@ public class EditorManager : MonoBehaviour
 {
     public string tableName = "StringTable";
 
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter, Hole }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public Camera mainCamera;
@@ -573,13 +573,13 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || !(b == 0 || b == sizeY))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -1265,6 +1265,37 @@ public class EditorManager : MonoBehaviour
                 hasChanged = true;
                 break;
 #endregion
+            case EditMode.Hole:
+#region Hole
+                a = Mathf.FloorToInt(x + 0.5f);
+                b = Mathf.FloorToInt(y + 0.5f);
+
+                if (a < 1 || a > sizeX || b < 1 || b > sizeY)
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
+                    break;
+                }
+                if (objects.Exists(i => i.x == a && i.y == b))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
+                    break;
+                }
+
+                if (verbose) Debug.Log("Add hole at (" + a + ", " + b + ")");
+                if (commitAction)
+                {
+                    undoStack.Add(new EditActionInfo(null, new ObjectInfo(ObjectInfo.Type.Hole, a, b)));
+                    redoStack.Clear();
+                    solution = "";
+                    dirtyBit = true;
+                    GameManager.gm.PlayWallSFX();
+                }
+                objects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                hasChanged = true;
+                break;
+#endregion
         }
 
         // Map Rendering
@@ -1296,6 +1327,9 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditMode.Iron:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_iron"));
+                break;
+            case EditMode.Hole:
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_hole"));
                 break;
             case EditMode.Wall:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_wall"));
@@ -2261,6 +2295,9 @@ public class EditorManager : MonoBehaviour
                         break;
                     case ObjectInfo.Type.Fire:
                         sw.WriteLine("* " + o.x + " " + o.y);
+                        break;
+                    case ObjectInfo.Type.Hole:
+                        sw.WriteLine("/ " + o.x + " " + o.y);
                         break;
                 }
             }

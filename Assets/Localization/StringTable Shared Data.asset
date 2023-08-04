@@ -60,7 +60,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486492069895
-    m_Key: edtior_warning_add_exit
+    m_Key: editor_warning_add_exit
     m_Metadata:
       m_Items: []
   - m_Id: 486492069896
@@ -73,6 +73,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486492069898
     m_Key: editor_warning_add_fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937476268032
+    m_Key: editor_warning_add_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486492069899
@@ -121,6 +125,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264194
     m_Key: editor_guide_add_shutter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937501433856
+    m_Key: editor_guide_add_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
@@ -321,6 +329,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264243
     m_Key: warning_shutter_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24254986643214336
+    m_Key: warning_hole_error
     m_Metadata:
       m_Items: []
   - m_Id: 486496264244
