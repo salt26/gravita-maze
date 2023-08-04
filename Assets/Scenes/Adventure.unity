@@ -4133,7 +4133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb260b5179d54554bba4b12719baf5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hapticMaterial: {fileID: -6750239444755058063, guid: 1f89ddcd9ce3fb342b657b4a073d3d92,
+  hapticMaterial: {fileID: -6750239444755058063, guid: f11ffa8704fd1d14097ec3f12a8a2429,
     type: 3}
   vibrationOffset: 0
   textureOffset: 0
@@ -7485,8 +7485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dce8bbeb160e4a46b6d95206ed29207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventHapticSource: []
-  delayPlayTime: 0
   tableName: StringTable
   modeText: {fileID: 3825228074445485395}
   difficultyText: {fileID: 996514661}
