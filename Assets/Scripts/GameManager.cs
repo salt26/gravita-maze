@@ -13,7 +13,7 @@ using Interhaptics.Internal;
 using UnityEditor;
 #endif
 #if UNITY_ANDROID && !UNITY_EDITOR
-
+using Haptic.internal
 using UnityEngine.Android;
 #endif
 
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public static MapManager mm = null;
     public static PlayManager pm = null;
     public static EditorManager em = null;
+    public GameObject hm = null;
 
     public enum GravityDirection { Up, Down, Left, Right }
 
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
     public EventHapticSource[] eventHapticSource;
     public float delayPlayTime = 0.0f;
 
-    public int PlayingMapIndex{
+    public int PlayingMapIndex {
         get { return playingMapIndex; }
     }
 
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
     public KeyCode timeOutKey1 = KeyCode.LeftControl;
     public KeyCode timeOutKey2 = KeyCode.RightControl;
 #endif
-    
+
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -90,6 +91,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
+#if UNITY_ANDROID && !UNITY_EDITOR
+        hm.SetActive(true);
+#endif
+        */
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
         sfxAudioSource.volume = 1f;
         LoadSettingsValue();
@@ -124,7 +130,17 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-
+#if !UNITY_ANDROID || UNITY_EDITOR
+        hm.SetActive(false);
+#endif
+        /*
+#if UNITY_ANDROID && !UNITY_EDITOR
+        hm.SetActive(true);
+#endif
+#if !UNITY_ANDROID
+        hm.SetActive(false);
+#endif
+        */
         // 입력 담당
         if (canPlay)
         {

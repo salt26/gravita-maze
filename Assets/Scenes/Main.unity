@@ -2019,7 +2019,7 @@ GameObject:
   - component: {fileID: 608808222}
   m_Layer: 0
   m_Name: HapticManager
-  m_TagString: Untagged
+  m_TagString: HapticManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7618,6 +7618,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
+      propertyPath: hm
+      value: 
+      objectReference: {fileID: 608808221}
     - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
         type: 3}
       propertyPath: tutorialdone

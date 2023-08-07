@@ -10,6 +10,7 @@ TagManager:
   - PlayManager
   - Tip
   - TooltipUI
+  - HapticManager
   layers:
   - Default
   - TransparentFX
