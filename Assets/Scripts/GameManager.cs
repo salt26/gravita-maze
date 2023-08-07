@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
 
+    public bool HasTimeSkipGuided = false;
 
-    [SerializeField]
     public EventHapticSource[] eventHapticSource;
     public float delayPlayTime = 0.0f;
 
