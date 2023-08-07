@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
     {
         /*
 #if UNITY_ANDROID && !UNITY_EDITOR
-        hm.SetActive(true);
+        hm.SetActive(false);
 #endif
         */
         bgmAudioSource.volume = Mathf.Clamp01(bgmVolume);
