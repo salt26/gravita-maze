@@ -1287,76 +1287,108 @@ public class EditorManager : MonoBehaviour
 
                 // Undo/Redo stack
                 List<WallInfo> oldWalls = new();
-                List<WallInfo> newWalls = new();
                 List<ObjectInfo> oldObjects = new();
+                List<WallInfo> newWalls = new();
                 List<ObjectInfo> newObjects = new();
 
                 // Wall up
                 if (b < sizeY)
                 {
-                    if (commitAction)
+                    // Shutter was there
+                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
-                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
-                        {
-                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
-                            oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
-                        }
-                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                            newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
                     }
+
+                    // No wall was there (including when shutter was there)
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                    {
+                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                         walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                    }
+
+                    // Wall was there and Hole was over the wall
+                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                    {
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                    }
                 }
 
                 // Wall down
                 if (b > 1)
                 {
-                    if (commitAction)
+                    // Shutter was there
+                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
                     {
-                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
-                        {
-                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
-                            oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
-                        }
-                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1)))
-                            newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
                     }
+
+                    // No wall was there (including when shutter was there)
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1)))
+                    {
+                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
                         walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                    }
+
+                    // Wall was there and Hole was over the wall
+                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
+                    {
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                    }
                 }
 
                 // Wall left
                 if (a > 1)
                 {
-                    if (commitAction)
+                    // Shutter was there
+                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
                     {
-                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
-                        {
-                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
-                            oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
-                        }
-                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b)))
-                            newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
                     }
+
+                    // No wall was there (including when shutter was there)
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b)))
+                    {
+                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
                         walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                    }
+
+                    // Wall was there and Hole was over the wall
+                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
+                    {
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                    }
                 }
 
                 // Wall right
                 if (a < sizeX)
                 {
-                    if (commitAction)
+                    // Shutter was there
+                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
-                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
-                        {
-                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
-                            oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
-                        }
-                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
-                            newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
                     }
+
+                    // No wall was there (including when shutter was there)
                     if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                    {
+                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                         walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                    }
+
+                    // Wall was there and Hole was over the wall
+                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                    {
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
+                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                    }
                 }
 
                 if (commitAction)
