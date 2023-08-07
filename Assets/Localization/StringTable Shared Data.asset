@@ -255,6 +255,10 @@ MonoBehaviour:
     m_Key: editor_undo_reintialization
     m_Metadata:
       m_Items: []
+  - m_Id: 25313860285095936
+    m_Key: editor_undo_several
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264225
     m_Key: editor_redo_map_name
     m_Metadata:
@@ -277,6 +281,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264230
     m_Key: editor_redo_reinitialization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25313897069142016
+    m_Key: editor_redo_several
     m_Metadata:
       m_Items: []
   - m_Id: 486496264231

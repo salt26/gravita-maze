@@ -2616,6 +2616,16 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_object"), 1f);
 #endregion
                 break;
+            case EditActionInfo.Type.SeveralChange:
+                foreach (WallInfo wi in eai.newWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.newObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_several"), 1f);
+                break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
@@ -2730,6 +2740,16 @@ public class EditorManager : MonoBehaviour
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_object"), 1f);
 #endregion
+                break;
+            case EditActionInfo.Type.SeveralChange:
+                foreach (WallInfo wi in eai.oldWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.oldObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.newWalls);
+                objects.AddRange(eai.newObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_several"), 1f);
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
@@ -2867,7 +2887,7 @@ public class EditorManager : MonoBehaviour
 
     private class EditActionInfo
     {
-        public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval, MassChange }
+        public enum Type { MapName, SizeX, SizeY, Wall, Object, SeveralChange, MassRemoval, MassChange }
 
         public Type type;
 
@@ -2959,6 +2979,23 @@ public class EditorManager : MonoBehaviour
             oldObject = oldObjectInfo;
             newObject = newObjectInfo;
         }
+
+        /// <summary>
+        /// Type: SeveralChange (Hole)
+        /// </summary>
+        /// <param name="oldObjects">없으면 null</param>
+        /// <param name="newObjects">없으면 null</param>
+        /// <param name="oldWalls">없으면 null</param>
+        /// <param name="newWalls">없으면 null</param>
+        public EditActionInfo(List<ObjectInfo> oldObjects, List<ObjectInfo> newObjects, List<WallInfo> oldWalls, List<WallInfo> newWalls)
+        {
+            type = Type.SeveralChange;
+            this.oldObjects = oldObjects;
+            this.newObjects = newObjects;
+            this.oldWalls = oldWalls;
+            this.newWalls = newWalls;
+        }
+
 
         /// <summary>
         /// Type: MassRemoval (Reset, New)
