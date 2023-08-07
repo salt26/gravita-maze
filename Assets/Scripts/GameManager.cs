@@ -13,7 +13,7 @@ using Interhaptics.Internal;
 using UnityEditor;
 #endif
 #if UNITY_ANDROID && !UNITY_EDITOR
-using Haptic.internal
+using Interhaptics.Internal;
 using UnityEngine.Android;
 #endif
 
@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
         }
 #if !UNITY_ANDROID || UNITY_EDITOR
         hm.SetActive(false);
+        Destroy(GameObject.Find("HapticManager"));
 #endif
         /*
 #if UNITY_ANDROID && !UNITY_EDITOR
