@@ -3017,7 +3017,6 @@ public class MapManager : MonoBehaviour
 
     private void ClearAllTiles()
     {
-        Debug.Log("ClearAllTiles");
         foreach (KeyValuePair<Tuple<int, int>, MapTile> tile in mapTiles)
         {
             Destroy(tile.Value.gameObject);
