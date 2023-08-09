@@ -11,6 +11,7 @@ using UnityEngine.Localization.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static MapTile;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 public class MapManager : MonoBehaviour
 {
@@ -316,9 +317,9 @@ public class MapManager : MonoBehaviour
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
-        float timeLimit = 0f, bool isValidation = false, bool canRotate = false)
+        float timeLimit = 0f, bool isValidation = false, bool canRotate = false, bool isEditing = false)
     {
-
+        
         IsReady = false;
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨
@@ -360,6 +361,8 @@ public class MapManager : MonoBehaviour
         int[,] horizontalWalls = new int[SizeX, SizeY + 1];
         int[,] verticalWalls = new int[SizeX + 1, SizeY];
         // 벽이 없는 경우: 0, 평범한 벽이 있는 경우: 1, Shutter가 있는 경우: 2
+
+        long kinds = MapTile.GetRenderingWallKinds();
 
         for (int i = 0; i < sizeX; i++)
         {
@@ -449,7 +452,6 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: exit position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-
                     if (!RotatedHasTransposed())
                     {
                         verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
@@ -646,7 +648,6 @@ public class MapManager : MonoBehaviour
                 // 여기 아래부터는 평범한 벽을 두르는 부분. 상황에 따라 Shutter가 존재할 수 있다.
                 else if (i != 0 && i != SizeX + 1 && j != 0 && j != SizeY + 1)
                 {
-                    long kinds = MapTile.GetRenderingWallKinds();
                     /*
                     if (horizontalWalls[i - 1, j] == 1)
                     {
@@ -681,10 +682,10 @@ public class MapManager : MonoBehaviour
                         //initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
                     }
                     */
-                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j] * kinds * kinds * kinds;
-                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j - 1] * kinds * kinds;
-                    initialMapCoord[i - 1, j - 1] += verticalWalls[i - 1, j - 1] * kinds;
-                    initialMapCoord[i - 1, j - 1] += verticalWalls[i, j - 1];
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j] * kinds * kinds * kinds; // Up
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j - 1] * kinds * kinds;     // Down
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i - 1, j - 1] * kinds;               // Left
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i, j - 1];                           // Right
                     //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[initialMapCoord[i - 1, j - 1] % 81]);
                     SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
                 }
@@ -787,10 +788,9 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
                 }
-
+                
                 fixedObjects.Add(f);
 
-                long kinds4 = GetKinds4();
                 switch (f.type)
                 {
                     case FixedObject.Type.Fire:
@@ -893,6 +893,114 @@ public class MapManager : MonoBehaviour
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
                     break;
                 case ObjectInfo.Type.Hole:
+                    // Removes surrounding outer wall if Hole is located on the edge
+                    if (oi.y == sizeY)  // Uppermost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            horizontalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
+                        }
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds * kinds * kinds;
+
+                        /*
+                        if (oi.x == 1 || )
+                        {
+                            if ()
+                            {
+                                //
+                            }
+                            else
+                            {
+                                //
+                            }
+                        }
+                        else
+                        {
+                            if ()
+                            {
+                                //
+                            }
+                            else
+                            {
+                                //
+                            }
+                        }
+                        */
+                        SetTile(RotatedX(oi.x, sizeY + 1), RotatedY(oi.x, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        if (oi.x == 1)          // Uppermost & leftmost
+                        {
+                            SetTile(RotatedX(0, sizeY + 1), RotatedY(0, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        }
+                        else if (oi.x == sizeX) // Uppermost & rightmost
+                        {
+                            SetTile(RotatedX(sizeX + 1, sizeY + 1), RotatedY(sizeX + 1, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        }
+                    }
+                    if (oi.y == 1)      // Lowermost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            horizontalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
+                        }
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds * kinds;
+                        SetTile(RotatedX(oi.x, 0), RotatedY(oi.x, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        if (oi.x == 1)          // Lowermost & leftmost
+                        {
+                            SetTile(RotatedX(0, 0), RotatedY(0, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        }
+                        else if (oi.x == sizeX) // Lowermost & rightmost
+                        {
+                            SetTile(RotatedX(sizeX + 1, 0), RotatedY(sizeX + 1, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                        }
+                    }
+                    if (oi.x == 1)      // Leftmost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            verticalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
+                        }
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds;
+                        SetTile(RotatedX(0, oi.y), RotatedY(0, oi.y), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                    }
+                    if (oi.x == sizeX)  // Rightmost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            verticalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
+                        }
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1;
+                        SetTile(RotatedX(sizeX + 1, oi.y), RotatedY(sizeX + 1, oi.y), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+                    }
+                    SetTile(RotatedX(oi.x, oi.y), RotatedY(oi.x, oi.y), FloorFlag.Floor, initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] % GetKinds4());
+
+
+
+
+
                     g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                     g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());

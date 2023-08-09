@@ -1292,7 +1292,14 @@ public class EditorManager : MonoBehaviour
                 List<ObjectInfo> newObjects = new();
 
                 // Wall up
-                if (b < sizeY)
+                if (b == sizeY)     // Uppermost
+                {
+                    if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                    {
+                        // WIP
+                    }
+                }
+                else if (b < sizeY) // Not uppermost
                 {
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
@@ -1317,7 +1324,11 @@ public class EditorManager : MonoBehaviour
                 }
 
                 // Wall down
-                if (b > 1)
+                if (b == 1)     // Lowermost
+                {
+
+                }
+                else if (b > 1) // Not lowermost
                 {
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
@@ -1342,7 +1353,11 @@ public class EditorManager : MonoBehaviour
                 }
 
                 // Wall left
-                if (a > 1)
+                if (a == 1)     // Leftmost
+                {
+
+                }
+                else if (a > 1) // Not leftmost
                 {
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
@@ -1367,7 +1382,11 @@ public class EditorManager : MonoBehaviour
                 }
 
                 // Wall right
-                if (a < sizeX)
+                if (a == sizeX)     // Rightmost
+                {
+
+                }
+                else if (a < sizeX) // Not rightmost
                 {
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
@@ -1407,7 +1426,7 @@ public class EditorManager : MonoBehaviour
         }
 
         // Map Rendering
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
 
         return hasChanged;
     }
