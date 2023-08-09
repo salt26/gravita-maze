@@ -252,7 +252,6 @@ public class ResultUI : MonoBehaviour
             star2.SetActive(true);
             starBang.SetTrigger("Star2");
             yield return new WaitForSeconds(0.3f);
-
         }
 
         if (starNum >= 3)
