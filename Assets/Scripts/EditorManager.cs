@@ -414,6 +414,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add horizontal wall at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -451,6 +457,12 @@ public class EditorManager : MonoBehaviour
                     if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall adjacent to hole");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
@@ -498,6 +510,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add horizontal shutter at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -535,6 +553,12 @@ public class EditorManager : MonoBehaviour
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical shutter overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter adjacent to hole");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
