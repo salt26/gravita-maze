@@ -999,6 +999,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
                         break;
                     }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Remove horizontal wall or shutter or exit at (" + a + ", " + b + ")");
                     //if (commitAction &&
@@ -1034,6 +1040,12 @@ public class EditorManager : MonoBehaviour
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
                         break;
                     }
 
