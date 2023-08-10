@@ -11,7 +11,6 @@ using UnityEngine.Localization.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static MapTile;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 public class MapManager : MonoBehaviour
 {
@@ -893,7 +892,9 @@ public class MapManager : MonoBehaviour
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
                     break;
                 case ObjectInfo.Type.Hole:
+
                     // Removes surrounding outer wall if Hole is located on the edge
+                    /*
                     if (oi.y == sizeY)  // Uppermost
                     {
                         if (!RotatedHasTransposed())
@@ -906,30 +907,6 @@ public class MapManager : MonoBehaviour
                         }
                         initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds * kinds * kinds;
 
-                        /*
-                        if (oi.x == 1 || )
-                        {
-                            if ()
-                            {
-                                //
-                            }
-                            else
-                            {
-                                //
-                            }
-                        }
-                        else
-                        {
-                            if ()
-                            {
-                                //
-                            }
-                            else
-                            {
-                                //
-                            }
-                        }
-                        */
                         SetTile(RotatedX(oi.x, sizeY + 1), RotatedY(oi.x, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
                             CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
                         if (oi.x == 1)          // Uppermost & leftmost
@@ -996,25 +973,22 @@ public class MapManager : MonoBehaviour
                             CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
                     }
                     SetTile(RotatedX(oi.x, oi.y), RotatedY(oi.x, oi.y), FloorFlag.Floor, initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] % GetKinds4());
-
-
-
-
+                    */
 
                     g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
                     g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
                     fixedObjects.Add(g.GetComponent<FixedObject>());
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                     break;
-                    /*
-                    // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
-                    case ObjectInfo.Type.QuitGame:
-                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
-                        break;
-                    case ObjectInfo.Type.MapEditor:
-                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
-                        break;
-                    */
+                /*
+                // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
+                case ObjectInfo.Type.QuitGame:
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
+                    break;
+                case ObjectInfo.Type.MapEditor:
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
+                    break;
+                */
             }
         }
 

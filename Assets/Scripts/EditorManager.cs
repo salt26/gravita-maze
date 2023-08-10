@@ -1283,6 +1283,17 @@ public class EditorManager : MonoBehaviour
                     break;
                 }
 
+                // Cannot be placed adjacent to Exit
+                if ((b == sizeY && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
+                    (b == 1     && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
+                    (a == 1     && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))) ||
+                    (a == sizeX && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole adjacent to exit");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
+                    break;
+                }
+
                 if (verbose) Debug.Log("Add hole at (" + a + ", " + b + ")");
 
                 // Undo/Redo stack
