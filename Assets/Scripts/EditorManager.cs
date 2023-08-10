@@ -392,6 +392,13 @@ public class EditorManager : MonoBehaviour
         if (touchID != 0 && touchID != -1) return false;
         bool hasChanged = false;
         int a, b;
+
+        // Undo/Redo stack for several changes
+        List<WallInfo> oldWalls = new();
+        List<ObjectInfo> oldObjects = new();
+        List<WallInfo> newWalls = new();
+        List<ObjectInfo> newObjects = new();
+
         switch (editMode)
         {
             case EditMode.Wall:
@@ -1342,18 +1349,111 @@ public class EditorManager : MonoBehaviour
                 if (verbose) Debug.Log("Remove object at (" + a + ", " + b + ")");
                 //if (commitAction && !objects.Exists(i => i.x == a && i.y == b))
                 //    Debug.LogError("Editor invalid: null in Removing object");
-                if (commitAction)
+
+                // Object is Hole
+                if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
                 {
-                    undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
-                    redoStack.Clear();
-                    solution = "";
-                    dirtyBit = true;
-                    GameManager.gm.PlayRemoveSFX();
+                    // Adjusting surrounding walls
+
+                    // Up (not uppermost)
+                    if (b < sizeY)
+                    {
+                        // Hole was there
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        }
+
+                        // Hole was not there
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b)));
+                        }
+                    }
+
+                    // Down (not lowermost)
+                    if (b > 1)
+                    {
+                        // Hole was there
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        }
+
+                        // Hole was not there
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b - 1)));
+                        }
+                    }
+
+                    // Left (not leftmost)
+                    if (a > 1)
+                    {
+                        // Hole was there
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        }
+
+                        // Hole was not there
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a - 1 && i.y == b)));
+                        }
+                    }
+
+                    // Right (not rightmost)
+                    if (a < sizeX)
+                    {
+                        // Hole was there
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        }
+
+                        // Hole was not there
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a && i.y == b)));
+                        }
+                    }
+
+                    if (commitAction)
+                    {
+                        oldObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                        undoStack.Add(new EditActionInfo(oldWalls, oldObjects, newWalls, newObjects));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
+                    }
+                }
+
+                // Object is not Hole
+                else
+                {
+                    if (commitAction)
+                    {
+                        undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                        GameManager.gm.PlayRemoveSFX();
+                    }
                 }
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
                 break;
-#endregion
+            #endregion
             case EditMode.Hole:
 #region Hole
                 a = Mathf.FloorToInt(x + 0.5f);
@@ -1385,12 +1485,6 @@ public class EditorManager : MonoBehaviour
 
                 if (verbose) Debug.Log("Add hole at (" + a + ", " + b + ")");
 
-                // Undo/Redo stack
-                List<WallInfo> oldWalls = new();
-                List<ObjectInfo> oldObjects = new();
-                List<WallInfo> newWalls = new();
-                List<ObjectInfo> newObjects = new();
-
                 // Wall up
                 if (b == sizeY)     // Uppermost
                 {
@@ -1404,8 +1498,8 @@ public class EditorManager : MonoBehaviour
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
                     }
 
                     // No wall was there (including when shutter was there)
@@ -1418,8 +1512,8 @@ public class EditorManager : MonoBehaviour
                     // Wall was there and Hole was over the wall
                     else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
                     }
                 }
 
@@ -1433,8 +1527,8 @@ public class EditorManager : MonoBehaviour
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
                     }
 
                     // No wall was there (including when shutter was there)
@@ -1447,8 +1541,8 @@ public class EditorManager : MonoBehaviour
                     // Wall was there and Hole was over the wall
                     else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
                     }
                 }
 
@@ -1462,8 +1556,8 @@ public class EditorManager : MonoBehaviour
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
                     }
 
                     // No wall was there (including when shutter was there)
@@ -1476,8 +1570,8 @@ public class EditorManager : MonoBehaviour
                     // Wall was there and Hole was over the wall
                     else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
                     }
                 }
 
@@ -1491,8 +1585,8 @@ public class EditorManager : MonoBehaviour
                     // Shutter was there
                     if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
                     }
 
                     // No wall was there (including when shutter was there)
@@ -1505,8 +1599,8 @@ public class EditorManager : MonoBehaviour
                     // Wall was there and Hole was over the wall
                     else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
                     {
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
                         if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
                     }
                 }
 
@@ -3208,7 +3302,7 @@ public class EditorManager : MonoBehaviour
         }
 
         /// <summary>
-        /// Type: SeveralChange (Hole)
+        /// Type: SeveralChange (Hole, Removing Hole)
         /// </summary>
         /// <param name="oldWalls">없으면 null</param>
         /// <param name="oldObjects">없으면 null</param>
