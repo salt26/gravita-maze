@@ -606,6 +606,13 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
+                    if ((b == sizeY && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b))) ||
+                        (b == 0 && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
 
                     if (walls.Exists((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical))
                     {
@@ -654,13 +661,20 @@ public class EditorManager : MonoBehaviour
                     if (!(a == 0 || a == sizeX) || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if ((a == 0 && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b))) ||
+                        (a == sizeX && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -711,13 +725,19 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -768,13 +788,19 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -825,13 +851,19 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -882,13 +914,19 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -1159,6 +1197,15 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
                     break;
                 }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: ball adjacent to hole");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
+                    break;
+                }
 
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
@@ -1207,6 +1254,15 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
                     break;
                 }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: iron adjacent to hole");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
+                    break;
+                }
 
                 if (verbose) Debug.Log("Add iron at (" + a + ", " + b + ")");
                 if (commitAction)
@@ -1239,6 +1295,15 @@ public class EditorManager : MonoBehaviour
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
+                    break;
+                }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: fire adjacent to hole");
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
                     break;
                 }
