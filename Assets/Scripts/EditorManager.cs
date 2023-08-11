@@ -1397,8 +1397,8 @@ public class EditorManager : MonoBehaviour
                 {
                     // Cannot be placed adjacent to Exit
                     if ((b == sizeY && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
-                        (b == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
-                        (a == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))) ||
+                        (b == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b - 1))) ||
+                        (a == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a - 1, b))) ||
                         (a == sizeX && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: hole adjacent to exit");
@@ -1703,7 +1703,7 @@ public class EditorManager : MonoBehaviour
         List<ObjectInfo> oldObjects = objects;
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
         solution = "";
 
         if (hasCreated)
@@ -1799,7 +1799,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
     public void EditSizeX(Dropdown caller)
@@ -1858,7 +1858,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
     public void EditSizeY(Dropdown caller)
