@@ -57,6 +57,9 @@ public class MapManager : MonoBehaviour
     public Movable[,] currentMovableCoord;
     public long[,] initialMapCoord;
     public long[,] currentMapCoord;
+    public int[,] horizontalWalls;
+    public int[,] verticalWalls;
+    public bool[,] holes;
 
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
@@ -350,16 +353,15 @@ public class MapManager : MonoBehaviour
 
         initialMapCoord = new long[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
         initialMovableCoord = new Movable[SizeX, SizeY]; // Movable의 좌표가 될 예정. 2차원 배열의 측정 위치에다가 Movable의 오브젝트를 넣는 다는 소리인가?
-
+        
         tilemap.ClearAllTiles();
         ClearAllTiles();
         timeoutPanel.SetActive(false);
 
-        int[,] horizontalWalls = new int[SizeX, SizeY + 1];
-        int[,] verticalWalls = new int[SizeX + 1, SizeY];
+        horizontalWalls = new int[SizeX, SizeY + 1];
+        verticalWalls = new int[SizeX + 1, SizeY];
         // 벽이 없는 경우: 0, 평범한 벽이 있는 경우: 1, Shutter가 있는 경우: 2
-
-        bool[,] holes = new bool[SizeX, SizeY]; // No Hole exists: false, Hole exists: true
+        holes = new bool[SizeX, SizeY]; // No Hole exists: false, Hole exists: true
 
         long kinds = MapTile.GetRenderingWallKinds();
 
@@ -1525,12 +1527,51 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < SizeX; i++)
+        for (int i = 1; i <= SizeX; i++)
         {
-            for (int j = 0; j < SizeY; j++)
+            for (int j = 1; j <= SizeY; j++)
             {
                 //tilemap.SetTile(new Vector3Int(i, j, 0), tiles[initialMapCoord[i, j] % 81]);
-                SetTile(i + 1, j + 1, FloorFlag.Floor, initialMapCoord[i, j] % GetKinds4());
+                // SetTile(i + 1, j + 1, FloorFlag.Floor, initialMapCoord[i, j] % GetKinds4());
+
+                // Current tile is Hole
+                if (holes[i - 1, j - 1])
+                {
+                    // Validating
+                    if ((j != SizeY && ((holes[i - 1, j] && horizontalWalls[i - 1, j] != 0) || (!holes[i - 1, j] && horizontalWalls[i - 1, j] != 1))) ||                // Up
+                        (j != 1 && ((holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 0) || (!holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 1))) ||    // Down
+                        (i != 1 && ((holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 0) || (!holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 1))) ||        // Left
+                        (i != SizeX && ((holes[i, j - 1] && verticalWalls[i, j - 1] != 0) || (!holes[i, j - 1] && verticalWalls[i, j - 1] != 1))))                      // Right
+                    {
+                        Debug.LogError("Map invalid: wrong hole position");
+                        return;
+                    }
+
+                    WallFlag top = WallFlag.None, bottom = WallFlag.None, left = WallFlag.None, right = WallFlag.None;
+                    CornerWallFlag topleft = CornerWallFlag.None, topright = CornerWallFlag.None, bottomright = CornerWallFlag.None, bottomleft = CornerWallFlag.None;
+
+                    if (j != SizeY && !holes[i - 1, j]) top = WallFlag.Wall;
+                    if (j != 1 && !holes[i - 1, j - 2]) bottom = WallFlag.Wall;
+                    if (i != 1 && !holes[i - 2, j - 1]) left = WallFlag.Wall;
+                    if (i != SizeX && !holes[i, j - 1]) right = WallFlag.Wall;
+
+                    if (top == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j < SizeY && !holes[i - 2, j]))
+                        topleft = CornerWallFlag.Normal;
+                    if (top == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j < SizeY && !holes[i, j]))
+                        topright = CornerWallFlag.Normal;
+                    if (bottom == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j - 2 >= 0 && !holes[i, j - 2]))
+                        bottomright = CornerWallFlag.Normal;
+                    if (bottom == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j - 2 >= 0 && !holes[i - 2, j - 2]))
+                        bottomleft = CornerWallFlag.Normal;
+
+                    SetTile(i, j, FloorFlag.Hole, top, bottom, left, right, topleft, topright, bottomright, bottomleft);
+                }
+
+                // Current tile is Floor
+                else
+                {
+                    SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
+                }
             }
         }
 
