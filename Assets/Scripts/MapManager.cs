@@ -892,93 +892,14 @@ public class MapManager : MonoBehaviour
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
                     break;
                 case ObjectInfo.Type.Hole:
-
-                    // Removes surrounding outer wall if Hole is located on the edge
-                    /*
-                    if (oi.y == sizeY)  // Uppermost
+                    // Hole object can be instatiated only when editing
+                    if (isEditing)
                     {
-                        if (!RotatedHasTransposed())
-                        {
-                            horizontalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
-                        }
-                        else
-                        {
-                            verticalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
-                        }
-                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds * kinds * kinds;
-
-                        SetTile(RotatedX(oi.x, sizeY + 1), RotatedY(oi.x, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        if (oi.x == 1)          // Uppermost & leftmost
-                        {
-                            SetTile(RotatedX(0, sizeY + 1), RotatedY(0, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        }
-                        else if (oi.x == sizeX) // Uppermost & rightmost
-                        {
-                            SetTile(RotatedX(sizeX + 1, sizeY + 1), RotatedY(sizeX + 1, sizeY + 1), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        }
+                        g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                        g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
+                        fixedObjects.Add(g.GetComponent<FixedObject>());
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                     }
-                    if (oi.y == 1)      // Lowermost
-                    {
-                        if (!RotatedHasTransposed())
-                        {
-                            horizontalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
-                        }
-                        else
-                        {
-                            verticalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
-                        }
-                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds * kinds;
-                        SetTile(RotatedX(oi.x, 0), RotatedY(oi.x, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        if (oi.x == 1)          // Lowermost & leftmost
-                        {
-                            SetTile(RotatedX(0, 0), RotatedY(0, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        }
-                        else if (oi.x == sizeX) // Lowermost & rightmost
-                        {
-                            SetTile(RotatedX(sizeX + 1, 0), RotatedY(sizeX + 1, 0), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                        }
-                    }
-                    if (oi.x == 1)      // Leftmost
-                    {
-                        if (!RotatedHasTransposed())
-                        {
-                            verticalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
-                        }
-                        else
-                        {
-                            horizontalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
-                        }
-                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1 * kinds;
-                        SetTile(RotatedX(0, oi.y), RotatedY(0, oi.y), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                    }
-                    if (oi.x == sizeX)  // Rightmost
-                    {
-                        if (!RotatedHasTransposed())
-                        {
-                            verticalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
-                        }
-                        else
-                        {
-                            horizontalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
-                        }
-                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] -= 1;
-                        SetTile(RotatedX(sizeX + 1, oi.y), RotatedY(sizeX + 1, oi.y), FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-                    }
-                    SetTile(RotatedX(oi.x, oi.y), RotatedY(oi.x, oi.y), FloorFlag.Floor, initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] % GetKinds4());
-                    */
-
-                    g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
-                    g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
-                    fixedObjects.Add(g.GetComponent<FixedObject>());
-                    initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                     break;
                 /*
                 // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음

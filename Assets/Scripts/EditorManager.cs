@@ -2711,6 +2711,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 SetEditModeToNone();
                 editPhase = EditPhase.Build;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);
                 hasPassedInitPhaseOnce = true;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
                 GameManager.gm.canPlay = false;
@@ -2720,6 +2721,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Request:
@@ -2770,6 +2772,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_reinitialize_message"));
                 GameManager.gm.canPlay = false;
                 break;
@@ -2778,6 +2781,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);
                 SetEditModeToNone();
                 GameManager.gm.canPlay = false;
                 break;
