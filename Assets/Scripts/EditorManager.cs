@@ -1385,6 +1385,12 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
                     break;
                 }
+                if (objects.Exists(i => i.type != ObjectInfo.Type.Hole && i.x == a && i.y == b))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: object overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                    break;
+                }
 
                 // Toggle on
                 if (!objects.Exists(i => i.x == a && i.y == b))
@@ -2711,7 +2717,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 SetEditModeToNone();
                 editPhase = EditPhase.Build;
-                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);   // Showing Hole mark
                 hasPassedInitPhaseOnce = true;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
                 GameManager.gm.canPlay = false;
@@ -2721,7 +2727,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
-                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);                       // Hiding Hole mark
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Request:
@@ -2772,7 +2778,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
-                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);                       // Hiding Hole mark
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_reinitialize_message"));
                 GameManager.gm.canPlay = false;
                 break;
@@ -2781,7 +2787,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
-                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);   // Showing Hole mark
                 SetEditModeToNone();
                 GameManager.gm.canPlay = false;
                 break;
@@ -2929,7 +2935,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_multi"), 1f);
 #endregion
                 break;
@@ -2959,7 +2965,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_object"), 1f);
 #endregion
                 break;
@@ -2970,27 +2976,27 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_several"), 1f);
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reset"), 1f);
                 break;
             case EditActionInfo.Type.MassChange:
@@ -3003,7 +3009,7 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reintialization"), 1f);
                 break;
         }
@@ -3054,7 +3060,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_multi"), 1f);
 #endregion
                 break;
@@ -3084,7 +3090,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_object"), 1f);
 #endregion
                 break;
@@ -3095,17 +3101,17 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_several"), 1f);
                 break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
@@ -3113,7 +3119,7 @@ public class EditorManager : MonoBehaviour
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reset"), 1f);
                 break;
             case EditActionInfo.Type.MassChange:
@@ -3126,7 +3132,7 @@ public class EditorManager : MonoBehaviour
                     objects.Remove(oi);
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reinitialization"), 1f);
                 break;
         }
