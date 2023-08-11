@@ -17,7 +17,7 @@ public class EditorManager : MonoBehaviour
 {
     public string tableName = "StringTable";
 
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter, Hole }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter, ToggleHole }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public Camera mainCamera;
@@ -392,12 +392,6 @@ public class EditorManager : MonoBehaviour
         if (touchID != 0 && touchID != -1) return false;
         bool hasChanged = false;
         int a, b;
-
-        // Undo/Redo stack for several changes
-        List<WallInfo> oldWalls = new();
-        List<ObjectInfo> oldObjects = new();
-        List<WallInfo> newWalls = new();
-        List<ObjectInfo> newObjects = new();
 
         switch (editMode)
         {
@@ -1357,27 +1351,218 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
                     break;
                 }
+                if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole exists at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
+                    break;
+                }
 
                 if (verbose) Debug.Log("Remove object at (" + a + ", " + b + ")");
                 //if (commitAction && !objects.Exists(i => i.x == a && i.y == b))
                 //    Debug.LogError("Editor invalid: null in Removing object");
 
-                // Object is Hole
-                if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                if (commitAction)
                 {
+                    undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
+                    redoStack.Clear();
+                    solution = "";
+                    dirtyBit = true;
+                    GameManager.gm.PlayRemoveSFX();
+                }
+                objects.Remove(objects.Find(i => i.x == a && i.y == b));
+                hasChanged = true;
+                break;
+            #endregion
+            case EditMode.ToggleHole:
+#region Hole
+                a = Mathf.FloorToInt(x + 0.5f);
+                b = Mathf.FloorToInt(y + 0.5f);
+
+                if (a < 1 || a > sizeX || b < 1 || b > sizeY)
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                    break;
+                }
+
+                // Toggle on
+                if (!objects.Exists(i => i.x == a && i.y == b))
+                {
+                    // Cannot be placed adjacent to Exit
+                    if ((b == sizeY && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
+                        (b == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
+                        (a == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))) ||
+                        (a == sizeX && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: hole adjacent to exit");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                        break;
+                    }
+
+                    // Undo/Redo stack
+                    List<WallInfo> oldWalls = new();
+                    List<ObjectInfo> oldObjects = new();
+                    List<WallInfo> newWalls = new();
+                    List<ObjectInfo> newObjects = new();
+
+                    if (verbose) Debug.Log("Toggle on hole at (" + a + ", " + b + ")");
+
+                    // Wall up
+                    if (b == sizeY)     // Uppermost
+                    {
+                        if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                        {
+                            // WIP
+                        }
+                    }
+                    else if (b < sizeY) // Not uppermost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
+                        }
+                    }
+
+                    // Wall down
+                    if (b == 1)     // Lowermost
+                    {
+
+                    }
+                    else if (b > 1) // Not lowermost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
+                        }
+                    }
+
+                    // Wall left
+                    if (a == 1)     // Leftmost
+                    {
+
+                    }
+                    else if (a > 1) // Not leftmost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
+                        }
+                    }
+
+                    // Wall right
+                    if (a == sizeX)     // Rightmost
+                    {
+
+                    }
+                    else if (a < sizeX) // Not rightmost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
+                        }
+                    }
+
+                    if (commitAction)
+                    {
+                        newObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                        undoStack.Add(new EditActionInfo(oldWalls, oldObjects, newWalls, newObjects));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                        GameManager.gm.PlayWallSFX();
+                    }
+                    objects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                }
+
+                // Toggle off
+                else
+                {
+                    if (verbose) Debug.Log("Toggle off hole at (" + a + ", " + b + ")");
+
+                    // Undo/Redo stack
+                    List<WallInfo> oldWalls = new();
+                    List<ObjectInfo> oldObjects = new();
+                    List<WallInfo> newWalls = new();
+                    List<ObjectInfo> newObjects = new();
+
                     // Adjusting surrounding walls
 
                     // Up (not uppermost)
                     if (b < sizeY)
                     {
-                        // Hole was there
+                        // Hole exists
                         if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
                         {
                             if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                             walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                         }
 
-                        // Hole was not there
+                        // Hole doesn't exist
                         else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
@@ -1388,14 +1573,14 @@ public class EditorManager : MonoBehaviour
                     // Down (not lowermost)
                     if (b > 1)
                     {
-                        // Hole was there
+                        // Hole exists
                         if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
                         {
                             if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
                             walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
                         }
 
-                        // Hole was not there
+                        // Hole doesn't exist
                         else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
@@ -1406,14 +1591,14 @@ public class EditorManager : MonoBehaviour
                     // Left (not leftmost)
                     if (a > 1)
                     {
-                        // Hole was there
+                        // Hole exists
                         if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
                         {
                             if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
                             walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
                         }
 
-                        // Hole was not there
+                        // Hole doesn't exist
                         else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
@@ -1424,14 +1609,14 @@ public class EditorManager : MonoBehaviour
                     // Right (not rightmost)
                     if (a < sizeX)
                     {
-                        // Hole was there
+                        // Hole exists
                         if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
                         {
                             if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                             walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                         }
 
-                        // Hole was not there
+                        // Hole doesn't exist
                         else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
@@ -1446,186 +1631,11 @@ public class EditorManager : MonoBehaviour
                         redoStack.Clear();
                         solution = "";
                         dirtyBit = true;
-                        GameManager.gm.PlayRemoveSFX();
+                        GameManager.gm.PlayWallSFX();
                     }
+                    objects.Remove(objects.Find(i => (i.type == ObjectInfo.Type.Hole && i.x == a && i.y == b)));
                 }
 
-                // Object is not Hole
-                else
-                {
-                    if (commitAction)
-                    {
-                        undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
-                        redoStack.Clear();
-                        solution = "";
-                        dirtyBit = true;
-                        GameManager.gm.PlayRemoveSFX();
-                    }
-                }
-                objects.Remove(objects.Find(i => i.x == a && i.y == b));
-                hasChanged = true;
-                break;
-            #endregion
-            case EditMode.Hole:
-#region Hole
-                a = Mathf.FloorToInt(x + 0.5f);
-                b = Mathf.FloorToInt(y + 0.5f);
-
-                if (a < 1 || a > sizeX || b < 1 || b > sizeY)
-                {
-                    if (verbose) Debug.LogWarning("Editor warning: hole position at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
-                    break;
-                }
-                if (objects.Exists(i => i.x == a && i.y == b))
-                {
-                    if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
-                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
-                    break;
-                }
-
-                // Cannot be placed adjacent to Exit
-                if ((b == sizeY && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
-                    (b == 1     && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
-                    (a == 1     && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))) ||
-                    (a == sizeX && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))))
-                {
-                    if (verbose) Debug.LogWarning("Editor warning: hole adjacent to exit");
-                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_hole"), 1f);
-                    break;
-                }
-
-                if (verbose) Debug.Log("Add hole at (" + a + ", " + b + ")");
-
-                // Wall up
-                if (b == sizeY)     // Uppermost
-                {
-                    if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                    {
-                        // WIP
-                    }
-                }
-                else if (b < sizeY) // Not uppermost
-                {
-                    // Shutter was there
-                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
-                    }
-
-                    // No wall was there (including when shutter was there)
-                    if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                    {
-                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                        walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                    }
-
-                    // Wall was there and Hole was over the wall
-                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
-                    }
-                }
-
-                // Wall down
-                if (b == 1)     // Lowermost
-                {
-
-                }
-                else if (b > 1) // Not lowermost
-                {
-                    // Shutter was there
-                    if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
-                    }
-
-                    // No wall was there (including when shutter was there)
-                    if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1)))
-                    {
-                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
-                        walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
-                    }
-
-                    // Wall was there and Hole was over the wall
-                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
-                    }
-                }
-
-                // Wall left
-                if (a == 1)     // Leftmost
-                {
-
-                }
-                else if (a > 1) // Not leftmost
-                {
-                    // Shutter was there
-                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
-                    }
-
-                    // No wall was there (including when shutter was there)
-                    if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b)))
-                    {
-                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
-                        walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
-                    }
-
-                    // Wall was there and Hole was over the wall
-                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
-                    }
-                }
-
-                // Wall right
-                if (a == sizeX)     // Rightmost
-                {
-
-                }
-                else if (a < sizeX) // Not rightmost
-                {
-                    // Shutter was there
-                    if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
-                    }
-
-                    // No wall was there (including when shutter was there)
-                    if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
-                    {
-                        if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                        walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                    }
-
-                    // Wall was there and Hole was over the wall
-                    else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
-                    {
-                        if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                        walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
-                    }
-                }
-
-                if (commitAction)
-                {
-                    newObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
-                    undoStack.Add(new EditActionInfo(oldWalls, oldObjects, newWalls, newObjects));
-                    redoStack.Clear();
-                    solution = "";
-                    dirtyBit = true;
-                    GameManager.gm.PlayWallSFX();
-                }
-                objects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
                 hasChanged = true;
                 break;
 #endregion
@@ -1661,9 +1671,6 @@ public class EditorManager : MonoBehaviour
             case EditMode.Iron:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_iron"));
                 break;
-            case EditMode.Hole:
-                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_hole"));
-                break;
             case EditMode.Wall:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_add_wall"));
                 break;
@@ -1675,6 +1682,9 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditMode.RemoveObject:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_remove_object"));
+                break;
+            case EditMode.ToggleHole:
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_toggle_hole"));
                 break;
         }
     }
