@@ -454,10 +454,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 125229985}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb283da44edeae478bdaf2d120a69b9, type: 3}
+  m_Script: {fileID: 11500000, guid: fa9d7245840628c419a4b3c72a337962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _persistent: 1
+  _persistent: 0
 --- !u!1 &157419992
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +945,7 @@ PrefabInstance:
     - target: {fileID: 1217957335370347017, guid: ea8f4c589373e52458ba3cedc4b69b0b,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1217957335370347017, guid: ea8f4c589373e52458ba3cedc4b69b0b,
         type: 3}
