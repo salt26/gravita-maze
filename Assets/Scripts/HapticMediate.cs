@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Text;
+#if !UNITY_EDITOR_OSX ||  !UNITY_STANDALONE_OSX
 using Interhaptics.Internal;
+#endif
 
 public class HapticMediate : MonoBehaviour
 {
+
+#if !UNITY_EDITOR_OSX || !UNITY_STANDALONE_OSX
     public EventHapticSource[] eventHapticSource;
+#endif
 #if UNITY_ANDROID && !UNITY_EDITOR
     private GameObject _hapticManager;
     private GameObject _hapticEvent;
