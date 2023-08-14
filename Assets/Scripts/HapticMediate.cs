@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Text;
-#if !UNITY_EDITOR_OSX &&  !UNITY_STANDALONE_OSX
+#if !UNITY_EDITOR_OSX && !UNITY_STANDALONE_OSX
 using Interhaptics.Internal;
 #endif
 
