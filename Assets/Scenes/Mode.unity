@@ -1294,6 +1294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
         type: 3}
+      propertyPath: hm
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063427215363646519, guid: 1db10a05a0fc004418a1b36bde2c72b0,
+        type: 3}
       propertyPath: eventHapticSource.Array.size
       value: 12
       objectReference: {fileID: 0}
