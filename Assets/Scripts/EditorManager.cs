@@ -2137,7 +2137,7 @@ public class EditorManager : MonoBehaviour
     {
         if (folderName == null || folderName == "")
         {
-            Debug.LogWarning("Editor warning: illegal folder name");
+            Debug.LogWarning("Editor warning: cannot create with illegal folder name");
             statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_cannot_create_folder"), 2f);
             return;
         }

@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
                             }
                             break;
                         case EditorManager.EditPhase.Save:
-                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable)
+                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable && !em.inputMessageUI.gameObject.activeInHierarchy)
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
