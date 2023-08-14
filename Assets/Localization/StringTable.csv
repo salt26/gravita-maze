@@ -53,6 +53,8 @@
 "editor_create_map_success_part2",1793875561631744,"""","""(으)로 저장했어요!"
 "editor_create_map_reinitialize_message",486496264217,"You can reinitialize your map.","맵을 재초기화할 수 있어요."
 "editor_warning_map_not_saved_yet",486496264218,"The map has not been saved yet.","맵이 아직 저장되지 않았어요."
+"editor_tooltip_no_ball_or_exit",27847587124994048,"A ball and\nan exit must\nbe placed.","공과 출구는 반드시\n설치해야 해요."
+"editor_tooltip_hole_invalid",27847587141771264,"You can't cover\nthe outermost edge\nwith holes.","맵 가장자리의 한 변을\n전부 구멍으로\n만들 수 없어요."
 "editor_undo_map_name",486496264219,"Undo: the map name","실행 취소: 맵 이름"
 "editor_undo_multi",486496264220,"Undo: a wall, a shutter,\nor an exit","실행 취소: 벽, 셔터\n또는 출구"
 "editor_undo_object",486496264221,"Undo: an object","실행 취소: 물체"

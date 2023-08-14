@@ -91,6 +91,7 @@ public class EditorManager : MonoBehaviour
     private bool hasSavedOnce = false;
     private bool isSaving = false;
     private bool hasPassedInitPhaseOnce = false;
+    private bool holeInvalid = false;
     private OpenSaveScrollItem selectedOpenScrollItem;
     private string currentOpenPath = MapManager.MAP_ROOT_PATH;
     private float openItemSelectTime = 0f;
@@ -98,6 +99,7 @@ public class EditorManager : MonoBehaviour
     private string currentSavePath = MapManager.MAP_ROOT_PATH;
     private float saveItemSelectTime = 0f;
     private string folderName = "";
+    private TooltipHover editorNextButton2Hover;
     private TooltipHover editorSaveButton3Hover;
     private TooltipHover editorQuitButton3Hover;
     
@@ -113,6 +115,7 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        editorNextButton2Hover = editorNextButton2.GetComponent<TooltipHover>();
         editorSaveButton3Hover = editorSaveButton3.GetComponent<TooltipHover>();
         editorQuitButton3Hover = editorQuitButton3.GetComponent<TooltipHover>();
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
@@ -135,6 +138,7 @@ public class EditorManager : MonoBehaviour
         hasSavedOnce = false;
         dirtyBit = false;
         hasPassedInitPhaseOnce = false;
+        holeInvalid = false;
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
         {
@@ -294,14 +298,20 @@ public class EditorManager : MonoBehaviour
         }
 
         // Phase 2 buttons
-        if (walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) &&
-            objects.Exists(e => e.type == ObjectInfo.Type.Ball))
+        if (!walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) ||
+            !objects.Exists(e => e.type == ObjectInfo.Type.Ball))
         {
-            editorNextButton2.interactable = true;
+            editorNextButton2.interactable = false;
+            editorNextButton2Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_tooltip_no_ball_or_exit");
+        }
+        else if (holeInvalid)
+        {
+            editorNextButton2.interactable = false;
+            editorNextButton2Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_tooltip_hole_invalid");
         }
         else
         {
-            editorNextButton2.interactable = false;
+            editorNextButton2.interactable = true;
         }
 
         editorUndoButton.interactable = undoStack.Count > 0;
@@ -1415,14 +1425,7 @@ public class EditorManager : MonoBehaviour
                     if (verbose) Debug.Log("Toggle on hole at (" + a + ", " + b + ")");
 
                     // Wall up
-                    if (b == sizeY)     // Uppermost
-                    {
-                        if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
-                        {
-                            // WIP
-                        }
-                    }
-                    else if (b < sizeY) // Not uppermost
+                    if (b != sizeY) // Not uppermost
                     {
                         // Shutter exists
                         if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
@@ -1447,11 +1450,7 @@ public class EditorManager : MonoBehaviour
                     }
 
                     // Wall down
-                    if (b == 1)     // Lowermost
-                    {
-
-                    }
-                    else if (b > 1) // Not lowermost
+                    if (b != 1) // Not lowermost
                     {
                         // Shutter exists
                         if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
@@ -1476,11 +1475,7 @@ public class EditorManager : MonoBehaviour
                     }
 
                     // Wall left
-                    if (a == 1)     // Leftmost
-                    {
-
-                    }
-                    else if (a > 1) // Not leftmost
+                    if (a != 1) // Not leftmost
                     {
                         // Shutter exists
                         if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
@@ -1505,11 +1500,7 @@ public class EditorManager : MonoBehaviour
                     }
 
                     // Wall right
-                    if (a == sizeX)     // Rightmost
-                    {
-
-                    }
-                    else if (a < sizeX) // Not rightmost
+                    if (a != sizeX) // Not rightmost
                     {
                         // Shutter exists
                         if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
@@ -1644,8 +1635,10 @@ public class EditorManager : MonoBehaviour
 
                 hasChanged = true;
                 break;
-#endregion
+                #endregion
         }
+
+        HoleValidityCheck();
 
         // Map Rendering
         mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
@@ -1703,6 +1696,7 @@ public class EditorManager : MonoBehaviour
         List<ObjectInfo> oldObjects = objects;
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
+        holeInvalid = false;
         mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
         solution = "";
 
@@ -1799,6 +1793,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
+        HoleValidityCheck();
         mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
@@ -1858,6 +1853,7 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
+        HoleValidityCheck();
         mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
@@ -3015,6 +3011,7 @@ public class EditorManager : MonoBehaviour
         }
         undoStack.RemoveAt(undoStack.Count - 1);
         redoStack.Add(eai);
+        HoleValidityCheck();
         solution = "";
         dirtyBit = true;
     }
@@ -3138,6 +3135,7 @@ public class EditorManager : MonoBehaviour
         }
         redoStack.RemoveAt(redoStack.Count - 1);
         undoStack.Add(eai);
+        HoleValidityCheck();
         solution = "";
         dirtyBit = true;
     }
@@ -3231,6 +3229,77 @@ public class EditorManager : MonoBehaviour
         editorOpenButton6.gameObject.SetActive(false);
 
         editorOpenButton6.interactable = false;
+    }
+
+    private void HoleValidityCheck()
+    {
+        bool floorExists;
+
+        // Uppermost
+        floorExists = false;
+        for (int i = 1; i <= sizeX; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == i && obj.y == sizeY)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Lowermost
+        floorExists = false;
+        for (int i = 1; i <= sizeX; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == i && obj.y == 1)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Leftmost
+        floorExists = false;
+        for (int i = 1; i <= sizeY; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == 1 && obj.y == i)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Rightmost
+        floorExists = false;
+        for (int i = 1; i <= sizeY; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == sizeX && obj.y == i)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        holeInvalid = false;
     }
 
     public void PlayButtonSFX()

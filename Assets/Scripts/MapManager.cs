@@ -841,6 +841,69 @@ public class MapManager : MonoBehaviour
                         fixedObjects.Add(g.GetComponent<FixedObject>());
                         initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                     }
+                    // Check if all tiles of one edge line are hole when not editing
+                    if (isValidation)
+                    {
+                        // Uppermost
+                        if (oi.y == sizeY)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeX; i++)
+                            {
+                                if (!holes[RotatedX(i, sizeY - 1), RotatedY(i, sizeY - 1)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Lowermost
+                        if (oi.y == 1)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeX; i++)
+                            {
+                                if (!holes[RotatedX(i, 0), RotatedY(i, 0)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Leftmost
+                        if (oi.x == 1)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeY; i++)
+                            {
+                                if (!holes[RotatedX(0, i), RotatedY(0, i)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Rightmost
+                        if (oi.x == sizeX)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeY; i++)
+                            {
+                                if (!holes[RotatedX(sizeX - 1, i), RotatedY(sizeX - 1, i)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+                    }
 
                     break;
                 /*

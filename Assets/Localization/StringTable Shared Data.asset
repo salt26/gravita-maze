@@ -231,6 +231,14 @@ MonoBehaviour:
     m_Key: editor_warning_map_not_saved_yet
     m_Metadata:
       m_Items: []
+  - m_Id: 27847587124994048
+    m_Key: editor_tooltip_no_ball_or_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27847587141771264
+    m_Key: editor_tooltip_hole_invalid
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264219
     m_Key: editor_undo_map_name
     m_Metadata:
