@@ -76,7 +76,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 24239937476268032
-    m_Key: editor_warning_add_hole
+    m_Key: editor_warning_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486492069899
@@ -128,7 +128,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 24239937501433856
-    m_Key: editor_guide_add_hole
+    m_Key: editor_guide_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
