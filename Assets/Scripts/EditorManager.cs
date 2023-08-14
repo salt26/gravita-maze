@@ -1569,11 +1569,11 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else
-                        {
-                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
-                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b)));
-                        }
+                        //else
+                        //{
+                        //    if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        //    walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b)));
+                        //}
                     }
 
                     // Down (not lowermost)
@@ -1587,11 +1587,11 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else
-                        {
-                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
-                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b - 1)));
-                        }
+                        //else
+                        //{
+                        //    if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        //    walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b - 1)));
+                        //}
                     }
 
                     // Left (not leftmost)
@@ -1605,11 +1605,11 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else
-                        {
-                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
-                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a - 1 && i.y == b)));
-                        }
+                        //else
+                        //{
+                        //    if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        //    walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a - 1 && i.y == b)));
+                        //}
                     }
 
                     // Right (not rightmost)
@@ -1623,11 +1623,11 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else
-                        {
-                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
-                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a && i.y == b)));
-                        }
+                        //else
+                        //{
+                        //    if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        //    walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a && i.y == b)));
+                        //}
                     }
 
                     if (commitAction)
