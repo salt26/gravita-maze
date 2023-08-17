@@ -725,7 +725,6 @@ public class PlayManager : MonoBehaviour
 
                     pauseButton.interactable = false;
 
-                    GameManager.mm.timeoutPanel.gameObject.SetActive(false);
                     revivePanel.gameObject.SetActive(true);
                     reviveButton.gameObject.SetActive(true);
                     revivePanel.transform.Find("ReviveGuide").gameObject.SetActive(true);
