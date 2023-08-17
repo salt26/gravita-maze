@@ -196,7 +196,7 @@ public class PlayManager : MonoBehaviour
     {
         get;
         private set;
-    } = 5;
+    } = 1;
 
     public bool IsRandomOrder
     {
@@ -313,13 +313,11 @@ public class PlayManager : MonoBehaviour
             case Mode.Custom:
                 CustomOpenPhase(MapManager.MAP_ROOT_PATH);
                 Life = int.MaxValue;
-                MaxSkipCount = int.MaxValue - 1;
                 customSelection = MapManager.MAP_ROOT_PATH;
                 break;
             case Mode.Training:
                 TrainingOpenPhase(TrainingMapSelect.Root);
                 Life = int.MaxValue;
-                MaxSkipCount = int.MaxValue - 1;
                 break;
             default:
                 IsRandomOrder = isRandomOrder;
@@ -709,7 +707,14 @@ public class PlayManager : MonoBehaviour
                     quitHighlightedButton.gameObject.SetActive(false);
 
                     pauseButton.interactable = true;
-                    nextButton.interactable = true;
+                    if (SkippedCount < MaxSkipCount)
+                    {
+                        nextButton.interactable = true;
+                    }
+                    else
+                    {
+                        nextButton.interactable = false;
+                    }
                 }
                 else
                 {
