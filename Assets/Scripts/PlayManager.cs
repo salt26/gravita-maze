@@ -264,8 +264,12 @@ public class PlayManager : MonoBehaviour
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
         pausePanel.SetActive(false);
-        revivePanel.SetActive(false);
-        reviveIndicator.SetActive(false);
+        
+        if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            revivePanel.SetActive(false);
+            reviveIndicator.SetActive(false);
+        }
         if (mode != Mode.Custom && mode != Mode.Training)
         { 
             resultUI.gameObject.SetActive(false); 
@@ -489,8 +493,12 @@ public class PlayManager : MonoBehaviour
             }
         }
 
-        revivePanel.gameObject.SetActive(false);
-        reviveIndicator.gameObject.SetActive(false);
+        if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            revivePanel.gameObject.SetActive(false);
+            reviveIndicator.gameObject.SetActive(false);
+        }
+
         resultUI.Initialize(playMode);
     }
 
