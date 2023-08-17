@@ -1457,17 +1457,14 @@ public class GameManager : MonoBehaviour
    // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
     public void OnTriggerHaptic(int hapticNum)
     {
-        Debug.Log("On triggered");
         hm.hmPlayHapticOnce(delayPlayTime, hapticNum);
     }
     public void PlayHaptic(int hapticNum)
     {
-        Debug.Log("StartPlay");
         hm.hmPlayHaptic(hapticNum);
     }
     public void StopHaptic(int hapticNum)
     {
-        Debug.Log("StopPlay");
         hm.hmStopHaptic(hapticNum);
     }
 
