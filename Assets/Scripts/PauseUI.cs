@@ -28,7 +28,11 @@ public class PauseUI : MonoBehaviour
     void Update()
     {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
+        if (GameManager.pm.SkippedCount >= GameManager.pm.MaxSkipCount)
+        {
+            pauseSkipButton.interactable = false;
+        }
+        else if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
         {
             pauseSkipButton.interactable = true;
         }

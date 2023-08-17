@@ -1172,6 +1172,22 @@ MonoBehaviour:
       the pause menu.'
     m_Metadata:
       m_Items: []
+  - m_Id: 29036724280614912
+    m_Localized: 'Wanna Get Revived?
+
+
+      You''ll get additional lives when you
+      press the revive button.
+
+
+      Instead, you can''t receive stars even if
+      you clear this level.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29037776283361280
+    m_Localized: Revive!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
