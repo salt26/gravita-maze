@@ -26,13 +26,16 @@ public class PlayManager : MonoBehaviour
 
     public enum TrainingMapSelect { Root = -1, Basic = 0, Fire = 1, Iron = 2, Block = 3, Exit = 4, Shutter = 5, Gate = 6 }
    
-    public Button pauseButton;                   // quitHighlightedButton이 활성화될 때 비활성화
+    public Button pauseButton;                  // quitHighlightedButton이 활성화될 때 비활성화
     public Button quitHighlightedButton;        // 모든 맵을 탈출하거나 라이프가 0이 되어 게임이 종료될 때 활성화
     public Button nextButton;                   // 탈출 또는 시간 초과 시 활성화 (튜토리얼에서는 탈출 시에만 활성화), quitHighlightedButton이 활성화될 때 비활성화
     public Button retryButton;                  // Continued일 때 활성화, 사망 또는 탈출 또는 시간 초과 시 비활성화
     public Button retryHighlightedButton;       // Burned 또는 Squashed일 때 활성화
     public Button retryTimeButton;              // 시간 초과 시 활성화 (튜토리얼에서는 탈출 시 활성화)
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
+    public GameObject revivePanel;              // 라이프가 0이 되어 게임이 종료될 때 활성화
+    public Button reviveButton;                 // revivePanel이 활성화될 때 활성화
+    public GameObject reviveIndicator;          // 부활하고 난 후 텍스트 표시
     public MessageUI messageUI;
     public PauseUI pauseUI;
     public GameObject pausePanel;
@@ -189,6 +192,12 @@ public class PlayManager : MonoBehaviour
         private set;
     } = 0;
 
+    public int MaxSkipCount
+    {
+        get;
+        private set;
+    } = 1;
+
     public bool IsRandomOrder
     {
         get;
@@ -200,6 +209,18 @@ public class PlayManager : MonoBehaviour
         get;
         set;
     } = 5;
+
+    public int RevivedLife
+    {
+        get;
+        set;
+    } = 5;
+
+    public bool IsRevived
+    {
+        get;
+        set;
+    } = false;
 
     public int EscapedCount
     {
@@ -243,6 +264,12 @@ public class PlayManager : MonoBehaviour
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
         pausePanel.SetActive(false);
+        
+        if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            revivePanel.SetActive(false);
+            reviveIndicator.SetActive(false);
+        }
         if (mode != Mode.Custom && mode != Mode.Training)
         { 
             resultUI.gameObject.SetActive(false); 
@@ -259,24 +286,28 @@ public class PlayManager : MonoBehaviour
                 _mapFiles = SeriesToMapFiles(adventureEasyMapSeries, adventureEasyMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureEasyLife;
+                MaxSkipCount = adventureEasyLife - 1;
                 PlayLength = Mathf.Clamp(adventureEasyPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvNormal:
                 _mapFiles = SeriesToMapFiles(adventureNormalMapSeries, adventureNormalMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureNormalLife;
+                MaxSkipCount = adventureNormalLife - 1;
                 PlayLength = Mathf.Clamp(adventureNormalPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvHard:
                 _mapFiles = SeriesToMapFiles(adventureHardMapSeries, adventureHardMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureHardLife;
+                MaxSkipCount = adventureHardLife - 1;
                 PlayLength = Mathf.Clamp(adventureHardPlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.AdvInsane:
                 _mapFiles = SeriesToMapFiles(adventureInsaneMapSeries, adventureInsaneMapFiles);
                 IsRandomOrder = isRandomOrder;
                 Life = adventureInsaneLife;
+                MaxSkipCount = adventureInsaneLife - 1;
                 PlayLength = Mathf.Clamp(adventureInsanePlayLength, 1, _mapFiles.Count - Life + 1);
                 break;
             case Mode.Custom:
@@ -291,9 +322,10 @@ public class PlayManager : MonoBehaviour
             default:
                 IsRandomOrder = isRandomOrder;
                 Life = Mathf.Max(initialLife, 1);
+                MaxSkipCount = Life - 1;
                 PlayLength = Mathf.Clamp(maxPlayLength, 1, _mapFiles.Count - Life + 1);
                 // TODO
-                return;
+                break;
         }
 
         if (_mapFiles == null || _mapFiles.Count < 1 || maxPlayLength < 1) return;
@@ -458,6 +490,13 @@ public class PlayManager : MonoBehaviour
                 }
             }
         }
+
+        if (SceneManager.GetActiveScene().name.Equals("Adventure"))
+        {
+            revivePanel.gameObject.SetActive(false);
+            reviveIndicator.gameObject.SetActive(false);
+        }
+
         resultUI.Initialize(playMode);
     }
 
@@ -668,7 +707,14 @@ public class PlayManager : MonoBehaviour
                     quitHighlightedButton.gameObject.SetActive(false);
 
                     pauseButton.interactable = true;
-                    nextButton.interactable = true;
+                    if (SkippedCount < MaxSkipCount)
+                    {
+                        nextButton.interactable = true;
+                    }
+                    else
+                    {
+                        nextButton.interactable = false;
+                    }
                 }
                 else
                 {
@@ -678,9 +724,24 @@ public class PlayManager : MonoBehaviour
                     quitHighlightedButton.gameObject.SetActive(true);
 
                     pauseButton.interactable = false;
+
+                    revivePanel.gameObject.SetActive(true);
+                    reviveButton.gameObject.SetActive(true);
+                    revivePanel.transform.Find("ReviveGuide").gameObject.SetActive(true);
                 }
                 break;
         }
+    }
+
+    public void ReviveHelper()
+    {
+        Life = RevivedLife;
+        IsRevived = true;
+        Debug.Log("Revived Life: " + RevivedLife);
+        revivePanel.gameObject.SetActive(false);
+        reviveIndicator.gameObject.SetActive(true);
+        GameManager.mm.afterGravity(MapManager.Flag.Continued);
+        GameManager.mm.RetryWithTime();
     }
 
     public void CustomAfterGravity(MapManager.Flag flag)

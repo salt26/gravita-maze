@@ -187,7 +187,7 @@ public class ResultUI : MonoBehaviour
         else if (mode == PlayManager.Mode.AdvEasy || mode == PlayManager.Mode.AdvNormal ||
             mode == PlayManager.Mode.AdvHard || mode == PlayManager.Mode.AdvInsane)
         {
-            if (pm.HasClearedAll)
+            if (pm.HasClearedAll && !pm.IsRevived)
             {
                 switch (mode)
                 {
@@ -223,7 +223,6 @@ public class ResultUI : MonoBehaviour
                     GameManager.gm.ReviseStar(mode, 1);
                     StartCoroutine(ResultAnimation(1));
                 }
-                
             }
             else if (pm.Life == 0)
             {
