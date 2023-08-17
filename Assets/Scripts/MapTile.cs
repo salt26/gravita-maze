@@ -9,33 +9,33 @@ using static MapTile;
 
 public class MapTile : MonoBehaviour
 {
-    // ³ªÁß¿¡ º® Á¾·ù¸¦ Ãß°¡ÇÒ ¶§ ¿©±â RenderingWallFlag ¹× PlayingWallFlag¿¡ º® Á¾·ù¸¦ Ãß°¡ÇÏ¸é µË´Ï´Ù.
-    // Ãß°¡ÇÒ ¶§¿¡´Â ¸Ç µÚ¿¡ ¹øÈ£°¡ 1¾¿ Áõ°¡ÇÏµµ·Ï Ãß°¡ÇÏ¸é ÁÁ½À´Ï´Ù.
+    // ë‚˜ì¤‘ì— ë²½ ì¢…ë¥˜ë¥¼ ì¶”ê°€í•  ë•Œ ì—¬ê¸° RenderingWallFlag ë° PlayingWallFlagì— ë²½ ì¢…ë¥˜ë¥¼ ì¶”ê°€í•˜ë©´ ë©ë‹ˆë‹¤.
+    // ì¶”ê°€í•  ë•Œì—ëŠ” ë§¨ ë’¤ì— ë²ˆí˜¸ê°€ 1ì”© ì¦ê°€í•˜ë„ë¡ ì¶”ê°€í•˜ë©´ ì¢‹ìŠµë‹ˆë‹¤.
 
     public enum DirectionFlag { Top = 3, Up = 3, Bottom = 2, Down = 2, Left = 1, Right = 0 };
 
     /// <summary>
-    /// ±×·¡ÇÈÀ¸·Î ±×¸± ¶§ ÇÊ¿äÇÑ º® Á¤º¸
+    /// ê·¸ë˜í”½ìœ¼ë¡œ ê·¸ë¦´ ë•Œ í•„ìš”í•œ ë²½ ì •ë³´
     /// </summary>
     public enum WallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5, Exit = 6, ClosedShutter = 7, BrokenGlass = 8 }
 
     /// <summary>
-    /// ±×·¡ÇÈÀ¸·Î ±×¸± ¶§ ÇÊ¿äÇÑ ÄÚ³Ê º® Á¤º¸
+    /// ê·¸ë˜í”½ìœ¼ë¡œ ê·¸ë¦´ ë•Œ í•„ìš”í•œ ì½”ë„ˆ ë²½ ì •ë³´
     /// </summary>
     public enum CornerWallFlag { None = 0, Normal = 1, Glitter = 2 }
 
     /// <summary>
-    /// ±×·¡ÇÈÀ¸·Î ±×¸± ¶§ ÇÊ¿äÇÑ ¹Ù´Ú Á¤º¸
+    /// ê·¸ë˜í”½ìœ¼ë¡œ ê·¸ë¦´ ë•Œ í•„ìš”í•œ ë°”ë‹¥ ì •ë³´
     /// </summary>
     public enum FloorFlag { Hole = 0, Floor = 1 }
 
     /// <summary>
-    /// °ÔÀÓÇÃ·¹ÀÌ ¸ŞÄ¿´ÏÁòÀ» ±¸ÇöÇÒ ¶§ ÇÊ¿äÇÑ º® Á¤º¸
+    /// ê²Œì„í”Œë ˆì´ ë©”ì»¤ë‹ˆì¦˜ì„ êµ¬í˜„í•  ë•Œ í•„ìš”í•œ ë²½ ì •ë³´
     /// </summary>
     public enum PlayingWallFlag { None = 0, Wall = 1, Shutter = 2, Glass = 3, OneWayIn = 4, OneWayOut = 5 }
 
-    // ³ªÁß¿¡ FixedObject Á¾·ù¸¦ Ãß°¡ÇÒ ¶§ ¿©±â FixedObjectFlag¿¡ ¹°Ã¼ Á¾·ù¸¦ Ãß°¡ÇÏ¸é µË´Ï´Ù.
-    // Ãß°¡ÇÒ ¶§¿¡´Â ¸Ç µÚ¿¡ ¹øÈ£°¡ 1¾¿ Áõ°¡ÇÏµµ·Ï Ãß°¡ÇÏ¸é ÁÁ½À´Ï´Ù.
+    // ë‚˜ì¤‘ì— FixedObject ì¢…ë¥˜ë¥¼ ì¶”ê°€í•  ë•Œ ì—¬ê¸° FixedObjectFlagì— ë¬¼ì²´ ì¢…ë¥˜ë¥¼ ì¶”ê°€í•˜ë©´ ë©ë‹ˆë‹¤.
+    // ì¶”ê°€í•  ë•Œì—ëŠ” ë§¨ ë’¤ì— ë²ˆí˜¸ê°€ 1ì”© ì¦ê°€í•˜ë„ë¡ ì¶”ê°€í•˜ë©´ ì¢‹ìŠµë‹ˆë‹¤.
     public enum FixedObjectFlag {
         None = 0, Fire = 1, Hole = 2, QuitGame = 3, MapEditor = 4,
         Adventure = 5, Tutorial = 6, Custom = 7, Training = 8, Setting = 9,
@@ -446,10 +446,10 @@ public class MapTile : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓÇÃ·¹ÀÌ ¸ŞÄ¿´ÏÁòÀ» ±¸ÇöÇÒ ¶§ ÇöÀç Å¸ÀÏÀÌ °¡Áø »óÇÏÁÂ¿ì º® Á¤º¸¸¦ ÇÏ³ªÀÇ ¼ö·Î Ç¥ÇöÇÕ´Ï´Ù.
-    /// ÃÑ (PlayingWallFlagÀÇ Á¾·ù °³¼ö) ^ 4 °¡ÁöÀÇ »óÅÂ¸¦ °¡Áı´Ï´Ù.
+    /// ê²Œì„í”Œë ˆì´ ë©”ì»¤ë‹ˆì¦˜ì„ êµ¬í˜„í•  ë•Œ í˜„ì¬ íƒ€ì¼ì´ ê°€ì§„ ìƒí•˜ì¢Œìš° ë²½ ì •ë³´ë¥¼ í•˜ë‚˜ì˜ ìˆ˜ë¡œ í‘œí˜„í•©ë‹ˆë‹¤.
+    /// ì´ (PlayingWallFlagì˜ ì¢…ë¥˜ ê°œìˆ˜) ^ 4 ê°€ì§€ì˜ ìƒíƒœë¥¼ ê°€ì§‘ë‹ˆë‹¤.
     /// </summary>
-    /// <returns>(PlayingWallFlagÀÇ Á¾·ù °³¼ö)Áø¹ıÀ¸·Î Ç¥ÇöÇÑ ³× ÀÚ¸® ¼ö (most significant bitºÎÅÍ Â÷·Ê·Î »ó, ÇÏ, ÁÂ, ¿ì)</returns>
+    /// <returns>(PlayingWallFlagì˜ ì¢…ë¥˜ ê°œìˆ˜)ì§„ë²•ìœ¼ë¡œ í‘œí˜„í•œ ë„¤ ìë¦¬ ìˆ˜ (most significant bitë¶€í„° ì°¨ë¡€ë¡œ ìƒ, í•˜, ì¢Œ, ìš°)</returns>
     public long GetPlayingWallFlagCode()
     {
         long kinds = Enum.GetNames(typeof(PlayingWallFlag)).Count();
@@ -468,7 +468,7 @@ public class MapTile : MonoBehaviour
         return kinds * kinds * kinds * kinds;
     }
 
-    // tileCode´Â WallFlag ±âÁØ
+    // tileCodeëŠ” WallFlag ê¸°ì¤€
     public static bool CheckTileFlag(long tileCode, PlayingWallFlag playingWallFlag, DirectionFlag directionFlag)
     {
         long kinds = GetRenderingWallKinds();
