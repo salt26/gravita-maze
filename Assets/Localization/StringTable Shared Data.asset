@@ -883,6 +883,10 @@ MonoBehaviour:
     m_Key: Adventure/Canvas/RevivePanel/ReviveButton/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 29040737667506176
+    m_Key: Adventure/Canvas/ReviveIndicator
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

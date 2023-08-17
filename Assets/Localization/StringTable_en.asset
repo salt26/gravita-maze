@@ -1176,16 +1176,24 @@ MonoBehaviour:
     m_Localized: 'Wanna Get Revived?
 
 
-      You''ll get additional lives when you
-      press the revive button.
+      You''ll get additional lives
+
+      when
+      you press the revive button.
 
 
-      Instead, you can''t receive stars even if
-      you clear this level.'
+      But you can''t receive stars
+
+      even
+      if you clear this level.'
     m_Metadata:
       m_Items: []
   - m_Id: 29037776283361280
     m_Localized: Revive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29040737667506176
+    m_Localized: Practice Mode
     m_Metadata:
       m_Items: []
   references:

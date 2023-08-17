@@ -35,6 +35,7 @@ public class PlayManager : MonoBehaviour
     public Button retryTimeHighlightedButton;   // (튜토리얼에서만 시간 초과 시 활성화)
     public GameObject revivePanel;              // 라이프가 0이 되어 게임이 종료될 때 활성화
     public Button reviveButton;                 // revivePanel이 활성화될 때 활성화
+    public GameObject reviveIndicator;          // 부활하고 난 후 텍스트 표시
     public MessageUI messageUI;
     public PauseUI pauseUI;
     public GameObject pausePanel;
@@ -264,6 +265,7 @@ public class PlayManager : MonoBehaviour
         pauseUI.gameObject.SetActive(false);
         pausePanel.SetActive(false);
         revivePanel.SetActive(false);
+        reviveIndicator.SetActive(false);
         if (mode != Mode.Custom && mode != Mode.Training)
         { 
             resultUI.gameObject.SetActive(false); 
@@ -488,6 +490,7 @@ public class PlayManager : MonoBehaviour
         }
 
         revivePanel.gameObject.SetActive(false);
+        reviveIndicator.gameObject.SetActive(false);
         resultUI.Initialize(playMode);
     }
 
@@ -724,6 +727,7 @@ public class PlayManager : MonoBehaviour
         IsRevived = true;
         Debug.Log("Revived Life: " + RevivedLife);
         revivePanel.gameObject.SetActive(false);
+        reviveIndicator.gameObject.SetActive(true);
         GameManager.mm.afterGravity(MapManager.Flag.Continued);
         GameManager.mm.RetryWithTime();
     }
