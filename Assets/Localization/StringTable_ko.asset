@@ -1059,7 +1059,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 29040737667506176
-    m_Localized: "\uC5F0\uC2B5\uBAA8\uB4DC"
+    m_Localized: "\uC5F0\uC2B5 \uBAA8\uB4DC"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29044565267701760
+    m_Localized: "\uB098\uAC00\uAE30"
     m_Metadata:
       m_Items: []
   references:
