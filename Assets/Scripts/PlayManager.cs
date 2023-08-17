@@ -214,7 +214,7 @@ public class PlayManager : MonoBehaviour
     {
         get;
         set;
-    } = 10;
+    } = 5;
 
     public bool IsRevived
     {
