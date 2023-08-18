@@ -1182,10 +1182,12 @@ MonoBehaviour:
       you press the revive button.
 
 
-      But you can''t receive stars
+      But you can play only this level
 
-      even
-      if you clear this level.'
+      and
+      you can''t receive stars
+
+      even if you clear the level.'
     m_Metadata:
       m_Items: []
   - m_Id: 29037776283361280
