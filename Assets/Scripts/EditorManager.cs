@@ -1783,6 +1783,13 @@ public class EditorManager : MonoBehaviour
             removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.x > value);
         }
+        else if (value > oldValue)
+        {
+            foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue))
+            {
+                walls.Add(new WallInfo(WallInfo.Type.Vertical, oldValue, o.y));
+            }
+        }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
         removedWalls.AddRange(tempWalls);
         walls.RemoveAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
@@ -1842,6 +1849,13 @@ public class EditorManager : MonoBehaviour
             tempObjects = objects.FindAll(o => o.y > value);
             removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.y > value);
+        }
+        else if (value > oldValue)
+        {
+            foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.y == oldValue))
+            {
+                walls.Add(new WallInfo(WallInfo.Type.Horizontal, o.x, oldValue));
+            }
         }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
         removedWalls.AddRange(tempWalls);
@@ -3331,17 +3345,21 @@ public class EditorManager : MonoBehaviour
         public ObjectInfo oldObject;
         public ObjectInfo newObject;
 
-        // SizeX, SizeY, MassRemoval, MassChange
+        // SizeX, SizeY, MassRemoval, MassChange, SeveralChange
         public List<WallInfo> oldWalls;
         public List<ObjectInfo> oldObjects;
+
+        // SizeX, SizeY, MassChange, SeveralChange
+        public List<WallInfo> newWalls;
+
+        // MassChange, SeveralChange
+        public List<ObjectInfo> newObjects;
 
         // MassChange
         public int oldSizeX;
         public int oldSizeY;
         public int newSizeX;
         public int newSizeY;
-        public List<WallInfo> newWalls;
-        public List<ObjectInfo> newObjects;
 
         /// <summary>
         /// Type: MapName
@@ -3362,7 +3380,7 @@ public class EditorManager : MonoBehaviour
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
-            List<WallInfo> oldRemovedWalls = null, List <ObjectInfo> oldRemovedObjects = null)
+            List<WallInfo> oldRemovedWalls = null, List<ObjectInfo> oldRemovedObjects = null)
         {
             if (isX)
                 type = Type.SizeX;
