@@ -1050,7 +1050,7 @@ public class MapManager : MonoBehaviour
                         {
                             if (holes[i - 1, 0])
                             {
-                                Debug.LogError("Map invalid: wrong hole position");
+                                Debug.LogError("Map invalid: exit adjacent to hole");
                                 return;
                             }
                             SetTile(i, j, FloorFlag.Hole, WallFlag.Exit, WallFlag.None, WallFlag.None, WallFlag.None,
@@ -1061,7 +1061,7 @@ public class MapManager : MonoBehaviour
                         {
                             if (holes[i - 1, SizeY - 1])
                             {
-                                Debug.LogError("Map invalid: wrong hole position");
+                                Debug.LogError("Map invalid: exit adjacent to hole");
                                 return;
                             }
                             SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Exit, WallFlag.None, WallFlag.None,
@@ -1072,7 +1072,7 @@ public class MapManager : MonoBehaviour
                         {
                             if (holes[SizeX - 1, j - 1])
                             {
-                                Debug.LogError("Map invalid: wrong hole position");
+                                Debug.LogError("Map invalid: exit adjacent to hole");
                                 return;
                             }
                             SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Exit, WallFlag.None,
@@ -1083,7 +1083,7 @@ public class MapManager : MonoBehaviour
                         {
                             if (holes[0, j - 1])
                             {
-                                Debug.LogError("Map invalid: wrong hole position");
+                                Debug.LogError("Map invalid: exit adjacent to hole");
                                 return;
                             }
                             SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Exit,
@@ -1132,7 +1132,7 @@ public class MapManager : MonoBehaviour
                             (i != 1 && ((holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 0) || (!holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 1))) ||        // Left
                             (i != SizeX && ((holes[i, j - 1] && verticalWalls[i, j - 1] != 0) || (!holes[i, j - 1] && verticalWalls[i, j - 1] != 1))))                      // Right
                         {
-                            Debug.LogError("Map invalid: wrong hole position");
+                            Debug.LogError("Map invalid: wrong hole position at (" + i + ", " + j + ")");
                             return;
                         }
 

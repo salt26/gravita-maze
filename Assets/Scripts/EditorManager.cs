@@ -1746,7 +1746,10 @@ public class EditorManager : MonoBehaviour
         {
             foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue))
             {
-                walls.Add(new WallInfo(WallInfo.Type.Vertical, oldValue, o.y));
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue + 1 && i.y == o.y))
+                {
+                    walls.Add(new WallInfo(WallInfo.Type.Vertical, oldValue, o.y));
+                }
             }
         }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
@@ -1813,7 +1816,10 @@ public class EditorManager : MonoBehaviour
         {
             foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.y == oldValue))
             {
-                walls.Add(new WallInfo(WallInfo.Type.Horizontal, o.x, oldValue));
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == o.x && i.y == oldValue + 1))
+                {
+                    walls.Add(new WallInfo(WallInfo.Type.Horizontal, o.x, oldValue));
+                }
             }
         }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
@@ -2951,16 +2957,16 @@ public class EditorManager : MonoBehaviour
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_several"), 1f);
                 break;
             case EditActionInfo.Type.SizeX:
-                EditSizeX(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
+                EditSizeX(eai.oldSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
-                EditSizeY(eai.oldSize);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
+                EditSizeY(eai.oldSize);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
                 break;
@@ -2972,14 +2978,14 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.oldName);
-                EditSizeX(eai.oldSizeX);
-                EditSizeY(eai.oldSizeY);
                 foreach (WallInfo wi in eai.newWalls)
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.newObjects)
                     objects.Remove(oi);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
+                EditSizeX(eai.oldSizeX);
+                EditSizeY(eai.oldSizeY);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reintialization"), 1f);
                 break;
@@ -3096,14 +3102,14 @@ public class EditorManager : MonoBehaviour
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.newName);
-                EditSizeX(eai.newSizeX);
-                EditSizeY(eai.newSizeY);
                 foreach (WallInfo wi in eai.oldWalls)
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
+                EditSizeX(eai.newSizeX);
+                EditSizeY(eai.newSizeY);
                 mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reinitialization"), 1f);
                 break;
