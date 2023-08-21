@@ -1,4 +1,4 @@
-Key,Id,English(en),Korean(ko)
+﻿Key,Id,English(en),Korean(ko)
 "editor_start_welcome",486441738240,"Welcome to the map editor!","맵 에디터에 오신 걸 환영합니다!"
 "editor_update_begin",486475292672,"All right!\nLet's move on to the next step.","좋아요!\n다음 단계로 가볼까요?"
 "editor_update_test_prompt",486479486976,"Confirm the map\\is playable.","맵이 플레이 가능한지\\테스트해주세요."
