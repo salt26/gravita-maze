@@ -65,9 +65,10 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(8, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_16"));
         tipDict.Add(new TutorialTuple(8, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_17"));
         tipDict.Add(new TutorialTuple(8, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_18"));
-        tipDict.Add(new TutorialTuple(9, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
-        tipDict.Add(new TutorialTuple(9, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
-        tipDict.Add(new TutorialTuple(9, 0, 3), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
+        tipDict.Add(new TutorialTuple(9, 1, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
+        tipDict.Add(new TutorialTuple(9, 4, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
+        tipDict.Add(new TutorialTuple(9, 1, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
+        tipDict.Add(new TutorialTuple(9, 4, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
         // tipDict.Add(new TutorialTuple(9, 2, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
         tipDict.Add(new TutorialTuple(10, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_30"));
         tipDict.Add(new TutorialTuple(10, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
@@ -222,7 +223,7 @@ public class TutorialGuide : MonoBehaviour
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_28");
                 }
-                else if (GameManager.gm.PlayingMapIndex + 1 == 10)
+                else if (GameManager.gm.PlayingMapIndex + 1 == 9)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_26");
                 }
