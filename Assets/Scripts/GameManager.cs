@@ -1467,6 +1467,14 @@ public class GameManager : MonoBehaviour
     {
         hm.hmStopHaptic(hapticNum);
     }
+    public void HapticOn()
+    {
+        hm.hapticEnabled = true;
+    }
+    public void HapticOff()
+    {
+        hm.hapticEnabled = false;
+    }
 
     public void LoadSettingsValue()
     {
