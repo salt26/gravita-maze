@@ -212,15 +212,11 @@ in the pause menu.","일시 정지 메뉴에서
 Volume","배경음
 음량"
 "Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
-<size=48>v1.4.3</size>
-
-
+<size=48>v1.4.4</size>
 
 
 Project Managing
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Programming
@@ -234,12 +230,8 @@ Programming
 <size=48><i>Diane Kim</i></size>
 
 
-
-
 Game Design
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Level Design
@@ -247,13 +239,9 @@ Level Design
 <size=48><i>Dantae An</i></size>
 
 
-
-
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
-
-
 
 
 Graphic Design
@@ -262,12 +250,8 @@ Graphic Design
 <size=48><i>Donghwan Yang</i></size>
 
 
-
-
 Sound Design
 <size=48><i>Dantae An</i></size>
-
-
 
 
 Localization
@@ -276,18 +260,12 @@ Localization
 <size=48><i>Dantae An</i></size>
 
 
-
-
 Marketing
 <size=48><i>Suin Lee</i></size>
 
 
-
-
 Infrastructure
 <size=36><i>cseteram</i></size>
-
-
 
 
 Map Making
@@ -298,7 +276,7 @@ Map Making
 <size=48><i>Suin Lee</i></size>
 <size=36><i>MINSEOKIM1</i></size>
 <size=36><i>ektnzpt1080</i></size>","<b>중력미로</b>
-<size=48>v1.4.3</size>
+<size=48>v1.4.4</size>
 
 프로젝트 관리
 <size=48><i>안단태</i></size>
@@ -421,3 +399,18 @@ skip","시간
 "PauseButton",963619405647872,"Esc key","Esc 키"
 "Non-clearedNextButtonOSX",8020914447835136,"Option + Enter key","Option + Enter 키"
 "RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
+"Adventure/Canvas/RevivePanel/ReviveGuide",29036724280614912,"Wanna Get Revived?
+
+You'll get additional lives
+when you press the revive button.
+
+But you can't receive stars
+even if you clear this level.","부활 찬스!
+
+부활 버튼을 누르면 라이프가 충전돼요!
+
+그 대신에 레벨을 클리어해도
+별은 받을 수 없어요."
+"Adventure/Canvas/RevivePanel/ReviveButton/Text",29037776283361280,"Revive!","부활하기!"
+"Adventure/Canvas/ReviveIndicator",29040737667506176,"Practice Mode","연습 모드"
+"Adventure/Canvas/RevivePanel/QuitButton/Text",29044565267701760,"Quit","나가기"
