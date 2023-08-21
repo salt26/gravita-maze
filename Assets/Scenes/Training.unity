@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1105,6 +1105,9 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 1773613030}
   retryTimeButton: {fileID: 530667194}
   retryTimeHighlightedButton: {fileID: 954792813}
+  revivePanel: {fileID: 0}
+  reviveButton: {fileID: 0}
+  reviveIndicator: {fileID: 0}
   messageUI: {fileID: 0}
   pauseUI: {fileID: 338028290}
   pausePanel: {fileID: 1438200330}
@@ -5811,7 +5814,7 @@ RectTransform:
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 132, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7729,7 +7732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1624171125
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8407,6 +8410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ea93e2943e07a46aeead4752d786cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hapticEnabled: 1
   eventHapticSource:
   - {fileID: 1683071639}
   - {fileID: 1324419691}
@@ -8564,7 +8568,7 @@ RectTransform:
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
