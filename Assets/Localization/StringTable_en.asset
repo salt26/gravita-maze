@@ -702,14 +702,18 @@ MonoBehaviour:
 
       <size=48>v1.4.4</size>
 
+      
 
+      
 
       Project
       Managing
 
       <size=48><i>Dantae An</i></size>
 
+      
 
+      
 
       Programming
 
@@ -733,74 +737,95 @@ MonoBehaviour:
 
       <size=48><i>Diane Kim</i></size>
 
+      
 
+      
 
-      Game Design
+      Game
+      Design
 
-      <size=48><i>Dantae
-      An</i></size>
+      <size=48><i>Dantae An</i></size>
 
+      
 
+      
 
-      Level Design
+      Level
+      Design
 
       <size=48><i>Donghwan Yang</i></size>
 
       <size=48><i>Dantae
       An</i></size>
 
+      
 
+      
 
       UI/UX Design
 
+      <size=48><i>Dantae
+      An</i></size>
+
+      <size=48><i>Suin Lee</i></size>
+
+      
+
+      
+
+      Graphic
+      Design
+
       <size=48><i>Dantae An</i></size>
 
-      <size=48><i>Suin
-      Lee</i></size>
+      <size=48><i>Suin Lee</i></size>
 
+      <size=48><i>Donghwan
+      Yang</i></size>
 
+      
 
-      Graphic Design
-
-      <size=48><i>Dantae An</i></size>
-
-      <size=48><i>Suin
-      Lee</i></size>
-
-      <size=48><i>Donghwan Yang</i></size>
-
-
+      
 
       Sound Design
 
       <size=48><i>Dantae
       An</i></size>
 
+      
 
+      
 
       Localization
 
-      <size=48><i>Jaehee Hong</i></size>
+      <size=48><i>Jaehee
+      Hong</i></size>
 
-      <size=48><i>Diane
-      Kim</i></size>
+      <size=48><i>Diane Kim</i></size>
 
-      <size=48><i>Dantae An</i></size>
+      <size=48><i>Dantae
+      An</i></size>
 
+      
 
+      
 
       Marketing
 
       <size=48><i>Suin
       Lee</i></size>
 
+      
 
+      
 
       Infrastructure
 
       <size=36><i>cseteram</i></size>
 
+      
 
+      
 
       Map
       Making
@@ -1186,12 +1211,14 @@ MonoBehaviour:
   - m_Id: 29036724280614912
     m_Localized: 'Wanna Get Revived?
 
+      
 
       You''ll get additional lives
 
       when
       you press the revive button.
 
+      
 
       But you can play only this level
 
