@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311924, g: 0.38073963, b: 0.3587269, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1488,9 +1488,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 98732516}
-  - component: {fileID: 98732519}
   - component: {fileID: 98732518}
   - component: {fileID: 98732517}
+  - component: {fileID: 98732519}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -1566,10 +1566,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 98732515}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &101421914
 GameObject:
   m_ObjectHideFlags: 0
@@ -1579,9 +1580,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 101421915}
-  - component: {fileID: 101421918}
   - component: {fileID: 101421917}
   - component: {fileID: 101421916}
+  - component: {fileID: 101421918}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -1657,10 +1658,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 101421914}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &123678966
 GameObject:
   m_ObjectHideFlags: 0
@@ -7741,9 +7743,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 569660068}
-  - component: {fileID: 569660071}
   - component: {fileID: 569660070}
   - component: {fileID: 569660069}
+  - component: {fileID: 569660071}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -7819,10 +7821,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 569660067}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &583063815
 GameObject:
   m_ObjectHideFlags: 0
@@ -14791,19 +14794,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ea93e2943e07a46aeead4752d786cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventHapticSource:
-  - {fileID: 97079591}
-  - {fileID: 1636272248}
-  - {fileID: 1735677311}
-  - {fileID: 982271668}
-  - {fileID: 1423318942}
-  - {fileID: 533931202}
-  - {fileID: 1001177392}
-  - {fileID: 432992069}
-  - {fileID: 142108354}
-  - {fileID: 362162596}
-  - {fileID: 1332589995}
-  - {fileID: 1150986164}
 --- !u!4 &1199813701
 Transform:
   m_ObjectHideFlags: 0
@@ -20083,9 +20073,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1599849848}
-  - component: {fileID: 1599849851}
   - component: {fileID: 1599849850}
   - component: {fileID: 1599849849}
+  - component: {fileID: 1599849851}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -20161,10 +20151,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1599849847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &1610279958
 GameObject:
   m_ObjectHideFlags: 0
@@ -20619,9 +20610,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1632630320}
-  - component: {fileID: 1632630323}
   - component: {fileID: 1632630322}
   - component: {fileID: 1632630321}
+  - component: {fileID: 1632630323}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -20697,10 +20688,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632630319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &1636272246
 GameObject:
   m_ObjectHideFlags: 0
@@ -25510,9 +25502,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2140613538}
-  - component: {fileID: 2140613541}
   - component: {fileID: 2140613540}
   - component: {fileID: 2140613539}
+  - component: {fileID: 2140613541}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -25588,10 +25580,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2140613537}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!222 &38331146116544519
 CanvasRenderer:
   m_ObjectHideFlags: 0
