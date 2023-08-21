@@ -8,12 +8,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
-using Interhaptics.Internal;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 #if UNITY_ANDROID && !UNITY_EDITOR
-
 using UnityEngine.Android;
 #endif
 
@@ -25,6 +23,8 @@ public class GameManager : MonoBehaviour
     public static PlayManager pm = null;
     public static EditorManager em = null;
 
+    public HapticMediate hm;
+    
     public enum GravityDirection { Up, Down, Left, Right }
 
     [HideInInspector]
@@ -37,11 +37,9 @@ public class GameManager : MonoBehaviour
     private int playingMapIndex = 0;
 
     public bool HasTimeSkipGuided = false;
-
-    public EventHapticSource[] eventHapticSource;
     public float delayPlayTime = 0.0f;
 
-    public int PlayingMapIndex{
+    public int PlayingMapIndex {
         get { return playingMapIndex; }
     }
 
@@ -75,7 +73,7 @@ public class GameManager : MonoBehaviour
     public KeyCode timeOutKey1 = KeyCode.LeftControl;
     public KeyCode timeOutKey2 = KeyCode.RightControl;
 #endif
-    
+
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -124,7 +122,6 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-
         // 입력 담당
         if (canPlay)
         {
@@ -296,7 +293,7 @@ public class GameManager : MonoBehaviour
                             }
                             break;
                         case EditorManager.EditPhase.Save:
-                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable)
+                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable && !em.inputMessageUI.gameObject.activeInHierarchy)
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
@@ -504,33 +501,25 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(8);
-#endif
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(8);
-#endif
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(7);
-#endif
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         OnTriggerHaptic(6);
-#endif
     }
 
     public void PlayEscapedSFX()
@@ -541,9 +530,7 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         PlayHaptic(9); // HapticError
-#endif
     }
 
     public void PlayRetrySFX()
@@ -565,7 +552,6 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         switch (volume)
         {
             case 1.0f:
@@ -578,13 +564,11 @@ public class GameManager : MonoBehaviour
                 OnTriggerHaptic(2);
                 break;
         }
-#endif
     }
 
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
-#if UNITY_ANDROID && !UNITY_EDITOR
         switch (num)
         {
             case 0:
@@ -597,7 +581,6 @@ public class GameManager : MonoBehaviour
                 OnTriggerHaptic(5); //HapticError
                 break;
         }
-#endif
     }
 
     public void QuitGame()
@@ -1471,25 +1454,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-    // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
+   // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
     public void OnTriggerHaptic(int hapticNum)
     {
-        Debug.Log("On triggered");
-        eventHapticSource[hapticNum].delayPlay = delayPlayTime;
-        eventHapticSource[hapticNum].PlayEventVibration();
+        hm.hmPlayHapticOnce(delayPlayTime, hapticNum);
     }
     public void PlayHaptic(int hapticNum)
     {
-        Debug.Log("StartPlay");
-        eventHapticSource[hapticNum].Play();
+        hm.hmPlayHaptic(hapticNum);
     }
     public void StopHaptic(int hapticNum)
     {
-        Debug.Log("StopPlay");
-        eventHapticSource[hapticNum].Stop();
+        hm.hmStopHaptic(hapticNum);
     }
-#endif
+    public void HapticOn()
+    {
+        hm.hapticEnabled = true;
+    }
+    public void HapticOff()
+    {
+        hm.hapticEnabled = false;
+    }
+
     public void LoadSettingsValue()
     {
         if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))

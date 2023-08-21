@@ -20,7 +20,7 @@ public class PauseUI : MonoBehaviour
 
         bgmVolume = GameManager.gm.bgmVolume;
         sfxVolume = GameManager.gm.sfxVolume;
-        
+
         transform.GetChild(0).transform.GetChild(5).GetComponent<Slider>().value = bgmVolume;
         transform.GetChild(0).transform.GetChild(7).GetComponent<Slider>().value = sfxVolume;
     }
@@ -28,11 +28,11 @@ public class PauseUI : MonoBehaviour
     void Update()
     {
         if (GameManager.mm == null || !GameManager.mm.IsReady) return;
-        if (GameManager.mm.LimitMode == MapManager.LimitModeEnum.Time && GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
+        if (GameManager.mm.LimitMode == LimitModeEnum.Time && GameManager.mm.IsTimeActivated && GameManager.mm.RemainingTime > 0f && !GameManager.mm.HasCleared)
         {
             pauseSkipButton.interactable = true;
         }
-        else if (GameManager.mm.LimitMode != MapManager.LimitModeEnum.Time || (GameManager.mm.IsTimeActivated && (GameManager.mm.RemainingTime <= 0f || GameManager.mm.HasCleared)))
+        else
         {
             pauseSkipButton.interactable = false;
         }

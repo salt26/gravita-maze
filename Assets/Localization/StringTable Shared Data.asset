@@ -571,6 +571,14 @@ MonoBehaviour:
     m_Key: tutorial_message_39
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391178
+    m_Key: tutorial_message_40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391179
+    m_Key: tutorial_message_41
+    m_Metadata:
+      m_Items: []
   - m_Id: 164806647603200
     m_Key: Adventure/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:
@@ -901,6 +909,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 8021235509223424
     m_Key: RetryTimeButtonOSX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29036724280614912
+    m_Key: Adventure/Canvas/RevivePanel/ReviveGuide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29037776283361280
+    m_Key: Adventure/Canvas/RevivePanel/ReviveButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29040737667506176
+    m_Key: Adventure/Canvas/ReviveIndicator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29044565267701760
+    m_Key: Adventure/Canvas/RevivePanel/QuitButton/Text
     m_Metadata:
       m_Items: []
   m_Metadata:

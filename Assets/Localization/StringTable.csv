@@ -1,4 +1,4 @@
-﻿Key,Id,English(en),Korean(ko)
+Key,Id,English(en),Korean(ko)
 "editor_start_welcome",486441738240,"Welcome to the map editor!","맵 에디터에 오신 걸 환영합니다!"
 "editor_update_begin",486475292672,"All right!\nLet's move on to the next step.","좋아요!\n다음 단계로 가볼까요?"
 "editor_update_test_prompt",486479486976,"Confirm the map\\is playable.","맵이 플레이 가능한지\\테스트해주세요."
@@ -138,6 +138,8 @@
 "tutorial_message_37",1829106272391175,"You get a penalty when the time's up,\nbut in Tutorial mode you won't get one! Let's try again!","시간이 끝나면 원래는 페널티가 있지만,\n튜토리얼에서는 괜찮아요! 다시 도전해봐요!"
 "tutorial_message_38",1829106272391176,"The time is really short...\nWhat if the time limit gets extended?\nGive it another try!","시간이 참 짧죠...\n제한시간을 늘려드릴게요.\n다시 도전해보세요!"
 "tutorial_message_39",1829106272391177,"Now you have more time.\nTake your time and try it!","시간이 더 늘어났어요.\n여유를 갖고 시도해 보세요!"
+"tutorial_message_40",1829106272391178,"From now on, you have time limit of\n30 seconds. But time won't go by\nuntil you manipulate the gravity!","이제부터 30초의 시간 제한이 있어요.\n하지만 중력을 조작하기 전까지는\n시간이 흐르지 않아요!"
+"tutorial_message_41",1829106272391179,"Time begins to flow as you manipulate\nthe gravity. Escape the maze\nbefore time runs out!","중력을 조작하면 시간이 흐르기 시작해요.\n시간 초과가 되기 전에 미로를 탈출하세요!"
 "Adventure/Canvas/PauseUI/PauseBox/BgmVolume",164806647603200,"BGM
 Volume","배경음
 음량"
@@ -219,7 +221,7 @@ in the pause menu.","일시 정지 메뉴에서
 Volume","배경음
 음량"
 "Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
-<size=48>v1.4.3</size>
+<size=48>v1.4.4</size>
 
 
 Project Managing
@@ -283,7 +285,7 @@ Map Making
 <size=48><i>Suin Lee</i></size>
 <size=36><i>MINSEOKIM1</i></size>
 <size=36><i>ektnzpt1080</i></size>","<b>중력미로</b>
-<size=48>v1.4.3</size>
+<size=48>v1.4.4</size>
 
 프로젝트 관리
 <size=48><i>안단태</i></size>
@@ -406,3 +408,20 @@ skip","시간
 "PauseButton",963619405647872,"Esc key","Esc 키"
 "Non-clearedNextButtonOSX",8020914447835136,"Option + Enter key","Option + Enter 키"
 "RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
+"Adventure/Canvas/RevivePanel/ReviveGuide",29036724280614912,"Wanna Get Revived?
+
+You'll get additional lives
+when you press the revive button.
+
+But you can play only this level
+and you can't receive stars
+even if you clear the level.","부활 찬스!
+
+부활 버튼을 누르면 라이프가 충전돼요!
+
+그 대신에 이 레벨에만 도전할
+수 있고, 레벨을 클리어해도
+별은 받을 수 없어요."
+"Adventure/Canvas/RevivePanel/ReviveButton/Text",29037776283361280,"Revive!","부활하기!"
+"Adventure/Canvas/ReviveIndicator",29040737667506176,"Practice Mode","연습 모드"
+"Adventure/Canvas/RevivePanel/QuitButton/Text",29044565267701760,"Quit","나가기"

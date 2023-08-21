@@ -24,9 +24,9 @@ public class TutorialGuide : MonoBehaviour
     int nowI;
 
     bool hasIronRemovedInTutorial5;
-    bool isBallIn12AndIronIn02InTutorial9;
-    bool hasShowed10TextInTutorial9;
-    bool hasShowedInitialTextInTutorial9;
+    bool isBallIn12AndIronIn02InTutorial10;
+    bool hasShowed10TextInTutorial10;
+    bool hasShowedInitialTextInTutorial10;
 
     public Dictionary<TutorialTuple, string> tipDict = new Dictionary<TutorialTuple, string>();
     public List<TutorialTuple> tipKeys;
@@ -44,8 +44,6 @@ public class TutorialGuide : MonoBehaviour
         
         myTransform = GetComponent<RectTransform>();
 
-        // You can manipulate the direction of gravity using the arrow buttons.
-
         tipDict.Add(new TutorialTuple(1, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_01"));
         tipDict.Add(new TutorialTuple(1, 0, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_02"));
         tipDict.Add(new TutorialTuple(1, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_03"));
@@ -60,25 +58,26 @@ public class TutorialGuide : MonoBehaviour
         tipDict.Add(new TutorialTuple(4, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_10"));
         tipDict.Add(new TutorialTuple(5, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_11"));
         tipDict.Add(new TutorialTuple(6, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_12"));
+        tipDict.Add(new TutorialTuple(7, 6, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_40"));
         tipDict.Add(new TutorialTuple(6, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_13"));
-        tipDict.Add(new TutorialTuple(7, 1, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_14"));
-        tipDict.Add(new TutorialTuple(7, 1, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_15"));
-        tipDict.Add(new TutorialTuple(7, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_16"));
-        tipDict.Add(new TutorialTuple(7, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_17"));
-        tipDict.Add(new TutorialTuple(7, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_18"));
-        tipDict.Add(new TutorialTuple(8, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
-        tipDict.Add(new TutorialTuple(8, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
-        tipDict.Add(new TutorialTuple(8, 0, 3), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
+        tipDict.Add(new TutorialTuple(8, 1, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_14"));
+        tipDict.Add(new TutorialTuple(8, 1, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_15"));
+        tipDict.Add(new TutorialTuple(8, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_16"));
+        tipDict.Add(new TutorialTuple(8, 2, 0), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_17"));
+        tipDict.Add(new TutorialTuple(8, 0, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_18"));
+        tipDict.Add(new TutorialTuple(9, 1, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_19"));
+        tipDict.Add(new TutorialTuple(9, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_20"));
+        tipDict.Add(new TutorialTuple(9, 0, 3), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_21"));
         // tipDict.Add(new TutorialTuple(9, 2, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_29"));
-        tipDict.Add(new TutorialTuple(9, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_30"));
-        tipDict.Add(new TutorialTuple(9, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
+        tipDict.Add(new TutorialTuple(10, 3, 1), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_30"));
+        tipDict.Add(new TutorialTuple(10, 2, 2), LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
 
         tipKeys = new List<TutorialTuple>(tipDict.Keys);
 
         hasIronRemovedInTutorial5 = false;
-        isBallIn12AndIronIn02InTutorial9 = true;
-        hasShowed10TextInTutorial9 = false;
-        hasShowedInitialTextInTutorial9 = false;
+        isBallIn12AndIronIn02InTutorial10 = true;
+        hasShowed10TextInTutorial10 = false;
+        hasShowedInitialTextInTutorial10 = false;
     }
 
     public bool IsBallThere(TutorialTuple tutorialTuple)
@@ -141,7 +140,7 @@ public class TutorialGuide : MonoBehaviour
         switch (flag)
         {
             case MapManager.Flag.Burned:
-                if (GameManager.gm.PlayingMapIndex + 1 == 9)
+                if (GameManager.gm.PlayingMapIndex + 1 == 10)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_35");
                 }
@@ -159,7 +158,7 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.Squashed:
-                if (GameManager.gm.PlayingMapIndex + 1 == 9)
+                if (GameManager.gm.PlayingMapIndex + 1 == 10)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_36");
                 }
@@ -176,7 +175,8 @@ public class TutorialGuide : MonoBehaviour
                 break;
 
             case MapManager.Flag.TimeOver:
-                if (GameManager.gm.PlayingMapIndex + 1 == 9)
+
+                if (GameManager.gm.PlayingMapIndex + 1 == 10)
                 {
                     if (pm.TimeoutCount == 1)
                     {
@@ -201,13 +201,28 @@ public class TutorialGuide : MonoBehaviour
                 currentTip.changeColor();
                 break;
 
+            case MapManager.Flag.Continued: // 7th map only
+
+                if (GameManager.gm.PlayingMapIndex + 1 == 7)
+                {
+                    emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_41");
+
+                    if (currentTip != null)
+                    {
+                        HideText(currentTip);
+                    }
+                    ShowText(emergencyText);
+                }
+
+                break;
+
             case MapManager.Flag.Escaped:
 
                 if (GameManager.gm.PlayingMapIndex + 1 == 1)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_28");
                 }
-                else if (GameManager.gm.PlayingMapIndex + 1 == 9)
+                else if (GameManager.gm.PlayingMapIndex + 1 == 10)
                 {
                     emergencyText = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_26");
                 }
@@ -236,9 +251,9 @@ public class TutorialGuide : MonoBehaviour
             tipKeys[j].isPassed = false;
         }
         hasIronRemovedInTutorial5 = false;
-        isBallIn12AndIronIn02InTutorial9 = true;
-        hasShowed10TextInTutorial9 = false;
-        hasShowedInitialTextInTutorial9 = false;
+        isBallIn12AndIronIn02InTutorial10 = true;
+        hasShowed10TextInTutorial10 = false;
+        hasShowedInitialTextInTutorial10 = false;
     }
 
 
@@ -367,11 +382,11 @@ public class TutorialGuide : MonoBehaviour
                         tipKeys[storedI].isPassed = false;
                     }
                 }
-                else if (GameManager.gm.PlayingMapIndex + 1 == 9)
+                else if (GameManager.gm.PlayingMapIndex + 1 == 10)
                 {
                     bool hasShowed = false;
                     if (mm.currentMovableCoord[1, 0] is Ball && mm.currentMovableCoord[0, 0] is Iron &&
-                        !hasShowed10TextInTutorial9)
+                        !hasShowed10TextInTutorial10)
                     {
                         tips = GameObject.FindGameObjectsWithTag("Tip");
                         if (currentTip != null)
@@ -382,13 +397,13 @@ public class TutorialGuide : MonoBehaviour
                         if (tips.Length == 0)
                         {
                             ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_32"));
-                            hasShowed10TextInTutorial9 = true;
-                            isBallIn12AndIronIn02InTutorial9 = false;
+                            hasShowed10TextInTutorial10 = true;
+                            isBallIn12AndIronIn02InTutorial10 = false;
                         }
                         hasShowed = true;
                     }
                     else if (mm.currentMovableCoord[1, 0] is Ball && mm.currentMovableCoord[0, 0] is null &&
-                        !hasShowed10TextInTutorial9)
+                        !hasShowed10TextInTutorial10)
                     {
                         tips = GameObject.FindGameObjectsWithTag("Tip");
                         if (currentTip != null)
@@ -399,14 +414,14 @@ public class TutorialGuide : MonoBehaviour
                         if (tips.Length == 0)
                         {
                             ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_33"));
-                            hasShowed10TextInTutorial9 = true;
-                            isBallIn12AndIronIn02InTutorial9 = false;
+                            hasShowed10TextInTutorial10 = true;
+                            isBallIn12AndIronIn02InTutorial10 = false;
                         }
                         hasShowed = true;
                     }
                     
                     if (mm.currentMovableCoord[1, 2] is Ball && mm.currentMovableCoord[0, 2] is Iron &&
-                        !isBallIn12AndIronIn02InTutorial9)
+                        !isBallIn12AndIronIn02InTutorial10)
                     {
                         tips = GameObject.FindGameObjectsWithTag("Tip");
                         if (currentTip != null)
@@ -417,13 +432,13 @@ public class TutorialGuide : MonoBehaviour
                         if (tips.Length == 0)
                         {
                             ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_34"));
-                            isBallIn12AndIronIn02InTutorial9 = true;
-                            hasShowed10TextInTutorial9 = false;
+                            isBallIn12AndIronIn02InTutorial10 = true;
+                            hasShowed10TextInTutorial10 = false;
                         }
                         hasShowed = true;
                     }
                     else if (mm.currentMovableCoord[1, 2] is Ball && mm.currentMovableCoord[0, 2] is null &&
-                        isBallIn12AndIronIn02InTutorial9)
+                        isBallIn12AndIronIn02InTutorial10)
                     {
                         tips = GameObject.FindGameObjectsWithTag("Tip");
                         if (currentTip != null)
@@ -434,12 +449,12 @@ public class TutorialGuide : MonoBehaviour
                         if (tips.Length == 0)
                         {
                             ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_31"));
-                            isBallIn12AndIronIn02InTutorial9 = false;
-                            hasShowed10TextInTutorial9 = false;
+                            isBallIn12AndIronIn02InTutorial10 = false;
+                            hasShowed10TextInTutorial10 = false;
                         }
                         hasShowed = true;
                     }
-                    else if (mm.currentMovableCoord[2, 1] is Ball && !hasShowedInitialTextInTutorial9)
+                    else if (mm.currentMovableCoord[2, 1] is Ball && !hasShowedInitialTextInTutorial10)
                     {
                         tips = GameObject.FindGameObjectsWithTag("Tip");
                         if (currentTip != null)
@@ -457,7 +472,7 @@ public class TutorialGuide : MonoBehaviour
                             {
                                 ShowText(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "tutorial_message_39"));
                             }
-                            hasShowedInitialTextInTutorial9 = true;
+                            hasShowedInitialTextInTutorial10 = true;
                         }
                         hasShowed = true;
                     }

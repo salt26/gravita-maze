@@ -700,9 +700,7 @@ MonoBehaviour:
   - m_Id: 169839971786752
     m_Localized: '<b>GravitaMaze</b>
 
-      <size=48>v1.4.3</size>
-
-
+      <size=48>v1.4.4</size>
 
       Project
       Managing
@@ -1180,6 +1178,48 @@ MonoBehaviour:
       - rid: 0
   - m_Id: 27847587141771264
     m_Localized: You can't cover\nthe outermost edge\nwith holes.
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 29036724280614912
+    m_Localized: 'Wanna Get Revived?
+
+
+      You''ll get additional lives
+
+      when
+      you press the revive button.
+
+
+      But you can play only this level
+
+      and
+      you can''t receive stars
+
+      even if you clear the level.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29037776283361280
+    m_Localized: Revive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29040737667506176
+    m_Localized: Practice Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29044565267701760
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391178
+    m_Localized: From now on, you have time limit of\n30 seconds. But time won't
+      go by\nuntil you manipulate the gravity!
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 1829106272391179
+    m_Localized: Time begins to flow as you manipulate\nthe gravity. Escape the maze\nbefore
+      time runs out!
     m_Metadata:
       m_Items:
       - rid: 0

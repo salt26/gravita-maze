@@ -637,10 +637,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError 
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -654,10 +651,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -701,10 +695,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -718,10 +709,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -764,10 +752,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -781,10 +766,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -827,10 +809,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -844,10 +823,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -890,10 +866,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -907,10 +880,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -953,10 +923,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -970,10 +937,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-                            GameManager.gm.OnTriggerHaptic(6); //11 HapticError
-#endif
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -1294,10 +1258,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
-
-#if UNITY_ANDROID && !UNITY_EDITOR
                     GameManager.gm.OnTriggerHaptic(7);
-#endif
                     GameManager.gm.PlayIronSFX(UnityEngine.Random.Range(1, 9));
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
@@ -2530,7 +2491,7 @@ public class EditorManager : MonoBehaviour
     {
         if (folderName == null || folderName == "")
         {
-            Debug.LogWarning("Editor warning: illegal folder name");
+            Debug.LogWarning("Editor warning: cannot create with illegal folder name");
             statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_cannot_create_folder"), 2f);
             return;
         }
