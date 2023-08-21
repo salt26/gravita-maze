@@ -35,7 +35,8 @@ public class HapticMediate : MonoBehaviour
     public void hmPlayHapticOnce(float delayTime, int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        if(hapticEnalbed){
+        if(hapticEnalbed)
+        {
             eventHapticSource[num].delayPlay = delayTime;
             eventHapticSource[num].PlayEventVibration();
         }
@@ -44,7 +45,8 @@ public class HapticMediate : MonoBehaviour
     public void hmStopHaptic(int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        if(hapticEnalbed){
+        if(hapticEnalbed)
+        {
             eventHapticSource[num].Stop();
         }
 #endif
@@ -52,7 +54,8 @@ public class HapticMediate : MonoBehaviour
     public void hmPlayHaptic(int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        if(hapticEnalbed){
+        if(hapticEnalbed)
+        {
             eventHapticSource[num].Play();
         }
 #endif
