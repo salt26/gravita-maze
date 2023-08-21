@@ -60,7 +60,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486492069895
-    m_Key: edtior_warning_add_exit
+    m_Key: editor_warning_add_exit
     m_Metadata:
       m_Items: []
   - m_Id: 486492069896
@@ -73,6 +73,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486492069898
     m_Key: editor_warning_add_fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937476268032
+    m_Key: editor_warning_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486492069899
@@ -121,6 +125,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264194
     m_Key: editor_guide_add_shutter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937501433856
+    m_Key: editor_guide_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
@@ -223,6 +231,14 @@ MonoBehaviour:
     m_Key: editor_warning_map_not_saved_yet
     m_Metadata:
       m_Items: []
+  - m_Id: 27847587124994048
+    m_Key: editor_tooltip_no_ball_or_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27847587141771264
+    m_Key: editor_tooltip_hole_invalid
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264219
     m_Key: editor_undo_map_name
     m_Metadata:
@@ -247,6 +263,10 @@ MonoBehaviour:
     m_Key: editor_undo_reintialization
     m_Metadata:
       m_Items: []
+  - m_Id: 25313860285095936
+    m_Key: editor_undo_several
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264225
     m_Key: editor_redo_map_name
     m_Metadata:
@@ -269,6 +289,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264230
     m_Key: editor_redo_reinitialization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25313897069142016
+    m_Key: editor_redo_several
     m_Metadata:
       m_Items: []
   - m_Id: 486496264231
@@ -321,6 +345,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264243
     m_Key: warning_shutter_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24254986643214336
+    m_Key: warning_hole_error
     m_Metadata:
       m_Items: []
   - m_Id: 486496264244

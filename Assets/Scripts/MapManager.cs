@@ -8,8 +8,6 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using static MapTile;
 
 public class MapManager : MonoBehaviour
@@ -19,7 +17,7 @@ public class MapManager : MonoBehaviour
     public enum Flag { Continued = 0, Escaped = 1, Burned = 2, Squashed = 3, TimeOver = 4, QuitGame = 5, MapEditor = 6,
         Adventure = 7, Tutorial = 8, Custom = 9, Training = 10, AdvEasy = 11, AdvNormal = 12, AdvHard = 13, AdvInsane = 14, Setting = 15 }
     public enum TileFlag { RightWall = 1, RightShutter = 2, LeftWall = 3, LeftShutter = 6, DownWall = 9, DownShutter = 18, UpWall = 27, UpShutter = 54,
-        Fire = 81, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
+        Fire = 81, Hole = 162, QuitGame = 243, MapEditor = 729, Adventure = 2187, Tutorial = 6561, Custom = 19683, Training = 59049, AdvEasy = 177147,
         AdvNormal = 531441, AdvHard = 1594323, AdvInsane = 4782969, Setting = 14348907 }
     // 기존의 방식: 2진법 이용, 따라서 켜고 끄는 것들만 있음..
     // 근데 3진법을 쓴다면 Shutter를 구현할 수 있다!!
@@ -59,6 +57,9 @@ public class MapManager : MonoBehaviour
     public Movable[,] currentMovableCoord;
     public long[,] initialMapCoord;
     public long[,] currentMapCoord;
+    public int[,] horizontalWalls;
+    public int[,] verticalWalls;
+    public bool[,] holes;
 
     public GameObject movableAndFixedGameObjects;
     public Camera mainCamera;
@@ -76,6 +77,7 @@ public class MapManager : MonoBehaviour
     public GameObject ballPrefab;
     public GameObject ironPrefab;
     public GameObject firePrefab;
+    public GameObject holePrefab;
 
     public List<GameObject> ballTracePrefabs = new List<GameObject>();
     public List<GameObject> ironTracePrefabs = new List<GameObject>();
@@ -315,7 +317,7 @@ public class MapManager : MonoBehaviour
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
-        float timeLimit = 0f, bool isValidation = false, bool canRotate = false)
+        float timeLimit = 0f, bool isValidation = false, bool canRotate = false, bool isEditing = false)
     {
 
         IsReady = false;
@@ -356,9 +358,13 @@ public class MapManager : MonoBehaviour
         ClearAllTiles();
         timeoutPanel.SetActive(false);
 
-        int[,] horizontalWalls = new int[SizeX, SizeY + 1];
-        int[,] verticalWalls = new int[SizeX + 1, SizeY];
+        horizontalWalls = new int[SizeX, SizeY + 1];
+        verticalWalls = new int[SizeX + 1, SizeY];
         // 벽이 없는 경우: 0, 평범한 벽이 있는 경우: 1, Shutter가 있는 경우: 2
+        holes = new bool[SizeX, SizeY]; // No Hole exists: false, Hole exists: true
+
+        long kinds = MapTile.GetRenderingWallKinds();
+
 
         for (int i = 0; i < sizeX; i++)
         {
@@ -448,7 +454,6 @@ public class MapManager : MonoBehaviour
                         Debug.LogError("Map invalid: exit position at (" + wi.x + ", " + wi.y + ")");
                         return;
                     }
-
                     if (!RotatedHasTransposed())
                     {
                         verticalWalls[RotatedX(wi.x, wi.y - 1, true, false), RotatedY(wi.x, wi.y - 1, true, false)] = 0;
@@ -597,117 +602,6 @@ public class MapManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i <= SizeX + 1; i++)
-        {
-            for (int j = 0; j <= SizeY + 1; j++)
-            {
-                if (i == 0 && j != 0 && j != SizeY + 1)
-                {
-                    if (ExitX == i && ExitY == j)
-                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[89]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Exit,
-                            CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None);
-                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[81]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Wall,
-                            CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.Normal, CornerWallFlag.None);
-                }
-                else if (i == SizeX + 1 && j != 0 && j != SizeY + 1)
-                {
-                    if (ExitX == i && ExitY == j)
-                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[90]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Exit, WallFlag.None,
-                            CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter);
-                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[82]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Wall, WallFlag.None,
-                            CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal);
-                }
-                else if (j == SizeY + 1 && i != 0 && i != SizeX + 1)
-                {
-                    if (ExitX == i && ExitY == j)
-                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[91]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Exit, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter);
-                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[83]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Wall, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.Normal);
-                }
-                else if (j == 0 && i != 0 && i != SizeX + 1)
-                {
-                    if (ExitX == i && ExitY == j)
-                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[92]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.Exit, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None);
-                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[84]);
-                        SetTile(i, j, FloorFlag.Hole, WallFlag.Wall, WallFlag.None, WallFlag.None, WallFlag.None,
-                            CornerWallFlag.Normal, CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None);
-                }
-                // 여기 위에 있는 if문은 겉테두리 벽을 두르는 부분. 여기에는 Shutter가 존재하지 않는다.
-                // 여기 아래부터는 평범한 벽을 두르는 부분. 상황에 따라 Shutter가 존재할 수 있다.
-                else if (i != 0 && i != SizeX + 1 && j != 0 && j != SizeY + 1)
-                {
-                    long kinds = MapTile.GetRenderingWallKinds();
-                    /*
-                    if (horizontalWalls[i - 1, j] == 1)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
-                    }
-                    else if (horizontalWalls[i - 1, j] == 2)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
-                    }
-                    if (horizontalWalls[i - 1, j - 1] == 1)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
-                    }
-                    else if (horizontalWalls[i - 1, j - 1] == 2)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
-                    }
-                    if (verticalWalls[i - 1, j - 1] == 1)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
-                    }
-                    else if (verticalWalls[i - 1, j - 1] == 2)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
-                    }
-                    if (verticalWalls[i, j - 1] == 1)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
-                    }
-                    else if (verticalWalls[i, j - 1] == 2)
-                    {
-                        //initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
-                    }
-                    */
-                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j] * kinds * kinds * kinds;
-                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j - 1] * kinds * kinds;
-                    initialMapCoord[i - 1, j - 1] += verticalWalls[i - 1, j - 1] * kinds;
-                    initialMapCoord[i - 1, j - 1] += verticalWalls[i, j - 1];
-                    //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[initialMapCoord[i - 1, j - 1] % 81]);
-                    SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
-                }
-            }
-        }
-        //tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[85]);
-        //tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[86]);
-        //tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[87]);
-        //tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[88]);
-        SetTile(0, 0, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-            CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None);
-        SetTile(0, SizeY + 1, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.None);
-        SetTile(SizeX + 1, 0, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-            CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
-        SetTile(SizeX + 1, SizeY + 1, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
-            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal);
-
-        /* MapManager의 인스펙터에 있는 Tiles의 인덱스 번호를 바꿈. 벽과 Shutter 오브젝트를 0~80에 배치하고, 꼭짓점, Exit, 외벽 오브젝트 등등도
-        인덱스를 바꿔 줘야 한다.,(81 이상 숫자로)
-        일단 기존의 16, 17, 18, 19 (순서대로 오른쪽, 왼쪽, 아래, 위 방향 외벽) 은 81, 82, 83, 84로
-             기존의 20, 21, 22, 23 (순서대로 1시, 5시, 11시, 7시 방향 꼭짓점) 은 85, 86, 87, 88로 
-             기존의 24, 25, 26, 27 (순서대로 왼쪽, 오른쪽, 위, 아래 방향 화살표) 은 89, 90, 91, 92로
-        여기 코드에서는 고쳤으나 MapManager의 인스펙터에서도 제 위치로 Tile들을 옮겨야 함. */
         bool hasBall = false;
         if (movables != null)
         {
@@ -786,15 +680,17 @@ public class MapManager : MonoBehaviour
                     Debug.LogError("Map invalid: objects overlapped at (" + x + ", " + y + ")");
                     return;
                 }
-
+                
                 fixedObjects.Add(f);
 
-                long kinds4 = GetKinds4();
                 switch (f.type)
                 {
                     case FixedObject.Type.Fire:
                         //initialMapCoord[x - 1, y - 1] += (int)TileFlag.Fire;       // 81
                         initialMapCoord[x - 1, y - 1] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
+                        break;
+                    case FixedObject.Type.Hole:
+                        initialMapCoord[x - 1, y - 1] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
                         break;
                     case FixedObject.Type.QuitGame:
                         //initialMapCoord[x - 1, y - 1] += (int)TileFlag.QuitGame;   // 243
@@ -888,15 +784,137 @@ public class MapManager : MonoBehaviour
                     //initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.Fire;         // 81
                     initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Fire);
                     break;
-                    /*
-                    // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
-                    case ObjectInfo.Type.QuitGame:
-                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
-                        break;
-                    case ObjectInfo.Type.MapEditor:
-                        mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
-                        break;
-                    */
+                case ObjectInfo.Type.Hole:
+                    holes[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] = true;
+
+                    // Removes surrounding outer wall if Hole is located on the edge
+                    if (oi.y == sizeY)  // Uppermost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            horizontalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(oi.x - 1, sizeY, true, true), RotatedY(oi.x - 1, sizeY, true, true)] = 0;
+                        }
+                    }
+                    if (oi.y == 1)      // Lowermost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            horizontalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
+                        }
+                        else
+                        {
+                            verticalWalls[RotatedX(oi.x - 1, 0, true, true), RotatedY(oi.x - 1, 0, true, true)] = 0;
+                        }
+                    }
+                    if (oi.x == 1)      // Leftmost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            verticalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(0, oi.y - 1, true, false), RotatedY(0, oi.y - 1, true, false)] = 0;
+                        }
+                    }
+                    if (oi.x == sizeX)  // Rightmost
+                    {
+                        if (!RotatedHasTransposed())
+                        {
+                            verticalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
+                        }
+                        else
+                        {
+                            horizontalWalls[RotatedX(sizeX, oi.y - 1, true, false), RotatedY(sizeX, oi.y - 1, true, false)] = 0;
+                        }
+                    }
+
+                    // Hole object can be instatiated only when editing
+                    if (isEditing)
+                    {
+                        g = Instantiate(holePrefab, new Vector3(), Quaternion.identity, movableAndFixedGameObjects.transform);
+                        g.transform.localPosition = RotatedVector3(new Vector3(oi.x, oi.y, 0f));
+                        fixedObjects.Add(g.GetComponent<FixedObject>());
+                        initialMapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += FixedObjectFlagToTileCode(FixedObjectFlag.Hole);
+                    }
+                    // Check if all tiles of one edge line are hole when not editing
+                    if (isValidation)
+                    {
+                        // Uppermost
+                        if (oi.y == sizeY)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeX; i++)
+                            {
+                                if (!holes[RotatedX(i, sizeY - 1), RotatedY(i, sizeY - 1)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Lowermost
+                        if (oi.y == 1)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeX; i++)
+                            {
+                                if (!holes[RotatedX(i, 0), RotatedY(i, 0)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Leftmost
+                        if (oi.x == 1)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeY; i++)
+                            {
+                                if (!holes[RotatedX(0, i), RotatedY(0, i)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+
+                        // Rightmost
+                        if (oi.x == sizeX)
+                        {
+                            bool floorExists = false;
+                            for (int i = 0; i < sizeY; i++)
+                            {
+                                if (!holes[RotatedX(sizeX - 1, i), RotatedY(sizeX - 1, i)]) floorExists = true;
+                            }
+                            if (!floorExists)
+                            {
+                                Debug.LogError("Map invalid: all tiles of one edge line are hole");
+                                return;
+                            }
+                        }
+                    }
+
+                    break;
+                /*
+                // 이 친구들은 맵 에디터에서 설치하거나 맵 파일에 기록되거나 자동으로 생성될 수 없음
+                case ObjectInfo.Type.QuitGame:
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.QuitGame;     // 243
+                    break;
+                case ObjectInfo.Type.MapEditor:
+                    mapCoord[RotatedX(oi.x - 1, oi.y - 1), RotatedY(oi.x - 1, oi.y - 1)] += (int)TileFlag.MapEditor;    // 729
+                    break;
+                */
             }
         }
 
@@ -906,6 +924,246 @@ public class MapManager : MonoBehaviour
             return;
         }
 
+        /* Old tile rendering code
+        for (int i = 0; i <= SizeX + 1; i++)
+        {
+            for (int j = 0; j <= SizeY + 1; j++)
+            {
+                if (i == 0 && j != 0 && j != SizeY + 1)
+                {
+                    if (ExitX == i && ExitY == j)
+                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[89]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Exit,
+                            CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None);
+                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[81]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Wall,
+                            CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.Normal, CornerWallFlag.None);
+                }
+                else if (i == SizeX + 1 && j != 0 && j != SizeY + 1)
+                {
+                    if (ExitX == i && ExitY == j)
+                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[90]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Exit, WallFlag.None,
+                            CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter);
+                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[82]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Wall, WallFlag.None,
+                            CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal);
+                }
+                else if (j == SizeY + 1 && i != 0 && i != SizeX + 1)
+                {
+                    if (ExitX == i && ExitY == j)
+                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[91]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Exit, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter);
+                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[83]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Wall, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.Normal);
+                }
+                else if (j == 0 && i != 0 && i != SizeX + 1)
+                {
+                    if (ExitX == i && ExitY == j)
+                        //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[92]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.Exit, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None);
+                    else //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[84]);
+                        SetTile(i, j, FloorFlag.Hole, WallFlag.Wall, WallFlag.None, WallFlag.None, WallFlag.None,
+                            CornerWallFlag.Normal, CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None);
+                }
+                // 여기 위에 있는 if문은 겉테두리 벽을 두르는 부분. 여기에는 Shutter가 존재하지 않는다.
+                // 여기 아래부터는 평범한 벽을 두르는 부분. 상황에 따라 Shutter가 존재할 수 있다.
+                else if (i != 0 && i != SizeX + 1 && j != 0 && j != SizeY + 1)
+                {
+                    //if (horizontalWalls[i - 1, j] == 1)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpWall;    // 27
+                    //}
+                    //else if (horizontalWalls[i - 1, j] == 2)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.UpShutter; // 54
+                    //}
+                    //if (horizontalWalls[i - 1, j - 1] == 1)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownWall;  // 9
+                    //}
+                    //else if (horizontalWalls[i - 1, j - 1] == 2)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.DownShutter;  // 18
+                    //}
+                    //if (verticalWalls[i - 1, j - 1] == 1)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftWall;  // 3
+                    //}
+                    //else if (verticalWalls[i - 1, j - 1] == 2)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.LeftShutter;  // 6
+                    //}
+                    //if (verticalWalls[i, j - 1] == 1)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightWall; // 1
+                    //}
+                    //else if (verticalWalls[i, j - 1] == 2)
+                    //{
+                    //    //initialMapCoord[i - 1, j - 1] += (int)TileFlag.RightShutter; // 2
+                    //}
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j] * kinds * kinds * kinds; // Up
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j - 1] * kinds * kinds;     // Down
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i - 1, j - 1] * kinds;               // Left
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i, j - 1];                           // Right
+                    //tilemap.SetTile(new Vector3Int(i - 1, j - 1, 0), tiles[initialMapCoord[i - 1, j - 1] % 81]);
+                    SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
+                }
+            }
+        }
+        //tilemap.SetTile(new Vector3Int(-1, -1, 0), tiles[85]);
+        //tilemap.SetTile(new Vector3Int(-1, SizeY, 0), tiles[86]);
+        //tilemap.SetTile(new Vector3Int(SizeX, -1, 0), tiles[87]);
+        //tilemap.SetTile(new Vector3Int(SizeX, SizeY, 0), tiles[88]);
+        SetTile(0, 0, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+            CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None);
+        SetTile(0, SizeY + 1, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal, CornerWallFlag.None);
+        SetTile(SizeX + 1, 0, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+            CornerWallFlag.Normal, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None);
+        SetTile(SizeX + 1, SizeY + 1, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.None,
+            CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Normal);
+        */
+        /* MapManager의 인스펙터에 있는 Tiles의 인덱스 번호를 바꿈. 벽과 Shutter 오브젝트를 0~80에 배치하고, 꼭짓점, Exit, 외벽 오브젝트 등등도
+        인덱스를 바꿔 줘야 한다.,(81 이상 숫자로)
+        일단 기존의 16, 17, 18, 19 (순서대로 오른쪽, 왼쪽, 아래, 위 방향 외벽) 은 81, 82, 83, 84로
+             기존의 20, 21, 22, 23 (순서대로 1시, 5시, 11시, 7시 방향 꼭짓점) 은 85, 86, 87, 88로 
+             기존의 24, 25, 26, 27 (순서대로 왼쪽, 오른쪽, 위, 아래 방향 화살표) 은 89, 90, 91, 92로
+        여기 코드에서는 고쳤으나 MapManager의 인스펙터에서도 제 위치로 Tile들을 옮겨야 함. */
+
+        // Tile rendering
+        for (int i = 0; i <= SizeX + 1; i++)
+        {
+            for (int j = 0; j <= SizeY + 1; j++)
+            {
+                // Outer tile
+                if (i == 0 || i == SizeX + 1 || j == 0 || j == SizeY + 1)
+                {
+                    // Current tile is Exit
+                    if (i == ExitX && j == ExitY && !(i == 0 && j == 0))
+                    {
+                        // Exit on top
+                        if (j == 0)
+                        {
+                            if (holes[i - 1, 0])
+                            {
+                                Debug.LogError("Map invalid: exit adjacent to hole");
+                                return;
+                            }
+                            SetTile(i, j, FloorFlag.Hole, WallFlag.Exit, WallFlag.None, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None);
+                        }
+                        // Exit on bottom
+                        else if (j == SizeY + 1)
+                        {
+                            if (holes[i - 1, SizeY - 1])
+                            {
+                                Debug.LogError("Map invalid: exit adjacent to hole");
+                                return;
+                            }
+                            SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.Exit, WallFlag.None, WallFlag.None,
+                                CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter);
+                        }
+                        // Exit on left
+                        else if (i == SizeX + 1)
+                        {
+                            if (holes[SizeX - 1, j - 1])
+                            {
+                                Debug.LogError("Map invalid: exit adjacent to hole");
+                                return;
+                            }
+                            SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.Exit, WallFlag.None,
+                                CornerWallFlag.Glitter, CornerWallFlag.None, CornerWallFlag.None, CornerWallFlag.Glitter);
+                        }
+                        // Exit on right
+                        else
+                        {
+                            if (holes[0, j - 1])
+                            {
+                                Debug.LogError("Map invalid: exit adjacent to hole");
+                                return;
+                            }
+                            SetTile(i, j, FloorFlag.Hole, WallFlag.None, WallFlag.None, WallFlag.None, WallFlag.Exit,
+                                CornerWallFlag.None, CornerWallFlag.Glitter, CornerWallFlag.Glitter, CornerWallFlag.None);
+                        }
+                    }
+
+                    // Current tile is not exit
+                    else
+                    {
+                        WallFlag top = WallFlag.None, bottom = WallFlag.None, left = WallFlag.None, right = WallFlag.None;
+                        CornerWallFlag topleft = CornerWallFlag.None, topright = CornerWallFlag.None, bottomright = CornerWallFlag.None, bottomleft = CornerWallFlag.None;
+
+                        if (j == 0 && (i != 0 && i != SizeX + 1) && !holes[i - 1, j]) top = WallFlag.Wall;
+                        if (j == SizeY + 1 && (i != 0 && i != SizeX + 1) && !holes[i - 1, j - 2]) bottom = WallFlag.Wall;
+                        if (i == SizeX + 1 && (j != 0 && j != SizeY + 1) && !holes[i - 2, j - 1]) left = WallFlag.Wall;
+                        if (i == 0 && (j != 0 && j != SizeY + 1) && !holes[i, j - 1]) right = WallFlag.Wall;
+
+                        if (top == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j < SizeY && !holes[i - 2, j]))
+                            topleft = CornerWallFlag.Normal;
+                        if (top == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j < SizeY && !holes[i, j]))
+                            topright = CornerWallFlag.Normal;
+                        if (bottom == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j - 2 >= 0 && !holes[i, j - 2]))
+                            bottomright = CornerWallFlag.Normal;
+                        if (bottom == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j - 2 >= 0 && !holes[i - 2, j - 2]))
+                            bottomleft = CornerWallFlag.Normal;
+
+                        SetTile(i, j, FloorFlag.Hole, top, bottom, left, right, topleft, topright, bottomright, bottomleft);
+                    }
+                }
+
+                // Inner tile
+                else
+                {
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j] * kinds * kinds * kinds; // Up
+                    initialMapCoord[i - 1, j - 1] += horizontalWalls[i - 1, j - 1] * kinds * kinds;     // Down
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i - 1, j - 1] * kinds;               // Left
+                    initialMapCoord[i - 1, j - 1] += verticalWalls[i, j - 1];                           // Right
+
+                    // Current tile is Hole
+                    if (holes[i - 1, j - 1])
+                    {
+                        // Validating
+                        if ((j != SizeY && ((holes[i - 1, j] && horizontalWalls[i - 1, j] != 0) || (!holes[i - 1, j] && horizontalWalls[i - 1, j] != 1))) ||                // Up
+                            (j != 1 && ((holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 0) || (!holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 1))) ||    // Down
+                            (i != 1 && ((holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 0) || (!holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 1))) ||        // Left
+                            (i != SizeX && ((holes[i, j - 1] && verticalWalls[i, j - 1] != 0) || (!holes[i, j - 1] && verticalWalls[i, j - 1] != 1))))                      // Right
+                        {
+                            Debug.LogError("Map invalid: wrong hole position at (" + i + ", " + j + ")");
+                            return;
+                        }
+
+                        WallFlag top = WallFlag.None, bottom = WallFlag.None, left = WallFlag.None, right = WallFlag.None;
+                        CornerWallFlag topleft = CornerWallFlag.None, topright = CornerWallFlag.None, bottomright = CornerWallFlag.None, bottomleft = CornerWallFlag.None;
+
+                        if (j != SizeY && !holes[i - 1, j]) top = WallFlag.Wall;
+                        if (j != 1 && !holes[i - 1, j - 2]) bottom = WallFlag.Wall;
+                        if (i != 1 && !holes[i - 2, j - 1]) left = WallFlag.Wall;
+                        if (i != SizeX && !holes[i, j - 1]) right = WallFlag.Wall;
+
+                        if (top == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j < SizeY && !holes[i - 2, j]))
+                            topleft = CornerWallFlag.Normal;
+                        if (top == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j < SizeY && !holes[i, j]))
+                            topright = CornerWallFlag.Normal;
+                        if (bottom == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j - 2 >= 0 && !holes[i, j - 2]))
+                            bottomright = CornerWallFlag.Normal;
+                        if (bottom == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j - 2 >= 0 && !holes[i - 2, j - 2]))
+                            bottomleft = CornerWallFlag.Normal;
+
+                        SetTile(i, j, FloorFlag.Hole, top, bottom, left, right, topleft, topright, bottomright, bottomleft);
+                    }
+
+                    // Current tile is Floor
+                    else
+                    {
+                        SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
+                    }
+                }
+            }
+        }
 
         currentMovableCoord = (Movable[,])initialMovableCoord.Clone();
         currentMapCoord = (long[,])initialMapCoord.Clone();
@@ -1069,6 +1327,15 @@ public class MapManager : MonoBehaviour
                         return OpenFileFlag.Failed;
                     }
                     tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Fire, int.Parse(token[1]), int.Parse(token[2])));
+                    break;
+                case "/":
+                    if (token.Length != 3)
+                    {
+                        Debug.LogError("File invalid: hole (" + l + ")");
+                        statusUI?.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "warning_hole_error"), 1.5f);
+                        return OpenFileFlag.Failed;
+                    }
+                    tempObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, int.Parse(token[1]), int.Parse(token[2])));
                     break;
                 case "$":
                     if (token.Length != 4)
@@ -1330,12 +1597,51 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < SizeX; i++)
+        for (int i = 1; i <= SizeX; i++)
         {
-            for (int j = 0; j < SizeY; j++)
+            for (int j = 1; j <= SizeY; j++)
             {
                 //tilemap.SetTile(new Vector3Int(i, j, 0), tiles[initialMapCoord[i, j] % 81]);
-                SetTile(i + 1, j + 1, FloorFlag.Floor, initialMapCoord[i, j] % GetKinds4());
+                // SetTile(i + 1, j + 1, FloorFlag.Floor, initialMapCoord[i, j] % GetKinds4());
+
+                // Current tile is Hole
+                if (holes[i - 1, j - 1])
+                {
+                    // Validating
+                    if ((j != SizeY && ((holes[i - 1, j] && horizontalWalls[i - 1, j] != 0) || (!holes[i - 1, j] && horizontalWalls[i - 1, j] != 1))) ||                // Up
+                        (j != 1 && ((holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 0) || (!holes[i - 1, j - 2] && horizontalWalls[i - 1, j - 1] != 1))) ||    // Down
+                        (i != 1 && ((holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 0) || (!holes[i - 2, j - 1] && verticalWalls[i - 1, j - 1] != 1))) ||        // Left
+                        (i != SizeX && ((holes[i, j - 1] && verticalWalls[i, j - 1] != 0) || (!holes[i, j - 1] && verticalWalls[i, j - 1] != 1))))                      // Right
+                    {
+                        Debug.LogError("Map invalid: wrong hole position");
+                        return;
+                    }
+
+                    WallFlag top = WallFlag.None, bottom = WallFlag.None, left = WallFlag.None, right = WallFlag.None;
+                    CornerWallFlag topleft = CornerWallFlag.None, topright = CornerWallFlag.None, bottomright = CornerWallFlag.None, bottomleft = CornerWallFlag.None;
+
+                    if (j != SizeY && !holes[i - 1, j]) top = WallFlag.Wall;
+                    if (j != 1 && !holes[i - 1, j - 2]) bottom = WallFlag.Wall;
+                    if (i != 1 && !holes[i - 2, j - 1]) left = WallFlag.Wall;
+                    if (i != SizeX && !holes[i, j - 1]) right = WallFlag.Wall;
+
+                    if (top == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j < SizeY && !holes[i - 2, j]))
+                        topleft = CornerWallFlag.Normal;
+                    if (top == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j < SizeY && !holes[i, j]))
+                        topright = CornerWallFlag.Normal;
+                    if (bottom == WallFlag.Wall || right == WallFlag.Wall || (i < SizeX && j - 2 >= 0 && !holes[i, j - 2]))
+                        bottomright = CornerWallFlag.Normal;
+                    if (bottom == WallFlag.Wall || left == WallFlag.Wall || (i - 2 >= 0 && j - 2 >= 0 && !holes[i - 2, j - 2]))
+                        bottomleft = CornerWallFlag.Normal;
+
+                    SetTile(i, j, FloorFlag.Hole, top, bottom, left, right, topleft, topright, bottomright, bottomleft);
+                }
+
+                // Current tile is Floor
+                else
+                {
+                    SetTile(i, j, FloorFlag.Floor, initialMapCoord[i - 1, j - 1] % GetKinds4());
+                }
             }
         }
 
