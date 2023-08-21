@@ -1746,7 +1746,8 @@ public class EditorManager : MonoBehaviour
         {
             foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue))
             {
-                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue + 1 && i.y == o.y))
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue + 1 && i.y == o.y) &&
+                    !walls.Exists(i => i.type == WallInfo.Type.Vertical && i.x == oldValue && i.y == o.y))
                 {
                     walls.Add(new WallInfo(WallInfo.Type.Vertical, oldValue, o.y));
                 }
@@ -1816,7 +1817,8 @@ public class EditorManager : MonoBehaviour
         {
             foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.y == oldValue))
             {
-                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == o.x && i.y == oldValue + 1))
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == o.x && i.y == oldValue + 1) &&
+                    !walls.Exists(i => i.type == WallInfo.Type.Horizontal && i.x == o.x && i.y == oldValue))
                 {
                     walls.Add(new WallInfo(WallInfo.Type.Horizontal, o.x, oldValue));
                 }
