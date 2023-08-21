@@ -261,6 +261,7 @@ public class PlayManager : MonoBehaviour
         SkippedCount = 0;
         TimeoutCount = 0;
         playMode = mode;
+        IsRevived = false;
         // messageUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
         pausePanel.SetActive(false);
@@ -361,7 +362,12 @@ public class PlayManager : MonoBehaviour
                 GameManager.mm.TryCountUp(this, metaPath, mapHash);
             }
         }
-
+        if (SceneManager.GetActiveScene().name.Equals("Adventure") && revivePanel.activeInHierarchy)
+        {
+            pauseButton.interactable = false;
+            pausePanel.SetActive(false);
+            pauseUI.gameObject.SetActive(false);
+        }
     }
 
     public void Resume()
@@ -493,8 +499,8 @@ public class PlayManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name.Equals("Adventure"))
         {
-            revivePanel.gameObject.SetActive(false);
-            reviveIndicator.gameObject.SetActive(false);
+            revivePanel.SetActive(false);
+            reviveIndicator.SetActive(false);
         }
 
         resultUI.Initialize(playMode);
@@ -662,7 +668,15 @@ public class PlayManager : MonoBehaviour
                 retryTimeButton.gameObject.SetActive(false);
                 retryTimeHighlightedButton.gameObject.SetActive(false);
                 EscapedCount++;
-                if (!HasClearedAll)
+                if (IsRevived || HasClearedAll)
+                {
+                    // 모든 맵을 탈출했을 때
+                    nextButton.gameObject.SetActive(false);
+                    quitHighlightedButton.gameObject.SetActive(true);
+
+                    pauseButton.interactable = false;
+                }
+                else
                 {
                     // 다음 맵이 존재할 때
                     nextButton.gameObject.SetActive(true);
@@ -670,14 +684,6 @@ public class PlayManager : MonoBehaviour
 
                     pauseButton.interactable = true;
                     nextButton.interactable = true;
-                }
-                else
-                {
-                    // 모든 맵을 탈출했을 때
-                    nextButton.gameObject.SetActive(false);
-                    quitHighlightedButton.gameObject.SetActive(true);
-
-                    pauseButton.interactable = false;
                 }
                 break;
             case MapManager.Flag.Burned:
@@ -702,18 +708,31 @@ public class PlayManager : MonoBehaviour
                 if (Life > 0)
                 {
                     // 라이프가 남아있을 때
-                    retryTimeHighlightedButton.gameObject.SetActive(true);
-                    nextButton.gameObject.SetActive(true);
-                    quitHighlightedButton.gameObject.SetActive(false);
 
-                    pauseButton.interactable = true;
-                    if (SkippedCount < MaxSkipCount)
+                    if (IsRevived)
                     {
-                        nextButton.interactable = true;
+                        retryTimeHighlightedButton.gameObject.SetActive(true);
+                        nextButton.gameObject.SetActive(false);
+                        quitHighlightedButton.gameObject.SetActive(true);
+
+                        pauseButton.interactable = false;
                     }
                     else
                     {
-                        nextButton.interactable = false;
+                        retryTimeHighlightedButton.gameObject.SetActive(true);
+                        nextButton.gameObject.SetActive(true);
+                        quitHighlightedButton.gameObject.SetActive(false);
+
+                        pauseButton.interactable = true;
+
+                        if (SkippedCount < MaxSkipCount)
+                        {
+                            nextButton.interactable = true;
+                        }
+                        else
+                        {
+                            nextButton.interactable = false;
+                        }
                     }
                 }
                 else
@@ -724,8 +743,9 @@ public class PlayManager : MonoBehaviour
                     quitHighlightedButton.gameObject.SetActive(true);
 
                     pauseButton.interactable = false;
+                    Debug.Log("Pause: " + pauseButton.interactable);
 
-                    revivePanel.gameObject.SetActive(true);
+                    revivePanel.SetActive(true);
                     reviveButton.gameObject.SetActive(true);
                     revivePanel.transform.Find("ReviveGuide").gameObject.SetActive(true);
                 }
@@ -738,8 +758,8 @@ public class PlayManager : MonoBehaviour
         Life = RevivedLife;
         IsRevived = true;
         Debug.Log("Revived Life: " + RevivedLife);
-        revivePanel.gameObject.SetActive(false);
-        reviveIndicator.gameObject.SetActive(true);
+        revivePanel.SetActive(false);
+        reviveIndicator.SetActive(true);
         GameManager.mm.afterGravity(MapManager.Flag.Continued);
         GameManager.mm.RetryWithTime();
     }
@@ -1783,7 +1803,6 @@ public class PlayManager : MonoBehaviour
         nextButton.interactable = false;
         pauseButton.interactable = true;
         pausePanel.SetActive(false);
-        pauseButton.interactable = true;
         CustomOpenPhase(customSelection);
         customPhase = CustomPhase.Open;
         GameManager.gm.CustomChangeBGM(customPhase);
@@ -1808,6 +1827,7 @@ public class PlayManager : MonoBehaviour
         moveLimitUI.SetActive(false);
         nextButton.interactable = false;
         pauseButton.interactable = true;
+        pausePanel.SetActive(false);
         // TODO
         // messagePanel.SetActive(false);
         TrainingOpenPhase(selection);
