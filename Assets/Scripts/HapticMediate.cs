@@ -9,7 +9,7 @@ using Interhaptics.Internal;
 
 public class HapticMediate : MonoBehaviour
 {
-
+    public bool hapticEnalbed = true;
 #if !UNITY_EDITOR_OSX && !UNITY_STANDALONE_OSX
     public EventHapticSource[] eventHapticSource;
 #endif
@@ -35,20 +35,26 @@ public class HapticMediate : MonoBehaviour
     public void hmPlayHapticOnce(float delayTime, int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        eventHapticSource[num].delayPlay = delayTime;
-        eventHapticSource[num].PlayEventVibration();
+        if(hapticEnalbed){
+            eventHapticSource[num].delayPlay = delayTime;
+            eventHapticSource[num].PlayEventVibration();
+        }
 #endif
     }
     public void hmStopHaptic(int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        eventHapticSource[num].Stop();
+        if(hapticEnalbed){
+            eventHapticSource[num].Stop();
+        }
 #endif
     }
     public void hmPlayHaptic(int num)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        eventHapticSource[num].Play();
+        if(hapticEnalbed){
+            eventHapticSource[num].Play();
+        }
 #endif
     }
 
