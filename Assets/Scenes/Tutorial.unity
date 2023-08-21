@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.3807401, b: 0.358727, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2608,19 +2608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ea93e2943e07a46aeead4752d786cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventHapticSource:
-  - {fileID: 1110556260}
-  - {fileID: 1942182755}
-  - {fileID: 1819699758}
-  - {fileID: 1386662151}
-  - {fileID: 474325189}
-  - {fileID: 2065467092}
-  - {fileID: 60272447}
-  - {fileID: 1658167067}
-  - {fileID: 1782693863}
-  - {fileID: 1474687705}
-  - {fileID: 85759971}
-  - {fileID: 206604694}
 --- !u!4 &1050515166
 Transform:
   m_ObjectHideFlags: 0
@@ -3617,7 +3604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1304023982
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4049,12 +4036,15 @@ MonoBehaviour:
   retryHighlightedButton: {fileID: 1404637733}
   retryTimeButton: {fileID: 1061809501}
   retryTimeHighlightedButton: {fileID: 1783891383}
+  revivePanel: {fileID: 0}
+  reviveButton: {fileID: 0}
+  reviveIndicator: {fileID: 0}
   messageUI: {fileID: 0}
   pauseUI: {fileID: 1782627619}
   pausePanel: {fileID: 4462461048705734384}
   resultUI: {fileID: 5}
   tooltipUI: {fileID: 947665018}
-  timerUI: {fileID: 0}
+  timerUI: {fileID: 1304023981}
   moveLimitUI: {fileID: 0}
   tryCountUis: []
   minMoveCountUis: []

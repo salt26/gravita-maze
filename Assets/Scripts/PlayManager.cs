@@ -510,6 +510,10 @@ public class PlayManager : MonoBehaviour
     {
         GameManager.gm.TutorialNext();
         TimeoutCount = 0;
+        if (GameManager.gm.PlayingMapIndex + 1 == 7)
+        {
+            timerUI.SetActive(true);
+        }
         if (HasClearedAll)
         {
             Ending();
