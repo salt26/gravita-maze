@@ -32,7 +32,7 @@ public class PauseUI : MonoBehaviour
         {
             pauseSkipButton.interactable = true;
         }
-        else if (GameManager.mm.LimitMode != LimitModeEnum.Time || (GameManager.mm.IsTimeActivated && (GameManager.mm.RemainingTime <= 0f || GameManager.mm.HasCleared)))
+        else
         {
             pauseSkipButton.interactable = false;
         }
