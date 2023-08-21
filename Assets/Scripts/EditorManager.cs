@@ -3308,10 +3308,8 @@ public class EditorManager : MonoBehaviour
         public List<WallInfo> oldWalls;
         public List<ObjectInfo> oldObjects;
 
-        // SizeX, SizeY, MassChange, SeveralChange
-        public List<WallInfo> newWalls;
-
         // MassChange, SeveralChange
+        public List<WallInfo> newWalls;
         public List<ObjectInfo> newObjects;
 
         // MassChange

@@ -319,7 +319,7 @@ public class MapManager : MonoBehaviour
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
         float timeLimit = 0f, bool isValidation = false, bool canRotate = false, bool isEditing = false)
     {
-        
+
         IsReady = false;
 
         // movableGameObject와 fixedGameObject의 child로 등록된 Movable, FixedObject들은 ObjectInfo를 인자로 주지 않아도 자동으로 등록됨
@@ -353,7 +353,7 @@ public class MapManager : MonoBehaviour
 
         initialMapCoord = new long[SizeX, SizeY]; // MapCoord는 대체 어디에다가 쓰는 거지??
         initialMovableCoord = new Movable[SizeX, SizeY]; // Movable의 좌표가 될 예정. 2차원 배열의 측정 위치에다가 Movable의 오브젝트를 넣는 다는 소리인가?
-        
+
         tilemap.ClearAllTiles();
         ClearAllTiles();
         timeoutPanel.SetActive(false);
