@@ -15,8 +15,6 @@ using UnityEngine.Android;
 
 public class EditorManager : MonoBehaviour
 {
-    public bool holeTileDevTest = false;    // Development test valuable, must be removed later
-
     public string tableName = "StringTable";
 
     public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter, ToggleHole }
@@ -1562,7 +1560,7 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else if (holeTileDevTest)
+                        else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
                             walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b)));
@@ -1580,7 +1578,7 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else if (holeTileDevTest)
+                        else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
                             walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b - 1)));
@@ -1598,7 +1596,7 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else if (holeTileDevTest)
+                        else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
                             walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a - 1 && i.y == b)));
@@ -1616,7 +1614,7 @@ public class EditorManager : MonoBehaviour
                         }
 
                         // Hole doesn't exist
-                        else if (holeTileDevTest)
+                        else
                         {
                             if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
                             walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a && i.y == b)));
