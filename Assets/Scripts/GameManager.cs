@@ -1468,15 +1468,6 @@ public class GameManager : MonoBehaviour
         hm.hmStopHaptic(hapticNum);
     }
 
-    public void HapticOn()
-    {
-        hm.hapticEnalbed = true;
-    }
-    public void HapticOff()
-    {
-        hm.hapticEnalbed = false;
-    }
-
     public void LoadSettingsValue()
     {
         if (!File.Exists(Application.persistentDataPath.TrimEnd('/') + "/Settings.txt"))
