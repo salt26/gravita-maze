@@ -742,14 +742,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 169839971786752
-    m_Localized: "<b>\uC911\uB825\uBBF8\uB85C</b>\r\n<size=48>v1.4.4</size>\r\n\r\n\uD504\uB85C\uC81D\uD2B8
-      \uAD00\uB9AC\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uD504\uB85C\uADF8\uB798\uBC0D\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=36><i>junu192857</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uAE40\uC138\uD604</i></size>\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uC870\uC6A9\uCC2C</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n\r\n\uAC8C\uC784
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uB808\uBCA8
-      \uB514\uC790\uC778\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\nUI/UX
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n\r\n\uADF8\uB798\uD53D
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n\r\n\uC0AC\uC6B4\uB4DC
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uBC88\uC5ED\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uB9C8\uCF00\uD305\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n\r\n\uC778\uD504\uB77C\r\n<size=36><i>cseteram</i></size>\r\n\r\n\uB9F5
-      \uC81C\uC791\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=36><i>ahnjunseo</i></size>\r\n<size=36><i>junu192857</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=36><i>MINSEOKIM1</i></size>\r\n<size=36><i>ektnzpt1080</i></size>"
+    m_Localized: "<b>\uC911\uB825\uBBF8\uB85C</b>\n<size=48>v1.4.4</size>\n\n\uD504\uB85C\uC81D\uD2B8
+      \uAD00\uB9AC\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uD504\uB85C\uADF8\uB798\uBC0D\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n<size=36><i>junu192857</i></size>\n<size=48><i>\uC591\uB3D9\uD658</i></size>\n<size=48><i>\uC774\uC218\uC778</i></size>\n<size=48><i>\uAE40\uC138\uD604</i></size>\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\n<size=48><i>\uC870\uC6A9\uCC2C</i></size>\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\n\n\uAC8C\uC784
+      \uB514\uC790\uC778\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uB808\uBCA8
+      \uB514\uC790\uC778\n<size=48><i>\uC591\uB3D9\uD658</i></size>\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n\nUI/UX
+      \uB514\uC790\uC778\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n<size=48><i>\uC774\uC218\uC778</i></size>\n\n\uADF8\uB798\uD53D
+      \uB514\uC790\uC778\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n<size=48><i>\uC774\uC218\uC778</i></size>\n<size=48><i>\uC591\uB3D9\uD658</i></size>\n\n\uC0AC\uC6B4\uB4DC
+      \uB514\uC790\uC778\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uBC88\uC5ED\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n\n\uB9C8\uCF00\uD305\n<size=48><i>\uC774\uC218\uC778</i></size>\n\n\uC778\uD504\uB77C\n<size=36><i>cseteram</i></size>\n\n\uB9F5
+      \uC81C\uC791\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\n<size=48><i>\uC591\uB3D9\uD658</i></size>\n<size=36><i>ahnjunseo</i></size>\n<size=36><i>junu192857</i></size>\n<size=48><i>\uC774\uC218\uC778</i></size>\n<size=36><i>MINSEOKIM1</i></size>\n<size=36><i>ektnzpt1080</i></size>"
     m_Metadata:
       m_Items: []
   - m_Id: 170078573158400
@@ -1066,13 +1066,27 @@ MonoBehaviour:
     m_Localized: "\uB098\uAC00\uAE30"
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391178
+    m_Localized: "\uC774\uC81C\uBD80\uD130 30\uCD08\uC758 \uC2DC\uAC04 \uC81C\uD55C\uC774
+      \uC788\uC5B4\uC694.\\n\uD558\uC9C0\uB9CC \uC911\uB825\uC744 \uC870\uC791\uD558\uAE30
+      \uC804\uAE4C\uC9C0\uB294\\n\uC2DC\uAC04\uC774 \uD750\uB974\uC9C0 \uC54A\uC544\uC694!"
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 1829106272391179
+    m_Localized: "\uC911\uB825\uC744 \uC870\uC791\uD558\uBA74 \uC2DC\uAC04\uC774
+      \uD750\uB974\uAE30 \uC2DC\uC791\uD574\uC694.\\n\uC2DC\uAC04 \uCD08\uACFC\uAC00
+      \uB418\uAE30 \uC804\uC5D0 \uBBF8\uB85C\uB97C \uD0C8\uCD9C\uD558\uC138\uC694!"
+    m_Metadata:
+      m_Items:
+      - rid: 0
   references:
     version: 2
     RefIds:
     - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f060000509ffd8f7f060020e0af45710000001ae0af457100000019e0af457100000018e0af457100000017e0af457100000016e0af457100000012e0af457100000006e0af457100000013e0af457100000015e0af457100000000509ff58f7f060002509ffd8f7f060010e0af457100000011e0af457100000008509ffd8f7f060009509ffd8f7f0600
+        m_Entries: 00e02f447100000001e06f447100000000e02f457100000002e02f457100000000e06f44710000000ee02f457100000011e02f457100000012e02f457100000003e06f457100000006e06f457100000007e06f457100000008e06f457100000009e06f45710000000de06f45710000000fe06f457100000014e06f457100000016e06f457100000017e06f457100000018e06f45710000001ce06f457100000022e06f45710000002ce06f45710000002de06f45710000002ee06f45710000002fe06f457100000030e06f457100000031e06f457100000032e06f457100000033e06f457100000034e06f457100000035e06f457100000036e06f457100000037e06f457100000038e06f457100000039e06f457100000007e0af457100000009e0af45710000001be0af45710000001de0af45710000001fe0af45710000000ce06f45710000001ce0af45710000000ee0af457100000001e0af45710000000050dfe09044060000501f33855f060007509ffd8f7f060006509ffd8f7f060005509ffd8f7f060000509ffd8f7f060020e0af45710000001ae0af457100000019e0af457100000018e0af457100000017e0af457100000016e0af457100000012e0af457100000006e0af457100000013e0af457100000015e0af457100000000509ff58f7f060002509ffd8f7f060010e0af457100000011e0af457100000008509ffd8f7f060009509ffd8f7f06000a509ffd8f7f06000b509ffd8f7f0600
     - rid: 1375113474824208398
       type: {class: PlatformOverride, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:

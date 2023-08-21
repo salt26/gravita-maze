@@ -510,6 +510,10 @@ public class PlayManager : MonoBehaviour
     {
         GameManager.gm.TutorialNext();
         TimeoutCount = 0;
+        if (GameManager.gm.PlayingMapIndex + 1 == 7)
+        {
+            timerUI.SetActive(true);
+        }
         if (HasClearedAll)
         {
             Ending();
@@ -572,7 +576,7 @@ public class PlayManager : MonoBehaviour
     public void TutorialTimeoutCountUp()
     {
         TimeoutCount++;
-        if (GameManager.gm.PlayingMapIndex + 1 == 9 && TimeoutCount >= 2)
+        if (GameManager.gm.PlayingMapIndex + 1 == 10 && TimeoutCount >= 2)
         {
             GameManager.mm.TimeLimit = 24f;
             GameManager.mm.TimeActivate();

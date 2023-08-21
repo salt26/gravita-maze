@@ -1209,7 +1209,14 @@ public class MapManager : MonoBehaviour
         if (LimitMode == LimitModeEnum.Time)
         {
             RemainingTime = TimeLimit;
-            IsTimeActivated = true;
+            if (SceneManager.GetActiveScene().name.Equals("Tutorial") && GameManager.gm.PlayingMapIndex + 1 < 7)
+            {
+                IsTimeActivated = false;
+            }
+            else
+            {
+                IsTimeActivated = true;
+            }
         }
         IsTimePassing = false;
         HasTimePaused = false;

@@ -543,6 +543,14 @@ MonoBehaviour:
     m_Key: tutorial_message_39
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391178
+    m_Key: tutorial_message_40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391179
+    m_Key: tutorial_message_41
+    m_Metadata:
+      m_Items: []
   - m_Id: 164806647603200
     m_Key: Adventure/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:
