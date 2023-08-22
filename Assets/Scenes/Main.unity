@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.3807401, b: 0.358727, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1711,6 +1711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hapticEnabled: 1
+  eventHapticSource: []
 --- !u!114 &556187999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3286,7 +3287,7 @@ SpriteRenderer:
   m_SortingLayerID: 1165801003
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2296311037455575914, guid: 7145cb16cff106a46a8420928e46fac0,
+  m_Sprite: {fileID: 3454307460556738731, guid: 7145cb16cff106a46a8420928e46fac0,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
