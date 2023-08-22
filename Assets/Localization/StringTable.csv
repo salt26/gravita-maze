@@ -221,7 +221,7 @@ in the pause menu.","일시 정지 메뉴에서
 Volume","배경음
 음량"
 "Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
-<size=48>v1.4.4</size>
+<size=48>v2.0.0</size>
 
 
 Project Managing
@@ -230,12 +230,19 @@ Project Managing
 
 Programming
 <size=48><i>Dantae An</i></size>
-<size=36><i>junu192857</i></size>
-<size=48><i>Donghwan Yang</i></size>
-<size=48><i>Suin Lee</i></size>
 <size=48><i>Sehyun Kim</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>Suin Lee</i></size>
 <size=48><i>Jaehee Hong</i></size>
+<size=48><i>Donghwan Yang</i></size>
+<size=48><i>Diane Kim</i></size>
 <size=48><i>Yongchan Jo</i></size>
+
+
+Graphic Design
+<size=48><i>Seoyoon Jeung</i></size>
+<size=48><i>Jeeseung Oh</i></size>
+<size=48><i>Hyori Seo</i></size>
 <size=48><i>Diane Kim</i></size>
 
 
@@ -251,11 +258,6 @@ Level Design
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
-
-
-Graphic Design
-<size=48><i>Dantae An</i></size>
-<size=48><i>Suin Lee</i></size>
 <size=48><i>Donghwan Yang</i></size>
 
 
@@ -267,10 +269,12 @@ Localization
 <size=48><i>Jaehee Hong</i></size>
 <size=48><i>Diane Kim</i></size>
 <size=48><i>Dantae An</i></size>
+<size=48><i>Sehyun Kim</i></size>
 
 
-Marketing
+Creative Services
 <size=48><i>Suin Lee</i></size>
+<size=48><i>Seoyoon Jeung</i></size>
 
 
 Infrastructure
@@ -285,19 +289,25 @@ Map Making
 <size=48><i>Suin Lee</i></size>
 <size=36><i>MINSEOKIM1</i></size>
 <size=36><i>ektnzpt1080</i></size>","<b>중력미로</b>
-<size=48>v1.4.4</size>
+<size=48>v2.0.0</size>
 
 프로젝트 관리
 <size=48><i>안단태</i></size>
 
 프로그래밍
 <size=48><i>안단태</i></size>
-<size=36><i>junu192857</i></size>
-<size=48><i>양동환</i></size>
-<size=48><i>이수인</i></size>
 <size=48><i>김세현</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>이수인</i></size>
 <size=48><i>홍재희</i></size>
+<size=48><i>양동환</i></size>
+<size=48><i>김다인</i></size>
 <size=48><i>조용찬</i></size>
+
+그래픽 디자인
+<size=48><i>정서윤</i></size>
+<size=48><i>오지승</i></size>
+<size=48><i>서효리</i></size>
 <size=48><i>김다인</i></size>
 
 게임 디자인
@@ -310,10 +320,6 @@ Map Making
 UI/UX 디자인
 <size=48><i>안단태</i></size>
 <size=48><i>이수인</i></size>
-
-그래픽 디자인
-<size=48><i>안단태</i></size>
-<size=48><i>이수인</i></size>
 <size=48><i>양동환</i></size>
 
 사운드 디자인
@@ -323,9 +329,11 @@ UI/UX 디자인
 <size=48><i>홍재희</i></size>
 <size=48><i>김다인</i></size>
 <size=48><i>안단태</i></size>
+<size=48><i>김세현</i></size>
 
-마케팅
+크리에이티브 서비스
 <size=48><i>이수인</i></size>
+<size=48><i>정서윤</i></size>
 
 인프라
 <size=36><i>cseteram</i></size>
