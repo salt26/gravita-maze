@@ -700,9 +700,7 @@ MonoBehaviour:
   - m_Id: 169839971786752
     m_Localized: '<b>GravitaMaze</b>
 
-      <size=48>v2.0.0</size>
-
-      
+      <size=48>v1.5.0</size>
 
       
 
@@ -710,8 +708,6 @@ MonoBehaviour:
       Managing
 
       <size=48><i>Dantae An</i></size>
-
-      
 
       
 
@@ -739,30 +735,23 @@ MonoBehaviour:
 
       
 
-      
-
       Graphic Design
 
-      <size=48><i>Seoyoon
-      Jeung</i></size>
+      <size=48><i>Seoyoon Jeung</i></size>
 
-      <size=48><i>Jeeseung Oh</i></size>
+      <size=48><i>Jeeseung
+      Oh</i></size>
 
-      <size=48><i>Hyori
-      Seo</i></size>
+      <size=48><i>Hyori Seo</i></size>
 
-      <size=48><i>Diane Kim</i></size>
-
-      
+      <size=48><i>Diane
+      Kim</i></size>
 
       
 
-      Game
-      Design
+      Game Design
 
       <size=48><i>Dantae An</i></size>
-
-      
 
       
 
@@ -776,28 +765,21 @@ MonoBehaviour:
 
       
 
-      
-
       UI/UX Design
 
-      <size=48><i>Dantae
-      An</i></size>
+      <size=48><i>Dantae An</i></size>
 
-      <size=48><i>Suin Lee</i></size>
+      <size=48><i>Suin
+      Lee</i></size>
 
-      <size=48><i>Donghwan
-      Yang</i></size>
-
-      
+      <size=48><i>Donghwan Yang</i></size>
 
       
 
-      Sound Design
+      Sound
+      Design
 
-      <size=48><i>Dantae
-      An</i></size>
-
-      
+      <size=48><i>Dantae An</i></size>
 
       
 
@@ -815,8 +797,6 @@ MonoBehaviour:
 
       
 
-      
-
       Creative
       Services
 
@@ -827,13 +807,9 @@ MonoBehaviour:
 
       
 
-      
-
       Infrastructure
 
       <size=36><i>cseteram</i></size>
-
-      
 
       
 
