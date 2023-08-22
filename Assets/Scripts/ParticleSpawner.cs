@@ -16,7 +16,7 @@ public class ParticleSpawner : MonoBehaviour
 
     private void Awake()
     {
-        // °³¼ö¿Í ¼Óµµ Á¶ÀıÀÌ ÇÊ¿äÇÑ °æ¿ì ParticleSpawner ÇÁ¸®ÆÕÀ» ¼±ÅÃÇÏ°í ÀÎ½ºÆåÅÍ¿¡¼­ ¼öÄ¡ Á¶Á¤!
+        // ê°œìˆ˜ì™€ ì†ë„ ì¡°ì ˆì´ í•„ìš”í•œ ê²½ìš° ParticleSpawner í”„ë¦¬íŒ¹ì„ ì„ íƒí•˜ê³  ì¸ìŠ¤í™í„°ì—ì„œ ìˆ˜ì¹˜ ì¡°ì •!
         currentDirection = Particle.ParticleDirection.None;
     }
 
