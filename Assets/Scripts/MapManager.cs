@@ -97,6 +97,8 @@ public class MapManager : MonoBehaviour
     public delegate void AfterGravity(Flag flag);
     public AfterGravity afterGravity;
 
+    public GameObject particleSpawner;
+
     private int _originalSizeX = 0;
     private int _originalSizeY = 0;
     private float _timeLimit;
@@ -273,6 +275,33 @@ public class MapManager : MonoBehaviour
                     afterGravity(Flag.TimeOver); // 사망판정을 해 주는 함수
                 Debug.LogWarning("Map warning: Time over");
             }
+        }
+
+        // Particle control
+        if (!HasTimePaused)
+        {
+            Particle.ParticleDirection prevDir = Particle.ParticleDirection.None;
+
+            if (ActionHistory.Length > 0)
+            {
+                prevDir = ActionHistory[^1] switch
+                {
+                    'w' => Particle.ParticleDirection.Up,
+                    's' => Particle.ParticleDirection.Down,
+                    'a' => Particle.ParticleDirection.Left,
+                    'd' => Particle.ParticleDirection.Right,
+                    _ => Particle.ParticleDirection.None
+                };
+            }
+
+            if (particleSpawner.GetComponent<ParticleSpawner>().currentDirection != prevDir)
+            {
+                particleSpawner.GetComponent<ParticleSpawner>().ModifyDirection(prevDir);
+            }
+        }
+        else
+        {
+            particleSpawner.GetComponent<ParticleSpawner>().ModifyDirection(Particle.ParticleDirection.None);
         }
     }
 
@@ -1206,6 +1235,7 @@ public class MapManager : MonoBehaviour
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
+        particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(SizeX, SizeY);
     }
 
     public OpenFileFlag InitializeFromFile(string path, out int tempSizeX, out int tempSizeY,
@@ -1819,7 +1849,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
+            // ActionHistory = ActionHistory.Substring(0, ActionHistory.Length - 1);
 
             switch (flag)
             {
@@ -2088,7 +2118,7 @@ public class MapManager : MonoBehaviour
                         if (move != null) moves.Add(move);
                     }
                 }
-                ActionHistory += "w";
+                if (isSimulation) ActionHistory += "w";
                 break;
             case GameManager.GravityDirection.Down:
                 for (int i = 0; i < SizeX; i++)
@@ -2295,7 +2325,7 @@ public class MapManager : MonoBehaviour
                         if (move != null) moves.Add(move);
                     }
                 }
-                ActionHistory += "s";
+                if (isSimulation) ActionHistory += "s";
                 break;
             case GameManager.GravityDirection.Left:
                 for (int i = 0; i < SizeX; i++)
@@ -2503,7 +2533,7 @@ public class MapManager : MonoBehaviour
                         if (move != null) moves.Add(move);
                     }
                 }
-                ActionHistory += "a";
+                if (isSimulation) ActionHistory += "a";
                 break;
             case GameManager.GravityDirection.Right:
                 for (int i = SizeX - 1; i >= 0; i--)
@@ -2836,7 +2866,7 @@ public class MapManager : MonoBehaviour
                         if (move != null) moves.Add(move);
                     }
                 }
-                ActionHistory += "d";
+                if (isSimulation) ActionHistory += "d";
                 break;
         }
         if (ballX == -1 && ballY == -1)

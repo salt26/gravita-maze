@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311924, g: 0.38073963, b: 0.3587269, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.3807401, b: 0.358727, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5441,6 +5441,7 @@ MonoBehaviour:
   mapTileParent: {fileID: 462834412}
   loadingPanel: {fileID: 38331146116544568}
   timeoutPanel: {fileID: 628789790}
+  particleSpawner: {fileID: 625365170}
   tryCount: 0
   beforeFirstAction: 0
   tryCountUpTrigger: 0
@@ -8101,6 +8102,85 @@ MonoBehaviour:
           m_WaitForCompletion: 0
           m_LocalVariables: []
         m_PropertyPath: m_Text
+--- !u!1001 &625365169
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4129596716145074738, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_Name
+      value: ParticleSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541089425641275569, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23d58b3b57ea742ad9f8e2bacc381039, type: 3}
+--- !u!1 &625365170 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4129596716145074738, guid: 23d58b3b57ea742ad9f8e2bacc381039,
+    type: 3}
+  m_PrefabInstance: {fileID: 625365169}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &628789790 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7497914685017812011, guid: a97aafa8dc7aae24993ae294c8359b43,
@@ -13419,7 +13499,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 882044277
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -14705,6 +14785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ea93e2943e07a46aeead4752d786cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hapticEnabled: 1
 --- !u!4 &1199813701
 Transform:
   m_ObjectHideFlags: 0
