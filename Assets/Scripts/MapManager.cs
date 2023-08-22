@@ -343,6 +343,8 @@ public class MapManager : MonoBehaviour
         tilemap.ClearAllTiles();
         ClearAllTiles();
         timeoutPanel.SetActive(false);
+
+        particleSpawner.GetComponent<ParticleSpawner>().DestroyAllParticles();
     }
 
     public void Initialize(int sizeX, int sizeY, List<WallInfo> walls, List<ObjectInfo> objects, string solution = "",
@@ -1235,7 +1237,8 @@ public class MapManager : MonoBehaviour
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
-        particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(SizeX, SizeY);
+        if (!(SceneManager.GetActiveScene().name.Equals("Editor") && GameManager.em.editPhase != EditorManager.EditPhase.Test)) particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(SizeX, SizeY);
+        else particleSpawner.GetComponent<ParticleSpawner>().DestroyAllParticles();
     }
 
     public OpenFileFlag InitializeFromFile(string path, out int tempSizeX, out int tempSizeY,

@@ -6,6 +6,7 @@ public class ParticleSpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject particlePrefab;
+
     private float xMin, xMax, yMin, yMax;
 
     public int particleCount = 50;
@@ -15,7 +16,8 @@ public class ParticleSpawner : MonoBehaviour
 
     private void Awake()
     {
-        ;
+        particleCount = 50;
+        particleSpeed = 5f;
         currentDirection = Particle.ParticleDirection.None;
     }
 
@@ -69,15 +71,20 @@ public class ParticleSpawner : MonoBehaviour
         particle.GetComponent<Particle>().SetInitialMovement(currentDirection, particleSpeed, xMin, xMax, yMin, yMax);
     }
 
-    public void SpawnInitialParticles(int mapSizeX, int mapSizeY)
+    public void DestroyAllParticles()
     {
-        SetSpawnerPosition(mapSizeX, mapSizeY);
-
         foreach (Transform t in GetComponentsInChildren<Transform>())
         {
             if (t == transform) continue;
             Destroy(t.gameObject);
         }
+    }
+
+    public void SpawnInitialParticles(int mapSizeX, int mapSizeY)
+    {
+        SetSpawnerPosition(mapSizeX, mapSizeY);
+
+        DestroyAllParticles();
 
         currentDirection = Particle.ParticleDirection.None;
 
