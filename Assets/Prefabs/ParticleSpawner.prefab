@@ -47,5 +47,5 @@ MonoBehaviour:
   particlePrefab: {fileID: 1380401797523374493, guid: 222957e3a521c8b4b9cf49b847cd1292,
     type: 3}
   particleCount: 50
-  particleSpeed: 5
+  particleSpeed: 10
   currentDirection: 0

@@ -10,14 +10,13 @@ public class ParticleSpawner : MonoBehaviour
     private float xMin, xMax, yMin, yMax;
 
     public int particleCount = 50;
-    public float particleSpeed = 5f;
+    public float particleSpeed = 15f;
     public Particle.ParticleDirection currentDirection;
 
 
     private void Awake()
     {
-        particleCount = 50;
-        particleSpeed = 5f;
+        // 개수와 속도 조절이 필요한 경우 ParticleSpawner 프리팹을 선택하고 인스펙터에서 수치 조정!
         currentDirection = Particle.ParticleDirection.None;
     }
 

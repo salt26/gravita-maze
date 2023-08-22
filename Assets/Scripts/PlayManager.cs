@@ -1680,6 +1680,8 @@ public class PlayManager : MonoBehaviour
                     //quitHighlightedButton.interactable = false;
                     retryTimeHighlightedButton.gameObject.SetActive(false);
 
+                    GameManager.mm.particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(GameManager.mm.SizeX, GameManager.mm.SizeY);
+
                     return true;
                 }
             case MapManager.OpenFileFlag.Failed:
@@ -1785,6 +1787,8 @@ public class PlayManager : MonoBehaviour
                     retryHighlightedButton.gameObject.SetActive(false);
                     //quitHighlightedButton.interactable = false;
                     retryTimeHighlightedButton.gameObject.SetActive(false);
+
+                    GameManager.mm.particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(GameManager.mm.SizeX, GameManager.mm.SizeY);
 
                     return true;
                 }

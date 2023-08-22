@@ -1232,7 +1232,10 @@ public class MapManager : MonoBehaviour
         tryCountUpTrigger = false;
         beforeFirstAction = true;
         //PrintMapCoord();
-        if (!(SceneManager.GetActiveScene().name.Equals("Editor") && GameManager.em.editPhase != EditorManager.EditPhase.Test)) particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(SizeX, SizeY);
+        if (!(SceneManager.GetActiveScene().name.Equals("Editor") && GameManager.em.editPhase != EditorManager.EditPhase.Test) &&
+            !(SceneManager.GetActiveScene().name.Equals("Custom") && GameManager.pm.customPhase != PlayManager.CustomPhase.Ingame) &&
+            !(SceneManager.GetActiveScene().name.Equals("Training") && GameManager.pm.trainingPhase != PlayManager.TrainingPhase.Ingame))
+            particleSpawner.GetComponent<ParticleSpawner>().SpawnInitialParticles(SizeX, SizeY);
         else particleSpawner.GetComponent<ParticleSpawner>().DestroyAllParticles();
     }
 
