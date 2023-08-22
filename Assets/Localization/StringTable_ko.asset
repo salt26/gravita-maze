@@ -742,13 +742,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 169839971786752
-    m_Localized: "<b>\uC911\uB825\uBBF8\uB85C</b>\r\n<size=48>v1.4.4</size>\r\n\r\n\uD504\uB85C\uC81D\uD2B8
-      \uAD00\uB9AC\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uD504\uB85C\uADF8\uB798\uBC0D\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=36><i>junu192857</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uAE40\uC138\uD604</i></size>\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uC870\uC6A9\uCC2C</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n\r\n\uAC8C\uC784
+    m_Localized: "<b>\uC911\uB825\uBBF8\uB85C</b>\r\n<size=48>v1.5.0</size>\r\n\r\n\uD504\uB85C\uC81D\uD2B8
+      \uAD00\uB9AC\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uD504\uB85C\uADF8\uB798\uBC0D\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uAE40\uC138\uD604</i></size>\r\n<size=36><i>junu192857</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n<size=48><i>\uC870\uC6A9\uCC2C</i></size>\r\n\r\n\uADF8\uB798\uD53D
+      \uB514\uC790\uC778\r\n<size=48><i>\uC815\uC11C\uC724</i></size>\r\n<size=48><i>\uC624\uC9C0\uC2B9</i></size>\r\n<size=48><i>\uC11C\uD6A8\uB9AC</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n\r\n\uAC8C\uC784
       \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uB808\uBCA8
       \uB514\uC790\uC778\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\nUI/UX
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n\r\n\uADF8\uB798\uD53D
       \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n\r\n\uC0AC\uC6B4\uB4DC
-      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uBC88\uC5ED\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uB9C8\uCF00\uD305\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n\r\n\uC778\uD504\uB77C\r\n<size=36><i>cseteram</i></size>\r\n\r\n\uB9F5
+      \uB514\uC790\uC778\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n\r\n\uBC88\uC5ED\r\n<size=48><i>\uD64D\uC7AC\uD76C</i></size>\r\n<size=48><i>\uAE40\uB2E4\uC778</i></size>\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uAE40\uC138\uD604</i></size>\r\n\r\n\uD06C\uB9AC\uC5D0\uC774\uD2F0\uBE0C
+      \uC11C\uBE44\uC2A4\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=48><i>\uC815\uC11C\uC724</i></size>\r\n\r\n\uC778\uD504\uB77C\r\n<size=36><i>cseteram</i></size>\r\n\r\n\uB9F5
       \uC81C\uC791\r\n<size=48><i>\uC548\uB2E8\uD0DC</i></size>\r\n<size=48><i>\uC591\uB3D9\uD658</i></size>\r\n<size=36><i>ahnjunseo</i></size>\r\n<size=36><i>junu192857</i></size>\r\n<size=48><i>\uC774\uC218\uC778</i></size>\r\n<size=36><i>MINSEOKIM1</i></size>\r\n<size=36><i>ektnzpt1080</i></size>"
     m_Metadata:
       m_Items: []

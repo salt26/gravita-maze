@@ -700,9 +700,7 @@ MonoBehaviour:
   - m_Id: 169839971786752
     m_Localized: '<b>GravitaMaze</b>
 
-      <size=48>v1.4.4</size>
-
-      
+      <size=48>v1.5.0</size>
 
       
 
@@ -713,40 +711,47 @@ MonoBehaviour:
 
       
 
-      
-
       Programming
 
       <size=48><i>Dantae
       An</i></size>
 
+      <size=48><i>Sehyun Kim</i></size>
+
       <size=36><i>junu192857</i></size>
+
+      <size=48><i>Suin
+      Lee</i></size>
+
+      <size=48><i>Jaehee Hong</i></size>
 
       <size=48><i>Donghwan
       Yang</i></size>
 
-      <size=48><i>Suin Lee</i></size>
-
-      <size=48><i>Sehyun
-      Kim</i></size>
-
-      <size=48><i>Jaehee Hong</i></size>
+      <size=48><i>Diane Kim</i></size>
 
       <size=48><i>Yongchan
       Jo</i></size>
 
-      <size=48><i>Diane Kim</i></size>
+      
+
+      Graphic Design
+
+      <size=48><i>Seoyoon Jeung</i></size>
+
+      <size=48><i>Jeeseung
+      Oh</i></size>
+
+      <size=48><i>Hyori Seo</i></size>
+
+      <size=48><i>Diane
+      Kim</i></size>
 
       
 
-      
-
-      Game
-      Design
+      Game Design
 
       <size=48><i>Dantae An</i></size>
-
-      
 
       
 
@@ -760,39 +765,21 @@ MonoBehaviour:
 
       
 
-      
-
       UI/UX Design
-
-      <size=48><i>Dantae
-      An</i></size>
-
-      <size=48><i>Suin Lee</i></size>
-
-      
-
-      
-
-      Graphic
-      Design
 
       <size=48><i>Dantae An</i></size>
 
-      <size=48><i>Suin Lee</i></size>
+      <size=48><i>Suin
+      Lee</i></size>
 
-      <size=48><i>Donghwan
-      Yang</i></size>
-
-      
+      <size=48><i>Donghwan Yang</i></size>
 
       
 
-      Sound Design
+      Sound
+      Design
 
-      <size=48><i>Dantae
-      An</i></size>
-
-      
+      <size=48><i>Dantae An</i></size>
 
       
 
@@ -806,24 +793,23 @@ MonoBehaviour:
       <size=48><i>Dantae
       An</i></size>
 
-      
+      <size=48><i>Sehyun Kim</i></size>
 
       
 
-      Marketing
+      Creative
+      Services
 
-      <size=48><i>Suin
-      Lee</i></size>
+      <size=48><i>Suin Lee</i></size>
 
-      
+      <size=48><i>Seoyoon
+      Jeung</i></size>
 
       
 
       Infrastructure
 
       <size=36><i>cseteram</i></size>
-
-      
 
       
 
