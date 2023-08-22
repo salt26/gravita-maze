@@ -139,7 +139,7 @@
 "tutorial_message_38",1829106272391176,"The time is really short...\nWhat if the time limit gets extended?\nGive it another try!","시간이 참 짧죠...\n제한시간을 늘려드릴게요.\n다시 도전해보세요!"
 "tutorial_message_39",1829106272391177,"Now you have more time.\nTake your time and try it!","시간이 더 늘어났어요.\n여유를 갖고 시도해 보세요!"
 "tutorial_message_40",1829106272391178,"From now on, you have time limit of\n30 seconds. But time won't go by\nuntil you manipulate the gravity!","이제부터 30초의 시간 제한이 있어요.\n하지만 중력을 조작하기 전까지는\n시간이 흐르지 않아요!"
-"tutorial_message_41",1829106272391179,"Time begins to flow as you manipulate\nthe gravity. Escape the maze\nbefore time runs out!","중력을 조작하면 시간이 흐르기 시작해요.\n시간 초과가 되기 전에 미로를 탈출하세요!"
+"tutorial_message_41",1829106272391179,"Time begins to flow as you manipulate\nthe gravity. Escape the maze\nbefore time runs out!","중력을 조작하면 시간이 흐르기 시작해요.\n시간이 끝나기 전에 미로를 탈출하세요!"
 "Adventure/Canvas/PauseUI/PauseBox/BgmVolume",164806647603200,"BGM
 Volume","배경음
 음량"
