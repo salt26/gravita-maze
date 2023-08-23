@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.3-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)  
+[![Version badge](https://img.shields.io/badge/Version-1.5.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## 다운로드
 
-### [v1.4.3 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
+### [v1.5.0 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
 
 ---
 
@@ -33,6 +33,28 @@
 
 <details>
 <summary>여기를 클릭하면 과거 업데이트 내용을 표시하거나 숨길 수 있습니다.</summary>
+
+### 업데이트 (v1.4.4 -> v1.5.0)
+
+* 중력 조작의 느낌을 잘 보여주는 입자 애니메이션 추가
+* 구멍 뚫린 타일 추가
+* macOS에서 발생하는 UI 버그 수정
+* 모바일 진동 일부 변경
+* 크레딧 문구 변경
+* 튜토리얼 개편: 순서 변경 및 난이도 하향
+
+### 업데이트 (v1.4.3 -> v1.4.4)
+
+* 모바일에서 진동 추가
+* 어드벤처에서 라이프 소진 시 부활 기능 추가: 부활 시 해당 맵에만 반복 도전할 수 있고 별을 부여하지 않는다.
+* 맵 타일 렌더링 최적화
+* 시간 건너뛰기 버튼 안내 기능 추가
+* 쇳덩이 효과음 관련 버그 수정
+* macOS에서 발생하는 UI 및 해상도 관련 버그 수정
+* 중력을 빠르게 조작할 때 배경음악이 가끔 희미하게 들리는 버그 수정
+* 맵 편집기에서 폴더를 생성할 때 발생하던 버그 수정
+* 불필요한 스프라이트 제거
+* 어드벤처 Easy, Normal, Hard 난이도의 맵 구성 변경
 
 ### 업데이트 (v1.4.2 -> v1.4.3)
 
@@ -237,8 +259,8 @@
 
 ### Android
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
-* `GravitaMaze.v1.4.3.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
+* `GravitaMaze.v1.5.0.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
   * `출처를 알 수 없는 앱 설치` 창이 나오면, `무시하고 설치`를 선택하세요.
   * Google Play Protect에서 `안전하지 않은 앱 차단됨` 창이 나오는 경우 ***확인 버튼을 누르지 말고*** `세부정보 더 보기 -> 무시하고 설치하기`를 선택하세요.
   * `Google에 알 수 없는 앱 전송`과 관련한 메시지가 뜨는 경우가 있을 수도 있어요. 이 경우 무슨 옵션을 선택해도 상관 없어요.
@@ -249,14 +271,14 @@
 
 ### Windows
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
-* `GravitaMaze.v1.4.3.w.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
+* `GravitaMaze.v1.5.0.w.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.exe`를 실행하세요.
 
 ### macOS
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
-* `GravitaMaze.v1.4.3.m.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
+* `GravitaMaze.v1.5.0.m.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.app`을 실행하세요.
 
 ## 맵 편집기
