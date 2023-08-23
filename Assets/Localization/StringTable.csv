@@ -1,4 +1,4 @@
-Key,Id,English(en),Korean(ko)
+﻿Key,Id,English(en),Korean(ko)
 "editor_start_welcome",486441738240,"Welcome to the map editor!","맵 에디터에 오신 걸 환영합니다!"
 "editor_update_begin",486475292672,"All right!\nLet's move on to the next step.","좋아요!\n다음 단계로 가볼까요?"
 "editor_update_test_prompt",486479486976,"Confirm the map\\is playable.","맵이 플레이 가능한지\\테스트해주세요."
@@ -10,10 +10,11 @@ Key,Id,English(en),Korean(ko)
 "editor_update_set_save_path",486492069892,"Choose a path to save.","저장할 경로를 설정하세요."
 "editor_warning_add_wall",486492069893,"Cannot add a wall there.","여기에는 벽을 추가할 수 없어요."
 "editor_warning_add_shutter",486492069894,"Cannot add a shutter there.","여기에는 셔터를 추가할 수 없어요."
-"edtior_warning_add_exit",486492069895,"Cannot add an exit there.","여기에는 출구를 추가할 수 없어요."
+"editor_warning_add_exit",486492069895,"Cannot add an exit there.","여기에는 출구를 추가할 수 없어요."
 "editor_warning_add_ball",486492069896,"Cannot add a ball there.","여기에는 공을 추가할 수 없어요."
 "editor_warning_add_iron",486492069897,"Cannot add an iron there.","여기에는 쇳덩이를 추가할 수 없어요."
 "editor_warning_add_fire",486492069898,"Cannot add a fire there.","여기에는 불을 추가할 수 없어요."
+"editor_warning_toggle_hole",24239937476268032,"Cannot add a hole there.","여기에는 구멍을 추가할 수 없어요."
 "editor_warning_duplicate_exits",486492069899,"Only one exit can be placed.","출구는 하나만 놓을 수 있어요."
 "editor_warning_duplicate_balls",486492069900,"Only one ball can be placed.","공은 하나만 놓을 수 있어요."
 "editor_warning_remove_wall",486492069901,"Cannot remove walls there.","해당 벽은 제거할 수 없어요."
@@ -26,6 +27,7 @@ Key,Id,English(en),Korean(ko)
 "editor_guide_add_iron",486496264192,"Touch the map to add irons.","맵을 터치하면 쇳덩이가 추가돼요."
 "editor_guide_add_wall",486496264193,"Touch the map to add walls.","맵을 터치하면 벽이 추가돼요."
 "editor_guide_add_shutter",486496264194,"Touch the map to add shutters.","맵을 터치하면 셔터가 추가돼요."
+"editor_guide_toggle_hole",24239937501433856,"Touch the map to add or remove holes.","맵을 터치하면 구멍이 추가 또는 제거돼요."
 "editor_guide_remove_multi",486496264195,"Touch the map to remove\nwalls or shutters or exits.","맵을 터치하면 벽, 셔터 또는 출구를\n제거할 수 있어요."
 "editor_guide_remove_object",486496264196,"Touch the map to remove objects.","맵을 터치하면 물체를 제거할 수 있어요."
 "editor_reset_initial",486496264197,"Build your own map!","나만의 맵을 만들어 보자고요!"
@@ -51,18 +53,22 @@ Key,Id,English(en),Korean(ko)
 "editor_create_map_success_part2",1793875561631744,"""","""(으)로 저장했어요!"
 "editor_create_map_reinitialize_message",486496264217,"You can reinitialize your map.","맵을 재초기화할 수 있어요."
 "editor_warning_map_not_saved_yet",486496264218,"The map has not been saved yet.","맵이 아직 저장되지 않았어요."
+"editor_tooltip_no_ball_or_exit",27847587124994048,"A ball and\nan exit must\nbe placed.","공과 출구는 반드시\n설치해야 해요."
+"editor_tooltip_hole_invalid",27847587141771264,"You can't cover\nthe outermost edge\nwith holes.","맵 가장자리의 한 변을\n전부 구멍으로\n만들 수 없어요."
 "editor_undo_map_name",486496264219,"Undo: the map name","실행 취소: 맵 이름"
 "editor_undo_multi",486496264220,"Undo: a wall, a shutter,\nor an exit","실행 취소: 벽, 셔터\n또는 출구"
 "editor_undo_object",486496264221,"Undo: an object","실행 취소: 물체"
 "editor_undo_map_size",486496264222,"Undo: the map size","실행 취소: 맵 크기"
 "editor_undo_reset",486496264223,"Undo: reset","실행 취소: 리셋"
 "editor_undo_reintialization",486496264224,"Undo: reinitialization","실행 취소: 재초기화"
+"editor_undo_several",25313860285095936,"Undo: several objects\nand walls","실행 취소: 여러 물체\n및 벽"
 "editor_redo_map_name",486496264225,"Redo: the map name","다시 실행: 맵 이름"
 "editor_redo_multi",486496264226,"Redo: a wall, a shutter,\nor an exit","다시 실행: 벽, 셔터\n또는 출구"
 "editor_redo_object",486496264227,"Redo: an object","다시 실행: 물체"
 "editor_redo_map_size",486496264228,"Redo: the map size","다시 실행: 맵 크기"
 "editor_redo_reset",486496264229,"Redo: reset","다시 실행: 리셋"
 "editor_redo_reinitialization",486496264230,"Redo: reinitialization","다시 실행: 재초기화"
+"editor_redo_several",25313897069142016,"Redo: several objects\nand walls","다시 실행: 여러 물체\n및 벽"
 "warning_invalid_path",486496264231,"The path doesn't exist anymore.","해당 경로가 존재하지 않아요."
 "warning_no_such_file",486496264232,"The map doesn't exist anymore.","해당 맵이 존재하지 않아요."
 "warning_invalid_map_file",486496264233,"The file is not a valid map file.","올바른 맵 파일이 아니예요."
@@ -76,6 +82,7 @@ Key,Id,English(en),Korean(ko)
 "warning_exit_error",486496264241,"Cannot open the map:\nexit error","맵을 열 수 없어요:\n출구 오류"
 "warning_wall_error",486496264242,"Cannot open the map:\nwall error","맵을 열 수 없어요:\n벽 오류"
 "warning_shutter_error",486496264243,"Cannot open the map:\nshutter error","맵을 열 수 없어요:\n셔터 오류"
+"warning_hole_error",24254986643214336,"Cannot open the map:\nhole error","맵을 열 수 없어요:\n구멍 오류"
 "warning_time_limit_error",486496264244,"Cannot open the map:\ntime limit error","맵을 열 수 없어요:\n시간 제한 오류"
 "warning_solution_error",486496264245,"Cannot open the map:\nsolution error","맵을 열 수 없어요:\n풀이 오류"
 "warning_multiple_solutions",486496264246,"Cannot open the map:\nmultiple solutions","맵을 열 수 없어요:\n중복된 풀이"
@@ -131,6 +138,8 @@ Key,Id,English(en),Korean(ko)
 "tutorial_message_37",1829106272391175,"You get a penalty when the time's up,\nbut in Tutorial mode you won't get one! Let's try again!","시간이 끝나면 원래는 페널티가 있지만,\n튜토리얼에서는 괜찮아요! 다시 도전해봐요!"
 "tutorial_message_38",1829106272391176,"The time is really short...\nWhat if the time limit gets extended?\nGive it another try!","시간이 참 짧죠...\n제한시간을 늘려드릴게요.\n다시 도전해보세요!"
 "tutorial_message_39",1829106272391177,"Now you have more time.\nTake your time and try it!","시간이 더 늘어났어요.\n여유를 갖고 시도해 보세요!"
+"tutorial_message_40",1829106272391178,"From now on, you have time limit of\n30 seconds. But time won't go by\nuntil you manipulate the gravity!","이제부터 30초의 시간 제한이 있어요.\n하지만 중력을 조작하기 전까지는\n시간이 흐르지 않아요!"
+"tutorial_message_41",1829106272391179,"Time begins to flow as you manipulate\nthe gravity. Escape the maze\nbefore time runs out!","중력을 조작하면 시간이 흐르기 시작해요.\n시간이 끝나기 전에 미로를 탈출하세요!"
 "Adventure/Canvas/PauseUI/PauseBox/BgmVolume",164806647603200,"BGM
 Volume","배경음
 음량"
@@ -149,7 +158,17 @@ to game","게임으로
 돌아가기"
 "Adventure/Canvas/PauseUI/PauseBox/QuitButton/Text",165465119776768,"Quit","나가기"
 "Adventure/Canvas/TimeoutPanel/Text",165502885289984,"Time out!","시간 초과!"
+"Adventure/Canvas/TimeoutPanel/TimeSkipGuide",21709072107999232,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "AdventureLevel/Canvas/TimeoutPanel/Text",165704832638976,"Time out!","시간 초과!"
+"AdventureLevel/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776448,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/BgmVolume",167868644712448,"BGM
 Volume","배경음
 음량"
@@ -159,6 +178,11 @@ Volume","배경음
 Volume","효과음
 음량"
 "Custom/Canvas/TimeoutPanel/Text",168024756707328,"Time out!","시간 초과!"
+"Custom/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776449,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Custom/Canvas/PauseUI/PauseBox/QuitButton/Text",168044683845632,"Quit","나가기"
 "Custom/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",168062677409792,"Return
 to game","게임으로
@@ -174,29 +198,48 @@ skip","시간
 "Editor/Canvas/EditorPanel/Phase 1: Initialize/EditorMapName1/Placeholder",168774387884032,"Enter the map name...","맵 이름을 입력하세요..."
 "Editor/Canvas/InputMessageUI/MessageBox/MessageInputField/Placeholder",168792230453248,"Folder name...","폴더 이름..."
 "Editor/Canvas/TimeoutPanel/Text",168827580047360,"Time out!","시간 초과!"
+"Editor/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776450,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "First/Canvas/FirstPanel/DesriptionText",169313049763840,"You're a gravity manipulator.
 Your goal is to escape the ball to the exit.","당신은 중력 조작자입니다.
 공을 출구로 탈출시켜보세요!"
 "First/Canvas/FirstPanel/HeaderText",169428787388416,"Welcome!","환영합니다!"
 "Main/Canvas/TimeoutPanel/Text",169542926983168,"Time out!","시간 초과!"
+"Main/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776451,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Mode/Canvas/TimeoutPanel/Text",169606495854592,"Time out!","시간 초과!"
+"Mode/Canvas/TimeoutPanel/TimeSkipGuide",21709072124776452,"You can skip the time
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Setting/Canvas/FirstPanel/Audio/BgmVolume",169656898805760,"BGM
 Volume","배경음
 음량"
 "Setting/Canvas/CreditPanel/DesriptionText",169839971786752,"<b>GravitaMaze</b>
-<size=48>v1.4.3</size>
+<size=48>v1.5.0</size>
 
 Project Managing
 <size=48><i>Dantae An</i></size>
 
 Programming
 <size=48><i>Dantae An</i></size>
-<size=36><i>junu192857</i></size>
-<size=48><i>Donghwan Yang</i></size>
-<size=48><i>Suin Lee</i></size>
 <size=48><i>Sehyun Kim</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>Suin Lee</i></size>
 <size=48><i>Jaehee Hong</i></size>
+<size=48><i>Donghwan Yang</i></size>
+<size=48><i>Diane Kim</i></size>
 <size=48><i>Yongchan Jo</i></size>
+
+Graphic Design
+<size=48><i>Seoyoon Jeung</i></size>
+<size=48><i>Jeeseung Oh</i></size>
+<size=48><i>Hyori Seo</i></size>
 <size=48><i>Diane Kim</i></size>
 
 Game Design
@@ -209,10 +252,6 @@ Level Design
 UI/UX Design
 <size=48><i>Dantae An</i></size>
 <size=48><i>Suin Lee</i></size>
-
-Graphic Design
-<size=48><i>Dantae An</i></size>
-<size=48><i>Suin Lee</i></size>
 <size=48><i>Donghwan Yang</i></size>
 
 Sound Design
@@ -222,9 +261,11 @@ Localization
 <size=48><i>Jaehee Hong</i></size>
 <size=48><i>Diane Kim</i></size>
 <size=48><i>Dantae An</i></size>
+<size=48><i>Sehyun Kim</i></size>
 
-Marketing
+Creative Services
 <size=48><i>Suin Lee</i></size>
+<size=48><i>Seoyoon Jeung</i></size>
 
 Infrastructure
 <size=36><i>cseteram</i></size>
@@ -237,19 +278,25 @@ Map Making
 <size=48><i>Suin Lee</i></size>
 <size=36><i>MINSEOKIM1</i></size>
 <size=36><i>ektnzpt1080</i></size>","<b>중력미로</b>
-<size=48>v1.4.3</size>
+<size=48>v1.5.0</size>
 
 프로젝트 관리
 <size=48><i>안단태</i></size>
 
 프로그래밍
 <size=48><i>안단태</i></size>
-<size=36><i>junu192857</i></size>
-<size=48><i>양동환</i></size>
-<size=48><i>이수인</i></size>
 <size=48><i>김세현</i></size>
+<size=36><i>junu192857</i></size>
+<size=48><i>이수인</i></size>
 <size=48><i>홍재희</i></size>
+<size=48><i>양동환</i></size>
+<size=48><i>김다인</i></size>
 <size=48><i>조용찬</i></size>
+
+그래픽 디자인
+<size=48><i>정서윤</i></size>
+<size=48><i>오지승</i></size>
+<size=48><i>서효리</i></size>
 <size=48><i>김다인</i></size>
 
 게임 디자인
@@ -262,10 +309,6 @@ Map Making
 UI/UX 디자인
 <size=48><i>안단태</i></size>
 <size=48><i>이수인</i></size>
-
-그래픽 디자인
-<size=48><i>안단태</i></size>
-<size=48><i>이수인</i></size>
 <size=48><i>양동환</i></size>
 
 사운드 디자인
@@ -275,9 +318,11 @@ UI/UX 디자인
 <size=48><i>홍재희</i></size>
 <size=48><i>김다인</i></size>
 <size=48><i>안단태</i></size>
+<size=48><i>김세현</i></size>
 
-마케팅
+크리에이티브 서비스
 <size=48><i>이수인</i></size>
+<size=48><i>정서윤</i></size>
 
 인프라
 <size=36><i>cseteram</i></size>
@@ -305,6 +350,11 @@ Volume","배경음
 Volume","효과음
 음량"
 "Training/Canvas/TimeoutPanel/Text",170842775347200,"Time out!","시간 초과!"
+"Training/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970752,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Training/Canvas/PauseUI/PauseBox/QuitButton/Text",170862224334848,"Quit","나가기"
 "Training/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",170877630013440,"Return
 to game","게임으로
@@ -321,6 +371,11 @@ Volume","배경음
 Volume","효과음
 음량"
 "Tutorial/Canvas/TimeoutPanel/Text",171112083218432,"Time out!","시간 초과!"
+"Tutorial/Canvas/TimeoutPanel/TimeSkipGuide",21709072128970753,"You can skip the time
+by clicking this button
+in the pause menu.","일시 정지 메뉴에서
+이 버튼을 눌러
+시간을 건너뛸 수 있어요."
 "Tutorial/Canvas/PauseUI/PauseBox/QuitButton/Text",171147529281536,"Quit","나가기"
 "Tutorial/Canvas/PauseUI/PauseBox/ReturnToGameButton/Text",171166206517248,"Return
 to game","게임으로
@@ -350,3 +405,20 @@ skip","시간
 "PauseButton",963619405647872,"Esc key","Esc 키"
 "Non-clearedNextButtonOSX",8020914447835136,"Option + Enter key","Option + Enter 키"
 "RetryTimeButtonOSX",8021235509223424,"Option + Space key","Option + Space 키"
+"Adventure/Canvas/RevivePanel/ReviveGuide",29036724280614912,"Wanna Get Revived?
+
+You'll get additional lives
+when you press the revive button.
+
+But you can play only this level
+and you can't receive stars
+even if you clear the level.","부활 찬스!
+
+부활 버튼을 누르면 라이프가 충전돼요!
+
+그 대신에 이 레벨에만 도전할
+수 있고, 레벨을 클리어해도
+별은 받을 수 없어요."
+"Adventure/Canvas/RevivePanel/ReviveButton/Text",29037776283361280,"Revive!","부활하기!"
+"Adventure/Canvas/ReviveIndicator",29040737667506176,"Practice Mode","연습 모드"
+"Adventure/Canvas/RevivePanel/QuitButton/Text",29044565267701760,"Quit","나가기"

@@ -19,4 +19,5 @@ MonoBehaviour:
   m_Extensions: []
   m_Group: String Table
   references:
-    version: 1
+    version: 2
+    RefIds: []

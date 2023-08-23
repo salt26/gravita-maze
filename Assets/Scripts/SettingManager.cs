@@ -21,7 +21,6 @@ public class SettingManager : MonoBehaviour
     public Sprite creditTitleKorean;
 
     public bool isCredit = false;
-    public bool isOnce = false;
 
     public Dropdown languageSetting;
     Animator panelAnimation;
@@ -59,18 +58,8 @@ public class SettingManager : MonoBehaviour
 
         if (isCredit)
         {
-            if (!isOnce)
+            if (backSettingButton.interactable==true && (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Return)))
             {
-                isOnce = true;
-                quitButton.interactable = false;
-                creditButton.interactable = false;
-                creditPanel.SetActive(true);
-                StartCoroutine(SoundEffect());
-            }
-
-            if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(KeyCode.Return))
-            {
-                isOnce = false;
                 isCredit = false;
                 StartCoroutine(OffCreditAnimation());
                 GameManager.gm.PlayButtonSFX();
@@ -79,16 +68,16 @@ public class SettingManager : MonoBehaviour
             if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
             {
                 creditTitleImage.sprite = creditTitleEnglish;
-                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 5760);
-                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 4800);
-                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -5040);
+                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 5760+300);
+                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 4800+300);
+                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -5040-300);
             }
             else if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("ko"))
             {
                 creditTitleImage.sprite = creditTitleKorean;
-                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 4920);
-                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 3960);
-                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -4200);
+                creditScrollContent.sizeDelta = new Vector2(creditScrollContent.sizeDelta.x, 4920+300);
+                creditDescription.sizeDelta = new Vector2(creditDescription.sizeDelta.x, 3960+300);
+                creditTeamLogo.anchoredPosition = new Vector2(creditTeamLogo.anchoredPosition.x, -4200-300);
             }
         }
         else
@@ -110,6 +99,12 @@ public class SettingManager : MonoBehaviour
         yield return new WaitForSeconds(14.0f/60.0f);
         GameManager.gm.PlayFallSFX(0.5f);
         yield return new WaitForSeconds(4.0f/60.0f);
+        backSettingButton.interactable = true;
+    }
+
+    void StopSoundEffect()
+    {
+        StopCoroutine(SoundEffect());
     }
 
     IEnumerator OffCreditAnimation()
@@ -130,13 +125,17 @@ public class SettingManager : MonoBehaviour
 
     public void InSettingBackButtonDown()
     {
-        isOnce = false;
+        backSettingButton.interactable = false;
         StartCoroutine(OffCreditAnimation());
         isCredit = false;
     }
 
     public void CreditButtonDown()
     {
+        creditButton.interactable = false;
+        quitButton.interactable = false;
+        backSettingButton.interactable = false;
+
         isCredit = true;
         creditPanel.SetActive(true);
         StartCoroutine(SoundEffect());
@@ -177,5 +176,6 @@ public class SettingManager : MonoBehaviour
     {
         GameManager.gm.sfxVolume = slider.value;
     }
+
 
 }

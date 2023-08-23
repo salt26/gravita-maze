@@ -17,7 +17,7 @@ public class EditorManager : MonoBehaviour
 {
     public string tableName = "StringTable";
 
-    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter }
+    public enum EditMode { None, Wall, Exit, RemoveWall, Ball, Iron, Fire, RemoveObject, Shutter, ToggleHole }
     public enum EditPhase { Initialize = 1, Build = 2, Request = 3, Test = 4, Open = 5, Save = 6 }
 
     public Camera mainCamera;
@@ -91,6 +91,7 @@ public class EditorManager : MonoBehaviour
     private bool hasSavedOnce = false;
     private bool isSaving = false;
     private bool hasPassedInitPhaseOnce = false;
+    private bool holeInvalid = false;
     private OpenSaveScrollItem selectedOpenScrollItem;
     private string currentOpenPath = MapManager.MAP_ROOT_PATH;
     private float openItemSelectTime = 0f;
@@ -98,6 +99,7 @@ public class EditorManager : MonoBehaviour
     private string currentSavePath = MapManager.MAP_ROOT_PATH;
     private float saveItemSelectTime = 0f;
     private string folderName = "";
+    private TooltipHover editorNextButton2Hover;
     private TooltipHover editorSaveButton3Hover;
     private TooltipHover editorQuitButton3Hover;
     
@@ -113,6 +115,7 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        editorNextButton2Hover = editorNextButton2.GetComponent<TooltipHover>();
         editorSaveButton3Hover = editorSaveButton3.GetComponent<TooltipHover>();
         editorQuitButton3Hover = editorQuitButton3.GetComponent<TooltipHover>();
         sizeX = Mathf.Clamp(editorSizeXDropdowns[0].value + MapManager.MIN_SIZE_X, MapManager.MIN_SIZE_X, MapManager.MAX_SIZE_X);
@@ -135,6 +138,7 @@ public class EditorManager : MonoBehaviour
         hasSavedOnce = false;
         dirtyBit = false;
         hasPassedInitPhaseOnce = false;
+        holeInvalid = false;
         GameManager.gm.canPlay = false;
         foreach (var t in tooltipUI.GetComponentsInChildren<TooltipBox>())
         {
@@ -294,14 +298,20 @@ public class EditorManager : MonoBehaviour
         }
 
         // Phase 2 buttons
-        if (walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) &&
-            objects.Exists(e => e.type == ObjectInfo.Type.Ball))
+        if (!walls.Exists(e => e.type == WallInfo.Type.ExitHorizontal || e.type == WallInfo.Type.ExitVertical) ||
+            !objects.Exists(e => e.type == ObjectInfo.Type.Ball))
         {
-            editorNextButton2.interactable = true;
+            editorNextButton2.interactable = false;
+            editorNextButton2Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_tooltip_no_ball_or_exit");
+        }
+        else if (holeInvalid)
+        {
+            editorNextButton2.interactable = false;
+            editorNextButton2Hover.tooltipMessage = LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_tooltip_hole_invalid");
         }
         else
         {
-            editorNextButton2.interactable = false;
+            editorNextButton2.interactable = true;
         }
 
         editorUndoButton.interactable = undoStack.Count > 0;
@@ -392,6 +402,7 @@ public class EditorManager : MonoBehaviour
         if (touchID != 0 && touchID != -1) return false;
         bool hasChanged = false;
         int a, b;
+
         switch (editMode)
         {
             case EditMode.Wall:
@@ -411,6 +422,12 @@ public class EditorManager : MonoBehaviour
                     if (walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall adjacent to hole");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
@@ -451,6 +468,12 @@ public class EditorManager : MonoBehaviour
                     if (walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall overlapped at (" + a + ", " + b + ")");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall adjacent to hole");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_wall"), 1f);
                         break;
                     }
@@ -498,6 +521,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal shutter adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add horizontal shutter at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -538,6 +567,12 @@ public class EditorManager : MonoBehaviour
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
                         break;
                     }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical shutter adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_shutter"), 1f);
+                        break;
+                    }
 
                     if (verbose) Debug.Log("Add vertical shutter at (" + a + ", " + b + ")");
                     if (commitAction)
@@ -573,13 +608,20 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX || !(b == 0 || b == sizeY))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if ((b == sizeY && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b))) ||
+                        (b == 0 && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -595,6 +637,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -608,6 +651,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -622,13 +666,20 @@ public class EditorManager : MonoBehaviour
                     if (!(a == 0 || a == sizeX) || b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if ((a == 0 && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b))) ||
+                        (a == sizeX && objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -644,6 +695,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -657,6 +709,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -671,13 +724,19 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -693,6 +752,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -706,6 +766,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -720,13 +781,19 @@ public class EditorManager : MonoBehaviour
                     if (b < 1 || b > sizeY)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -742,6 +809,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -755,6 +823,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11); 
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitVertical, a, b));
@@ -769,13 +838,19 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -791,6 +866,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -804,6 +880,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -818,13 +895,19 @@ public class EditorManager : MonoBehaviour
                     if (a < 1 || a > sizeX)
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit position at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
                     if (walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b)))
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal exit overlapped at (" + a + ", " + b + ")");
-                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "edtior_warning_add_exit"), 1f);
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
+                        break;
+                    }
+                    if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal exit adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_exit"), 1f);
                         break;
                     }
 
@@ -840,6 +923,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                         walls.Remove(walls.Find((i) => i.type == WallInfo.Type.ExitHorizontal || i.type == WallInfo.Type.ExitVertical));
                     }
@@ -853,6 +937,7 @@ public class EditorManager : MonoBehaviour
                             solution = "";
                             dirtyBit = true;
                             GameManager.gm.PlayEscapedSFX();
+                            GameManager.gm.OnTriggerHaptic(11);
                         }
                     }
                     walls.Add(new WallInfo(WallInfo.Type.ExitHorizontal, a, b));
@@ -880,6 +965,12 @@ public class EditorManager : MonoBehaviour
                     {
                         if (verbose) Debug.LogWarning("Editor warning: horizontal wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && i.x == a && (i.y == b || i.y == b + 1))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: horizontal wall adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
                         break;
                     }
 
@@ -917,6 +1008,12 @@ public class EditorManager : MonoBehaviour
                     {
                         if (verbose) Debug.LogWarning("Editor warning: vertical wall or shutter or exit doesn't exist at (" + a + ", " + b + ")");
                         statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_multi"), 1f);
+                        break;
+                    }
+                    if (objects.Exists(i => (i.type == ObjectInfo.Type.Hole && (i.x == a || i.x == a + 1) && i.y == b)))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: vertical wall adjacent to hole");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_wall"), 1f);
                         break;
                     }
 
@@ -1087,6 +1184,15 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
                     break;
                 }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: ball adjacent to hole");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_ball"), 1f);
+                    break;
+                }
 
                 if (objects.Exists((i) => i.type == ObjectInfo.Type.Ball))
                 {
@@ -1135,6 +1241,15 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
                     break;
                 }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: iron adjacent to hole");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_iron"), 1f);
+                    break;
+                }
 
                 if (verbose) Debug.Log("Add iron at (" + a + ", " + b + ")");
                 if (commitAction)
@@ -1143,6 +1258,7 @@ public class EditorManager : MonoBehaviour
                     redoStack.Clear();
                     solution = "";
                     dirtyBit = true;
+                    GameManager.gm.OnTriggerHaptic(7);
                     GameManager.gm.PlayIronSFX(UnityEngine.Random.Range(1, 9));
                 }
                 objects.Add(new ObjectInfo(ObjectInfo.Type.Iron, a, b));
@@ -1163,6 +1279,15 @@ public class EditorManager : MonoBehaviour
                 if (objects.Exists(i => i.x == a && i.y == b))
                 {
                     if (verbose) Debug.LogWarning("Editor warning: objects overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
+                    break;
+                }
+                if ((objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)) && !walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b))) ||
+                    (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)) && !walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b))))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: fire adjacent to hole");
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_add_fire"), 1f);
                     break;
                 }
@@ -1197,10 +1322,17 @@ public class EditorManager : MonoBehaviour
                     statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
                     break;
                 }
+                if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b)))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole exists at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_remove_object"), 1f);
+                    break;
+                }
 
                 if (verbose) Debug.Log("Remove object at (" + a + ", " + b + ")");
                 //if (commitAction && !objects.Exists(i => i.x == a && i.y == b))
                 //    Debug.LogError("Editor invalid: null in Removing object");
+
                 if (commitAction)
                 {
                     undoStack.Add(new EditActionInfo(objects.Find(i => i.x == a && i.y == b), null));
@@ -1212,11 +1344,265 @@ public class EditorManager : MonoBehaviour
                 objects.Remove(objects.Find(i => i.x == a && i.y == b));
                 hasChanged = true;
                 break;
-#endregion
+            #endregion
+            case EditMode.ToggleHole:
+#region Hole
+                a = Mathf.FloorToInt(x + 0.5f);
+                b = Mathf.FloorToInt(y + 0.5f);
+
+                if (a < 1 || a > sizeX || b < 1 || b > sizeY)
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: hole position at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                    break;
+                }
+                if (objects.Exists(i => i.type != ObjectInfo.Type.Hole && i.x == a && i.y == b))
+                {
+                    if (verbose) Debug.LogWarning("Editor warning: object overlapped at (" + a + ", " + b + ")");
+                    statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                    break;
+                }
+
+                // Toggle on
+                if (!objects.Exists(i => i.x == a && i.y == b))
+                {
+                    // Cannot be placed adjacent to Exit
+                    if ((b == sizeY && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b))) ||
+                        (b == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitHorizontal, a, b - 1))) ||
+                        (a == 1 && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a - 1, b))) ||
+                        (a == sizeX && walls.Contains(new WallInfo(WallInfo.Type.ExitVertical, a, b))))
+                    {
+                        if (verbose) Debug.LogWarning("Editor warning: hole adjacent to exit");
+                        statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_toggle_hole"), 1f);
+                        break;
+                    }
+
+                    // Undo/Redo stack
+                    List<WallInfo> oldWalls = new();
+                    List<ObjectInfo> oldObjects = new();
+                    List<WallInfo> newWalls = new();
+                    List<ObjectInfo> newObjects = new();
+
+                    if (verbose) Debug.Log("Toggle on hole at (" + a + ", " + b + ")");
+
+                    // Wall up
+                    if (b != sizeY) // Not uppermost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b));
+                        }
+                    }
+
+                    // Wall down
+                    if (b != 1) // Not lowermost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.HorizontalShutter, a, b - 1));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.HorizontalShutter) && i.x == a && i.y == b - 1));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Horizontal, a, b - 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Horizontal) && i.x == a && i.y == b - 1));
+                        }
+                    }
+
+                    // Wall left
+                    if (a != 1) // Not leftmost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a - 1, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a - 1 && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a - 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a - 1 && i.y == b));
+                        }
+                    }
+
+                    // Wall right
+                    if (a != sizeX) // Not rightmost
+                    {
+                        // Shutter exists
+                        if (walls.Contains(new WallInfo(WallInfo.Type.VerticalShutter, a, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.VerticalShutter, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.VerticalShutter) && i.x == a && i.y == b));
+                        }
+
+                        // No wall exists (including when shutter exists)
+                        if (!walls.Contains(new WallInfo(WallInfo.Type.Vertical, a, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        }
+
+                        // Wall exists and Hole exists over the wall
+                        else if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Remove(walls.Find((i) => (i.type == WallInfo.Type.Vertical) && i.x == a && i.y == b));
+                        }
+                    }
+
+                    if (commitAction)
+                    {
+                        newObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                        undoStack.Add(new EditActionInfo(oldWalls, oldObjects, newWalls, newObjects));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                        GameManager.gm.PlayWallSFX();
+                    }
+                    objects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                }
+
+                // Toggle off
+                else
+                {
+                    if (verbose) Debug.Log("Toggle off hole at (" + a + ", " + b + ")");
+
+                    // Undo/Redo stack
+                    List<WallInfo> oldWalls = new();
+                    List<ObjectInfo> oldObjects = new();
+                    List<WallInfo> newWalls = new();
+                    List<ObjectInfo> newObjects = new();
+
+                    // Adjusting surrounding walls
+
+                    // Up (not uppermost)
+                    if (b < sizeY)
+                    {
+                        // Hole exists
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b + 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                        }
+
+                        // Hole doesn't exist
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b)));
+                        }
+                    }
+
+                    // Down (not lowermost)
+                    if (b > 1)
+                    {
+                        // Hole exists
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a, b - 1)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                        }
+
+                        // Hole doesn't exist
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Horizontal, a, b - 1));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Horizontal && i.x == a && i.y == b - 1)));
+                        }
+                    }
+
+                    // Left (not leftmost)
+                    if (a > 1)
+                    {
+                        // Hole exists
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a - 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                        }
+
+                        // Hole doesn't exist
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a - 1, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a - 1 && i.y == b)));
+                        }
+                    }
+
+                    // Right (not rightmost)
+                    if (a < sizeX)
+                    {
+                        // Hole exists
+                        if (objects.Contains(new ObjectInfo(ObjectInfo.Type.Hole, a + 1, b)))
+                        {
+                            if (commitAction) newWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                        }
+
+                        // Hole doesn't exist
+                        else
+                        {
+                            if (commitAction) oldWalls.Add(new WallInfo(WallInfo.Type.Vertical, a, b));
+                            walls.Remove(walls.Find(i => (i.type == WallInfo.Type.Vertical && i.x == a && i.y == b)));
+                        }
+                    }
+
+                    if (commitAction)
+                    {
+                        oldObjects.Add(new ObjectInfo(ObjectInfo.Type.Hole, a, b));
+                        undoStack.Add(new EditActionInfo(oldWalls, oldObjects, newWalls, newObjects));
+                        redoStack.Clear();
+                        solution = "";
+                        dirtyBit = true;
+                        GameManager.gm.PlayWallSFX();
+                    }
+                    objects.Remove(objects.Find(i => (i.type == ObjectInfo.Type.Hole && i.x == a && i.y == b)));
+                }
+
+                hasChanged = true;
+                break;
+                #endregion
         }
 
+        HoleValidityCheck();
+
         // Map Rendering
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
 
         return hasChanged;
     }
@@ -1257,6 +1643,9 @@ public class EditorManager : MonoBehaviour
             case EditMode.RemoveObject:
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_remove_object"));
                 break;
+            case EditMode.ToggleHole:
+                statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_guide_toggle_hole"));
+                break;
         }
     }
 
@@ -1268,7 +1657,8 @@ public class EditorManager : MonoBehaviour
         List<ObjectInfo> oldObjects = objects;
         walls = new List<WallInfo>();
         objects = new List<ObjectInfo>();
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        holeInvalid = false;
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
         solution = "";
 
         if (hasCreated)
@@ -1352,6 +1742,17 @@ public class EditorManager : MonoBehaviour
             removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.x > value);
         }
+        else if (value > oldValue)
+        {
+            foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue))
+            {
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == oldValue + 1 && i.y == o.y) &&
+                    !walls.Exists(i => i.type == WallInfo.Type.Vertical && i.x == oldValue && i.y == o.y))
+                {
+                    walls.Add(new WallInfo(WallInfo.Type.Vertical, oldValue, o.y));
+                }
+            }
+        }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
         removedWalls.AddRange(tempWalls);
         walls.RemoveAll(w => w.type == WallInfo.Type.ExitVertical && !(w.x == 0 || w.x == value));
@@ -1364,7 +1765,8 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        HoleValidityCheck();
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
     public void EditSizeX(Dropdown caller)
@@ -1411,6 +1813,17 @@ public class EditorManager : MonoBehaviour
             removedObjects.AddRange(tempObjects);
             objects.RemoveAll(o => o.y > value);
         }
+        else if (value > oldValue)
+        {
+            foreach (ObjectInfo o in objects.FindAll(i => i.type == ObjectInfo.Type.Hole && i.y == oldValue))
+            {
+                if (!objects.Exists(i => i.type == ObjectInfo.Type.Hole && i.x == o.x && i.y == oldValue + 1) &&
+                    !walls.Exists(i => i.type == WallInfo.Type.Horizontal && i.x == o.x && i.y == oldValue))
+                {
+                    walls.Add(new WallInfo(WallInfo.Type.Horizontal, o.x, oldValue));
+                }
+            }
+        }
         tempWalls = walls.FindAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
         removedWalls.AddRange(tempWalls);
         walls.RemoveAll(w => w.type == WallInfo.Type.ExitHorizontal && !(w.y == 0 || w.y == value));
@@ -1423,7 +1836,8 @@ public class EditorManager : MonoBehaviour
             dirtyBit = true;
         }
 
-        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+        HoleValidityCheck();
+        mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
     }
 
     public void EditSizeY(Dropdown caller)
@@ -1633,8 +2047,8 @@ public class EditorManager : MonoBehaviour
         if (!openPath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1647,8 +2061,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in dirs)
             {
                 GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1662,8 +2076,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in files)
             {
                 GameObject g = Instantiate(openScrollItemPrefab, editorOpenScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
                 g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Open, s, false, this);
@@ -1914,8 +2328,8 @@ public class EditorManager : MonoBehaviour
         if (!savePath.TrimEnd('/').Equals(MapManager.MAP_ROOT_PATH.TrimEnd('/')))
         {
             GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-            g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-            g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+            g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
             g.GetComponent<RectTransform>().anchoredPosition =
                 new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1928,8 +2342,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in dirs)
             {
                 GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
 
@@ -1943,8 +2357,8 @@ public class EditorManager : MonoBehaviour
             foreach (string s in files)
             {
                 GameObject g = Instantiate(saveScrollItemPrefab, editorSaveScrollContent.transform);
-                g.GetComponent<RectTransform>().offsetMin = new Vector2(12f, -SCROLL_ITEM_HEIGHT / 2);
-                g.GetComponent<RectTransform>().offsetMax = new Vector2(-12f, SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMin = new Vector2(0, -SCROLL_ITEM_HEIGHT / 2);
+                g.GetComponent<RectTransform>().offsetMax = new Vector2(0, SCROLL_ITEM_HEIGHT / 2);
                 g.GetComponent<RectTransform>().anchoredPosition =
                     new Vector3(g.GetComponent<RectTransform>().anchoredPosition.x, (SCROLL_ITEM_HEIGHT / 2) * (length - 1 - 2 * index), 0f);
                 g.GetComponent<OpenSaveScrollItem>().Initialize(OpenSaveScrollItem.Type.Save, s, false, this);
@@ -2085,7 +2499,7 @@ public class EditorManager : MonoBehaviour
     {
         if (folderName == null || folderName == "")
         {
-            Debug.LogWarning("Editor warning: illegal folder name");
+            Debug.LogWarning("Editor warning: cannot create with illegal folder name");
             statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_warning_cannot_create_folder"), 2f);
             return;
         }
@@ -2210,6 +2624,9 @@ public class EditorManager : MonoBehaviour
                     case ObjectInfo.Type.Fire:
                         sw.WriteLine("* " + o.x + " " + o.y);
                         break;
+                    case ObjectInfo.Type.Hole:
+                        sw.WriteLine("/ " + o.x + " " + o.y);
+                        break;
                 }
             }
             foreach (WallInfo w in walls)
@@ -2279,6 +2696,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 SetEditModeToNone();
                 editPhase = EditPhase.Build;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);   // Showing Hole mark
                 hasPassedInitPhaseOnce = true;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
                 GameManager.gm.canPlay = false;
@@ -2288,6 +2706,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[2].SetActive(true);
                 editPhase = EditPhase.Request;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);                       // Hiding Hole mark
                 GameManager.gm.canPlay = false;
                 break;
             case EditPhase.Request:
@@ -2338,6 +2757,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(false);
                 editorPhases[0].SetActive(true);
                 editPhase = EditPhase.Initialize;
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit);                       // Hiding Hole mark
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_create_map_reinitialize_message"));
                 GameManager.gm.canPlay = false;
                 break;
@@ -2346,6 +2766,7 @@ public class EditorManager : MonoBehaviour
                 editorPhases[1].SetActive(true);
                 editPhase = EditPhase.Build;
                 statusUI.SetStatusMessage(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_reset_initial"));
+                mm.Initialize(sizeX, sizeY, walls, objects, solution, timeLimit, false, false, true);   // Showing Hole mark
                 SetEditModeToNone();
                 GameManager.gm.canPlay = false;
                 break;
@@ -2493,7 +2914,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_multi"), 1f);
 #endregion
                 break;
@@ -2523,46 +2944,57 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_object"), 1f);
 #endregion
                 break;
-            case EditActionInfo.Type.SizeX:
-                EditSizeX(eai.oldSize);
-                walls.AddRange(eai.oldWalls);
-                objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
-                break;
-            case EditActionInfo.Type.SizeY:
-                EditSizeY(eai.oldSize);
-                walls.AddRange(eai.oldWalls);
-                objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
-                break;
-            case EditActionInfo.Type.MassRemoval:
-                walls.AddRange(eai.oldWalls);
-                objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
-                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reset"), 1f);
-                break;
-            case EditActionInfo.Type.MassChange:
-                EditMapName(eai.oldName);
-                EditSizeX(eai.oldSizeX);
-                EditSizeY(eai.oldSizeY);
+            case EditActionInfo.Type.SeveralChange:
                 foreach (WallInfo wi in eai.newWalls)
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.newObjects)
                     objects.Remove(oi);
                 walls.AddRange(eai.oldWalls);
                 objects.AddRange(eai.oldObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_several"), 1f);
+                break;
+            case EditActionInfo.Type.SizeX:
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                EditSizeX(eai.oldSize);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
+                break;
+            case EditActionInfo.Type.SizeY:
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                EditSizeY(eai.oldSize);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_map_size"), 1f);
+                break;
+            case EditActionInfo.Type.MassRemoval:
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reset"), 1f);
+                break;
+            case EditActionInfo.Type.MassChange:
+                EditMapName(eai.oldName);
+                foreach (WallInfo wi in eai.newWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.newObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.oldWalls);
+                objects.AddRange(eai.oldObjects);
+                EditSizeX(eai.oldSizeX);
+                EditSizeY(eai.oldSizeY);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_undo_reintialization"), 1f);
                 break;
         }
         undoStack.RemoveAt(undoStack.Count - 1);
         redoStack.Add(eai);
+        HoleValidityCheck();
         solution = "";
         dirtyBit = true;
     }
@@ -2608,7 +3040,7 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_multi"), 1f);
 #endregion
                 break;
@@ -2638,18 +3070,28 @@ public class EditorManager : MonoBehaviour
                 if (verbose)
                     Debug.Log(verboseMessage);
 
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_object"), 1f);
 #endregion
                 break;
+            case EditActionInfo.Type.SeveralChange:
+                foreach (WallInfo wi in eai.oldWalls)
+                    walls.Remove(wi);
+                foreach (ObjectInfo oi in eai.oldObjects)
+                    objects.Remove(oi);
+                walls.AddRange(eai.newWalls);
+                objects.AddRange(eai.newObjects);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
+                statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_several"), 1f);
+                break;
             case EditActionInfo.Type.SizeX:
                 EditSizeX(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.SizeY:
                 EditSizeY(eai.newSize);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_map_size"), 1f);
                 break;
             case EditActionInfo.Type.MassRemoval:
@@ -2657,25 +3099,26 @@ public class EditorManager : MonoBehaviour
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reset"), 1f);
                 break;
             case EditActionInfo.Type.MassChange:
                 EditMapName(eai.newName);
-                EditSizeX(eai.newSizeX);
-                EditSizeY(eai.newSizeY);
                 foreach (WallInfo wi in eai.oldWalls)
                     walls.Remove(wi);
                 foreach (ObjectInfo oi in eai.oldObjects)
                     objects.Remove(oi);
                 walls.AddRange(eai.newWalls);
                 objects.AddRange(eai.newObjects);
-                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit);
+                EditSizeX(eai.newSizeX);
+                EditSizeY(eai.newSizeY);
+                mm.Initialize(sizeX, sizeY, walls, objects, "", timeLimit, false, false, true);
                 statusUI.SetStatusMessageWithFlashing(LocalizationSettings.StringDatabase.GetLocalizedString(tableName, "editor_redo_reinitialization"), 1f);
                 break;
         }
         redoStack.RemoveAt(redoStack.Count - 1);
         undoStack.Add(eai);
+        HoleValidityCheck();
         solution = "";
         dirtyBit = true;
     }
@@ -2771,6 +3214,77 @@ public class EditorManager : MonoBehaviour
         editorOpenButton6.interactable = false;
     }
 
+    private void HoleValidityCheck()
+    {
+        bool floorExists;
+
+        // Uppermost
+        floorExists = false;
+        for (int i = 1; i <= sizeX; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == i && obj.y == sizeY)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Lowermost
+        floorExists = false;
+        for (int i = 1; i <= sizeX; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == i && obj.y == 1)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Leftmost
+        floorExists = false;
+        for (int i = 1; i <= sizeY; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == 1 && obj.y == i)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        // Rightmost
+        floorExists = false;
+        for (int i = 1; i <= sizeY; i++)
+        {
+            if (!objects.Exists(obj => (obj.type == ObjectInfo.Type.Hole && obj.x == sizeX && obj.y == i)))
+            {
+                floorExists = true;
+                break;
+            }
+        }
+        if (!floorExists)
+        {
+            holeInvalid = true;
+            return;
+        }
+
+        holeInvalid = false;
+    }
+
     public void PlayButtonSFX()
     {
         GameManager.gm.PlayButtonSFX();
@@ -2778,7 +3292,7 @@ public class EditorManager : MonoBehaviour
 
     private class EditActionInfo
     {
-        public enum Type { MapName, SizeX, SizeY, Wall, Object, MassRemoval, MassChange }
+        public enum Type { MapName, SizeX, SizeY, Wall, Object, SeveralChange, MassRemoval, MassChange }
 
         public Type type;
 
@@ -2798,17 +3312,19 @@ public class EditorManager : MonoBehaviour
         public ObjectInfo oldObject;
         public ObjectInfo newObject;
 
-        // SizeX, SizeY, MassRemoval, MassChange
+        // SizeX, SizeY, MassRemoval, MassChange, SeveralChange
         public List<WallInfo> oldWalls;
         public List<ObjectInfo> oldObjects;
+
+        // MassChange, SeveralChange
+        public List<WallInfo> newWalls;
+        public List<ObjectInfo> newObjects;
 
         // MassChange
         public int oldSizeX;
         public int oldSizeY;
         public int newSizeX;
         public int newSizeY;
-        public List<WallInfo> newWalls;
-        public List<ObjectInfo> newObjects;
 
         /// <summary>
         /// Type: MapName
@@ -2829,7 +3345,7 @@ public class EditorManager : MonoBehaviour
         /// <param name="oldSize"></param>
         /// <param name="newSize"></param>
         public EditActionInfo(bool isX, int oldSize, int newSize,
-            List<WallInfo> oldRemovedWalls = null, List <ObjectInfo> oldRemovedObjects = null)
+            List<WallInfo> oldRemovedWalls = null, List<ObjectInfo> oldRemovedObjects = null)
         {
             if (isX)
                 type = Type.SizeX;
@@ -2870,6 +3386,23 @@ public class EditorManager : MonoBehaviour
             oldObject = oldObjectInfo;
             newObject = newObjectInfo;
         }
+
+        /// <summary>
+        /// Type: SeveralChange (Hole, Removing Hole)
+        /// </summary>
+        /// <param name="oldWalls">없으면 null</param>
+        /// <param name="oldObjects">없으면 null</param>
+        /// <param name="newWalls">없으면 null</param>
+        /// <param name="newObjects">없으면 null</param>
+        public EditActionInfo(List<WallInfo> oldWalls, List<ObjectInfo> oldObjects, List<WallInfo> newWalls, List<ObjectInfo> newObjects)
+        {
+            type = Type.SeveralChange;
+            this.oldWalls = oldWalls;
+            this.oldObjects = oldObjects;
+            this.newWalls = newWalls;
+            this.newObjects = newObjects;
+        }
+
 
         /// <summary>
         /// Type: MassRemoval (Reset, New)

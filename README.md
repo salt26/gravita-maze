@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
 [![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
 
-[![Version badge](https://img.shields.io/badge/Version-1.4.3-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)  
+[![Version badge](https://img.shields.io/badge/Version-1.5.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)  
 [![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
 ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
@@ -25,7 +25,7 @@
 
 ## Download
 
-### [v1.4.3 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)
+### [v1.5.0 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
 
 ---
 
@@ -33,6 +33,28 @@
 
 <details>
 <summary>Click here to expand or collapse the old update logs!</summary>
+
+### Updates (v1.4.4 -> v1.5.0)
+
+* Add animated background particles to better convey the sense of manipulating gravity.
+* Add a new type of tile: A tile that is a hole.
+* Fix UI bugs occurring on macOS. 
+* Alter mobile vibration.
+* Update credit text.
+* Tutorial overhaul: Reorder steps and lower difficulty. 
+
+### Updates (v1.4.3 -> v1.4.4)
+
+* Add vibration on mobile.
+* Add a resurrection feature when all lives have been depleted in Adventure mode: Upon resurrection, players can retry the same map. However, retry attempts are ineligible for receiving stars.
+* Optimize map tile rendering.
+* Add a guide for the time skip button.
+* Fix iron sound effect bug.
+* Fix UI and resolution bugs on macOS.
+* Fix a bug where background music occasionally attenuated when manipulating gravity rapidly.
+* Fix a bug in the map editor related to folder creation.
+* Remove unnecessary sprites.
+* Rearrange maps to adjust difficulty for Easy, Normal, and Hard levels in Adventure mode.
 
 ### Updates (v1.4.2 -> v1.4.3)
 
@@ -237,8 +259,8 @@
 
 ### Android
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
-* Download `GravitaMaze.v1.4.3.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
+* Download `GravitaMaze.v1.5.0.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * When the `Install unknown app` message appears, choose `Ignore and install`
   * If Google Play Protect shows `Blocked by Play Protect` message, ***DO NOT CLICK OK MESSAGE***. Instead, click `Details -> Install anyway (unsafe)`.
   * `Send app for scanning?` message might appear. You can choose whatever option you want.
@@ -249,14 +271,14 @@
 
 ### Windows
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
-* Download `GravitaMaze.v1.4.3.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
+* Download `GravitaMaze.v1.5.0.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
 
 ### macOS
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.4.3)!
-* Download `GravitaMaze.v1.4.3.m.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
+* Download `GravitaMaze.v1.5.0.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
 
 ## Map Editor

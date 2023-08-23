@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public static PlayManager pm = null;
     public static EditorManager em = null;
 
+    public HapticMediate hm;
+    
     public enum GravityDirection { Up, Down, Left, Right }
 
     [HideInInspector]
@@ -34,7 +36,10 @@ public class GameManager : MonoBehaviour
     private AdventureLevel adventureLevel;
     private int playingMapIndex = 0;
 
-    public int PlayingMapIndex{
+    public bool HasTimeSkipGuided = false;
+    public float delayPlayTime = 0.0f;
+
+    public int PlayingMapIndex {
         get { return playingMapIndex; }
     }
 
@@ -68,7 +73,7 @@ public class GameManager : MonoBehaviour
     public KeyCode timeOutKey1 = KeyCode.LeftControl;
     public KeyCode timeOutKey2 = KeyCode.RightControl;
 #endif
-    
+
     private void Awake()
     {
         if (gm != null && gm != this)
@@ -117,7 +122,6 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-
         // 입력 담당
         if (canPlay)
         {
@@ -289,7 +293,7 @@ public class GameManager : MonoBehaviour
                             }
                             break;
                         case EditorManager.EditPhase.Save:
-                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable)
+                            if (em.editorOpenButton6.gameObject.activeInHierarchy && em.editorOpenButton6.interactable && !em.inputMessageUI.gameObject.activeInHierarchy)
                             {
                                 em.editorOpenButton6.onClick.Invoke();
                             }
@@ -324,7 +328,6 @@ public class GameManager : MonoBehaviour
                 {
                     LoadFirst();
                     isTutorialDone = false;
-
                 }
             }
             catch (Exception e)
@@ -498,21 +501,25 @@ public class GameManager : MonoBehaviour
     public void PlayWallSFX()
     {
         sfxAudioSource.PlayOneShot(wallSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(8);
     }
 
     public void PlayShutterSFX()
     {
         sfxAudioSource.PlayOneShot(shutterSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(8);
     }
 
     public void PlaySquashedSFX()
     {
         sfxAudioSource.PlayOneShot(squashedSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(7);
     }
 
     public void PlayBurnedSFX()
     {
         sfxAudioSource.PlayOneShot(burnedSfx, Mathf.Clamp01(sfxVolume));
+        OnTriggerHaptic(6);
     }
 
     public void PlayEscapedSFX()
@@ -523,6 +530,7 @@ public class GameManager : MonoBehaviour
     public void PlayTimeoutSFX()
     {
         sfxAudioSource.PlayOneShot(timeoutSfx, Mathf.Clamp01(sfxVolume));
+        PlayHaptic(9); // HapticError
     }
 
     public void PlayRetrySFX()
@@ -544,11 +552,35 @@ public class GameManager : MonoBehaviour
     public void PlayFallSFX(float volume)
     {
         sfxAudioSource.PlayOneShot(fallSfx, Mathf.Clamp01(volume * sfxVolume));
+        switch (volume)
+        {
+            case 1.0f:
+                OnTriggerHaptic(0);
+                break;
+            case 0.75f:
+                OnTriggerHaptic(1);
+                break;
+            case 0.5f:
+                OnTriggerHaptic(2);
+                break;
+        }
     }
 
     public void PlayStarSFX(int num)
     {
         sfxAudioSource.PlayOneShot(starSfxs[num], Mathf.Clamp01(sfxVolume));
+        switch (num)
+        {
+            case 0:
+                OnTriggerHaptic(3); //HapticError
+                break;
+            case 1:
+                OnTriggerHaptic(4); //HapticError
+                break;
+            case 2:
+                OnTriggerHaptic(5); //HapticError
+                break;
+        }
     }
 
     public void QuitGame()
@@ -1420,6 +1452,28 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError(e.Message);
         }
+    }
+
+   // 주어진 진동 source를 1번만 play (play, stop 모두 한 함수에 포함)
+    public void OnTriggerHaptic(int hapticNum)
+    {
+        hm.hmPlayHapticOnce(delayPlayTime, hapticNum);
+    }
+    public void PlayHaptic(int hapticNum)
+    {
+        hm.hmPlayHaptic(hapticNum);
+    }
+    public void StopHaptic(int hapticNum)
+    {
+        hm.hmStopHaptic(hapticNum);
+    }
+    public void HapticOn()
+    {
+        hm.hapticEnabled = true;
+    }
+    public void HapticOff()
+    {
+        hm.hapticEnabled = false;
     }
 
     public void LoadSettingsValue()

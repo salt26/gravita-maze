@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FixedObject : MonoBehaviour
 {
-    public enum Type { Fire = 3, QuitGame = 11, MapEditor = 12, Setting = 13, Adventure = 21, Tutorial = 22, Custom = 23, Survival = 24, 
+    public enum Type { Fire = 3, Hole = 4, QuitGame = 11, MapEditor = 12, Setting = 13, Adventure = 21, Tutorial = 22, Custom = 23, Training = 24, 
         AdvEasy = 31, AdvNormal = 32, AdvHard = 33, AdvInsane = 34 }
     public Type type;
 }

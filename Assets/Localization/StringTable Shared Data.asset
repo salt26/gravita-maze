@@ -60,7 +60,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 486492069895
-    m_Key: edtior_warning_add_exit
+    m_Key: editor_warning_add_exit
     m_Metadata:
       m_Items: []
   - m_Id: 486492069896
@@ -73,6 +73,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486492069898
     m_Key: editor_warning_add_fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937476268032
+    m_Key: editor_warning_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486492069899
@@ -121,6 +125,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264194
     m_Key: editor_guide_add_shutter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24239937501433856
+    m_Key: editor_guide_toggle_hole
     m_Metadata:
       m_Items: []
   - m_Id: 486496264195
@@ -223,6 +231,14 @@ MonoBehaviour:
     m_Key: editor_warning_map_not_saved_yet
     m_Metadata:
       m_Items: []
+  - m_Id: 27847587124994048
+    m_Key: editor_tooltip_no_ball_or_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27847587141771264
+    m_Key: editor_tooltip_hole_invalid
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264219
     m_Key: editor_undo_map_name
     m_Metadata:
@@ -247,6 +263,10 @@ MonoBehaviour:
     m_Key: editor_undo_reintialization
     m_Metadata:
       m_Items: []
+  - m_Id: 25313860285095936
+    m_Key: editor_undo_several
+    m_Metadata:
+      m_Items: []
   - m_Id: 486496264225
     m_Key: editor_redo_map_name
     m_Metadata:
@@ -269,6 +289,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264230
     m_Key: editor_redo_reinitialization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25313897069142016
+    m_Key: editor_redo_several
     m_Metadata:
       m_Items: []
   - m_Id: 486496264231
@@ -321,6 +345,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 486496264243
     m_Key: warning_shutter_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24254986643214336
+    m_Key: warning_hole_error
     m_Metadata:
       m_Items: []
   - m_Id: 486496264244
@@ -543,6 +571,14 @@ MonoBehaviour:
     m_Key: tutorial_message_39
     m_Metadata:
       m_Items: []
+  - m_Id: 1829106272391178
+    m_Key: tutorial_message_40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829106272391179
+    m_Key: tutorial_message_41
+    m_Metadata:
+      m_Items: []
   - m_Id: 164806647603200
     m_Key: Adventure/Canvas/PauseUI/PauseBox/BgmVolume
     m_Metadata:
@@ -583,8 +619,16 @@ MonoBehaviour:
     m_Key: Adventure/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072107999232
+    m_Key: Adventure/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 165704832638976
     m_Key: AdventureLevel/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776448
+    m_Key: AdventureLevel/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 167868644712448
@@ -605,6 +649,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 168024756707328
     m_Key: Custom/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776449
+    m_Key: Custom/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 168044683845632
@@ -651,6 +699,10 @@ MonoBehaviour:
     m_Key: Editor/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072124776450
+    m_Key: Editor/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 169313049763840
     m_Key: First/Canvas/FirstPanel/DesriptionText
     m_Metadata:
@@ -663,8 +715,16 @@ MonoBehaviour:
     m_Key: Main/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072124776451
+    m_Key: Main/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 169606495854592
     m_Key: Mode/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072124776452
+    m_Key: Mode/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 169656898805760
@@ -711,6 +771,10 @@ MonoBehaviour:
     m_Key: Training/Canvas/TimeoutPanel/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 21709072128970752
+    m_Key: Training/Canvas/TimeoutPanel/TimeSkipGuide
+    m_Metadata:
+      m_Items: []
   - m_Id: 170862224334848
     m_Key: Training/Canvas/PauseUI/PauseBox/QuitButton/Text
     m_Metadata:
@@ -741,6 +805,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 171112083218432
     m_Key: Tutorial/Canvas/TimeoutPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21709072128970753
+    m_Key: Tutorial/Canvas/TimeoutPanel/TimeSkipGuide
     m_Metadata:
       m_Items: []
   - m_Id: 171147529281536
@@ -841,6 +909,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 8021235509223424
     m_Key: RetryTimeButtonOSX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29036724280614912
+    m_Key: Adventure/Canvas/RevivePanel/ReviveGuide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29037776283361280
+    m_Key: Adventure/Canvas/RevivePanel/ReviveButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29040737667506176
+    m_Key: Adventure/Canvas/ReviveIndicator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29044565267701760
+    m_Key: Adventure/Canvas/RevivePanel/QuitButton/Text
     m_Metadata:
       m_Items: []
   m_Metadata:
