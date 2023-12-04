@@ -1,31 +1,32 @@
 # GravitaMaze
 
-[![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
-[![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
+**[Read in English](./README.md)**  
+**[한국어로 읽기](./README.ko.md)**
 
-[![Version badge](https://img.shields.io/badge/Version-1.5.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)  
-[![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
-![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
-![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+[![Version badge](https://img.shields.io/badge/Version-1.6.4-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)    
+![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)
 
-<img src="./Figures/Banner.png" height=300>
+<img src="./Figures/Banner_16-3.png">
 
 ## Introduction
 
 ### "Escape complex mazes by manipulating gravity!"
 
 * Puzzle game
-* Make your own map by using the Map Editor.
-* English and Korean are fully available!
+* Make your own map by using the space-cube builder.
+* Korean is available!
+  * English is temporarily unavailable. Sorry for the inconvenience.
 * This is a pre-release.
-  * 2023 H2 release! Coming soon!
+  * You can listen the latest news on [our blog](https://blog.naver.com/ravitastudio).
 * Check out our latest news below.
   * Youtube: https://youtube.com/@Ravita_Studio/
-  * Fantrie: https://fantrie.com/ravitastudio/
+  * Naver Blog: https://blog.naver.com/ravitastudio (Korean only)
 
 ## Download
 
-### [v1.5.0 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
+### [v1.6.4 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)
+
+> Note: this demo version is playable only until December 2023.
 
 ---
 
@@ -33,6 +34,46 @@
 
 <details>
 <summary>Click here to expand or collapse the old update logs!</summary>
+
+### Updates (v1.5.0 -> v1.6.4)
+
+#### Graphics
+* Apply completely renewed graphics!
+
+#### UI
+* Redesign main menu to use mouse click instead of manipulating gravity.
+  * Adventure -> Challenge
+  * Custom -> Explore
+  * Map editor -> Create
+  * Settings -> (temporarily unavailable)
+  * Credit -> (temporarily unavailable)
+* Change Name.
+  * Map -> Space-cube
+  * Ball -> Capsule
+  * Map editor -> Space-cube builder
+* Add new levels to Challenge mode.
+  * Easy < **Simple** < Normal < Hard < **Extreme** < Insane
+* Display of the current difficulty during Challenge play.
+* Remove First scene.
+* Add Splash scene.
+  * In case of inability to connect to the server via the network, gameplay is unavailable; instead, links to our blog and YouTube are displayed.
+  * New BGM in Splash scene.
+* Fix bugs related to holes when opening space-cubes in Create.
+* Require author name input when saving space-cubes in Create.
+* Modify Test phase in Create to always offer 'retry with time' instead of simply 'retry'.
+* Game automatically pauses when the application loses focus.
+* Only Korean language available now.
+  * English is temporarily unavailable.
+
+#### Game Balance
+* Balanced according to the new difficulty classification system in Challenge mode
+  * New Easy is easier than the old Easy
+  * New Simple is similar to the old Easy
+  * New Normal consists of relatively easy space-cubes from the old Normal
+  * New Hard includes relatively difficult space-cubes from the old Normal and relatively easy ones from the old Hard
+  * New Extreme is slightly harder than the old Hard
+  * New Insane is similar to the old Insane
+* Add new space-cubes
 
 ### Updates (v1.4.4 -> v1.5.0)
 
@@ -256,11 +297,12 @@
 ---
 
 ## How to Play
+> Note: this demo version is playable only until December 2023.
 
 ### Android
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
-* Download `GravitaMaze.v1.5.0.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)!
+* Download `GravitaMaze.v1.6.4.a.zip` on your Android phone, unzip it, and execute `GravitaMaze.apk` to install it.
   * When the `Install unknown app` message appears, choose `Ignore and install`
   * If Google Play Protect shows `Blocked by Play Protect` message, ***DO NOT CLICK OK MESSAGE***. Instead, click `Details -> Install anyway (unsafe)`.
   * `Send app for scanning?` message might appear. You can choose whatever option you want.
@@ -271,30 +313,34 @@
 
 ### Windows
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
-* Download `GravitaMaze.v1.5.0.w.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)!
+* Download `GravitaMaze.v1.6.4.w.zip` and unzip it.
 * Execute `GravitaMaze.exe`.
 
 ### macOS
 
-* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)!
-* Download `GravitaMaze.v1.5.0.m.zip` and unzip it.
+* Click [here](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)!
+* Download `GravitaMaze.v1.6.4.m.zip` and unzip it.
 * Execute `GravitaMaze.app`.
 
-## Map Editor
+## Space-cube builder
 
-* You can use the map editor to make your own custom maps!
+* You can enter Create mode to make your own custom space-cubes!
 
 ## Play Modes
 
-* There are a Tutorial mode, four Adventure modes, Custom modes and Training mode.
+* There are Tutorial, Challenge, Explore and Create modes.
 * The gravity can be manipulated by touching the four "arrow" buttons or pressing arrow keys.
-* Whenever the ball dies, you can touch "retry" button or press space key to retry the map.
-  * Time stops while the ball is dead.
+* Whenever the capsule has destroyed, you can touch "retry" button or press space key to retry the map.
+  * Time stops when the capsule has destroyed.
   * Time passes after you manipulate gravity.
-* Escape the ball before the time limit is over.
+* Make the capsule escape from the space-cube before the time limit is over.
   * If you time out, you lose one life.
 
-![Screenshot1](./Figures/Screenshot1.v1.4.1.png)
+**For more information, please check out our [blog](https://blog.naver.com/ravitastudio) or [YouTube](https://youtube.com/@Ravita_Studio).**
 
-![Screenshot2](./Figures/Screenshot2.v1.4.1.png)
+![Screenshot1](./Figures/Screenshot1_v1.6.4_9-16.png)
+
+![Screenshot2](./Figures/Screenshot2_v1.6.4_9-16.png)
+
+![Screenshot3](./Figures/Screenshot5_v1.6.4_9-16.png)
