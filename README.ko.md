@@ -1,31 +1,32 @@
 # 중력미로
 
-[![English](https://img.shields.io/badge/lang-English-red.svg)](./README.md)  
-[![한국어](https://img.shields.io/badge/lang-한국어-blue.svg)](./README.ko.md)
+**[한국어로 읽기](./README.ko.md)**  
+**[Read in English](./README.md)**
 
-[![Version badge](https://img.shields.io/badge/Version-1.5.0-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)  
-[![Licence](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)  
-![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)  
-![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+[![Version badge](https://img.shields.io/badge/Version-1.6.4-purple.svg)](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)  
+![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)
 
-<img src="./Figures/Banner.png" height=300>
+<img src="./Figures/Banner_16-3.png">
 
 ## 게임 소개
 
 ### "중력을 조작하여 짧은 시간 안에 미로를 빠져나가자!"
 
 * 퍼즐 게임
-* 맵 편집기로 나만의 퍼즐을 만들어볼 수 있습니다!
-* 영어 및 한국어 지원!
+* 우주선 편집기로 나만의 맵을 만들어볼 수 있습니다!
+* 한국어 지원!
+  * 영어는 일시적으로 지원되지 않습니다.
 * 이 버전은 출시 전 데모 버전입니다.
-  * 2023년 하반기 출시 예정!
+  * 출시 등의 최신 소식은 [블로그](https://blog.naver.com/ravitastudio)에서 확인하세요.
 * 중력미로의 최신 소식은 아래에서 확인하세요!
   * 유튜브: https://youtube.com/@Ravita_Studio/
-  * 팬트리: https://fantrie.com/ravitastudio/
+  * 네이버 블로그: https://blog.naver.com/ravitastudio (한국어 전용)
 
 ## 다운로드
 
-### [v1.5.0 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
+### [v1.6.4 for Android, Windows, and macOS](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)
+
+> 공지: 이 데모 버전은 2023년 12월까지만 플레이하실 수 있습니다.
 
 ---
 
@@ -33,6 +34,45 @@
 
 <details>
 <summary>여기를 클릭하면 과거 업데이트 내용을 표시하거나 숨길 수 있습니다.</summary>
+
+### 업데이트 (v1.5.0 -> v1.6.4)
+
+#### 그래픽
+* 완전히 새로워진 그래픽 적용!
+
+#### 사용자 인터페이스
+* 중력 조작 대신 마우스 클릭을 통해 선택하도록 메인 메뉴 개편
+  * 어드벤처 -> 도전(Challenge)
+  * 커스텀 -> 탐험(Explore)
+  * 맵 편집기 -> 창작(Create)
+  * 설정 -> (일시적으로 사용 불가)
+  * 크레딧 -> (일시적으로 사용 불가)
+* 명칭 변경
+  * 맵 -> 우주선
+  * 공 -> 캡슐
+  * 맵 편집기 -> 우주선 제작소
+* 도전 모드에 새로운 난도 추가
+  * Easy < **Simple** < Normal < Hard < **Extreme** < Insane
+* 도전 모드 플레이 중에 현재 도전하고 있는 난도 표시
+* 첫 플레이 유저를 위한 화면 제거
+* 스플래시 화면 추가
+  * 네트워크를 통해 서버와 연결할 수 없는 경우 게임 플레이를 할 수 없으며 대신 블로그와 유튜브 링크를 표시함
+* 창작 모드에서 우주선을 열 때 구멍과 관련하여 생기던 버그 수정
+* 창작 모드에서 우주선을 저장할 때 제작자 이름을 적도록 함
+* 창작 모드의 테스트 페이즈에서 항상 되돌리기 대신 시간 되돌리기가 되도록 함
+* 애플리케이션이 포커스를 잃을 때 자동으로 게임이 일시정지됨
+* 한국어로만 표시
+  * 영어는 일시적으로 지원되지 않음
+
+#### 게임 밸런스
+* 도전 모드에서 새 난도 분류 체계에 따라 밸런스 조정
+  * 새 Easy는 옛 Easy보다 쉬운 난도
+  * 새 Simple은 옛 Easy와 비슷한 난도
+  * 새 Normal은 옛 Normal 중 비교적 쉬운 우주선만을 모은 난도
+  * 새 Hard는 옛 Normal 중 비교적 어려운 우주선과 옛 Hard 중 비교적 쉬운 우주선을 모은 난도
+  * 새 Extreme은 옛 Hard보다 조금 어려운 난도
+  * 새 Insane은 옛 Insane과 비슷한 난도
+* 새 우주선 다수 추가
 
 ### 업데이트 (v1.4.4 -> v1.5.0)
 
@@ -256,11 +296,12 @@
 ---
 
 ## 플레이 방법
+> 공지: 이 데모 버전은 2023년 12월까지만 플레이하실 수 있습니다.
 
 ### Android
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
-* `GravitaMaze.v1.5.0.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)
+* `GravitaMaze.v1.6.4.a.zip`을 Android 스마트폰에 다운로드해서 압축 해제한 후, `GravitaMaze.apk`를 실행해서 설치를 진행하세요.
   * `출처를 알 수 없는 앱 설치` 창이 나오면, `무시하고 설치`를 선택하세요.
   * Google Play Protect에서 `안전하지 않은 앱 차단됨` 창이 나오는 경우 ***확인 버튼을 누르지 말고*** `세부정보 더 보기 -> 무시하고 설치하기`를 선택하세요.
   * `Google에 알 수 없는 앱 전송`과 관련한 메시지가 뜨는 경우가 있을 수도 있어요. 이 경우 무슨 옵션을 선택해도 상관 없어요.
@@ -271,30 +312,34 @@
 
 ### Windows
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
-* `GravitaMaze.v1.5.0.w.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)
+* `GravitaMaze.v1.6.4.w.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.exe`를 실행하세요.
 
 ### macOS
 
-* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.5.0)
-* `GravitaMaze.v1.5.0.m.zip`을 다운로드한 후 압축 해제하세요.
+* [여기를 클릭!](https://github.com/salt26/gravita-maze/releases/tag/v1.6.4)
+* `GravitaMaze.v1.6.4.m.zip`을 다운로드한 후 압축 해제하세요.
 * `GravitaMaze.app`을 실행하세요.
 
-## 맵 편집기
+## 우주선 제작소
 
-* 맵 편집기로 나만의 맵을 만들 수 있어요!
+* 창작(Create) 모드에서 여러분만의 멋진 우주선을 만드세요!
 
 ## 플레이 모드
 
-* Tutorial 모드, 4개의 Adventure 모드, Custom 모드, Training 모드가 있어요!
+* 튜토리얼(Tutorial) 모드, 도전(Challenge) 모드, 탐험(Explore) 모드, 창작(Create) 모드가 있어요!
 * 4개의 "화살표" 버튼을 클릭하거나 화살표 키를 눌러서 중력을 조작할 수 있어요.
-* 공이 죽는 경우, "되돌리기" 버튼 또는 Space 키를 눌러서 해당 맵에 재도전할 수 있어요.
-  * 공이 죽으면 시간이 멈춰요.
+* 공이 파괴된 경우, "되돌리기" 버튼 또는 Space 키를 눌러서 해당 맵에 재도전할 수 있어요.
+  * 공이 파괴되면 시간이 멈춰요.
   * 중력을 조작하면 시간이 다시 흘러요.
 * 제한 시간 안에 공을 미로에서 탈출시켜 보세요.
   * 시간이 초과되면 목숨이 1개 깎여요.
 
-![Screenshot1](./Figures/Screenshot1.v1.4.1.ko.png)
+**더 많은 정보가 궁금하시다면 저희 [블로그](https://blog.naver.com/ravitastudio)나 [유튜브](https://youtube.com/@Ravita_Studio)를 방문해 보세요.**
 
-![Screenshot2](./Figures/Screenshot2.v1.4.1.png)
+![Screenshot1](./Figures/Screenshot1_v1.6.4_9-16.png)
+
+![Screenshot2](./Figures/Screenshot2_v1.6.4_9-16.png)
+
+![Screenshot3](./Figures/Screenshot5_v1.6.4_9-16.png)
